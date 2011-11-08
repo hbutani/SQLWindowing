@@ -37,6 +37,10 @@ class FunctionTranslator
 	IWindowFunction translate(GroovyShell wshell, Query qry, FuncSpec funcSpec) throws WindowingException
 	{
 		Class<IWindowFunction> cls = FunctionRegistry.FUNCTION_MAP[funcSpec.name];
+		if (!cls)
+		{
+			throw new WindowingException(sprintf("Unknown function %s", funcSpec.name))
+		}
 		FunctionDef fDef = cls.getAnnotation(FunctionDef.class);
 
 		//Check window spec

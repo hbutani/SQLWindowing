@@ -1,10 +1,12 @@
 package com.sap.hadoop.windowing.functions
 
+import com.sap.hadoop.windowing.runtime.ArgType;
 import com.sap.hadoop.windowing.functions.annotations.ArgDef;
 import com.sap.hadoop.windowing.functions.annotations.FunctionDef;
 import com.sap.hadoop.windowing.query.OrderColumn;
 import com.sap.hadoop.windowing.runtime.InputObj;
 import com.sap.hadoop.windowing.runtime.Partition;
+
 
 @FunctionDef(
 	name = "rownumber",
@@ -159,7 +161,7 @@ number of groups called buckets and assigns a bucket number to each row in the p
 	supportsWindow = false,
 	args =
 	[
-		@ArgDef(name="nbuckets", typeName="int")
+		@ArgDef(name="nbuckets", typeName="int", argTypes = [ArgType.SCRIPT, ArgType.NUMBER])
 	]
 )
 class NTile extends IWindowFunction

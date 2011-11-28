@@ -2,6 +2,7 @@ package com.sap.hadoop.metadata;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde2.io.ShortWritable;
@@ -15,18 +16,23 @@ import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.RawComparator;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.VIntWritable;
 import org.apache.hadoop.io.VLongWritable;
 import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.io.WritableComparator;
 import org.apache.hadoop.util.ReflectionUtils;
 import org.apache.hadoop.hive.serde.Constants;
 
 import static com.sap.hadoop.metadata.Utils.*;
 
-public class DataType<T extends Writable>
+@SuppressWarnings("rawtypes")
+public class DataType<T extends WritableComparable>
 {
 	Class<T> valueClass;
+	RawComparator<?> comparator;
 	
 	
 	public DataType() {}
@@ -34,6 +40,23 @@ public class DataType<T extends Writable>
 	public DataType(Class<T> valueClass)
 	{
 		this.valueClass = valueClass;
+		this.comparator = WritableComparator.get(valueClass);
+	}
+
+	/**
+	 * compare the raw form of to instances of this type.
+	 * @param v1
+	 * @param v2
+	 * @return
+	 */
+	public final int compare(byte[] v1, byte[] v2)
+	{
+		return compare(v1, 0, v1.length, v2, 0, v2.length);
+	}
+
+	public int compare(byte[] v1, int s1, int l1, byte[] v2, int s2, int l2)
+	{
+		return comparator.compare(v1, s1, l1, v2, s2, l2);
 	}
 
 	/**
@@ -56,10 +79,16 @@ public class DataType<T extends Writable>
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public T cast(Writable o)
+	public T cast(WritableComparable<?> o)
 	{
 		return (T) o;
 	}
+	
+	/**
+	 * write this type to a StringBuffer
+	 */
+	protected void write(StringBuffer buf) { buf.append(typeToNameMap.get(this)); }
+
 
 	public T cloneInstance(T instance) throws IOException
 	{
@@ -131,6 +160,17 @@ public class DataType<T extends Writable>
 		nameToTypeMap.put(Constants.DOUBLE_TYPE_NAME, DOUBLE);
 		nameToTypeMap.put(Constants.STRING_TYPE_NAME, TEXT);
 	};
+	
+	static HashMap<DataType<? extends Writable>, String> typeToNameMap = new HashMap<DataType<? extends Writable>, String>();
+	
+	static
+	{
+		for(Map.Entry<String, DataType<? extends Writable>> e : nameToTypeMap.entrySet())
+		{
+			typeToNameMap.put(e.getValue(), e.getKey());
+		}
+	}
+
 
 	
 	private static ThreadLocal<DataInputBuffer> materializeBuffers = new ThreadLocal<DataInputBuffer>()

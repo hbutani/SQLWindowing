@@ -35,6 +35,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.serializer.Serialization;
 import org.apache.hadoop.mapred.FileInputFormat;
 import org.apache.hadoop.mapred.FileOutputFormat;
 import org.apache.hadoop.mapred.InputSplit;
@@ -53,6 +54,9 @@ import org.apache.hadoop.util.ToolRunner;
 import org.apache.hadoop.mapred.InputFormat;
 import org.apache.hadoop.mapred.OutputFormat;
 
+import com.sap.hadoop.metadata.CompositeDataType;
+import com.sap.hadoop.metadata.CompositeSerialization;
+import com.sap.hadoop.metadata.CompositeWritable;
 import com.sap.hadoop.metadata.WindowingKey;
 
 @SuppressWarnings("deprecation")
@@ -61,6 +65,7 @@ class Job extends Configured
 	public static final String WINDOWING_PARTITION_COLS = "windowing.partition.cols";
 	public static final String WINDOWING_SORT_COLS = "windowing.sort.cols";
 	public static final String WINDOWING_INPUT_TABLE = "windowing.input.table";
+	public static final String WINDOWING_KEY_TYPE = CompositeSerialization.COMPOSITE_DATA_TYPE;
 
 	public Job()
 	{
@@ -138,13 +143,73 @@ class Job extends Configured
 	    conf.setOutputFormat(TextOutputFormat.class);
 	    
 	    conf.setOutputKeyClass(NullWritable.class);
-	    conf.setMapOutputKeyClass(WindowingKey.class);
+	    conf.setMapOutputKeyClass(CompositeWritable.class);
 	    conf.setOutputValueClass(rdr.createValue().getClass());
+		configureMapTask(conf);
 	    
 	    JobClient.runJob(conf);
 		
 		return 0;
 	}
-
 	
+	public void configureMapTask(JobConf jobconf) {
+		try {
+			HiveConf hConf = new HiveConf(jobconf, getClass());
+			HiveMetaStoreClient client = new HiveMetaStoreClient(hConf);
+			List<String> dbs = client.getAllDatabases();
+			String db = dbs.get(0);
+			String tableName = jobconf.get(Job.WINDOWING_INPUT_TABLE);
+			Table t = client.getTable(db, tableName);
+			List<FieldSchema> fields = client.getFields(db, tableName);
+			StorageDescriptor sd = t.getSd();
+			SerDeInfo sInfo = sd.getSerdeInfo();
+
+			String sortColStr = jobconf.get(Job.WINDOWING_SORT_COLS);
+			String[] sortCols = sortColStr.split(",");
+
+			StringBuilder sortColType = new StringBuilder();
+			getTypeString(fields, sortCols, sortColType)
+			Properties props = new Properties();
+			props.setProperty(org.apache.hadoop.hive.serde.Constants.LIST_COLUMNS, sortColStr);
+			props.setProperty(org.apache.hadoop.hive.serde.Constants.LIST_COLUMN_TYPES, sortColType.toString());
+			TypedBytesSerDe sortColsSerDe = new TypedBytesSerDe();
+			sortColsSerDe.initialize(jobconf, props);
+			StructObjectInspector sortColsOI = (StructObjectInspector) sortColsSerDe.getObjectInspector();
+			CompositeDataType sortDataType = CompositeDataType.define(sortColsOI);
+			jobconf.set(WINDOWING_KEY_TYPE, sortDataType.toString())
+			jobconf.setClass("io.serializations", CompositeSerialization.class, Serialization.class);
+		}
+		catch(Exception me) {
+			throw new RuntimeException(me);
+		}
+	}
+
+
+	public static void getTypeString(List<FieldSchema> fields, String[] sortCols, StringBuilder sortColType) {
+		boolean first = true;
+		for(String sCol: sortCols) {
+			int i=0;
+			for(;i < fields.size(); i++) {
+				FieldSchema f = fields.get(i);
+				if ( f.getName().equals(sCol) ) {
+					if (first)
+						first = false;
+					else
+						sortColType.append(",");
+					sortColType.append(f.getType());
+					break;
+				}
+			}
+			if ( i == fields.size()) {
+				throw new RuntimeException("Unknown column " + sCol);
+			}
+		}
+	}
+
+	public static Deserializer getDeserializer(Table tbl) throws Exception 
+	{
+		TableDesc tDesc = Utilities.getTableDesc(new org.apache.hadoop.hive.ql.metadata.Table(tbl));
+		return tDesc.getDeserializer();
+	}
+
 }

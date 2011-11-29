@@ -24,6 +24,8 @@ import org.apache.hadoop.hive.metastore.api.Table;
 import org.apache.hadoop.hive.ql.exec.Utilities;
 import org.apache.hadoop.hive.ql.plan.TableDesc;
 
+import com.sap.hadoop.metadata.CompositeDataType;
+import com.sap.hadoop.metadata.CompositeWritable;
 import com.sap.hadoop.metadata.WindowingKey;
 
 
@@ -36,11 +38,15 @@ class Map extends MapReduceBase implements Mapper<Writable, Writable, Writable, 
 	StructObjectInspector partColsOI;
 	StructObjectInspector partColsStdOI;
 	ArrayList<Object> partitionColsRow;
+	CompositeDataType partitionDataType;
+	CompositeWritable wkey;
 
 	TypedBytesSerDe sortColsSerDe;
 	StructObjectInspector sortColsOI;
 	StructObjectInspector sortColsStdOI;
 	ArrayList<Object> sortColsRow;
+	CompositeDataType sortDataType;
+	
 	WindowingKey wk = new WindowingKey();
 	
 	public void configure(JobConf jobconf) {
@@ -66,13 +72,14 @@ class Map extends MapReduceBase implements Mapper<Writable, Writable, Writable, 
 			StringBuilder sortColType = new StringBuilder();
 			StringBuilder sortColStrFixed = new StringBuilder();
 			getTypeString(fields, partitionCols, partColType, sortCols, sortColType, sortColStrFixed);
-			System.out.println(sortColStr + ":" + sortColType.toString());
 			Properties props = new Properties();
 			props.setProperty(org.apache.hadoop.hive.serde.Constants.LIST_COLUMNS, partColStr);
 			props.setProperty(org.apache.hadoop.hive.serde.Constants.LIST_COLUMN_TYPES, partColType.toString());
 			partColsSerDe = new TypedBytesSerDe();
 			partColsSerDe.initialize(jobconf, props);
 			partColsOI = (StructObjectInspector) partColsSerDe.getObjectInspector();
+			partitionDataType = CompositeDataType.define(partColsOI);
+			wkey = partitionDataType.create();
 			partColsStdOI = (StructObjectInspector) ObjectInspectorUtils.getStandardObjectInspector(partColsOI, ObjectInspectorCopyOption.JAVA);
 			partitionColsRow = new ArrayList<Object>();
 
@@ -82,6 +89,7 @@ class Map extends MapReduceBase implements Mapper<Writable, Writable, Writable, 
 			sortColsSerDe = new TypedBytesSerDe();
 			sortColsSerDe.initialize(jobconf, props);
 			sortColsOI = (StructObjectInspector) sortColsSerDe.getObjectInspector();
+			sortDataType = CompositeDataType.define(sortColsOI);
 			sortColsStdOI = (StructObjectInspector) ObjectInspectorUtils.getStandardObjectInspector(sortColsOI, ObjectInspectorCopyOption.JAVA);
 			sortColsRow = new ArrayList<Object>();
 			wk = new WindowingKey();
@@ -102,6 +110,7 @@ class Map extends MapReduceBase implements Mapper<Writable, Writable, Writable, 
 			 * convert o into a Partition Object
 			 */
 			partitionColsRow.clear();
+			int pi = 0;
 			for(StructField pField: partColsStdOI.getAllStructFieldRefs()) {
 				StructField iField = inputOI.getStructFieldRef(pField.getFieldName());
 				Object val = inputOI.getStructFieldData(o, iField);
@@ -109,6 +118,8 @@ class Map extends MapReduceBase implements Mapper<Writable, Writable, Writable, 
 						ObjectInspectorUtils.copyToStandardObject(val,
 						iField.getFieldObjectInspector(),
 						ObjectInspectorCopyOption.JAVA));
+					
+				wkey.setElement(val, iField.getFieldObjectInspector(), pi++);
 			}
 			BytesWritable pk = (BytesWritable) partColsSerDe.serialize(partitionColsRow, partColsStdOI);
 

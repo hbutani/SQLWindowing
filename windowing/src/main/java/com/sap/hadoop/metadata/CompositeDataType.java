@@ -6,11 +6,19 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.StructField;
+import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
+
+import com.sap.hadoop.windowing.WindowingException;
 
 @SuppressWarnings("rawtypes")
 public class CompositeDataType extends DataType<CompositeWritable> implements Writable
@@ -139,6 +147,56 @@ public class CompositeDataType extends DataType<CompositeWritable> implements Wr
 		StringBuffer buf = new StringBuffer();
 		write(buf);
 		return buf.toString();
+	}
+	
+	public static CompositeDataType define(StructObjectInspector OI) throws WindowingException
+	{
+		List<? extends StructField> fields = OI.getAllStructFieldRefs();
+		@SuppressWarnings("unchecked")
+		DataType<? extends WritableComparable>[] elementTypes = (DataType<? extends WritableComparable>[]) new DataType[fields.size()];
+		int i=0;
+		for(StructField f : fields)
+		{
+			ObjectInspector fOI = f.getFieldObjectInspector();
+			if ( fOI.getCategory() != Category.PRIMITIVE )
+			{
+				throw new WindowingException("Cannot handle non primitve fields for partitioning/sorting");
+			}
+			
+			PrimitiveObjectInspector pOI = (PrimitiveObjectInspector) fOI;
+			switch(pOI.getPrimitiveCategory())
+			{
+			case BOOLEAN: 
+				elementTypes[i] = BOOLEAN;
+				break;
+			case DOUBLE:
+				elementTypes[i] = DOUBLE;
+				break;
+			case BYTE:
+				elementTypes[i] = BYTE;
+				break;
+			case FLOAT:
+				elementTypes[i] = FLOAT;
+				break;
+			case INT:
+				elementTypes[i] = INT;
+				break;
+			case LONG:
+				elementTypes[i] = LONG;
+				break;
+			case SHORT:
+				elementTypes[i] = SHORT;
+				break;
+			case STRING:
+				elementTypes[i] = TEXT;
+				break;
+			default :
+				throw new WindowingException(Utils.sprintf("Cannot handle datatype %s for partitioning/sorting", pOI.toString()));
+			}
+			i++;
+		}
+		
+		return new CompositeDataType(",", elementTypes);
 	}
 
 }

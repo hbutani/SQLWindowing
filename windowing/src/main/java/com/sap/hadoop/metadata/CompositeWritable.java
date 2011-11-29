@@ -4,8 +4,32 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
+import org.apache.hadoop.hive.serde2.io.ShortWritable;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.StructField;
+import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.BooleanObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.ByteObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.DoubleObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.FloatObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.IntObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.LongObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.ShortObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.StringObjectInspector;
+import org.apache.hadoop.io.BooleanWritable;
+import org.apache.hadoop.io.ByteWritable;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.WritableComparable;
+
+import com.sap.hadoop.windowing.WindowingException;
 
 public class CompositeWritable implements WritableComparable<CompositeWritable>
 {
@@ -45,6 +69,91 @@ public class CompositeWritable implements WritableComparable<CompositeWritable>
 	{
 		this.type = type;
 	}
+	
+	public void set(Object obj, StructObjectInspector soi) throws IOException
+	{
+		List<? extends StructField> fields = soi.getAllStructFieldRefs();
+
+		for (int i = 0; i < elements.length; i++)
+		{
+			Object o = soi.getStructFieldData(obj, fields.get(i));
+			ObjectInspector oi = fields.get(i).getFieldObjectInspector();
+			setElement(o, oi, i);
+		}
+	}
+	
+	public void setElement(Object o, ObjectInspector oi, int i) throws IOException
+	{
+		if ( oi.getCategory() != Category.PRIMITIVE )
+		{
+			throw new IOException("Cannot handle non primitve fields for partitioning/sorting");
+		}
+		
+		PrimitiveObjectInspector poi = (PrimitiveObjectInspector) oi;
+		switch (poi.getPrimitiveCategory())
+		{
+		case BOOLEAN:
+		{
+			BooleanObjectInspector boi = (BooleanObjectInspector) poi;
+			BooleanWritable r = (BooleanWritable) elements[i];
+			r.set(boi.get(o));
+			return;
+		}
+		case BYTE:
+		{
+			ByteObjectInspector boi = (ByteObjectInspector) poi;
+			ByteWritable r = (ByteWritable) elements[i];
+			r.set(boi.get(o));
+			return;
+		}
+		case SHORT:
+		{
+			ShortObjectInspector spoi = (ShortObjectInspector) poi;
+			ShortWritable r = (ShortWritable) elements[i];
+			r.set(spoi.get(o));
+			return;
+		}
+		case INT:
+		{
+			IntObjectInspector ioi = (IntObjectInspector) poi;
+			IntWritable r = (IntWritable) elements[i];
+			r.set(ioi.get(o));
+			return;
+		}
+		case LONG:
+		{
+			LongObjectInspector loi = (LongObjectInspector) poi;
+			LongWritable r = (LongWritable) elements[i];
+			r.set(loi.get(o));
+			return;
+		}
+		case FLOAT:
+		{
+			FloatObjectInspector foi = (FloatObjectInspector) poi;
+			FloatWritable r = (FloatWritable) elements[i];
+			r.set(foi.get(o));
+			return;
+		}
+		case DOUBLE:
+		{
+			DoubleObjectInspector doi = (DoubleObjectInspector) poi;
+			DoubleWritable r = (DoubleWritable) elements[i];
+			r.set(doi.get(o));
+			return;
+		}
+		case STRING:
+		{
+			StringObjectInspector soi = (StringObjectInspector) poi;
+			elements[i] = soi.getPrimitiveWritableObject(o);
+			return;
+		}
+		default:
+		{
+			throw new RuntimeException("Unsupported type: " + poi.getPrimitiveCategory());
+		}
+		}
+	}
+
 
 	@Override
 	public void write(DataOutput out) throws IOException

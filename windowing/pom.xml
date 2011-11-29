@@ -104,11 +104,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 	    <scope>compile</scope>
 	</dependency>
 	<dependency>
-		<groupId>com.cloudera.hadoop</groupId>
-		<artifactId>hadoop-core</artifactId>
-		<version>0.20.2-737</version>
-	</dependency>
-	<dependency>
 		<groupId>org.apache.hadoop.hive</groupId>
 		<artifactId>hive-exec</artifactId>
 		<version>0.7.1-cdh3u1</version>
@@ -117,6 +112,21 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 		<groupId>org.apache.hadoop.hive</groupId>
 		<artifactId>hive-contrib</artifactId>
 		<version>0.7.1-cdh3u1</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.hadoop.hive</groupId>
+		<artifactId>hive-metastore</artifactId>
+		<version>0.7.1-cdh3u1</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.hadoop</groupId>
+		<artifactId>hadoop-core</artifactId>
+		<version>0.20.2-cdh3u1</version>
+	</dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>1.6.4</version>
 	</dependency>
   </dependencies>
   <repositories>

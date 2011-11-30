@@ -5,11 +5,6 @@ import org.apache.hadoop.mapred.MapReduceBase;
 import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
-import org.apache.hadoop.hive.conf.HiveConf;
-import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
-import org.apache.hadoop.hive.metastore.api.FieldSchema;
-import org.apache.hadoop.hive.metastore.api.SerDeInfo;
-import org.apache.hadoop.hive.metastore.api.StorageDescriptor;
 import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
@@ -19,9 +14,8 @@ import org.apache.hadoop.io.Writable;
 
 import com.sap.hadoop.metadata.CompositeDataType;
 import com.sap.hadoop.metadata.CompositeWritable;
+import com.sap.hadoop.metadata.HiveUtils;
 
-
-@SuppressWarnings("deprecation")
 class Map extends MapReduceBase implements Mapper<Writable, Writable, Writable, Writable> {
 	Deserializer de;
 	StructObjectInspector inputOI;
@@ -32,16 +26,7 @@ class Map extends MapReduceBase implements Mapper<Writable, Writable, Writable, 
 	
 	public void configure(JobConf jobconf) {
 		try {
-			HiveConf hConf = new HiveConf(jobconf, getClass());
-			HiveMetaStoreClient client = new HiveMetaStoreClient(hConf);
-			List<String> dbs = client.getAllDatabases();
-			String db = dbs.get(0);
-			String tableName = jobconf.get(Job.WINDOWING_INPUT_TABLE);
-			Table t = client.getTable(db, tableName);
-			List<FieldSchema> fields = client.getFields(db, tableName);
-			StorageDescriptor sd = t.getSd();
-			SerDeInfo sInfo = sd.getSerdeInfo();
-			de = Job.getDeserializer(t);
+			de = HiveUtils.getDeserializer(jobconf.get(Job.WINDOWING_INPUT_DATABASE), jobconf.get(Job.WINDOWING_INPUT_TABLE), jobconf)
 			inputOI = (StructObjectInspector) de.getObjectInspector();
 			
 			String sortColStr = jobconf.get(Job.WINDOWING_SORT_COLS);

@@ -10,30 +10,13 @@ import java.util.Properties;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
-import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
-import org.apache.hadoop.hive.metastore.api.MetaException;
-import org.apache.hadoop.hive.metastore.api.SerDeInfo;
-import org.apache.hadoop.hive.metastore.api.StorageDescriptor;
-import org.apache.hadoop.hive.metastore.api.Table;
-import org.apache.hadoop.hive.ql.exec.Utilities;
-import org.apache.hadoop.hive.ql.plan.TableDesc;
-import org.apache.hadoop.hive.serde2.Deserializer;
-import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
-import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
-import org.apache.hadoop.io.BytesWritable;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.serializer.Serialization;
 import org.apache.hadoop.mapred.FileInputFormat;
@@ -64,6 +47,7 @@ class Job extends Configured
 {
 	public static final String WINDOWING_PARTITION_COLS = "windowing.partition.cols";
 	public static final String WINDOWING_SORT_COLS = "windowing.sort.cols";
+	public static final String WINDOWING_INPUT_DATABASE = "windowing.input.database";
 	public static final String WINDOWING_INPUT_TABLE = "windowing.input.table";
 	public static final String WINDOWING_KEY_TYPE = CompositeDataType.COMPOSITE_DATA_TYPE;
 
@@ -75,8 +59,8 @@ class Job extends Configured
 	{
 		Job j = new Job();
 		Configuration conf = new Configuration();
-		conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
-	    conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
+		//conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
+	    //conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
 		
 	    conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
 		conf.set("hive.metastore.local", "false");
@@ -85,7 +69,7 @@ class Job extends Configured
 	    conf.set("mapred.map.max.attempts", "2");
 		conf.set("mapred.child.java.opts", "-Xmx2048m")
 	    j.setConf(conf);
-		int exitCode = j.run("Hive Windowing", false, null, "part_test", "p_mfgr", "p_mfgr,p_name", "e:/windowing/windowing.jar", 
+		int exitCode = j.run("Hive Windowing", true, null, "part_test", "p_mfgr", "p_mfgr,p_name", "e:/windowing/windowing.jar", 
 			"windowing-output/", TextOutputFormat.class);
 		System.exit(exitCode);
 	}
@@ -114,9 +98,13 @@ class Job extends Configured
 	    fs.delete(outputPath, true);
 	    
 		JobConf conf = new JobConf(getConf());
+		if ( db != null )
+			conf.set(WINDOWING_INPUT_DATABASE, db);
 		conf.set(WINDOWING_INPUT_TABLE, tableName);
 		conf.set(WINDOWING_PARTITION_COLS, partitionCols);
 		conf.set(WINDOWING_SORT_COLS, sortColumns);
+		
+		List<FieldSchema> fields;
 		
 		if (localMode)
 		{
@@ -130,11 +118,11 @@ class Job extends Configured
 					(org.apache.hadoop.mapred.RecordReader<Writable, Writable>) iFmt.getRecordReader(iSplits[0], conf, Reporter.NULL);
 		    conf.setOutputValueClass(rdr.createValue().getClass());
 			conf.setNumReduceTasks(iSplits.length);
-			
+			fields = HiveUtils.getFields(db, tableName, conf);
 		}
 		else
 		{
-			HiveUtils.addTableasJobInput(db, tableName, conf, fs);
+			fields = HiveUtils.addTableasJobInput(db, tableName, conf, fs);
 			conf.setJar(windowingJarFile);
 		}
 
@@ -150,28 +138,20 @@ class Job extends Configured
 		
 		conf.setOutputKeyComparatorClass(CompositeDataType.CompositeWritableComparator.class);
 		
-		configureMapTask(conf);
+		configureSortingDataType(fields, conf);
 	    
 	    JobClient.runJob(conf);
 		
 		return 0;
 	}
 	
-	public void configureMapTask(JobConf jobconf) {
+	public void configureSortingDataType(List<FieldSchema> fields, JobConf jobconf) {
 		try {
-			HiveConf hConf = new HiveConf(jobconf, getClass());
-			HiveMetaStoreClient client = new HiveMetaStoreClient(hConf);
-			List<String> dbs = client.getAllDatabases();
-			String db = dbs.get(0);
-			String tableName = jobconf.get(Job.WINDOWING_INPUT_TABLE);
-			Table t = client.getTable(db, tableName);
-			List<FieldSchema> fields = client.getFields(db, tableName);
-			StorageDescriptor sd = t.getSd();
-			SerDeInfo sInfo = sd.getSerdeInfo();
 
 			String sortColStr = jobconf.get(Job.WINDOWING_SORT_COLS);
 			String[] sortCols = sortColStr.split(",");
 
+			// setup a OI from the sortColums; get datatypes from hive table Defn
 			StringBuilder sortColType = new StringBuilder();
 			getTypeString(fields, sortCols, sortColType)
 			Properties props = new Properties();
@@ -180,6 +160,8 @@ class Job extends Configured
 			TypedBytesSerDe sortColsSerDe = new TypedBytesSerDe();
 			sortColsSerDe.initialize(jobconf, props);
 			StructObjectInspector sortColsOI = (StructObjectInspector) sortColsSerDe.getObjectInspector();
+			
+			// create a CompositeDataType based on OI; add it to job
 			CompositeDataType sortDataType = CompositeDataType.define(sortColsOI);
 			jobconf.set(WINDOWING_KEY_TYPE, sortDataType.toString())
 			jobconf.setClass("io.serializations", CompositeSerialization.class, Serialization.class);
@@ -209,12 +191,6 @@ class Job extends Configured
 				throw new RuntimeException("Unknown column " + sCol);
 			}
 		}
-	}
-
-	public static Deserializer getDeserializer(Table tbl) throws Exception 
-	{
-		TableDesc tDesc = Utilities.getTableDesc(new org.apache.hadoop.hive.ql.metadata.Table(tbl));
-		return tDesc.getDeserializer();
 	}
 
 }

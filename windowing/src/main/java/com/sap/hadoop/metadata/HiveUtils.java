@@ -1,6 +1,5 @@
 package com.sap.hadoop.metadata;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
@@ -8,9 +7,12 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
+import org.apache.hadoop.hive.metastore.MetaStoreUtils;
+import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.metastore.api.MetaException;
 import org.apache.hadoop.hive.metastore.api.StorageDescriptor;
 import org.apache.hadoop.hive.metastore.api.Table;
+import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapred.FileInputFormat;
 import org.apache.hadoop.mapred.InputFormat;
@@ -24,7 +26,7 @@ import com.sap.hadoop.windowing.WindowingException;
 public class HiveUtils
 {
 	@SuppressWarnings("unchecked")
-	public static void addTableasJobInput(String db, String table, JobConf job, FileSystem fs) throws WindowingException, IOException
+	public static List<FieldSchema> addTableasJobInput(String db, String table, JobConf job, FileSystem fs) throws WindowingException
 	{
 		try
 		{
@@ -58,12 +60,56 @@ public class HiveUtils
 		    
 		    // 5. set num reducers to number of input splits
 			job.setNumReduceTasks(iSplits.length);
+			
+			return client.getFields(db, table);
+		}
+		catch(WindowingException w)
+		{
+			throw w;
 		}
 		catch(Exception e)
 		{
 			throw new WindowingException(e);
 		}
 		
+	}
+	
+	public static List<FieldSchema> getFields(String db, String table, JobConf job) throws WindowingException
+	{
+		try
+		{
+			HiveMetaStoreClient client = getClient(job);
+			db = validateDB(client, db);
+			getTable(client, db, table);
+			return client.getFields(db, table);
+		}
+		catch(WindowingException w)
+		{
+			throw w;
+		}
+		catch(Exception e)
+		{
+			throw new WindowingException(e);
+		}
+	}
+	
+	public static Deserializer getDeserializer(String db, String table, JobConf job) throws WindowingException
+	{
+		try
+		{
+			HiveMetaStoreClient client = getClient(job);
+			db = validateDB(client, db);
+			Table t = getTable(client, db, table);
+			return MetaStoreUtils.getDeserializer(job, t);
+		}
+		catch(WindowingException w)
+		{
+			throw w;
+		}
+		catch(Exception e)
+		{
+			throw new WindowingException(e);
+		}
 	}
 	
 	

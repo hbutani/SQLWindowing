@@ -8,21 +8,26 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
+import org.apache.hadoop.io.DataInputBuffer;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.io.WritableComparator;
 
 import com.sap.hadoop.windowing.WindowingException;
 
 @SuppressWarnings("rawtypes")
 public class CompositeDataType extends DataType<CompositeWritable> implements Writable
 {
+	public static final String COMPOSITE_DATA_TYPE = "windowing.composite.datatype";
+
 	DataType<? extends WritableComparable>[] elementTypes;
 	Text fieldSep;
 	
@@ -197,6 +202,68 @@ public class CompositeDataType extends DataType<CompositeWritable> implements Wr
 		}
 		
 		return new CompositeDataType(",", elementTypes);
+	}
+	
+	public static class CompositeWritableComparator extends WritableComparator implements Configurable
+	{
+		Configuration conf;
+		CompositeDataType recordType;
+		CompositeWritable key1;
+		CompositeWritable key2;
+		private final DataInputBuffer buffer;
+		
+		protected String useConfigParamName()
+		{
+			return 	COMPOSITE_DATA_TYPE;
+		}
+		
+		protected CompositeWritableComparator()
+		{
+			super(CompositeWritable.class);
+			key1 = new CompositeWritable();
+			key2 = new CompositeWritable();
+			buffer = new DataInputBuffer();
+		}
+
+		@Override
+		public void setConf(Configuration conf)
+		{
+			this.conf = conf;
+			recordType = new CompositeDataType();
+			try
+			{
+				recordType.readFields(conf.get(useConfigParamName()));
+				recordType.cast(key1);
+				recordType.cast(key2);
+			}
+			catch(IOException ie)
+			{
+				throw new RuntimeException(ie);
+			}
+		}
+
+		@Override
+		public Configuration getConf()
+		{
+			return conf;
+		}
+		
+		@Override
+		public int compare(byte[] b1, int s1, int l1, byte[] b2, int s2, int l2) {
+		    try {
+		      buffer.reset(b1, s1, l1);                   // parse key1
+		      key1.readFields(buffer);
+		      
+		      buffer.reset(b2, s2, l2);                   // parse key2
+		      key2.readFields(buffer);
+		      
+		    } catch (IOException e) {
+		      throw new RuntimeException(e);
+		    }
+		    
+		    return compare(key1, key2);                   // compare them
+		  }
+		
 	}
 
 }

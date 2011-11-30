@@ -13,11 +13,12 @@ import org.apache.hadoop.util.ReflectionUtils;
 
 public class CompositeSerialization extends WritableSerialization
 {
-	public static final String COMPOSITE_DATA_TYPE = "windowing.composite.datatype";
 	
 	public Deserializer<Writable> getDeserializer(Class<Writable> c)
 	{
-		return new CompositeDeserializer(getConf(), c);
+		if (CompositeWritable.class.isAssignableFrom(c))
+			return new CompositeDeserializer(getConf(), c);
+		return super.getDeserializer(c);
 	}
 	
 	public static class CompositeDeserializer extends Configured implements Deserializer<Writable>
@@ -35,13 +36,14 @@ public class CompositeSerialization extends WritableSerialization
 				type = new CompositeDataType();
 				try
 				{
-					type.readFields(conf.get(COMPOSITE_DATA_TYPE));
+					type.readFields(conf.get(CompositeDataType.COMPOSITE_DATA_TYPE));
 				}
 				catch (IOException ie)
 				{
 					throw new RuntimeException(ie);
 				}
 			}
+			//System.out.println(c.getName() + "  " + type.toString());
 		}
 
 		public void open(InputStream in)

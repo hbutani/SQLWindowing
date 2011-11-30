@@ -65,7 +65,7 @@ class Job extends Configured
 	public static final String WINDOWING_PARTITION_COLS = "windowing.partition.cols";
 	public static final String WINDOWING_SORT_COLS = "windowing.sort.cols";
 	public static final String WINDOWING_INPUT_TABLE = "windowing.input.table";
-	public static final String WINDOWING_KEY_TYPE = CompositeSerialization.COMPOSITE_DATA_TYPE;
+	public static final String WINDOWING_KEY_TYPE = CompositeDataType.COMPOSITE_DATA_TYPE;
 
 	public Job()
 	{
@@ -75,8 +75,9 @@ class Job extends Configured
 	{
 		Job j = new Job();
 		Configuration conf = new Configuration();
-		conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
-	    conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
+		//conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
+	    //conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
+		
 	    conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
 		conf.set("hive.metastore.local", "false");
 	    //conf.addResource("hadoop-local.xml");
@@ -111,25 +112,32 @@ class Job extends Configured
 		cfg.set(WINDOWING_SORT_COLS, sortColumns);
 		
 		JobConf conf = new JobConf(getConf());
-	    conf.setJar(windowingJarFile);
-	    FileInputFormat.addInputPath(conf, new Path(sd.getLocation()));
-	    FileOutputFormat.setOutputPath(conf, new Path("windowing-output"));
 		
+		// local testing
+		FileInputFormat.addInputPath(conf, new Path("part-test"));
+		FileOutputFormat.setOutputPath(conf, new Path("windowing-output"));
 		Class<? extends InputFormat<? extends Writable, ? extends Writable>> inputFormatClass = 
-			(Class<? extends InputFormat<? extends Writable, ? extends Writable>>) Class.forName(sd.getInputFormat());
-		Path tableDirPath = new Path(sd.getLocation());
-		FileStatus tableDir = fs.getFileStatus(tableDirPath);
-		assert tableDir.isDir();
-		FileStatus[] tableFiles = fs.listStatus(tableDirPath);
+			(Class<? extends InputFormat<? extends Writable, ? extends Writable>>) Class.forName("org.apache.hadoop.mapred.TextInputFormat");
 		InputFormat<? extends Writable, ? extends Writable> iFmt = inputFormatClass.newInstance();
 		if (iFmt instanceof TextInputFormat)
 			((TextInputFormat)iFmt).configure(conf);
-
+		// end local
+			
+//		conf.setJar(windowingJarFile);
+//		FileInputFormat.addInputPath(conf, new Path(sd.getLocation()));
+//		FileOutputFormat.setOutputPath(conf, new Path("windowing-output"));
+//		Class<? extends InputFormat<? extends Writable, ? extends Writable>> inputFormatClass = 
+//			(Class<? extends InputFormat<? extends Writable, ? extends Writable>>) Class.forName(sd.getInputFormat());
+//		Path tableDirPath = new Path(sd.getLocation());
+//		FileStatus tableDir = fs.getFileStatus(tableDirPath);
+//		assert tableDir.isDir();
+//		FileStatus[] tableFiles = fs.listStatus(tableDirPath);
+//		InputFormat<? extends Writable, ? extends Writable> iFmt = inputFormatClass.newInstance();
+		
 		if (iFmt instanceof TextInputFormat)
 			((TextInputFormat)iFmt).configure(conf);
 		InputSplit[] iSplits = iFmt.getSplits(conf, 1);
 		org.apache.hadoop.mapred.RecordReader<Writable, Writable> rdr = (org.apache.hadoop.mapred.RecordReader<Writable, Writable>) iFmt.getRecordReader(iSplits[0], conf, Reporter.NULL);
-		
 
 	    
 	    conf.setJobName("Hive Windowing");
@@ -145,6 +153,9 @@ class Job extends Configured
 	    conf.setOutputKeyClass(NullWritable.class);
 	    conf.setMapOutputKeyClass(CompositeWritable.class);
 	    conf.setOutputValueClass(rdr.createValue().getClass());
+		
+		conf.setOutputKeyComparatorClass(CompositeDataType.CompositeWritableComparator.class);
+		
 		configureMapTask(conf);
 	    
 	    JobClient.runJob(conf);

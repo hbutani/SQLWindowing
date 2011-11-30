@@ -45,7 +45,7 @@ class Map extends MapReduceBase implements Mapper<Writable, Writable, Writable, 
 			inputOI = (StructObjectInspector) de.getObjectInspector();
 			
 			String sortColStr = jobconf.get(Job.WINDOWING_SORT_COLS);
-			String[] sortCols = sortColStr.split(",");
+			sortCols = sortColStr.split(",");
 			String s = jobconf.get(Job.WINDOWING_KEY_TYPE);
 			sortDataType = new CompositeDataType();
 			sortDataType.readFields(s);
@@ -60,7 +60,6 @@ class Map extends MapReduceBase implements Mapper<Writable, Writable, Writable, 
 	public void map(Writable key, Writable value,
 	OutputCollector<Writable, Writable> output, Reporter reporter)
 	throws IOException {
-		
 		try {
 			Object o = de.deserialize(value);
 			int si = 0

@@ -30,6 +30,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 		<version>2.3.2</version>
         <configuration>
           <compilerId>groovy-eclipse-compiler</compilerId>
+          <source>1.6</source>
+          <target>1.6</target>
         </configuration>
         <dependencies>
           <dependency>

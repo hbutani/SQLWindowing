@@ -57,9 +57,9 @@ import org.apache.hadoop.mapred.OutputFormat;
 import com.sap.hadoop.metadata.CompositeDataType;
 import com.sap.hadoop.metadata.CompositeSerialization;
 import com.sap.hadoop.metadata.CompositeWritable;
+import com.sap.hadoop.metadata.HiveUtils;
 import com.sap.hadoop.metadata.WindowingKey;
 
-@SuppressWarnings("deprecation")
 class Job extends Configured
 {
 	public static final String WINDOWING_PARTITION_COLS = "windowing.partition.cols";
@@ -75,8 +75,8 @@ class Job extends Configured
 	{
 		Job j = new Job();
 		Configuration conf = new Configuration();
-		//conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
-	    //conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
+		conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
+	    conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
 		
 	    conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
 		conf.set("hive.metastore.local", "false");
@@ -85,74 +85,68 @@ class Job extends Configured
 	    conf.set("mapred.map.max.attempts", "2");
 		conf.set("mapred.child.java.opts", "-Xmx2048m")
 	    j.setConf(conf);
-		int exitCode = j.run("part_test", "p_mfgr", "p_mfgr,p_name", "e:/windowing/windowing.jar");
+		int exitCode = j.run("Hive Windowing", false, null, "part_test", "p_mfgr", "p_mfgr,p_name", "e:/windowing/windowing.jar", 
+			"windowing-output/", TextOutputFormat.class);
 		System.exit(exitCode);
 	}
 
+	/**
+	 * 
+	 * @param jobName
+	 * @param localMode		used to test on dev env. tableName used as directory in local hdfs; fmt assumed to be TextInputFormat
+	 * @param db
+	 * @param tableName
+	 * @param partitionCols
+	 * @param sortColumns
+	 * @param windowingJarFile
+	 * @param outputURI
+	 * @param outputFormatClass
+	 * @return
+	 * @throws Exception
+	 */
 	@Override
-	public int run(String tableName, String partitionCols, String sortColumns, String windowingJarFile) throws Exception
+	public int run(String jobName, boolean localMode, String db, String tableName,
+		String partitionCols, String sortColumns, String windowingJarFile,
+		String outputURI, Class<? extends OutputFormat> outputFormatClass) throws Exception
 	{
-		String uri = "windowing-output/"; //args[0];
-	    FileSystem fs = FileSystem.get(URI.create(uri), getConf());
-	    fs.delete(new Path(uri), true);
+	    FileSystem fs = FileSystem.get(URI.create(outputURI), getConf());
+		Path outputPath = new Path(outputURI)
+	    fs.delete(outputPath, true);
 	    
-		HiveConf hConf = new HiveConf(getConf(), getClass());
-		HiveMetaStoreClient client = new HiveMetaStoreClient(hConf);
-		List<String> dbs = client.getAllDatabases();
-		String db = dbs.get(0);
-		List<String> tableNames = client.getAllTables(db);
-		Table t = client.getTable(db, tableName);
-		StorageDescriptor sd = t.getSd();
-		SerDeInfo sInfo = sd.getSerdeInfo();
-		
-		Configuration cfg = getConf();
-		//cfg.set("tmpjars", "file:///e:/hadoop/hive2/hive/build/dist/lib/hive-exec-0.9.0-SNAPSHOT.jar,file:///e:/hadoop/hive2/hive/build/dist/lib/hive-metastore-0.9.0-SNAPSHOT.jar");
-		cfg.set(WINDOWING_INPUT_TABLE, tableName);
-		cfg.set(WINDOWING_PARTITION_COLS, partitionCols);
-		cfg.set(WINDOWING_SORT_COLS, sortColumns);
-		
 		JobConf conf = new JobConf(getConf());
+		conf.set(WINDOWING_INPUT_TABLE, tableName);
+		conf.set(WINDOWING_PARTITION_COLS, partitionCols);
+		conf.set(WINDOWING_SORT_COLS, sortColumns);
 		
-		// local testing
-		FileInputFormat.addInputPath(conf, new Path("part-test"));
-		FileOutputFormat.setOutputPath(conf, new Path("windowing-output"));
-		Class<? extends InputFormat<? extends Writable, ? extends Writable>> inputFormatClass = 
-			(Class<? extends InputFormat<? extends Writable, ? extends Writable>>) Class.forName("org.apache.hadoop.mapred.TextInputFormat");
-		InputFormat<? extends Writable, ? extends Writable> iFmt = inputFormatClass.newInstance();
-		if (iFmt instanceof TextInputFormat)
-			((TextInputFormat)iFmt).configure(conf);
-		// end local
+		if (localMode)
+		{
+			FileInputFormat.addInputPath(conf, new Path(tableName));
 			
-//		conf.setJar(windowingJarFile);
-//		FileInputFormat.addInputPath(conf, new Path(sd.getLocation()));
-//		FileOutputFormat.setOutputPath(conf, new Path("windowing-output"));
-//		Class<? extends InputFormat<? extends Writable, ? extends Writable>> inputFormatClass = 
-//			(Class<? extends InputFormat<? extends Writable, ? extends Writable>>) Class.forName(sd.getInputFormat());
-//		Path tableDirPath = new Path(sd.getLocation());
-//		FileStatus tableDir = fs.getFileStatus(tableDirPath);
-//		assert tableDir.isDir();
-//		FileStatus[] tableFiles = fs.listStatus(tableDirPath);
-//		InputFormat<? extends Writable, ? extends Writable> iFmt = inputFormatClass.newInstance();
-		
-		if (iFmt instanceof TextInputFormat)
-			((TextInputFormat)iFmt).configure(conf);
-		InputSplit[] iSplits = iFmt.getSplits(conf, 1);
-		org.apache.hadoop.mapred.RecordReader<Writable, Writable> rdr = (org.apache.hadoop.mapred.RecordReader<Writable, Writable>) iFmt.getRecordReader(iSplits[0], conf, Reporter.NULL);
+			conf.setInputFormat(TextInputFormat.class);
+			TextInputFormat iFmt = new TextInputFormat();
+			iFmt.configure(conf);
+			InputSplit[] iSplits = iFmt.getSplits(conf, 1);
+			org.apache.hadoop.mapred.RecordReader<Writable, Writable> rdr = 
+					(org.apache.hadoop.mapred.RecordReader<Writable, Writable>) iFmt.getRecordReader(iSplits[0], conf, Reporter.NULL);
+		    conf.setOutputValueClass(rdr.createValue().getClass());
+			conf.setNumReduceTasks(iSplits.length);
+			
+		}
+		else
+		{
+			HiveUtils.addTableasJobInput(db, tableName, conf, fs);
+			conf.setJar(windowingJarFile);
+		}
 
-	    
-	    conf.setJobName("Hive Windowing");
+		FileOutputFormat.setOutputPath(conf, outputPath);
+					
+	    conf.setJobName(jobName);
 	    //getConf().setBoolean("mapred.compress.map.output", true);
-	    conf.setNumMapTasks(4);
-	    conf.setNumReduceTasks(1);
 	    conf.setMapperClass(Map.class);
 	    conf.setReducerClass(Reduce.class);
-	    conf.setInputFormat(inputFormatClass);
-	    //conf.setOutputFormat(SequenceFileOutputFormat.class);
-	    conf.setOutputFormat(TextOutputFormat.class);
-	    
+	    conf.setOutputFormat(outputFormatClass);
 	    conf.setOutputKeyClass(NullWritable.class);
 	    conf.setMapOutputKeyClass(CompositeWritable.class);
-	    conf.setOutputValueClass(rdr.createValue().getClass());
 		
 		conf.setOutputKeyComparatorClass(CompositeDataType.CompositeWritableComparator.class);
 		

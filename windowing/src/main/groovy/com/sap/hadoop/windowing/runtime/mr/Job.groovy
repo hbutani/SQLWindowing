@@ -42,6 +42,7 @@ import com.sap.hadoop.metadata.CompositeSerialization;
 import com.sap.hadoop.metadata.CompositeWritable;
 import com.sap.hadoop.metadata.HiveUtils;
 import com.sap.hadoop.metadata.WindowingKey;
+import com.sap.hadoop.windowing.WindowingException;
 
 class Job extends Configured
 {
@@ -50,6 +51,7 @@ class Job extends Configured
 	public static final String WINDOWING_INPUT_DATABASE = "windowing.input.database";
 	public static final String WINDOWING_INPUT_TABLE = "windowing.input.table";
 	public static final String WINDOWING_KEY_TYPE = CompositeDataType.COMPOSITE_DATA_TYPE;
+	public static final String WINDOWING_NUM_PARTION_COLUMNS = "windowing.number.of.partition.columns";
 
 	public Job()
 	{
@@ -62,7 +64,8 @@ class Job extends Configured
 		//conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
 	    //conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
 		
-	    conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
+	    //conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
+		conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
 	    //conf.addResource("hadoop-local.xml");
 	    conf.set("keep.failed.task.files", "true");
@@ -135,6 +138,7 @@ class Job extends Configured
 	    conf.setOutputFormat(outputFormatClass);
 	    conf.setOutputKeyClass(NullWritable.class);
 	    conf.setMapOutputKeyClass(CompositeWritable.class);
+		conf.setPartitionerClass(Partition.class);
 		
 		conf.setOutputKeyComparatorClass(CompositeDataType.CompositeWritableComparator.class);
 		
@@ -145,15 +149,20 @@ class Job extends Configured
 		return 0;
 	}
 	
-	public void configureSortingDataType(List<FieldSchema> fields, JobConf jobconf) {
+	public void configureSortingDataType(List<FieldSchema> fields, JobConf jobconf) throws WindowingException
+	{
 		try {
 
 			String sortColStr = jobconf.get(Job.WINDOWING_SORT_COLS);
 			String[] sortCols = sortColStr.split(",");
+			String partColStr = jobconf.get(Job.WINDOWING_PARTITION_COLS);
+			String[] partCols = partColStr.split(",");
+			jobconf.setInt(Job.WINDOWING_NUM_PARTION_COLUMNS, partCols.length); 
 
 			// setup a OI from the sortColums; get datatypes from hive table Defn
 			StringBuilder sortColType = new StringBuilder();
-			getTypeString(fields, sortCols, sortColType)
+			getTypeString(fields, sortColStr, sortCols, sortColType, partColStr, partCols)
+			
 			Properties props = new Properties();
 			props.setProperty(org.apache.hadoop.hive.serde.Constants.LIST_COLUMNS, sortColStr);
 			props.setProperty(org.apache.hadoop.hive.serde.Constants.LIST_COLUMN_TYPES, sortColType.toString());
@@ -166,15 +175,32 @@ class Job extends Configured
 			jobconf.set(WINDOWING_KEY_TYPE, sortDataType.toString())
 			jobconf.setClass("io.serializations", CompositeSerialization.class, Serialization.class);
 		}
-		catch(Exception me) {
-			throw new RuntimeException(me);
+		catch(WindowingException we)
+		{
+			throw we;
+		}
+		catch(Exception me) 
+		{
+			throw new WindowingException(me);
 		}
 	}
 
 
-	public static void getTypeString(List<FieldSchema> fields, String[] sortCols, StringBuilder sortColType) {
+	public static void getTypeString(List<FieldSchema> fields, String sortColStr, String[] sortCols, 
+		StringBuilder sortColType, String partColStr, String[] partCols) throws WindowingException
+	{
 		boolean first = true;
-		for(String sCol: sortCols) {
+		int j = 0;
+		for(String sCol: sortCols) 
+		{
+			// check if partCols[j] == sortCils[j] for the first K columns; K = partCols.length
+			if ( j < partCols.length)
+			{
+				if ( !partCols[j].equals(sCol) )
+				{
+					throw new WindowingException(sprintf("Sort Columns '%s' must be a superset of PartColumns '%s'", sortColStr, partColStr))
+				}
+			}
 			int i=0;
 			for(;i < fields.size(); i++) {
 				FieldSchema f = fields.get(i);
@@ -190,6 +216,7 @@ class Job extends Configured
 			if ( i == fields.size()) {
 				throw new RuntimeException("Unknown column " + sCol);
 			}
+			j++;
 		}
 	}
 

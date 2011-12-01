@@ -5,11 +5,6 @@ import groovy.lang.Binding;
 import java.util.Map;
 import java.util.Properties;
 
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.CommonTreeAdaptor;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -19,11 +14,6 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Writable;
 
-import com.sap.hadoop.windowing.parser.WindowingLexer;
-import com.sap.hadoop.windowing.parser.WindowingParser;
-import com.sap.hadoop.windowing.query.Query;
-import com.sap.hadoop.windowing.query.QuerySpec;
-import com.sap.hadoop.windowing.query.QuerySpecBuilder;
 import com.sap.hadoop.windowing.runtime.Mode;
 import com.sap.hadoop.windowing.runtime.Utils;
 
@@ -35,49 +25,17 @@ class WindowingDriver
 											 "org.apache.commons.logging.impl.NoOpLog");
  }
 
+	CommandLine cmdLine
 	Configuration cfg;
 	Mode mode;
-	String query;
 	
-	public QuerySpec parse(String query) throws WindowingException
-	{
-		try
-		{
-			WindowingLexer lexer = new WindowingLexer(new ANTLRStringStream(query));
-			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			WindowingParser parser = new WindowingParser(tokens);
-			CommonTree t = parser.query().getTree()
-		
-			CommonTreeAdaptor ta = (CommonTreeAdaptor) parser.getTreeAdaptor();
-			QuerySpecBuilder v = new QuerySpecBuilder(adaptor : ta)
-			v.visit(t)
-			return v.qSpec
-		}
-		catch(RecognitionException re)
-		{
-			throw new WindowingException("Parse Error:" + re.getMessage(), re)
-		}
-	}
-	
-	public Query translate(Mode m, GroovyShell wshell, QuerySpec qSpec, Configuration cfg) throws WindowingException
-	{
-		return m.getTranslator().translate(wshell, qSpec, cfg);
-	}
-	
-	public void execute(Mode m, GroovyShell wshell, Query qry) throws WindowingException
-	{
-		m.getExecutor().execute(qry)
-	}
-
-	void configure(CommandLine cmdLine) throws Exception
+	void configure() throws Exception
 	{
 		cfg = new Configuration();
 		mode = Mode.LOCAL
 		if ( cmdLine.hasOption('m'))
 			mode = Mode.getMode(cmdLine.getOptionValue('m'))
-		query = cmdLine.getOptionValue('q')
-		query = Utils.unescapeQueryString(query);
-		
+	
 		/*
 		 * this is for testing purposes only
 		 */
@@ -90,15 +48,13 @@ class WindowingDriver
 	
 	WindowingDriver(CommandLine cmdLine) throws WindowingException
 	{
-		configure(cmdLine);
+		this.cmdLine = cmdLine
+		configure();
 	}
 	
 	public void process() throws WindowingException
 	{
-		GroovyShell wshell = new GroovyShell()
-		QuerySpec qSpec = parse(query)
-		Query q = translate(mode, wshell, qSpec, cfg)
-		execute(mode, wshell, q)
+		mode.run(cmdLine, cfg)
 	}
 
 	public static void main(String[] args) throws Exception

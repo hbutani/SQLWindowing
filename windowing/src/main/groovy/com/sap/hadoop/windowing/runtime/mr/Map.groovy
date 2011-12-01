@@ -12,9 +12,9 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.hive.metastore.api.Table;
 import org.apache.hadoop.io.Writable;
 
+import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.metadata.CompositeDataType;
 import com.sap.hadoop.metadata.CompositeWritable;
-import com.sap.hadoop.metadata.HiveUtils;
 
 class Map extends MapReduceBase implements Mapper<Writable, Writable, Writable, Writable> {
 	Deserializer de;

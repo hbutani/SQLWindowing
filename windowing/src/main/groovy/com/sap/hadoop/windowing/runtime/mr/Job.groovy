@@ -37,10 +37,10 @@ import org.apache.hadoop.util.ToolRunner;
 import org.apache.hadoop.mapred.InputFormat;
 import org.apache.hadoop.mapred.OutputFormat;
 
+import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.metadata.CompositeDataType;
 import com.sap.hadoop.metadata.CompositeSerialization;
 import com.sap.hadoop.metadata.CompositeWritable;
-import com.sap.hadoop.metadata.HiveUtils;
 import com.sap.hadoop.metadata.WindowingKey;
 import com.sap.hadoop.windowing.WindowingException;
 

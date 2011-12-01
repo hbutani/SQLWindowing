@@ -1,4 +1,4 @@
-package com.sap.hadoop.metadata;
+package com.sap.hadoop;
 
 import java.io.File;
 import java.net.URL;
@@ -27,6 +27,7 @@ import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.mapred.TextInputFormat;
 
+import com.sap.hadoop.metadata.Utils;
 import com.sap.hadoop.windowing.WindowingException;
 
 public class HiveUtils

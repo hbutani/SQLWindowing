@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
 import org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordWriter;
-import org.apache.hadoop.hive.ql.exec.RecordWriter;
 import org.apache.hadoop.hive.serde2.objectinspector.SettableStructObjectInspector;
 
 import com.sap.hadoop.windowing.io.WindowingInput;

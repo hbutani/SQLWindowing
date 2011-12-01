@@ -1,7 +1,13 @@
 package com.sap.hadoop.metadata;
 
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -160,4 +166,44 @@ public class HiveUtils
 			throw new WindowingException(me);
 		}
 	}
+	
+	/**
+	 * copied from hive.ql.exec.Utilities: keep dependency on exec jar to minimum
+	 * @param cloader
+	 * @param newPaths
+	 * @return
+	 * @throws Exception
+	 */
+	public static ClassLoader addToClassPath(ClassLoader cloader,
+			String[] newPaths) throws Exception
+	{
+		URLClassLoader loader = (URLClassLoader) cloader;
+		List<URL> curPath = Arrays.asList(loader.getURLs());
+		ArrayList<URL> newPath = new ArrayList<URL>();
+
+		// get a list with the current classpath components
+		for (URL onePath : curPath)
+		{
+			newPath.add(onePath);
+		}
+		curPath = newPath;
+
+		for (String onestr : newPaths)
+		{
+			// special processing for hadoop-17. file:// needs to be removed
+			if (StringUtils.indexOf(onestr, "file://") == 0)
+			{
+				onestr = StringUtils.substring(onestr, 7);
+			}
+
+			URL oneurl = (new File(onestr)).toURL();
+			if (!curPath.contains(oneurl))
+			{
+				curPath.add(oneurl);
+			}
+		}
+
+		return new URLClassLoader(curPath.toArray(new URL[0]), loader);
+	}
+
 }

@@ -7,18 +7,19 @@ import java.util.Properties;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
 import org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordReader;
+import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.io.Writable;
 
 
 public class HiveWindowingInput extends TypedBytesRecordReader implements WindowingInput
 {
-	SerDe serDe;
+	private SerDe serDe;
 	Writable value;
 	boolean isValueValid;
 
 	
-	public SerDe getSerDe()
+	public Deserializer getDeserializer()
 	{
 		return serDe;
 	}

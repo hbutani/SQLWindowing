@@ -47,13 +47,13 @@ class Partitioner implements Iterator<Partition>
 	def next() 
 	{ 
 		if (currElem == null)
-			currElem = ObjectInspectorUtils.copyToStandardObject(qryIn.serDe.deserialize(qryIn.wInput.next()), qryIn.inputOI, ObjectInspectorCopyOption.JAVA)
+			currElem = ObjectInspectorUtils.copyToStandardObject(qryIn.deserializer.deserialize(qryIn.wInput.next()), qryIn.inputOI, ObjectInspectorCopyOption.JAVA)
 		Partition p = new Partition(qryIn.inputOI, qryIn.processingOI, partitionColumnFields)
 		while ( p.belongs(currElem) )
 		{
 			p << currElem
 			if ( qryIn.wInput.hasNext())
-				currElem = ObjectInspectorUtils.copyToStandardObject(qryIn.serDe.deserialize(qryIn.wInput.next()), qryIn.inputOI, ObjectInspectorCopyOption.JAVA)
+				currElem = ObjectInspectorUtils.copyToStandardObject(qryIn.deserializer.deserialize(qryIn.wInput.next()), qryIn.inputOI, ObjectInspectorCopyOption.JAVA)
 			else
 				currElem = null
 		}

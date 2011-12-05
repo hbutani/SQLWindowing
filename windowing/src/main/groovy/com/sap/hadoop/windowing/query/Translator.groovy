@@ -44,8 +44,8 @@ abstract class Translator
 		qry.input = qryIn
 		WindowingInput inputStream = setupWindowingInput(qry)
 		qryIn.wInput = inputStream
-		qryIn.serDe = inputStream.getSerDe()
-		qryIn.inputOI = qryIn.serDe.getObjectInspector()
+		qryIn.deserializer = inputStream.getDeserializer()
+		qryIn.inputOI = qryIn.deserializer.getObjectInspector()
 		qryIn.processingOI = ObjectInspectorUtils.getStandardObjectInspector(qryIn.inputOI, ObjectInspectorCopyOption.JAVA)
 		setupInputColumns(qry)
 		

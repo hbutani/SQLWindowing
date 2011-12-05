@@ -4,6 +4,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapred.InputFormat;
@@ -25,12 +26,11 @@ class TableWindowingInput implements WindowingInput
 	InputSplit[] iSplits;
 	int currSplitNum;
 	org.apache.hadoop.mapred.RecordReader<Writable, Writable> rdr;
-	SerDe serDe;
+	private SerDe serDe;
 	Writable key;
 	Writable value;
 	boolean isValueValid;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(InputStream ins, Configuration conf, Properties tbl) throws IOException
 	{
@@ -125,7 +125,7 @@ class TableWindowingInput implements WindowingInput
 		}
 	}
 	
-	public SerDe getSerDe()
+	public Deserializer getDeserializer()
 	{
 		return serDe;
 	}

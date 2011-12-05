@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.ql.exec.RecordWriter;
+import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDe;
-import org.apache.hadoop.hive.serde2.objectinspector.SettableStructObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo
@@ -44,7 +44,7 @@ class QueryInput
 {
 	WindowingInput wInput;
 	StructObjectInspector inputOI;
-	SerDe serDe
+	Deserializer deserializer
 	StructObjectInspector processingOI;
 	ArrayList<Column> columns = []
 	ArrayList<Column> partitionColumns = []

@@ -14,6 +14,7 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Writable;
 
+import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.runtime.Mode;
 import com.sap.hadoop.windowing.runtime.Utils;
 
@@ -32,6 +33,12 @@ class WindowingDriver
 	void configure() throws Exception
 	{
 		cfg = new Configuration();
+		
+		if (cmdLine.hasOption('c'))
+		{
+			HiveUtils.addToClassPath(getClass().getClassLoader(), cmdLine.getOptionValues('c'));
+		}
+		
 		mode = Mode.LOCAL
 		if ( cmdLine.hasOption('m'))
 			mode = Mode.getMode(cmdLine.getOptionValue('m'))
@@ -80,6 +87,7 @@ class WindowingDriver
 		options.addOption(OptionBuilder.withArgName("mode").withLongOpt("mode").withDescription("exec. mode").hasArg().create('m'));
 		options.addOption(OptionBuilder.withArgName("query").withLongOpt("query").withDescription("com.sap.hadoop.windowing query").hasArg().isRequired().create('q'));
 		options.addOption(OptionBuilder.withArgName("file").withLongOpt("hiveinput").withDescription("simulate hive input").hasArg().create('i'));
+		options.addOption(OptionBuilder.withArgName("dir").withLongOpt("confDir").withDescription("directory containing hive and hadoop conf files").hasArg().create('c'));
 		
 		return options;
 	}

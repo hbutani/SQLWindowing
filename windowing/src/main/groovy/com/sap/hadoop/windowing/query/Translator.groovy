@@ -52,6 +52,16 @@ abstract class Translator
 		//println qryIn.columns.typeInfo.typeName
 	}
 	
+	/**
+	 * <ul>
+	 * <li> Create a Column object for each Field in processingOI
+	 * <li> validate columns in partition clause are columns of this table
+	 * <li> validate columns in order clause are columns of this table; add ordering info to Column object
+	 * <li> if order columns doesn't include partition columns, add them.
+	 * </ul>
+	 * @param qry
+	 * @throws WindowingException
+	 */
 	void setupInputColumns(Query qry) throws WindowingException
 	{
 		QueryInput qryIn = qry.input

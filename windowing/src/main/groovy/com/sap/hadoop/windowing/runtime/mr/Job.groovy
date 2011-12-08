@@ -43,9 +43,13 @@ import com.sap.hadoop.metadata.CompositeSerialization;
 import com.sap.hadoop.metadata.CompositeWritable;
 import com.sap.hadoop.metadata.WindowingKey;
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.query.Query;
+import com.sap.hadoop.windowing.query.TableInput;
+import com.sap.hadoop.windowing.query.TableOutput;
 
 class Job extends Configured
 {
+	public static final String WINDOWING_JAR_FILE = "windowing.jar.file";
 	public static final String WINDOWING_PARTITION_COLS = "windowing.partition.cols";
 	public static final String WINDOWING_SORT_COLS = "windowing.sort.cols";
 	public static final String WINDOWING_INPUT_DATABASE = "windowing.input.database";
@@ -147,6 +151,33 @@ class Job extends Configured
 	    JobClient.runJob(conf);
 		
 		return 0;
+	}
+	
+	public int run(Query query) throws WindowingException
+	{
+		try
+		{
+			TableInput tblIn = query.qSpec.tableIn
+			TableOutput tblOut = query.qSpec.tableOut
+			
+			String jobName = "Windowing Query: " + query.qSpec.toString()
+			
+			String db = null
+			String tableName = tblIn.tableName
+			
+			String partitionCols = query.input.partitionColumns*.name.join(",")
+			String sortCols = query.input.orderColumns*.name.join(",")
+			String windowingJar = conf.get(WINDOWING_JAR_FILE)
+			String outputURI = tblOut.outputPath
+			String outputFormatClassName = tblOut.outputFormat;
+			Class<? extends OutputFormat> outputFormatClass = (outputFormatClassName != null) ?
+						(Class<? extends OutputFormat>) Class.forName(outputFormatClassName) : SequenceFileOutputFormat.class;
+			return run(jobName, false, db, tableName, partitionCols, sortCols, windowingJar, outputURI, outputFormatClass)
+		}
+		catch(Throwable t)
+		{
+			throw new WindowingException(t);
+		}
 	}
 	
 	public void configureSortingDataType(List<FieldSchema> fields, JobConf jobconf) throws WindowingException

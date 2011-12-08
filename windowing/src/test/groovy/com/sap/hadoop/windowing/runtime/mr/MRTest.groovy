@@ -17,7 +17,7 @@ class MRTest extends MRBaseTest
 	@Test
 	void test1()
 	{
-		Query qry = wshell.translate("""
+		wshell.execute("""
 		from part
 		partition by p_mfgr
 		order by p_mfgr, p_name

@@ -56,6 +56,7 @@ class Job extends Configured
 	public static final String WINDOWING_INPUT_TABLE = "windowing.input.table";
 	public static final String WINDOWING_KEY_TYPE = CompositeDataType.COMPOSITE_DATA_TYPE;
 	public static final String WINDOWING_NUM_PARTION_COLUMNS = "windowing.number.of.partition.columns";
+	public static final String WINDOWING_QUERY_STRING = "windowing.query.string";
 
 	public Job()
 	{

@@ -78,6 +78,7 @@ public enum Mode
 			CommonTreeAdaptor ta = (CommonTreeAdaptor) parser.getTreeAdaptor();
 			QuerySpecBuilder v = new QuerySpecBuilder(adaptor : ta)
 			v.visit(t)
+			v.qSpec.queryStr = query
 			return v.qSpec
 		}
 		catch(RecognitionException re)

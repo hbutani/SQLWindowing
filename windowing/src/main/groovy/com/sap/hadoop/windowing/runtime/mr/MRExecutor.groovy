@@ -14,6 +14,7 @@ class MRExecutor extends Executor
 		conf.set("keep.failed.task.files", "true");
 		conf.set("mapred.map.max.attempts", "2");
 		conf.set("mapred.child.java.opts", "-Xmx2048m")
+		conf.set(Job.WINDOWING_QUERY_STRING, qry.qSpec.queryStr)
 		j.setConf(conf);
 		int eCode = j.run(qry);
 	}

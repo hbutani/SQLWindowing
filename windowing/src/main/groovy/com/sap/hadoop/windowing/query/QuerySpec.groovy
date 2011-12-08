@@ -5,6 +5,7 @@ import com.sap.hadoop.windowing.runtime.ArgType;
 
 class QuerySpec
 {
+	String queryStr
 	TableInput tableIn
 	ArrayList<FuncSpec> funcSpecs
 	ArrayList<String> partitionColumns

@@ -19,8 +19,10 @@ import org.apache.hadoop.hive.serde.Constants as HiveConstants
 import com.sap.hadoop.windowing.functions.*;
 import com.sap.hadoop.windowing.functions.annotations.FunctionDef;
 import com.sap.hadoop.windowing.io.HiveWindowingInput;
+import com.sap.hadoop.windowing.io.MRWindowingInput;
 import com.sap.hadoop.windowing.io.WindowingInput;
 import com.sap.hadoop.windowing.runtime.ArgType;
+import com.sap.hadoop.windowing.runtime.mr.Job;
 import com.sap.hadoop.windowing.*;
 
 abstract class Translator
@@ -341,4 +343,24 @@ class HiveTranslator extends Translator
 		}
 	}
 
+}
+
+class MRTranslator extends Translator
+{
+	WindowingInput setupWindowingInput(Query qry) throws WindowingException
+	{
+		TableInput tableIn = qry.qSpec.tableIn
+		try
+		{
+			Configuration cfg = qry.cfg
+			WindowingInput rdr = new MRWindowingInput();
+			cfg.set(Job.WINDOWING_INPUT_TABLE, tableIn.tableName)
+			rdr.initialize(null, cfg, tableIn.serDeProps);
+			return rdr;
+		}
+		catch(Exception e)
+		{
+			throw new WindowingException(e);
+		}
+	}
 }

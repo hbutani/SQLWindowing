@@ -21,6 +21,7 @@ import com.sap.hadoop.windowing.query.QuerySpecBuilder;
 import com.sap.hadoop.windowing.query.Translator;
 import com.sap.hadoop.windowing.query.LocalTranslator;
 import com.sap.hadoop.windowing.query.HiveTranslator;
+import com.sap.hadoop.windowing.query.MRTranslator;
 
 /**
  * Is responsible for running an invocation of the Driver.
@@ -32,7 +33,8 @@ public enum Mode
 	LOCAL(new LocalTranslator(), new Executor()),
 	TEST(new LocalTranslator(), new TestExecutor()),
 	HIVE(new HiveTranslator(), new Executor()),
-	HIVETEST(new HiveTranslator(), new TestExecutor());
+	HIVETEST(new HiveTranslator(), new TestExecutor()),
+	MR(new MRTranslator(), new Executor());
 	
 	private final Translator translator;
 	private final Executor executor;

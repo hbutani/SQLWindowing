@@ -61,18 +61,18 @@ class Job extends Configured
 	{
 		Job j = new Job();
 		Configuration conf = new Configuration();
-		//conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
-	    //conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
+		conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
+	    conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
 		
-	    //conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
-		conf.set("hive.metastore.uris", "thrift://localhost:9083");
+	    conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
+		//conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
 	    //conf.addResource("hadoop-local.xml");
 	    conf.set("keep.failed.task.files", "true");
 	    conf.set("mapred.map.max.attempts", "2");
 		conf.set("mapred.child.java.opts", "-Xmx2048m")
 	    j.setConf(conf);
-		int exitCode = j.run("Hive Windowing", true, null, "part_test", "p_mfgr", "p_mfgr,p_name", "e:/windowing/windowing.jar", 
+		int exitCode = j.run("Hive Windowing", false, null, "part_test", "p_mfgr", "p_mfgr,p_name", "e:/windowing/windowing.jar", 
 			"windowing-output/", TextOutputFormat.class);
 		System.exit(exitCode);
 	}

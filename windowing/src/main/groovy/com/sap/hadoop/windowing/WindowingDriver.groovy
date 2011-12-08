@@ -32,12 +32,12 @@ class WindowingDriver
 	
 	void configure() throws Exception
 	{
-		cfg = new Configuration();
-		
 		if (cmdLine.hasOption('c'))
 		{
 			HiveUtils.addToClassPath(getClass().getClassLoader(), cmdLine.getOptionValues('c'));
 		}
+		
+		cfg = new Configuration();
 		
 		mode = Mode.LOCAL
 		if ( cmdLine.hasOption('m'))

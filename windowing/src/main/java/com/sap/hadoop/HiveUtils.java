@@ -100,14 +100,14 @@ public class HiveUtils
 		}
 	}
 	
-	public static Deserializer getDeserializer(String db, String table, JobConf job) throws WindowingException
+	public static Deserializer getDeserializer(String db, String table, Configuration conf) throws WindowingException
 	{
 		try
 		{
-			HiveMetaStoreClient client = getClient(job);
+			HiveMetaStoreClient client = getClient(conf);
 			db = validateDB(client, db);
 			Table t = getTable(client, db, table);
-			return MetaStoreUtils.getDeserializer(job, t);
+			return MetaStoreUtils.getDeserializer(conf, t);
 		}
 		catch(WindowingException w)
 		{

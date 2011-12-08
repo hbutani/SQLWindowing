@@ -52,6 +52,7 @@ with
   first_value(p_size, 'true') over rows between 2 preceding and 2 following as fv2
 select p_mfgr,p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, fv,lv, fv2""")
 		
+		//print qSpec.toString()
 		assert qSpec.toString() == """Query:
 	tableInput=(windowInputClass=com.sap.hadoop.windowing.io.TableWindowingInput, inputPath=$basedir/com/sap/hadoop/windowing/partsmall, keyClass=org.apache.hadoop.io.Text, valueClass=org.apache.hadoop.io.Text, inputFormatClass=org.apache.hadoop.mapred.TextInputFormat, serDeClass=org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, serDeProps={columns=p_partkey,p_name,p_mfgr,p_brand,p_type,p_size,p_container,p_retailprice,p_comment, columns.types=int,string,string,string,string,int,string,double,string})
 	partitionColumns=p_mfgr
@@ -74,7 +75,7 @@ select p_mfgr,p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, 
 		first_value(alias=fv2, param=[id=p_size, strVal=true], type=null, window=window(start=range(2 PRECEDING), end=range(2 FOLLOWING)))]
 	select=p_mfgr, p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, fv, lv, fv2
 	whereExpr=null
-	tableOutput=(serDeProps={columns=p_partkey,p_name,p_mfgr,p_brand,p_type,p_size,p_container,p_retailprice,p_comment, columns.types=int,string,string,string,string,int,string,double,string})
+	tableOutput=(serDeProps={columns=p_partkey,p_name,p_mfgr,p_brand,p_type,p_size,p_container,p_retailprice,p_comment, columns.types=int,string,string,string,string,int,string,double,string}, outputPath=null, outputFormat=null)
 """	
 	}
 	
@@ -90,5 +91,63 @@ select p_mfgr,p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, 
 		with
 			rank() as r
 		select p_mfgr,p_name, p_size, r""")
+	}
+	
+	@Test
+	void testTableName()
+	{
+		QuerySpec qSpec = wshell.parse("""
+		from part
+		partition by p_mfgr
+		order by p_mfgr, p_name
+		with
+			rank() as r
+		select p_mfgr,p_name, p_size, r""")
+	}
+	
+	@Test
+	void testOutputPath()
+	{
+		QuerySpec qSpec = wshell.parse("""
+		from part
+		partition by p_mfgr
+		order by p_mfgr, p_name
+		with
+			rank() as r
+		select p_mfgr,p_name, p_size, r
+		into path='/tmp/wout'""")
+		
+		assert qSpec.toString() == """Query:
+	tableInput=(hiveTable=part)
+	partitionColumns=p_mfgr
+	orderColumns=p_mfgr ASC, p_name ASC
+	funcSpecs=[rank(alias=r, param=[], type=null, window=null)]
+	select=p_mfgr, p_name, p_size, r
+	whereExpr=null
+	tableOutput=(serDeProps={}, outputPath=/tmp/wout, outputFormat=null)
+"""
+	}
+	
+	@Test
+	void testOutputFormat()
+	{
+		QuerySpec qSpec = wshell.parse("""
+		from part
+		partition by p_mfgr
+		order by p_mfgr, p_name
+		with
+			rank() as r
+		select p_mfgr,p_name, p_size, r
+		into path='/tmp/wout' format='org.apache.hadoop.mapred.SequenceFileOutputFormat'""")
+		
+		assert qSpec.toString() == """Query:
+	tableInput=(hiveTable=part)
+	partitionColumns=p_mfgr
+	orderColumns=p_mfgr ASC, p_name ASC
+	funcSpecs=[rank(alias=r, param=[], type=null, window=null)]
+	select=p_mfgr, p_name, p_size, r
+	whereExpr=null
+	tableOutput=(serDeProps={}, outputPath=/tmp/wout, outputFormat=org.apache.hadoop.mapred.SequenceFileOutputFormat)
+"""
 	}
 }

@@ -18,6 +18,7 @@ tokens {
   WINDOWVALUES;
   TYPENAME;
   SELECTCOLUMN;
+  OUTPUTSPEC;
 }
 
 @header {
@@ -55,11 +56,13 @@ query :
  orderby
  WITH funclist
  select
- where? -> ^(QUERY tableSpec partitionby orderby funclist select where?)
+ where? 
+ outputClause? -> ^(QUERY tableSpec partitionby orderby funclist select where? outputClause?)
 ;
 
 tableSpec :
- hivetable
+ hivetable |
+ ID -> ^(TABLEINPUT ID)
 ;
 
 hivetable :
@@ -133,6 +136,10 @@ selectColumn:
 
 where :	
  (WHERE GROOVYEXPRESSION) -> ^(WHERE GROOVYEXPRESSION)
+;
+
+outputClause :
+ (INTO PATH EQ p=STRING (FORMAT EQ f=STRING)?) -> ^(OUTPUTSPEC $p $f?)
 ;
 
 value_expression :
@@ -239,6 +246,9 @@ LESS		  : L E S S;
 MORE		  : M O R E;
 AS		  : A S;
 OVER		  : O V E R;
+INTO    : I N T O;
+PATH    : P A T H;
+FORMAT  : F O R M A T;
 /*
 /*
   boolean operators

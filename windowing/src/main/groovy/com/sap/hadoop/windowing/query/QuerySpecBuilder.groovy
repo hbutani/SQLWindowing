@@ -58,6 +58,9 @@ class QuerySpecBuilder
 			case WindowingParser.ORDER:
 				order(node)
 				break;
+			case WindowingParser.OUTPUTSPEC:
+				ouputSpec(node, qSpec.tableOut);
+				break;
 		}
 	}
 	
@@ -93,6 +96,11 @@ class QuerySpecBuilder
 	
 	void visitTableInput(CommonTree node, TableInput tableIn) throws WindowingException
 	{
+		CommonTree child = node.children[0]
+		if ( child.getType() == WindowingParser.ID )
+		{
+			tableIn.tableName = child.text
+		}
 	}
 	
 	void visitParam(CommonTree node, TableInput tableInput)
@@ -123,6 +131,16 @@ class QuerySpecBuilder
 				break;
 			default:
 				tableInput.serDeProps.setProperty(name, value)
+		}
+	}
+	
+	void ouputSpec(CommonTree node, TableOutput tableOut)
+	{
+		int cCnt = node.children.size()
+		tableOut.outputPath = node.children[0].text
+		if ( cCnt > 1 )
+		{
+			tableOut.outputFormat = node.children[1].text
 		}
 	}
 	

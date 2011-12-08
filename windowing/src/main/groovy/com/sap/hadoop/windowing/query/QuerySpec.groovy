@@ -32,8 +32,17 @@ class QuerySpec
 	
 }
 
+/**
+ * <ul>
+ * <li> if tableName is specified and it is possible to connect to a HIve MetaStore then rest of the information is extracted from MStore
+ * <li> o.w. in hiveMode: 
+ * </ul>
+ * @author "Harish Butani"
+ *
+ */
 class TableInput
 {
+	String tableName
 	String windowingInputClass
 	String inputPath
 	String keyClass
@@ -44,6 +53,10 @@ class TableInput
 	
 	public String toString()
 	{
+		if (tableName != null )
+		{
+			return sprintf('hiveTable=%s', tableName)
+		}
 		return sprintf( 'windowInputClass=%s, inputPath=%s, keyClass=%s, valueClass=%s, inputFormatClass=%s, serDeClass=%s, serDeProps=%s', 
 			windowingInputClass, inputPath, keyClass, valueClass, inputFormatClass, serDeClass, serDeProps)
 	}
@@ -51,10 +64,12 @@ class TableInput
 
 class TableOutput
 {
+	String outputFormat
+	String outputPath
 	Properties serDeProps = new Properties()
 	public String toString()
 	{
-		return sprintf( 'serDeProps=%s', serDeProps)
+		return sprintf( 'serDeProps=%s, outputPath=%s, outputFormat=%s', serDeProps, outputPath, outputFormat)
 	}
 }
 

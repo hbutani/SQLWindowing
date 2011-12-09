@@ -17,14 +17,15 @@ import org.apache.hadoop.io.Writable;
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.runtime.Mode;
 import com.sap.hadoop.windowing.runtime.Utils;
+import com.sap.hadoop.windowing.runtime.mr.Job;
 
 class WindowingDriver
 {
 	/* turn off logging */
-	static {
+	/*static {
 		System.setProperty("org.apache.commons.logging.Log",
 											 "org.apache.commons.logging.impl.NoOpLog");
- }
+ }*/
 
 	CommandLine cmdLine
 	Configuration cfg;
@@ -34,7 +35,8 @@ class WindowingDriver
 	{
 		if (cmdLine.hasOption('c'))
 		{
-			HiveUtils.addToClassPath(getClass().getClassLoader(), cmdLine.getOptionValues('c'));
+			ClassLoader cLdr = HiveUtils.addToClassPath(getClass().getClassLoader(), cmdLine.getOptionValues('c'));
+			Thread.currentThread().setContextClassLoader(cLdr);
 		}
 		
 		cfg = new Configuration();
@@ -51,6 +53,16 @@ class WindowingDriver
 			String iFile = cmdLine.getOptionValue('i');
 			System.setIn(new FileInputStream(iFile));
 		}
+		
+		/*
+		 * set Windowing jar
+		 */
+		String wJar = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+		if ( mode == Mode.MR)
+			cfg.set(Job.WINDOWING_JAR_FILE, wJar);
+		// fixme: in test mode explicitly set this
+		if ( mode == Mode.MRTEST)
+			cfg.set(Job.WINDOWING_JAR_FILE, "e:/windowing/windowing.jar");
 	}
 	
 	WindowingDriver(CommandLine cmdLine) throws WindowingException

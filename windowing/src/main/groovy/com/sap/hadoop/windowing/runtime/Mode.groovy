@@ -35,7 +35,8 @@ public enum Mode
 	TEST(new LocalTranslator(), new TestExecutor()),
 	HIVE(new HiveTranslator(), new Executor()),
 	HIVETEST(new HiveTranslator(), new TestExecutor()),
-	MR(new MRTranslator(), new MRExecutor());
+	MR(new MRTranslator(), new MRExecutor()),
+	MRTEST(new MRTranslator(), new MRExecutor());
 	
 	private final Translator translator;
 	private final Executor executor;

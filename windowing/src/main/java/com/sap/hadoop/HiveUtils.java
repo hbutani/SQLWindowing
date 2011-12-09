@@ -133,6 +133,18 @@ public class HiveUtils
 		}
 	}
 	
+	public static HiveConf getHiveConf(Configuration conf) throws WindowingException
+	{
+		try
+		{
+			return new HiveConf(conf, conf.getClass());
+		}
+		catch(Exception me)
+		{
+			throw new WindowingException(me);
+		}
+	}
+	
 	public static String validateDB(HiveMetaStoreClient client, String db) throws WindowingException
 	{
 		try

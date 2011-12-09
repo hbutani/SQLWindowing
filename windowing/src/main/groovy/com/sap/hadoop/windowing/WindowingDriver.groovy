@@ -61,7 +61,10 @@ class WindowingDriver
 	
 	public void process() throws WindowingException
 	{
-		mode.run(cmdLine, cfg)
+		WindowingShell wshell = new WindowingShell(cfg, mode.translator, mode.executor);
+		String query = cmdLine.getOptionValue('q')
+		query = Utils.unescapeQueryString(query);
+		wshell.execute(query);
 	}
 
 	public static void main(String[] args) throws Exception

@@ -55,45 +55,4 @@ public enum Mode
 		return Mode.valueOf(m);
 	}
 	
-	public void run(CommandLine cmdLine, Configuration cfg) throws WindowingException
-	{
-		String query = cmdLine.getOptionValue('q')
-		query = Utils.unescapeQueryString(query);
-
-		GroovyShell wshell = new GroovyShell()
-		QuerySpec qSpec = parse(query)
-		Query q = translate(wshell, qSpec, cfg)
-		execute(wshell, q)
-	}
-	
-	public static QuerySpec parse(String query) throws WindowingException
-	{
-		try
-		{
-			WindowingLexer lexer = new WindowingLexer(new ANTLRStringStream(query));
-			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			WindowingParser parser = new WindowingParser(tokens);
-			CommonTree t = parser.query().getTree()
-		
-			CommonTreeAdaptor ta = (CommonTreeAdaptor) parser.getTreeAdaptor();
-			QuerySpecBuilder v = new QuerySpecBuilder(adaptor : ta)
-			v.visit(t)
-			v.qSpec.queryStr = query
-			return v.qSpec
-		}
-		catch(RecognitionException re)
-		{
-			throw new WindowingException("Parse Error:" + re.getMessage(), re)
-		}
-	}
-	
-	public Query translate(GroovyShell wshell, QuerySpec qSpec, Configuration cfg) throws WindowingException
-	{
-		return getTranslator().translate(wshell, qSpec, cfg);
-	}
-	
-	public void execute(GroovyShell wshell, Query qry) throws WindowingException
-	{
-		getExecutor().execute(qry)
-	}
 }

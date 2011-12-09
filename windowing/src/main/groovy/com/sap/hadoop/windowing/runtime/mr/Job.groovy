@@ -17,6 +17,7 @@ import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.serializer.Serialization;
 import org.apache.hadoop.mapred.FileInputFormat;
@@ -131,6 +132,7 @@ class Job extends Configured
 		else
 		{
 			fields = HiveUtils.addTableasJobInput(db, tableName, conf, fs);
+			conf.setOutputValueClass(Text.class);
 			conf.setJar(windowingJarFile);
 		}
 

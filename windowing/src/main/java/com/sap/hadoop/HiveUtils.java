@@ -63,7 +63,7 @@ public class HiveUtils
 			InputSplit[] iSplits = iFmt.getSplits(job, 1);
 			org.apache.hadoop.mapred.RecordReader<Writable, Writable> rdr = 
 				(org.apache.hadoop.mapred.RecordReader<Writable, Writable>) iFmt.getRecordReader(iSplits[0], job, Reporter.NULL);
-		    job.setOutputValueClass(rdr.createValue().getClass());
+		    job.setMapOutputValueClass(rdr.createValue().getClass());
 		    
 		    // 5. set num reducers to number of input splits
 			job.setNumReduceTasks(iSplits.length);

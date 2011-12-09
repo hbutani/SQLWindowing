@@ -7,6 +7,7 @@ import org.antlr.runtime.tree.CommonTree;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
 import org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordWriter;
+import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
 import org.apache.hadoop.hive.serde2.objectinspector.SettableStructObjectInspector;
@@ -140,7 +141,7 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 			Properties props = new Properties()
 			props.setProperty(HiveConstants.LIST_COLUMNS, colnames)
 			props.setProperty(HiveConstants.LIST_COLUMN_TYPES, coltypes)
-			qryOut.serDe = new TypedBytesSerDe();
+			qryOut.serDe = getOutputSerDe(props);
 			
 			// 2. setup internal processing serDe
 			qryOut.serDe.initialize(qry.cfg, props);
@@ -242,6 +243,11 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 	OutputStream getOutputStream()
 	{
 		return System.out
+	}
+	
+	SerDe getOutputSerDe(Properties props)
+	{
+		return new TypedBytesSerDe();
 	}
 }
 

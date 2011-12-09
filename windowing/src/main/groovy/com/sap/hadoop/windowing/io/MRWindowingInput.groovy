@@ -3,6 +3,7 @@ package com.sap.hadoop.windowing.io
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDe;
+import org.apache.hadoop.hive.serde2.Serializer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,6 +47,11 @@ class MRWindowingInput implements WindowingInput
 	}
 
 	Deserializer getDeserializer() 
+	{
+		return serDe;
+	}
+	
+	Serializer getSerializer()
 	{
 		return serDe;
 	}

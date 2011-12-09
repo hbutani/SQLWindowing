@@ -1,5 +1,6 @@
 package com.sap.hadoop.windowing.io
 
+import org.apache.hadoop.hive.serde2.Serializer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -128,6 +129,11 @@ class TableWindowingInput implements WindowingInput
 	public Deserializer getDeserializer()
 	{
 		return serDe;
+	}
+	
+	Serializer getSerializer()
+	{
+		throw new UnsupportedOperationException();
 	}
 	
 	boolean hasNext() 

@@ -9,6 +9,7 @@ import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
 import org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordReader;
 import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDe;
+import org.apache.hadoop.hive.serde2.Serializer;
 import org.apache.hadoop.io.Writable;
 
 
@@ -22,6 +23,11 @@ public class HiveWindowingInput extends TypedBytesRecordReader implements Window
 	public Deserializer getDeserializer()
 	{
 		return serDe;
+	}
+	
+	Serializer getSerializer()
+	{
+		throw new UnsupportedOperationException();
 	}
 	
 	public void initialize(InputStream ins, Configuration conf, Properties tbl) throws IOException

@@ -135,6 +135,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 		<artifactId>slf4j-api</artifactId>
 		<version>1.6.4</version>
 	</dependency>
+	<dependency>
+		<groupId>org.apache.hadoop.hive</groupId>
+		<artifactId>hive-cli</artifactId>
+		<version>0.7.1-cdh3u1</version>
+	</dependency>
   </dependencies>
   <repositories>
     <repository>

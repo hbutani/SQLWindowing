@@ -1,0 +1,31 @@
+- copy target/com.sap.hadoop.windowing-0.0.1-SNAPSHOT.jar to $HIVE_HOME/lib
+- cp $HIVE_HOME/bin/ext/cli.sh $HIVE_HOME/bin/ext/windowCli.sh
+- edit windowCli.sh; change to
+THISSERVICE=windowingCli
+export SERVICE_LIST="${SERVICE_LIST}${THISSERVICE} "
+
+windowingCli () {
+  CLASS=com.sap.hadoop.windowing.WindowingHiveCliDriver
+  if $cygwin; then
+    HIVE_LIB=`cygpath -w "$HIVE_LIB"`
+  fi
+  JAR=${HIVE_LIB}/com.sap.hadoop.windowing-*.jar
+  exec $HADOOP jar $JAR $CLASS "$@"
+}
+
+windowingCli_help () {
+  windowingCli "--help"
+} 
+
+
+Also note:
+had to comment out this line in hive script:
+if $cygwin; then
+#    CLASSPATH=`cygpath -p -w "$CLASSPATH"`  <----- this line
+    CLASSPATH=${CLASSPATH};${AUX_CLASSPATH}
+else
+    CLASSPATH=${CLASSPATH}:${AUX_CLASSPATH}
+fi
+
+passing cygpathed CLASSPATH to hadoop causes problems. hadoop runs cygpath on already transformed path which causes incorrect transformation.
+maybe because using drive E: and not C:

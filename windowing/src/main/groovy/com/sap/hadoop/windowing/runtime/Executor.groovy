@@ -28,6 +28,11 @@ class Executor
 		def windowFnAliases = qry.wnAliases
 			
 		OutputObj orow = new OutputObj();
+		for(OutputColumn oc in qry.output.columns)
+		{
+			oc.groovyExpr.binding = orow
+			orow.registerFunctions(oc.groovyExpr)
+		}
 		orow.resultMap = [:]
 		Partitioner partitions = new Partitioner(qry)
 		while(partitions.hasNext())
@@ -55,7 +60,6 @@ class Executor
 		ArrayList o = []
 		for(OutputColumn oc in qry.output.columns)
 		{
-			oc.groovyExpr.binding = orow
 			o << oc.groovyExpr.run()
 		}
 		qryOut.wrtr.write(qryOut.serDe.serialize(o, qryOut.processingOI))
@@ -78,7 +82,6 @@ class TestExecutor extends Executor
 		ArrayList o = []
 		for(OutputColumn oc in qry.output.columns)
 		{
-			oc.groovyExpr.binding = orow
 			o << oc.groovyExpr.run()
 		}
 		out.println(o)

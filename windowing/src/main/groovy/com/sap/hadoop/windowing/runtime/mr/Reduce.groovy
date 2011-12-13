@@ -57,6 +57,11 @@ public class Reduce extends MapReduceBase implements Reducer<Writable, Writable,
 		def windowFnAliases = qry.wnAliases
 			
 		OutputObj orow = new OutputObj();
+		for(OutputColumn oc in qry.output.columns)
+		{
+			oc.groovyExpr.binding = orow
+			orow.registerFunctions(oc.groovyExpr)
+		}
 		orow.resultMap = [:]
 		com.sap.hadoop.windowing.runtime.Partition p = new com.sap.hadoop.windowing.runtime.Partition(
 			qryIn.inputOI, qryIn.processingOI, partitionColumnFields)
@@ -84,7 +89,6 @@ public class Reduce extends MapReduceBase implements Reducer<Writable, Writable,
 		ArrayList o = []
 		for(OutputColumn oc in qry.output.columns)
 		{
-			oc.groovyExpr.binding = orow
 			o << oc.groovyExpr.run()
 		}
 		Writable outWritable = qryOut.serDe.serialize(o, qryOut.processingOI)

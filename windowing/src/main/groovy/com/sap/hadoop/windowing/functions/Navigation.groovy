@@ -5,15 +5,6 @@ import com.sap.hadoop.windowing.functions.annotations.FunctionDef;
 import com.sap.hadoop.windowing.runtime.ArgType;
 import com.sap.hadoop.windowing.runtime.Partition;
 
-@FunctionDef(
-	name = "first_value",
-	supportsWindow = true,
-	args =
-	[
-		@ArgDef(name="aggExpr", typeName="script", argTypes = [ArgType.STRING, ArgType.SCRIPT, ArgType.ID]),
-		@ArgDef(name="skipNulls", typeName="boolean", optional=true, argTypes = [ArgType.STRING])
-	]
-)
 abstract class FirstLastValue  extends IWindowFunction
 {
 	Script aggExpr

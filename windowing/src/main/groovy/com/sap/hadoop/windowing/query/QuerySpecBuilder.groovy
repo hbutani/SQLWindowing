@@ -239,7 +239,7 @@ class QuerySpecBuilder
 		}
 		if ( node.children.size() > 2)
 		{
-			sc.typeName = node.children[2].text
+			sc.typeName = node.children[2].children[0].text
 		}
 		return sc
 	}

@@ -17,6 +17,8 @@ windowingCli_help () {
   windowingCli "--help"
 } 
 
+- to run pass -w windowing.jar option.
+
 
 Also note:
 had to comment out this line in hive script:

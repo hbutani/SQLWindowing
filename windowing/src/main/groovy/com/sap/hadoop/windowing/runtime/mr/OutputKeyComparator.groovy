@@ -1,23 +1,24 @@
 package com.sap.hadoop.windowing.runtime.mr
 
-import java.io.IOException;
-
 import org.apache.hadoop.io.DataInputBuffer;
-import com.sap.hadoop.metadata.CompositeDataType;
-import com.sap.hadoop.metadata.CompositeWritable;
 import org.apache.hadoop.io.RawComparator;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.JobConfigurable;
 
-class OutputGroupingComparator implements RawComparator, JobConfigurable 
+import com.sap.hadoop.metadata.CompositeDataType;
+import com.sap.hadoop.metadata.CompositeWritable;
+import com.sap.hadoop.windowing.query.Order;
+
+
+class OutputKeyComparator implements RawComparator, JobConfigurable 
 {
 	CompositeDataType recordType;
 	CompositeWritable key1;
 	CompositeWritable key2;
 	private final DataInputBuffer buffer;
-	int numPCols
+	boolean[] ordering;
 	
-	protected OutputGroupingComparator()
+	protected OutputKeyComparator()
 	{
 		key1 = new CompositeWritable();
 		key2 = new CompositeWritable();
@@ -27,12 +28,22 @@ class OutputGroupingComparator implements RawComparator, JobConfigurable
 	@Override
 	public void configure(JobConf job)
 	{
-		numPCols = job.getInt(Job.WINDOWING_NUM_PARTION_COLUMNS, 0);
 		String s = job.get(Job.WINDOWING_KEY_TYPE);
 		recordType = new CompositeDataType();
 		recordType.readFields(s);
 		key1 = recordType.create();
 		key2 = recordType.create();
+		
+		String sortOrder = job.get(Job.WINDOWING_SORT_COLS_ORDER)
+		String[] orders = sortOrder.split(",")
+		int len = orders.length
+		ordering = new boolean[len]
+		for(int i = 0; i < len; i++)
+		{
+			String os = orders[i]
+			Order o = Order.valueOf(Order.class, os)
+			ordering[i] = (o == Order.DESC)
+		}
 	}
 	
 	public int compare(byte[] b1, int s1, int l1, byte[] b2, int s2, int l2)
@@ -56,6 +67,6 @@ class OutputGroupingComparator implements RawComparator, JobConfigurable
 	{
 		CompositeWritable key1 = (CompositeWritable) arg0;
 		CompositeWritable key2 = (CompositeWritable) arg1;
-		return key1.compareToPrefix(key2, numPCols);
+		return key1.compareTo(key2, ordering);
 	}
 }

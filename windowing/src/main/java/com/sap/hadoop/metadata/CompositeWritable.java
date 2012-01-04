@@ -212,6 +212,23 @@ public class CompositeWritable implements WritableComparable<CompositeWritable>
 		}
 		return cmp;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public int compareTo(CompositeWritable o, boolean[] descending)
+	{
+		int cmp = 0;
+		int i = 0;
+		for(DataType<?> eType : type.elementTypes)
+		{
+			//elements[i].compareTo(o.elements[i]);
+			WritableComparable<?> e1 = descending[i] ? o.elements[i] : elements[i];
+			WritableComparable<?> e2 = descending[i] ? elements[i] : o.elements[i];
+			cmp = eType.cast(e1).compareTo(eType.cast(e2));
+			if ( cmp != 0 ) return cmp;
+			i++;
+		}
+		return cmp;
+	}
 
 	@Override
 	public int hashCode()

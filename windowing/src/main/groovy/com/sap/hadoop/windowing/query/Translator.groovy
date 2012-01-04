@@ -109,7 +109,10 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		if (numMissing > 0)
 		{
 			for(p in qryIn.partitionColumns)
+			{
+				p.order = Order.ASC
 				qryIn.orderColumns << p
+			}
 		}
 		qryIn.orderColumns += tl
 	}

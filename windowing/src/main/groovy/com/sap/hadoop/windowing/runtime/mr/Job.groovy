@@ -53,6 +53,7 @@ class Job extends Configured
 	public static final String WINDOWING_JAR_FILE = "windowing.jar.file";
 	public static final String WINDOWING_PARTITION_COLS = "windowing.partition.cols";
 	public static final String WINDOWING_SORT_COLS = "windowing.sort.cols";
+	public static final String WINDOWING_SORT_COLS_ORDER = "windowing.sort.order";
 	public static final String WINDOWING_INPUT_DATABASE = "windowing.input.database";
 	public static final String WINDOWING_INPUT_TABLE = "windowing.input.table";
 	public static final String WINDOWING_KEY_TYPE = CompositeDataType.COMPOSITE_DATA_TYPE;
@@ -99,7 +100,7 @@ class Job extends Configured
 	 */
 	@Override
 	public int run(String jobName, boolean localMode, String db, String tableName,
-		String partitionCols, String sortColumns, String windowingJarFile,
+		String partitionCols, String sortColumns, String sortOrder, String windowingJarFile,
 		String outputURI, Class<? extends OutputFormat> outputFormatClass) throws Exception
 	{
 	    FileSystem fs = FileSystem.get(URI.create(outputURI), getConf());
@@ -112,6 +113,7 @@ class Job extends Configured
 		conf.set(WINDOWING_INPUT_TABLE, tableName);
 		conf.set(WINDOWING_PARTITION_COLS, partitionCols);
 		conf.set(WINDOWING_SORT_COLS, sortColumns);
+		conf.set(WINDOWING_SORT_COLS_ORDER, sortOrder)
 		
 		List<FieldSchema> fields;
 		
@@ -147,7 +149,7 @@ class Job extends Configured
 	    conf.setMapOutputKeyClass(CompositeWritable.class);
 		conf.setPartitionerClass(Partition.class);
 		
-		conf.setOutputKeyComparatorClass(CompositeDataType.CompositeWritableComparator.class);
+		conf.setOutputKeyComparatorClass(OutputKeyComparator.class);
 		
 		conf.setOutputValueGroupingComparator(OutputGroupingComparator.class);
 		
@@ -172,12 +174,13 @@ class Job extends Configured
 			
 			String partitionCols = query.input.partitionColumns*.name.join(",")
 			String sortCols = query.input.orderColumns*.name.join(",")
+			String sortOrder = query.input.orderColumns*.order.join(",")
 			String windowingJar = conf.get(WINDOWING_JAR_FILE)
 			String outputURI = tblOut.outputPath
 			String outputFormatClassName = tblOut.outputFormat;
 			Class<? extends OutputFormat> outputFormatClass = (outputFormatClassName != null) ?
 						(Class<? extends OutputFormat>) Class.forName(outputFormatClassName) : SequenceFileOutputFormat.class;
-			return run(jobName, false, db, tableName, partitionCols, sortCols, windowingJar, outputURI, outputFormatClass)
+			return run(jobName, false, db, tableName, partitionCols, sortCols, sortOrder, windowingJar, outputURI, outputFormatClass)
 		}
 		catch(Throwable t)
 		{

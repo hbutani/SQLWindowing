@@ -1,0 +1,6 @@
+1. Loading Geo Header file
+	- get CA state data from www2.census.gov
+	- run schema file to create tables
+	- to load data, you need to translate GeoHdr file into csv
+		(3/1/2012 hb: need to checkin code to do this. for now send me email)
+2. For each test setup the temp table using ctas form 

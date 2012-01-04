@@ -25,7 +25,7 @@ abstract class MRBaseTest
 		
 		Configuration conf = new Configuration();
 		conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
-		//conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
+		conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
 		
 		conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
 		//conf.set("hive.metastore.uris", "thrift://localhost:9083");

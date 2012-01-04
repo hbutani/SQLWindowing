@@ -178,6 +178,24 @@ public class CompositeWritable implements WritableComparable<CompositeWritable>
 	}
 	
 	@SuppressWarnings("unchecked")
+	public int compareToPrefix(CompositeWritable o, int prefixSize)
+	{
+		int cmp = 0;
+		int i = 0;
+		prefixSize = prefixSize > type.elementTypes.length ? type.elementTypes.length : prefixSize;
+		for(i=0; i <prefixSize; i++)
+		{
+			DataType<?> eType = type.elementTypes[i];
+			//elements[i].compareTo(o.elements[i]);
+			cmp = eType.cast(elements[i]).compareTo(
+					eType.cast(o.elements[i])
+					);
+			if ( cmp != 0 ) return cmp;
+		}
+		return cmp;
+	}
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public int compareTo(CompositeWritable o)
 	{

@@ -23,14 +23,7 @@ abstract class MRBaseTest
 	{
 		outStream = new ByteArrayOutputStream()
 		
-		Configuration conf = new Configuration();
-		conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
-		conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
-		
-		conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
-		//conf.set("hive.metastore.uris", "thrift://localhost:9083");
-		conf.set("hive.metastore.local", "false");
-		conf.set("windowing.jar.file", "e:/windowing/windowing.jar");
+		Configuration conf = HOME();
 		
 		wshell = new WindowingShell(conf, new MRTranslator(), 
 			new MRExecutor())
@@ -40,5 +33,33 @@ abstract class MRBaseTest
 	public void setup()
 	{
 		outStream.reset();
+	}
+	
+	public static Configuration WORK()
+	{
+		Configuration conf = new Configuration();
+		conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
+		conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
+		
+		conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
+		//conf.set("hive.metastore.uris", "thrift://localhost:9083");
+		conf.set("hive.metastore.local", "false");
+		conf.set("windowing.jar.file", "e:/windowing/windowing.jar");
+		
+		return conf;
+	}
+	
+	public static Configuration HOME()
+	{
+		Configuration conf = new Configuration();
+		conf.set("fs.default.name", "hdfs://localhost:8020");
+		conf.set("mapred.job.tracker", "localhost:8021");
+		
+		conf.set("hive.metastore.uris", "thrift://localhost:9083");
+		//conf.set("hive.metastore.uris", "thrift://localhost:9083");
+		conf.set("hive.metastore.local", "false");
+		conf.set("windowing.jar.file", "/media/MyPassport/windowing/windowing.jar");
+		
+		return conf;
 	}
 }

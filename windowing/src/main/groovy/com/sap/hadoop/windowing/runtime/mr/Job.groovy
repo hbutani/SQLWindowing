@@ -149,7 +149,7 @@ class Job extends Configured
 		
 		conf.setOutputKeyComparatorClass(CompositeDataType.CompositeWritableComparator.class);
 		
-		configureSortingDataType(fields, conf);
+		configurePartitionDataType(fields, conf);
 	    
 	    JobClient.runJob(conf);
 		
@@ -183,7 +183,7 @@ class Job extends Configured
 		}
 	}
 	
-	public void configureSortingDataType(List<FieldSchema> fields, JobConf jobconf) throws WindowingException
+	public void configurePartitionDataType(List<FieldSchema> fields, JobConf jobconf) throws WindowingException
 	{
 		try {
 
@@ -194,19 +194,19 @@ class Job extends Configured
 			jobconf.setInt(Job.WINDOWING_NUM_PARTION_COLUMNS, partCols.length); 
 
 			// setup a OI from the sortColums; get datatypes from hive table Defn
-			StringBuilder sortColType = new StringBuilder();
-			getTypeString(fields, sortColStr, sortCols, sortColType, partColStr, partCols)
+			StringBuilder partColType = new StringBuilder();
+			getTypeString(fields, sortColStr, sortCols, partColType, partColStr, partCols)
 			
 			Properties props = new Properties();
-			props.setProperty(org.apache.hadoop.hive.serde.Constants.LIST_COLUMNS, sortColStr);
-			props.setProperty(org.apache.hadoop.hive.serde.Constants.LIST_COLUMN_TYPES, sortColType.toString());
-			TypedBytesSerDe sortColsSerDe = new TypedBytesSerDe();
-			sortColsSerDe.initialize(jobconf, props);
-			StructObjectInspector sortColsOI = (StructObjectInspector) sortColsSerDe.getObjectInspector();
+			props.setProperty(org.apache.hadoop.hive.serde.Constants.LIST_COLUMNS, partColStr);
+			props.setProperty(org.apache.hadoop.hive.serde.Constants.LIST_COLUMN_TYPES, partColType.toString());
+			TypedBytesSerDe partColsSerDe = new TypedBytesSerDe();
+			partColsSerDe.initialize(jobconf, props);
+			StructObjectInspector partColsOI = (StructObjectInspector) partColsSerDe.getObjectInspector();
 			
 			// create a CompositeDataType based on OI; add it to job
-			CompositeDataType sortDataType = CompositeDataType.define(sortColsOI);
-			jobconf.set(WINDOWING_KEY_TYPE, sortDataType.toString())
+			CompositeDataType partDataType = CompositeDataType.define(partColsOI);
+			jobconf.set(WINDOWING_KEY_TYPE, partDataType.toString())
 			jobconf.setClass("io.serializations", CompositeSerialization.class, Serialization.class);
 		}
 		catch(WindowingException we)
@@ -225,20 +225,17 @@ class Job extends Configured
 	{
 		boolean first = true;
 		int j = 0;
-		for(String sCol: sortCols) 
+		for(String pCol: partCols) 
 		{
 			// check if partCols[j] == sortCils[j] for the first K columns; K = partCols.length
-			if ( j < partCols.length)
+			if ( !sortCols[j].equals(pCol) )
 			{
-				if ( !partCols[j].equals(sCol) )
-				{
-					throw new WindowingException(sprintf("Sort Columns '%s' must be a superset of PartColumns '%s'", sortColStr, partColStr))
-				}
+				throw new WindowingException(sprintf("Sort Columns '%s' must be a superset of PartColumns '%s'", sortColStr, partColStr))
 			}
 			int i=0;
 			for(;i < fields.size(); i++) {
 				FieldSchema f = fields.get(i);
-				if ( f.getName().equals(sCol) ) {
+				if ( f.getName().equals(pCol) ) {
 					if (first)
 						first = false;
 					else
@@ -248,7 +245,7 @@ class Job extends Configured
 				}
 			}
 			if ( i == fields.size()) {
-				throw new RuntimeException("Unknown column " + sCol);
+				throw new RuntimeException("Unknown column " + pCol);
 			}
 			j++;
 		}

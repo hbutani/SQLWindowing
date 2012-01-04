@@ -21,7 +21,7 @@ class Map extends MapReduceBase implements Mapper<Writable, Writable, Writable, 
 	StructObjectInspector inputOI;
 
 	String[] sortCols;
-	CompositeDataType sortDataType;
+	CompositeDataType partDataType;
 	CompositeWritable wkey;
 	
 	public void configure(JobConf jobconf) {
@@ -29,12 +29,12 @@ class Map extends MapReduceBase implements Mapper<Writable, Writable, Writable, 
 			de = HiveUtils.getDeserializer(jobconf.get(Job.WINDOWING_INPUT_DATABASE), jobconf.get(Job.WINDOWING_INPUT_TABLE), jobconf)
 			inputOI = (StructObjectInspector) de.getObjectInspector();
 			
-			String sortColStr = jobconf.get(Job.WINDOWING_SORT_COLS);
-			sortCols = sortColStr.split(",");
+			String partColStr = jobconf.get(Job.WINDOWING_PARTITION_COLS);
+			sortCols = partColStr.split(",");
 			String s = jobconf.get(Job.WINDOWING_KEY_TYPE);
-			sortDataType = new CompositeDataType();
-			sortDataType.readFields(s);
-			wkey = sortDataType.create();
+			partDataType = new CompositeDataType();
+			partDataType.readFields(s);
+			wkey = partDataType.create();
 		}
 		catch(Exception me) {
 			throw new RuntimeException(me);

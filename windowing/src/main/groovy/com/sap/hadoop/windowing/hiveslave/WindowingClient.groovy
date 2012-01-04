@@ -33,6 +33,7 @@ class WindowingClient
 		resp = new Response();
 		spawnServer();
 		connect();
+		startServerStreamThreads();
 	}
 	
 	void executeQuery(String query) throws WindowingException
@@ -68,7 +69,8 @@ class WindowingClient
 		try
 		{
 			ProcessBuilder pb = new ProcessBuilder(
-				"java", "-cp", windowingJar, 
+				"java", "-cp", '"' + windowingJar + '"', 
+				//"-Xdebug", "-Xrunjdwp:transport=dt_socket,address=9015,server=y,suspend=y",
 				"com.sap.hadoop.windowing.hiveslave.WindowingServer",
 				"-t", "1");
 			Map<String, String> env = pb.environment();
@@ -83,9 +85,10 @@ class WindowingClient
 	
 	private int readPort() throws IOException
 	{
-		DataInputStream scriptIn = new DataInputStream(new BufferedInputStream(
-			server.getInputStream()));
-		return scriptIn.readInt()
+		BufferedReader rdr = new BufferedReader(new InputStreamReader(server.getInputStream()));
+		String s = rdr.readLine();
+		//s = rdr.readLine()
+		return Integer.parseInt(s);
 	}
 
 	private void connect() throws WindowingException
@@ -98,26 +101,28 @@ class WindowingClient
 			socketChannel.configureBlocking(true);
 			socketChannel.connect(addr);
 		}
-		catch(IOException ie)
+		catch(Throwable ie)
 		{
 			killServer();
 			throw new WindowingException(ie);
 		}
 	}
 	
-	private void startErrorThread()
+	private void startServerStreamThreads()
 	{
 		ServerStreamThread t = new ServerStreamThread(this, server.getErrorStream());
 		t.start();
+		ServerOutStreamThread t1 = new ServerOutStreamThread(this, server.getInputStream());
+		t1.start();
 	}
 	
-	private void killServer()
+	void killServer()
 	{
 		if ( server != null )
 		{
 			server.destroy();
 			server = null;
-			socketChannel.close();
+			if ( socketChannel != null ) socketChannel.close();
 		}
 	}
 	
@@ -136,11 +141,12 @@ class ClientUtils
 {
 	static void addJobConfToEnvironment(Configuration conf, Map<String, String> env) {
 	  Iterator<Map.Entry<String, String>> it = conf.iterator();
+	  
 	  while (it.hasNext()) {
 		Map.Entry<String, String> en = it.next();
 		String name = en.getKey();
 		String value = conf.get(name); // does variable expansion
-		name = safeEnvVarName(name);
+		//name = safeEnvVarName(name);
 		env.put(name, value);
 	  }
 	}
@@ -190,6 +196,34 @@ class ServerStreamThread extends Thread
 				errorString.append(line);
 			}
 			client.serverError = errorString.toString();
+		}
+		catch(IOException ioe)
+		{
+		}
+	}
+}
+
+class ServerOutStreamThread extends Thread
+{
+	WindowingClient client;
+	InputStream inputStream;
+	
+	ServerOutStreamThread(WindowingClient client, InputStream inputStream)
+	{
+		this.client = client;
+		this.inputStream = inputStream;
+	}
+  
+	public void run()
+	{
+		try
+		{
+			BufferedReader rdr = new BufferedReader(new InputStreamReader(inputStream));
+			String line = null
+			while( (line = rdr.readLine()) != null)
+			{
+				println line
+			}
 		}
 		catch(IOException ioe)
 		{

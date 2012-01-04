@@ -15,10 +15,13 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.log4j.Logger;
 
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.WindowingHiveCliDriver;
 import com.sap.hadoop.windowing.WindowingShell;
 import com.sap.hadoop.windowing.runtime.Mode;
+import com.sap.hadoop.windowing.runtime.mr.Job;
 
 class WindowingServer
 {
@@ -28,9 +31,21 @@ class WindowingServer
 	Configuration conf;
 	
 	WindowingServer(int numThreads)
-	{
+	{	
 		conf = new Configuration();
 		
+		// apply values from environment
+		for (Map.Entry<String, String> e : System.getenv().entrySet())
+		{
+			conf.set(e.key, e.value)
+		}
+		String wJar = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+		conf.set(Job.WINDOWING_JAR_FILE, wJar);
+		
+		// turn off console logging.
+		//WindowingHiveCliDriver.initHiveLog4j();
+		Logger.getRootLogger().removeAllAppenders();
+
 		/* setup serverChannel */
 		serverChannel = ServerSocketChannel.open();
 		ServerSocket serverSocket = serverChannel.socket();
@@ -46,6 +61,7 @@ class WindowingServer
 		
 		// enable invoker to make connection.
 		System.out.println(serverSocket.localPort);
+		System.out.flush();
 	}
 	
 	void start()
@@ -85,7 +101,7 @@ class WindowingServer
 	void handleRead(final SelectionKey key)
 	{
 		key.interestOps(key.interestOps() & (~SelectionKey.OP_READ))
-		final SlaveConnection conn = (SlaveConnection) key.attachment
+		final SlaveConnection conn = (SlaveConnection) key.attachment()
 		execSvc.submit({
 			conn.handleRequest(key);
 		})
@@ -147,6 +163,7 @@ class SlaveConnection
 	
 	SlaveConnection(Configuration conf)
 	{
+		state = SlaveConnectionState.PROCESS_QUERY
 		szb = ByteBuffer.allocate(4)
 		Mode wMode = Mode.MR
 		wshell = new WindowingShell( conf, wMode.getTranslator(), wMode.getExecutor())
@@ -159,7 +176,7 @@ class SlaveConnection
 		switch(state)
 		{
 			case SlaveConnectionState.PROCESS_QUERY:
-				handleQuery(scoketChannel);
+				handleQuery(socketChannel);
 				break;
 			default:
 				resp.type = ResponseType.ERROR;
@@ -178,16 +195,12 @@ class SlaveConnection
 			wshell.execute(qry); // todo: pass an Object to wshell that can be used to execute Hive Queries
 			resp.type = ResponseType.OK;
 		}
-		catch(WindowingException e)
+		catch(Throwable e)
 		{
 			resp.type = ResponseType.ERROR;
 			resp.errMsg = e.getMessage();
 		}
-		resp.write(socketChannel, szb);
 	}
-	
-	
-	
 	
 }
 
@@ -232,8 +245,12 @@ class Response
 		switch(type)
 		{
 			case ResponseType.OK: break;
-			case ResponseType.QUERY: query = CommUtils.readString(socketChannel, intb);
-			case ResponseType.ERROR: errMsg = CommUtils.readString(socketChannel, intb);
+			case ResponseType.QUERY: 
+				query = CommUtils.readString(socketChannel, intb);
+				break;
+			case ResponseType.ERROR: 
+				errMsg = CommUtils.readString(socketChannel, intb);
+				break;
 			default: throw new RuntimeException(sprintf("Unknown ResponseType %s", this));
 		}
 	}
@@ -244,8 +261,12 @@ class Response
 		switch(type)
 		{
 			case ResponseType.OK: break;
-			case ResponseType.QUERY: CommUtils.writeString(socketChannel, intb, query);
-			case ResponseType.ERROR: CommUtils.writeString(socketChannel, intb, errMsg);
+			case ResponseType.QUERY: 
+				CommUtils.writeString(socketChannel, intb, query);
+				break;
+			case ResponseType.ERROR: 
+				CommUtils.writeString(socketChannel, intb, errMsg);
+				break;
 			default: throw new RuntimeException(sprintf("Unknown ResponseType %s", this));
 		}
 	}
@@ -255,7 +276,7 @@ class CommUtils
 {
 	static int readInt(SocketChannel socketChannel, ByteBuffer intb)
 	{
-		intb.reset();
+		intb.clear();
 		while (intb.hasRemaining() ) socketChannel.read(intb);
 		intb.flip();
 		return intb.getInt();
@@ -271,7 +292,7 @@ class CommUtils
 	
 	static void writeInt(SocketChannel socketChannel, ByteBuffer intb, int i)
 	{
-		intb.reset();
+		intb.clear();
 		intb.putInt(i);
 		intb.flip();
 		while (intb.hasRemaining() ) socketChannel.write(intb);

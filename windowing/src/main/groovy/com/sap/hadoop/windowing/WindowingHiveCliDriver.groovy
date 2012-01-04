@@ -12,6 +12,7 @@ import java.io.IOException;
 import com.sap.hadoop.windowing.runtime.Mode;
 import com.sap.hadoop.windowing.runtime.Utils;
 import org.apache.hadoop.conf.Configuration;
+import com.sap.hadoop.windowing.hiveslave.WindowingClient;
 import com.sap.hadoop.windowing.query.Translator;
 import com.sap.hadoop.windowing.runtime.Executor;
 import java.io.File;
@@ -23,6 +24,8 @@ import java.util.Arrays;
 import java.util.Map;
 import jline.ConsoleReader;
 import jline.History;
+
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,11 +53,16 @@ class WindowingHiveCliDriver extends CliDriver {
 	
 	CliDriver hiveDriver;
 	boolean windowingMode = false;
-	WindowingShell wShell;
+	WindowingClient wClient;
 	
 	public WindowingHiveCliDriver(CliDriver hiveDriver) {
 		this.hiveDriver = hiveDriver
 	  }
+	
+	void setupClient(HiveConf hConf, String windowingJar) throws WindowingException
+	{
+		wClient = new WindowingClient(hConf, windowingJar)
+	}
 	
 	public LogHelper getConsole() { return hiveDriver.console; }
 	public  Configuration getConf() { return hiveDriver.conf; }
@@ -121,24 +129,36 @@ class WindowingHiveCliDriver extends CliDriver {
 			try
 			{
 				String query = Utils.unescapeQueryString(cmd);
-				wShell.execute(query);
+				wClient.executeQuery(query);
 				return 0;
 			}
 			catch(Exception e)
 			{
 				console.printError("Failed windowing query "+ cmd +" "+ e.getLocalizedMessage(),
 					org.apache.hadoop.util.StringUtils.stringifyException(e));
-				  ret = 1;
+				  return 1;
 			}
 		}
 		else
 		{
+			if (cmd_trimmed.toLowerCase().equals("quit") || cmd_trimmed.toLowerCase().equals("exit"))
+			{
+				wClient.killServer();
+			}
 			return hiveDriver.processCmd(cmd);
 		}
 	}
 
 	public static void main(String[] args) throws Exception {
 		OptionsProcessor oproc = new OptionsProcessor();
+		
+		oproc.@options.addOption(OptionBuilder
+        .hasArg()
+        .withArgName("jar")
+        .withDescription("windowing jar")
+		.isRequired()
+        .create('w'));
+		
 		if (!oproc.process_stage1(args)) {
 			System.exit(1);
 		}
@@ -146,8 +166,10 @@ class WindowingHiveCliDriver extends CliDriver {
 		// NOTE: It is critical to do this here so that log4j is reinitialized
 		// before any of the other core hive classes are loaded
 		initHiveLog4j();
+		
+		HiveConf hConf = new HiveConf(SessionState.class);
 
-		CliSessionState ss = new CliSessionState(new HiveConf(SessionState.class));
+		CliSessionState ss = new CliSessionState(hConf);
 		ss.in = System.in;
 		try {
 			ss.out = new PrintStream(System.out, true, "UTF-8");
@@ -196,8 +218,7 @@ class WindowingHiveCliDriver extends CliDriver {
 
 		// Execute -i init files (always in silent mode)
 		cli.processInitFiles(ss);
-		Mode wMode = Mode.MR
-		cli.wShell = new WindowingShell( cli.conf, wMode.getTranslator(), wMode.getExecutor())
+		cli.setupClient(cli.conf, oproc.commandLine.getOptionValue('w'));
 
 		if (ss.execString != null) {
 			System.exit(cli.processLine(ss.execString));

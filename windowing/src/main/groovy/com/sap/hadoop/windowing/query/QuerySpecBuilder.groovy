@@ -89,7 +89,7 @@ class QuerySpecBuilder
 		if (node.childCount > 1)
 		{
 			def otyp = node.children[1].getType()
-			ord = otype == WindowingParser.ASC ? Order.ASC : Order.DESC
+			ord = otyp == WindowingParser.ASC ? Order.ASC : Order.DESC
 		}
 		return new OrderColumn(name : name, order: ord)
 	}

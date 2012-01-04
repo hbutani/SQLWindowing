@@ -23,7 +23,7 @@ abstract class MRBaseTest
 	{
 		outStream = new ByteArrayOutputStream()
 		
-		Configuration conf = HOME();
+		Configuration conf = HOME_LOCALMR();
 		
 		wshell = new WindowingShell(conf, new MRTranslator(), 
 			new MRExecutor())
@@ -54,6 +54,20 @@ abstract class MRBaseTest
 		Configuration conf = new Configuration();
 		conf.set("fs.default.name", "hdfs://localhost:8020");
 		conf.set("mapred.job.tracker", "localhost:8021");
+		
+		conf.set("hive.metastore.uris", "thrift://localhost:9083");
+		//conf.set("hive.metastore.uris", "thrift://localhost:9083");
+		conf.set("hive.metastore.local", "false");
+		conf.set("windowing.jar.file", "/media/MyPassport/windowing/windowing.jar");
+		
+		return conf;
+	}
+	
+	public static Configuration HOME_LOCALMR()
+	{
+		Configuration conf = new Configuration();
+		conf.set("fs.default.name", "hdfs://localhost:8020");
+		//conf.set("mapred.job.tracker", "localhost:8021");
 		
 		conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		//conf.set("hive.metastore.uris", "thrift://localhost:9083");

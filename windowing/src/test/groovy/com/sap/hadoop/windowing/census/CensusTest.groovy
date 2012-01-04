@@ -22,4 +22,21 @@ class CensusTest extends MRBaseTest
 		select county, tract, arealand, r 
 		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat''""")
 	}
+	
+	/*
+	 * @CTAS create table census_q2 as 
+	 select county, cousub, name, POP100 from geo_header_sf1 where sumlev='060';
+	 */
+	@Test
+	void testQ2()
+	{
+		wshell.execute("""
+		from census_q2
+		partition by county
+		order by pop100 desc
+		with rank() as r,
+			sum(pop100) as s
+		select county, name, pop100, r, <sprintf("%4.2f",((double)pop100)/s *100)> as percentPop[string]
+		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat''""")
+	}
 }

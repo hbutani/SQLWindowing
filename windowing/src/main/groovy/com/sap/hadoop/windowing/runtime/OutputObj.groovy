@@ -10,6 +10,7 @@ class OutputObj extends Binding
 {
 	InputObj iObj
 	Map resultMap
+	Partition p
 	
 	def getVariable(String name)
 	{
@@ -22,28 +23,50 @@ class OutputObj extends Binding
 		}
 	}
 	
+	def getValue(int idx, String name)
+	{
+		int currIdx = iObj.idx
+		try
+		{
+			iObj.idx = idx
+			return iObj[name]
+		}
+		finally
+		{
+			iObj.idx = currIdx
+		}
+	}
+	
 	def lag(String name, int amt)
 	{
-		if ( !(name in resultMap) )
-			throw new RuntimeException(sprintf("Unknown column %s", name));
-		
-		def l = resultMap[name]
 		int idx = iObj.idx - amt
 		idx = (idx < 0 ? 0 : idx)
-		idx = ( idx > l.size() -1 ? l.size() - 1 : idx)
-		return l[idx]
+		idx = ( idx > p.size() -1 ? p.size() - 1 : idx)
+
+		if ( name in resultMap )
+		{
+			return resultMap[name][idx]
+		}
+		else
+		{
+			return getValue(idx, name)
+		}
 	}
 	
 	def lead(String name, int amt)
 	{
-		if ( !(name in resultMap) )
-			throw new RuntimeException(sprintf("Unknown column %s", name));
-		
-		def l = resultMap[name]
 		int idx = iObj.idx + amt
 		idx = (idx < 0 ? 0 : idx)
-		idx = ( idx > l.size() -1 ? l.size() - 1 : idx)
-		return l[idx]
+		idx = ( idx > p.size() -1 ? p.size() - 1 : idx)
+
+		if ( name in resultMap )
+		{
+			return resultMap[name][idx]
+		}
+		else
+		{
+			return getValue(idx, name)
+		}
 	}
 	
 

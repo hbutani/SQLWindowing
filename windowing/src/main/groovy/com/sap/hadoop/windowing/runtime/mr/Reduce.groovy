@@ -77,6 +77,7 @@ public class Reduce extends MapReduceBase implements Reducer<Writable, Writable,
 			p << ObjectInspectorUtils.copyToStandardObject(qryIn.deserializer.deserialize(values.next()), 
 				qryIn.inputOI, ObjectInspectorCopyOption.JAVA)
 		}
+		orow.p = p
 		orow.resultMap.clear()
 		for (i in 0..<windowFns.size())
 		{

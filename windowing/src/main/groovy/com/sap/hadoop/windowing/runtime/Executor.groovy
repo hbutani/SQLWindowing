@@ -46,6 +46,7 @@ class Executor
 		while(partitions.hasNext())
 		{
 			Partition p = partitions.next()
+			orow.p = p
 			orow.resultMap.clear()
 			for (i in 0..<windowFns.size())
 			{

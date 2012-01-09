@@ -69,3 +69,9 @@ class WindowingShell
 	}
 
 }
+
+interface HiveQueryExecutor
+{
+	void exeuteHiveQuery(String hQry) throws WindowingException;
+}
+

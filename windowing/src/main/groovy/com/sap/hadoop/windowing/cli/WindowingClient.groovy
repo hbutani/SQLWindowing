@@ -1,4 +1,4 @@
-package com.sap.hadoop.windowing.hiveslave
+package com.sap.hadoop.windowing.cli
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -71,7 +71,7 @@ class WindowingClient
 			ProcessBuilder pb = new ProcessBuilder(
 				"java", "-cp", windowingJar, 
 				//"-Xdebug", "-Xrunjdwp:transport=dt_socket,address=9015,server=y,suspend=y",
-				"com.sap.hadoop.windowing.hiveslave.WindowingServer",
+				"com.sap.hadoop.windowing.cli.WindowingServer",
 				"-t", "1");
 			Map<String, String> env = pb.environment();
 			ClientUtils.addJobConfToEnvironment(hConf, env);

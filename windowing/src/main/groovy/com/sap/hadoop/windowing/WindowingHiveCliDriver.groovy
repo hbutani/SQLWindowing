@@ -12,7 +12,7 @@ import java.io.IOException;
 import com.sap.hadoop.windowing.runtime.Mode;
 import com.sap.hadoop.windowing.runtime.Utils;
 import org.apache.hadoop.conf.Configuration;
-import com.sap.hadoop.windowing.hiveslave.WindowingClient;
+import com.sap.hadoop.windowing.cli.WindowingClient;
 import com.sap.hadoop.windowing.query.Translator;
 import com.sap.hadoop.windowing.runtime.Executor;
 import java.io.File;

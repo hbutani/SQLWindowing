@@ -1,4 +1,4 @@
-package com.sap.hadoop.windowing.hiveslave
+package com.sap.hadoop.windowing.cli
 
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;

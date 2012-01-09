@@ -69,7 +69,7 @@ class WindowingClient
 		try
 		{
 			ProcessBuilder pb = new ProcessBuilder(
-				"java", "-cp", '"' + windowingJar + '"', 
+				"java", "-cp", windowingJar, 
 				//"-Xdebug", "-Xrunjdwp:transport=dt_socket,address=9015,server=y,suspend=y",
 				"com.sap.hadoop.windowing.hiveslave.WindowingServer",
 				"-t", "1");

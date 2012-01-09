@@ -61,7 +61,7 @@ class WindowingHiveCliDriver extends CliDriver {
 	
 	void setupClient(HiveConf hConf, String windowingJar) throws WindowingException
 	{
-		wClient = new WindowingClient(hConf, windowingJar)
+		wClient = new WindowingClient(hConf, windowingJar, hiveDriver)
 	}
 	
 	public LogHelper getConsole() { return hiveDriver.console; }

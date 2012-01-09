@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.cli.CliDriver;
 import org.apache.hadoop.hive.conf.HiveConf;
 
 import com.sap.hadoop.windowing.WindowingException;
@@ -18,6 +19,7 @@ class WindowingClient
 {
 	String windowingJar;
 	HiveConf hConf;
+	CliDriver hiveDriver;
 	Process server
 	int serverPort
 	SocketChannel socketChannel;
@@ -25,10 +27,11 @@ class WindowingClient
 	Response resp
 	String serverError
 	
-	WindowingClient(HiveConf hConf, String windowingJar) throws WindowingException
+	WindowingClient(HiveConf hConf, String windowingJar, CliDriver hiveDriver) throws WindowingException
 	{
 		this.hConf = hConf
 		this.windowingJar = windowingJar
+		this.hiveDriver = hiveDriver
 		intb = ByteBuffer.allocate(4)
 		resp = new Response();
 		spawnServer();
@@ -55,10 +58,20 @@ class WindowingClient
 			case ResponseType.OK: return;
 			case ResponseType.ERROR: throw new WindowingException(resp.errMsg);
 			case ResponseType.QUERY:
-				// todo:
 				// execute hive Query
 				// send Resp.OK
 				// read Resp
+				int rc = hiveDriver.processCmd(resp.query)
+				if ( rc == 0)
+				{
+					resp.type = ResponseType.OK;
+				}
+				else
+				{
+					resp.type = ResponseType.ERROR
+					resp.errMsg = sprintf("Failed to execute query '%s', return = %d", resp.query, rc)
+				}
+				resp.write(socketChannel, intb)
 				break;
 			default: throw new WindowingException(sprintf("Unknown ResponseType %s", resp));
 		}

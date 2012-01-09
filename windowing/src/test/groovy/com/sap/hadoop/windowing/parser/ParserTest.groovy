@@ -150,4 +150,23 @@ select p_mfgr,p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, 
 	tableOutput=(serDeProps={}, outputPath=/tmp/wout, outputFormat=org.apache.hadoop.mapred.SequenceFileOutputFormat)
 """
 	}
+	
+	@Test
+	void testEmbeddedHiveQuery()
+	{
+		QuerySpec qSpec = wshell.parse("""
+		from <select p_mfgr, p_name, p_size 
+				from part_rc>
+		partition by p_mfgr
+		order by p_mfgr, p_name
+		with
+		rank() as r
+select p_mfgr,p_name, p_size, r
+		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+		println qSpec.toString();
+		
+		//assert qSpec.toString() == """
+//"""
+	}
 }

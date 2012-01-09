@@ -62,7 +62,8 @@ query :
 
 tableSpec :
  hivetable |
- ID -> ^(TABLEINPUT ID)
+ ID -> ^(TABLEINPUT ID) |
+ LPAREN? h=GROOVYEXPRESSION RPAREN? -> ^(TABLEINPUT $h)
 ;
 
 hivetable :

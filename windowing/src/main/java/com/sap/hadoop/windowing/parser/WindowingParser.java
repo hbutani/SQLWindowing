@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:46:29 com/sap/hadoop/windowing/parser/Windowing.g 2012-01-07 18:33:47
+// $ANTLR 3.3 Nov 30, 2010 12:46:29 com\\sap\\hadoop\\windowing\\parser\\Windowing.g 2012-01-09 14:16:12
 
 package com.sap.hadoop.windowing.parser;
 
@@ -14,7 +14,7 @@ import org.antlr.runtime.tree.*;
 
 public class WindowingParser extends Parser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "NUMERIC", "INTEGER", "UMINUS", "PARAM", "ORDERCOLUMN", "FUNCTION", "FUNCTIONS", "QUERY", "WINDOWRANGE", "WINDOWVALUES", "TYPENAME", "SELECTCOLUMN", "OUTPUTSPEC", "FROM", "WITH", "ID", "TABLEINPUT", "LPAREN", "COMMA", "RPAREN", "STRING", "EQ", "ORDER", "BY", "ASC", "DESC", "PARTITION", "AS", "LBRACKET", "RBRACKET", "GROOVYEXPRESSION", "NUMBER", "OVER", "ROWS", "BETWEEN", "AND", "UNBOUNDED", "PRECEDING", "FOLLOWING", "CURRENT", "ROW", "RANGE", "LESS", "MORE", "SELECT", "WHERE", "INTO", "PATH", "FORMAT", "PLUS", "MINUS", "ASTERISK", "SOLIDUS", "DOT", "QUOTE", "COLON", "SEMICOLON", "GE", "GT", "LBRACE", "LE", "LT", "NE", "RBRACE", "S", "E", "L", "C", "T", "F", "R", "O", "M", "W", "H", "A", "B", "I", "N", "P", "U", "D", "Y", "G", "V", "NOT", "OR", "X", "XOR", "GroovyEscapeSequence", "EscapeSequence", "WS", "J", "K", "Q", "Z", "'E'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "NUMERIC", "INTEGER", "UMINUS", "PARAM", "ORDERCOLUMN", "FUNCTION", "FUNCTIONS", "QUERY", "WINDOWRANGE", "WINDOWVALUES", "TYPENAME", "SELECTCOLUMN", "OUTPUTSPEC", "FROM", "WITH", "ID", "LPAREN", "GROOVYEXPRESSION", "RPAREN", "TABLEINPUT", "COMMA", "STRING", "EQ", "ORDER", "BY", "ASC", "DESC", "PARTITION", "AS", "LBRACKET", "RBRACKET", "NUMBER", "OVER", "ROWS", "BETWEEN", "AND", "UNBOUNDED", "PRECEDING", "FOLLOWING", "CURRENT", "ROW", "RANGE", "LESS", "MORE", "SELECT", "WHERE", "INTO", "PATH", "FORMAT", "PLUS", "MINUS", "ASTERISK", "SOLIDUS", "DOT", "QUOTE", "COLON", "SEMICOLON", "GE", "GT", "LBRACE", "LE", "LT", "NE", "RBRACE", "S", "E", "L", "C", "T", "F", "R", "O", "M", "W", "H", "A", "B", "I", "N", "P", "U", "D", "Y", "G", "V", "NOT", "OR", "X", "XOR", "GroovyEscapeSequence", "EscapeSequence", "WS", "J", "K", "Q", "Z", "'E'"
     };
     public static final int EOF=-1;
     public static final int T__100=100;
@@ -34,21 +34,21 @@ public class WindowingParser extends Parser {
     public static final int FROM=17;
     public static final int WITH=18;
     public static final int ID=19;
-    public static final int TABLEINPUT=20;
-    public static final int LPAREN=21;
-    public static final int COMMA=22;
-    public static final int RPAREN=23;
-    public static final int STRING=24;
-    public static final int EQ=25;
-    public static final int ORDER=26;
-    public static final int BY=27;
-    public static final int ASC=28;
-    public static final int DESC=29;
-    public static final int PARTITION=30;
-    public static final int AS=31;
-    public static final int LBRACKET=32;
-    public static final int RBRACKET=33;
-    public static final int GROOVYEXPRESSION=34;
+    public static final int LPAREN=20;
+    public static final int GROOVYEXPRESSION=21;
+    public static final int RPAREN=22;
+    public static final int TABLEINPUT=23;
+    public static final int COMMA=24;
+    public static final int STRING=25;
+    public static final int EQ=26;
+    public static final int ORDER=27;
+    public static final int BY=28;
+    public static final int ASC=29;
+    public static final int DESC=30;
+    public static final int PARTITION=31;
+    public static final int AS=32;
+    public static final int LBRACKET=33;
+    public static final int RBRACKET=34;
     public static final int NUMBER=35;
     public static final int OVER=36;
     public static final int ROWS=37;
@@ -137,7 +137,7 @@ public class WindowingParser extends Parser {
     }
 
     public String[] getTokenNames() { return WindowingParser.tokenNames; }
-    public String getGrammarFileName() { return "com/sap/hadoop/windowing/parser/Windowing.g"; }
+    public String getGrammarFileName() { return "com\\sap\\hadoop\\windowing\\parser\\Windowing.g"; }
 
 
     	protected void mismatch(IntStream input, int ttype, BitSet follow) throws RecognitionException
@@ -156,7 +156,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "query"
-    // com/sap/hadoop/windowing/parser/Windowing.g:53:1: query : FROM tableSpec partitionby orderby WITH funclist select ( where )? ( outputClause )? -> ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? ) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:53:1: query : FROM tableSpec partitionby orderby WITH funclist select ( where )? ( outputClause )? -> ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? ) ;
     public final WindowingParser.query_return query() throws RecognitionException {
         WindowingParser.query_return retval = new WindowingParser.query_return();
         retval.start = input.LT(1);
@@ -192,8 +192,8 @@ public class WindowingParser extends Parser {
         RewriteRuleSubtreeStream stream_where=new RewriteRuleSubtreeStream(adaptor,"rule where");
         RewriteRuleSubtreeStream stream_outputClause=new RewriteRuleSubtreeStream(adaptor,"rule outputClause");
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:53:7: ( FROM tableSpec partitionby orderby WITH funclist select ( where )? ( outputClause )? -> ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? ) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:54:2: FROM tableSpec partitionby orderby WITH funclist select ( where )? ( outputClause )?
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:53:7: ( FROM tableSpec partitionby orderby WITH funclist select ( where )? ( outputClause )? -> ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:54:2: FROM tableSpec partitionby orderby WITH funclist select ( where )? ( outputClause )?
             {
             FROM1=(Token)match(input,FROM,FOLLOW_FROM_in_query138); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_FROM.add(FROM1);
@@ -231,7 +231,7 @@ public class WindowingParser extends Parser {
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_select.add(select7.getTree());
-            // com/sap/hadoop/windowing/parser/Windowing.g:59:2: ( where )?
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:59:2: ( where )?
             int alt1=2;
             switch ( input.LA(1) ) {
                 case WHERE:
@@ -243,7 +243,7 @@ public class WindowingParser extends Parser {
 
             switch (alt1) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:59:2: where
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:59:2: where
                     {
                     pushFollow(FOLLOW_where_in_query157);
                     where8=where();
@@ -257,7 +257,7 @@ public class WindowingParser extends Parser {
 
             }
 
-            // com/sap/hadoop/windowing/parser/Windowing.g:60:2: ( outputClause )?
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:60:2: ( outputClause )?
             int alt2=2;
             switch ( input.LA(1) ) {
                 case INTO:
@@ -269,7 +269,7 @@ public class WindowingParser extends Parser {
 
             switch (alt2) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:60:2: outputClause
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:60:2: outputClause
                     {
                     pushFollow(FOLLOW_outputClause_in_query162);
                     outputClause9=outputClause();
@@ -286,7 +286,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: where, select, partitionby, tableSpec, orderby, funclist, outputClause
+            // elements: funclist, tableSpec, where, select, orderby, partitionby, outputClause
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -299,7 +299,7 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 60:16: -> ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? )
             {
-                // com/sap/hadoop/windowing/parser/Windowing.g:60:19: ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? )
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:60:19: ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(QUERY, "QUERY"), root_1);
@@ -309,13 +309,13 @@ public class WindowingParser extends Parser {
                 adaptor.addChild(root_1, stream_orderby.nextTree());
                 adaptor.addChild(root_1, stream_funclist.nextTree());
                 adaptor.addChild(root_1, stream_select.nextTree());
-                // com/sap/hadoop/windowing/parser/Windowing.g:60:73: ( where )?
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:60:73: ( where )?
                 if ( stream_where.hasNext() ) {
                     adaptor.addChild(root_1, stream_where.nextTree());
 
                 }
                 stream_where.reset();
-                // com/sap/hadoop/windowing/parser/Windowing.g:60:80: ( outputClause )?
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:60:80: ( outputClause )?
                 if ( stream_outputClause.hasNext() ) {
                     adaptor.addChild(root_1, stream_outputClause.nextTree());
 
@@ -354,45 +354,60 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "tableSpec"
-    // com/sap/hadoop/windowing/parser/Windowing.g:63:1: tableSpec : ( hivetable | ID -> ^( TABLEINPUT ID ) );
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:63:1: tableSpec : ( hivetable | ID -> ^( TABLEINPUT ID ) | ( LPAREN )? h= GROOVYEXPRESSION ( RPAREN )? -> ^( TABLEINPUT $h) );
     public final WindowingParser.tableSpec_return tableSpec() throws RecognitionException {
         WindowingParser.tableSpec_return retval = new WindowingParser.tableSpec_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
+        Token h=null;
         Token ID11=null;
+        Token LPAREN12=null;
+        Token RPAREN13=null;
         WindowingParser.hivetable_return hivetable10 = null;
 
 
+        Object h_tree=null;
         Object ID11_tree=null;
+        Object LPAREN12_tree=null;
+        Object RPAREN13_tree=null;
+        RewriteRuleTokenStream stream_RPAREN=new RewriteRuleTokenStream(adaptor,"token RPAREN");
         RewriteRuleTokenStream stream_ID=new RewriteRuleTokenStream(adaptor,"token ID");
+        RewriteRuleTokenStream stream_GROOVYEXPRESSION=new RewriteRuleTokenStream(adaptor,"token GROOVYEXPRESSION");
+        RewriteRuleTokenStream stream_LPAREN=new RewriteRuleTokenStream(adaptor,"token LPAREN");
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:63:11: ( hivetable | ID -> ^( TABLEINPUT ID ) )
-            int alt3=2;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:63:11: ( hivetable | ID -> ^( TABLEINPUT ID ) | ( LPAREN )? h= GROOVYEXPRESSION ( RPAREN )? -> ^( TABLEINPUT $h) )
+            int alt5=3;
             switch ( input.LA(1) ) {
             case TABLEINPUT:
                 {
-                alt3=1;
+                alt5=1;
                 }
                 break;
             case ID:
                 {
-                alt3=2;
+                alt5=2;
+                }
+                break;
+            case LPAREN:
+            case GROOVYEXPRESSION:
+                {
+                alt5=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 3, 0, input);
+                    new NoViableAltException("", 5, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt3) {
+            switch (alt5) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:64:2: hivetable
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:64:2: hivetable
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -406,7 +421,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:65:2: ID
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:65:2: ID
                     {
                     ID11=(Token)match(input,ID,FOLLOW_ID_in_tableSpec200); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ID.add(ID11);
@@ -427,12 +442,96 @@ public class WindowingParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 65:5: -> ^( TABLEINPUT ID )
                     {
-                        // com/sap/hadoop/windowing/parser/Windowing.g:65:8: ^( TABLEINPUT ID )
+                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:65:8: ^( TABLEINPUT ID )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(TABLEINPUT, "TABLEINPUT"), root_1);
 
                         adaptor.addChild(root_1, stream_ID.nextNode());
+
+                        adaptor.addChild(root_0, root_1);
+                        }
+
+                    }
+
+                    retval.tree = root_0;}
+                    }
+                    break;
+                case 3 :
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:66:2: ( LPAREN )? h= GROOVYEXPRESSION ( RPAREN )?
+                    {
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:66:2: ( LPAREN )?
+                    int alt3=2;
+                    switch ( input.LA(1) ) {
+                        case LPAREN:
+                            {
+                            alt3=1;
+                            }
+                            break;
+                    }
+
+                    switch (alt3) {
+                        case 1 :
+                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:66:2: LPAREN
+                            {
+                            LPAREN12=(Token)match(input,LPAREN,FOLLOW_LPAREN_in_tableSpec213); if (state.failed) return retval; 
+                            if ( state.backtracking==0 ) stream_LPAREN.add(LPAREN12);
+
+
+                            }
+                            break;
+
+                    }
+
+                    h=(Token)match(input,GROOVYEXPRESSION,FOLLOW_GROOVYEXPRESSION_in_tableSpec218); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_GROOVYEXPRESSION.add(h);
+
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:66:29: ( RPAREN )?
+                    int alt4=2;
+                    switch ( input.LA(1) ) {
+                        case RPAREN:
+                            {
+                            alt4=1;
+                            }
+                            break;
+                    }
+
+                    switch (alt4) {
+                        case 1 :
+                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:66:29: RPAREN
+                            {
+                            RPAREN13=(Token)match(input,RPAREN,FOLLOW_RPAREN_in_tableSpec220); if (state.failed) return retval; 
+                            if ( state.backtracking==0 ) stream_RPAREN.add(RPAREN13);
+
+
+                            }
+                            break;
+
+                    }
+
+
+
+                    // AST REWRITE
+                    // elements: h
+                    // token labels: h
+                    // rule labels: retval
+                    // token list labels: 
+                    // rule list labels: 
+                    // wildcard labels: 
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleTokenStream stream_h=new RewriteRuleTokenStream(adaptor,"token h",h);
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
+
+                    root_0 = (Object)adaptor.nil();
+                    // 66:37: -> ^( TABLEINPUT $h)
+                    {
+                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:66:40: ^( TABLEINPUT $h)
+                        {
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(TABLEINPUT, "TABLEINPUT"), root_1);
+
+                        adaptor.addChild(root_1, stream_h.nextNode());
 
                         adaptor.addChild(root_0, root_1);
                         }
@@ -468,110 +567,110 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "hivetable"
-    // com/sap/hadoop/windowing/parser/Windowing.g:68:1: hivetable : TABLEINPUT LPAREN ( namevalue )? ( COMMA namevalue )* RPAREN -> ^( TABLEINPUT ( namevalue )* ) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:69:1: hivetable : TABLEINPUT LPAREN ( namevalue )? ( COMMA namevalue )* RPAREN -> ^( TABLEINPUT ( namevalue )* ) ;
     public final WindowingParser.hivetable_return hivetable() throws RecognitionException {
         WindowingParser.hivetable_return retval = new WindowingParser.hivetable_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token TABLEINPUT12=null;
-        Token LPAREN13=null;
-        Token COMMA15=null;
-        Token RPAREN17=null;
-        WindowingParser.namevalue_return namevalue14 = null;
-
+        Token TABLEINPUT14=null;
+        Token LPAREN15=null;
+        Token COMMA17=null;
+        Token RPAREN19=null;
         WindowingParser.namevalue_return namevalue16 = null;
 
+        WindowingParser.namevalue_return namevalue18 = null;
 
-        Object TABLEINPUT12_tree=null;
-        Object LPAREN13_tree=null;
-        Object COMMA15_tree=null;
-        Object RPAREN17_tree=null;
+
+        Object TABLEINPUT14_tree=null;
+        Object LPAREN15_tree=null;
+        Object COMMA17_tree=null;
+        Object RPAREN19_tree=null;
         RewriteRuleTokenStream stream_RPAREN=new RewriteRuleTokenStream(adaptor,"token RPAREN");
         RewriteRuleTokenStream stream_TABLEINPUT=new RewriteRuleTokenStream(adaptor,"token TABLEINPUT");
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleTokenStream stream_LPAREN=new RewriteRuleTokenStream(adaptor,"token LPAREN");
         RewriteRuleSubtreeStream stream_namevalue=new RewriteRuleSubtreeStream(adaptor,"rule namevalue");
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:68:11: ( TABLEINPUT LPAREN ( namevalue )? ( COMMA namevalue )* RPAREN -> ^( TABLEINPUT ( namevalue )* ) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:69:2: TABLEINPUT LPAREN ( namevalue )? ( COMMA namevalue )* RPAREN
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:69:11: ( TABLEINPUT LPAREN ( namevalue )? ( COMMA namevalue )* RPAREN -> ^( TABLEINPUT ( namevalue )* ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:70:2: TABLEINPUT LPAREN ( namevalue )? ( COMMA namevalue )* RPAREN
             {
-            TABLEINPUT12=(Token)match(input,TABLEINPUT,FOLLOW_TABLEINPUT_in_hivetable218); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_TABLEINPUT.add(TABLEINPUT12);
+            TABLEINPUT14=(Token)match(input,TABLEINPUT,FOLLOW_TABLEINPUT_in_hivetable240); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_TABLEINPUT.add(TABLEINPUT14);
 
-            LPAREN13=(Token)match(input,LPAREN,FOLLOW_LPAREN_in_hivetable220); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_LPAREN.add(LPAREN13);
+            LPAREN15=(Token)match(input,LPAREN,FOLLOW_LPAREN_in_hivetable242); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_LPAREN.add(LPAREN15);
 
-            // com/sap/hadoop/windowing/parser/Windowing.g:69:20: ( namevalue )?
-            int alt4=2;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:70:20: ( namevalue )?
+            int alt6=2;
             switch ( input.LA(1) ) {
                 case ID:
                 case STRING:
                     {
-                    alt4=1;
+                    alt6=1;
                     }
                     break;
             }
 
-            switch (alt4) {
+            switch (alt6) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:69:21: namevalue
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:70:21: namevalue
                     {
-                    pushFollow(FOLLOW_namevalue_in_hivetable223);
-                    namevalue14=namevalue();
+                    pushFollow(FOLLOW_namevalue_in_hivetable245);
+                    namevalue16=namevalue();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_namevalue.add(namevalue14.getTree());
+                    if ( state.backtracking==0 ) stream_namevalue.add(namevalue16.getTree());
 
                     }
                     break;
 
             }
 
-            // com/sap/hadoop/windowing/parser/Windowing.g:69:33: ( COMMA namevalue )*
-            loop5:
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:70:33: ( COMMA namevalue )*
+            loop7:
             do {
-                int alt5=2;
+                int alt7=2;
                 switch ( input.LA(1) ) {
                 case COMMA:
                     {
-                    alt5=1;
+                    alt7=1;
                     }
                     break;
 
                 }
 
-                switch (alt5) {
+                switch (alt7) {
             	case 1 :
-            	    // com/sap/hadoop/windowing/parser/Windowing.g:69:34: COMMA namevalue
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:70:34: COMMA namevalue
             	    {
-            	    COMMA15=(Token)match(input,COMMA,FOLLOW_COMMA_in_hivetable228); if (state.failed) return retval; 
-            	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA15);
+            	    COMMA17=(Token)match(input,COMMA,FOLLOW_COMMA_in_hivetable250); if (state.failed) return retval; 
+            	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA17);
 
-            	    pushFollow(FOLLOW_namevalue_in_hivetable230);
-            	    namevalue16=namevalue();
+            	    pushFollow(FOLLOW_namevalue_in_hivetable252);
+            	    namevalue18=namevalue();
 
             	    state._fsp--;
             	    if (state.failed) return retval;
-            	    if ( state.backtracking==0 ) stream_namevalue.add(namevalue16.getTree());
+            	    if ( state.backtracking==0 ) stream_namevalue.add(namevalue18.getTree());
 
             	    }
             	    break;
 
             	default :
-            	    break loop5;
+            	    break loop7;
                 }
             } while (true);
 
-            RPAREN17=(Token)match(input,RPAREN,FOLLOW_RPAREN_in_hivetable234); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_RPAREN.add(RPAREN17);
+            RPAREN19=(Token)match(input,RPAREN,FOLLOW_RPAREN_in_hivetable256); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_RPAREN.add(RPAREN19);
 
 
 
             // AST REWRITE
-            // elements: TABLEINPUT, namevalue
+            // elements: namevalue, TABLEINPUT
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -582,14 +681,14 @@ public class WindowingParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 69:60: -> ^( TABLEINPUT ( namevalue )* )
+            // 70:60: -> ^( TABLEINPUT ( namevalue )* )
             {
-                // com/sap/hadoop/windowing/parser/Windowing.g:69:63: ^( TABLEINPUT ( namevalue )* )
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:70:63: ^( TABLEINPUT ( namevalue )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_TABLEINPUT.nextNode(), root_1);
 
-                // com/sap/hadoop/windowing/parser/Windowing.g:69:76: ( namevalue )*
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:70:76: ( namevalue )*
                 while ( stream_namevalue.hasNext() ) {
                     adaptor.addChild(root_1, stream_namevalue.nextTree());
 
@@ -628,7 +727,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "namevalue"
-    // com/sap/hadoop/windowing/parser/Windowing.g:72:1: namevalue : (i= ID | i= STRING ) EQ v= STRING -> ^( PARAM $i $v) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:73:1: namevalue : (i= ID | i= STRING ) EQ v= STRING -> ^( PARAM $i $v) ;
     public final WindowingParser.namevalue_return namevalue() throws RecognitionException {
         WindowingParser.namevalue_return retval = new WindowingParser.namevalue_return();
         retval.start = input.LT(1);
@@ -637,54 +736,54 @@ public class WindowingParser extends Parser {
 
         Token i=null;
         Token v=null;
-        Token EQ18=null;
+        Token EQ20=null;
 
         Object i_tree=null;
         Object v_tree=null;
-        Object EQ18_tree=null;
+        Object EQ20_tree=null;
         RewriteRuleTokenStream stream_EQ=new RewriteRuleTokenStream(adaptor,"token EQ");
         RewriteRuleTokenStream stream_ID=new RewriteRuleTokenStream(adaptor,"token ID");
         RewriteRuleTokenStream stream_STRING=new RewriteRuleTokenStream(adaptor,"token STRING");
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:72:11: ( (i= ID | i= STRING ) EQ v= STRING -> ^( PARAM $i $v) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:73:2: (i= ID | i= STRING ) EQ v= STRING
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:73:11: ( (i= ID | i= STRING ) EQ v= STRING -> ^( PARAM $i $v) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:74:2: (i= ID | i= STRING ) EQ v= STRING
             {
-            // com/sap/hadoop/windowing/parser/Windowing.g:73:2: (i= ID | i= STRING )
-            int alt6=2;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:74:2: (i= ID | i= STRING )
+            int alt8=2;
             switch ( input.LA(1) ) {
             case ID:
                 {
-                alt6=1;
+                alt8=1;
                 }
                 break;
             case STRING:
                 {
-                alt6=2;
+                alt8=2;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 6, 0, input);
+                    new NoViableAltException("", 8, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt6) {
+            switch (alt8) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:73:3: i= ID
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:74:3: i= ID
                     {
-                    i=(Token)match(input,ID,FOLLOW_ID_in_namevalue257); if (state.failed) return retval; 
+                    i=(Token)match(input,ID,FOLLOW_ID_in_namevalue279); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ID.add(i);
 
 
                     }
                     break;
                 case 2 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:73:8: i= STRING
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:74:8: i= STRING
                     {
-                    i=(Token)match(input,STRING,FOLLOW_STRING_in_namevalue261); if (state.failed) return retval; 
+                    i=(Token)match(input,STRING,FOLLOW_STRING_in_namevalue283); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_STRING.add(i);
 
 
@@ -693,16 +792,16 @@ public class WindowingParser extends Parser {
 
             }
 
-            EQ18=(Token)match(input,EQ,FOLLOW_EQ_in_namevalue264); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_EQ.add(EQ18);
+            EQ20=(Token)match(input,EQ,FOLLOW_EQ_in_namevalue286); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_EQ.add(EQ20);
 
-            v=(Token)match(input,STRING,FOLLOW_STRING_in_namevalue268); if (state.failed) return retval; 
+            v=(Token)match(input,STRING,FOLLOW_STRING_in_namevalue290); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_STRING.add(v);
 
 
 
             // AST REWRITE
-            // elements: v, i
+            // elements: i, v
             // token labels: v, i
             // rule labels: retval
             // token list labels: 
@@ -715,9 +814,9 @@ public class WindowingParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 73:30: -> ^( PARAM $i $v)
+            // 74:30: -> ^( PARAM $i $v)
             {
-                // com/sap/hadoop/windowing/parser/Windowing.g:73:33: ^( PARAM $i $v)
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:74:33: ^( PARAM $i $v)
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(PARAM, "PARAM"), root_1);
@@ -757,76 +856,76 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "orderby"
-    // com/sap/hadoop/windowing/parser/Windowing.g:76:1: orderby : ORDER BY ordercolumn ( COMMA ordercolumn )* -> ^( ORDER ( ordercolumn )+ ) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:77:1: orderby : ORDER BY ordercolumn ( COMMA ordercolumn )* -> ^( ORDER ( ordercolumn )+ ) ;
     public final WindowingParser.orderby_return orderby() throws RecognitionException {
         WindowingParser.orderby_return retval = new WindowingParser.orderby_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token ORDER19=null;
-        Token BY20=null;
-        Token COMMA22=null;
-        WindowingParser.ordercolumn_return ordercolumn21 = null;
-
+        Token ORDER21=null;
+        Token BY22=null;
+        Token COMMA24=null;
         WindowingParser.ordercolumn_return ordercolumn23 = null;
 
+        WindowingParser.ordercolumn_return ordercolumn25 = null;
 
-        Object ORDER19_tree=null;
-        Object BY20_tree=null;
-        Object COMMA22_tree=null;
+
+        Object ORDER21_tree=null;
+        Object BY22_tree=null;
+        Object COMMA24_tree=null;
         RewriteRuleTokenStream stream_BY=new RewriteRuleTokenStream(adaptor,"token BY");
         RewriteRuleTokenStream stream_ORDER=new RewriteRuleTokenStream(adaptor,"token ORDER");
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleSubtreeStream stream_ordercolumn=new RewriteRuleSubtreeStream(adaptor,"rule ordercolumn");
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:76:9: ( ORDER BY ordercolumn ( COMMA ordercolumn )* -> ^( ORDER ( ordercolumn )+ ) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:77:2: ORDER BY ordercolumn ( COMMA ordercolumn )*
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:77:9: ( ORDER BY ordercolumn ( COMMA ordercolumn )* -> ^( ORDER ( ordercolumn )+ ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:78:2: ORDER BY ordercolumn ( COMMA ordercolumn )*
             {
-            ORDER19=(Token)match(input,ORDER,FOLLOW_ORDER_in_orderby290); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_ORDER.add(ORDER19);
+            ORDER21=(Token)match(input,ORDER,FOLLOW_ORDER_in_orderby312); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_ORDER.add(ORDER21);
 
-            BY20=(Token)match(input,BY,FOLLOW_BY_in_orderby292); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_BY.add(BY20);
+            BY22=(Token)match(input,BY,FOLLOW_BY_in_orderby314); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_BY.add(BY22);
 
-            pushFollow(FOLLOW_ordercolumn_in_orderby294);
-            ordercolumn21=ordercolumn();
+            pushFollow(FOLLOW_ordercolumn_in_orderby316);
+            ordercolumn23=ordercolumn();
 
             state._fsp--;
             if (state.failed) return retval;
-            if ( state.backtracking==0 ) stream_ordercolumn.add(ordercolumn21.getTree());
-            // com/sap/hadoop/windowing/parser/Windowing.g:77:23: ( COMMA ordercolumn )*
-            loop7:
+            if ( state.backtracking==0 ) stream_ordercolumn.add(ordercolumn23.getTree());
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:78:23: ( COMMA ordercolumn )*
+            loop9:
             do {
-                int alt7=2;
+                int alt9=2;
                 switch ( input.LA(1) ) {
                 case COMMA:
                     {
-                    alt7=1;
+                    alt9=1;
                     }
                     break;
 
                 }
 
-                switch (alt7) {
+                switch (alt9) {
             	case 1 :
-            	    // com/sap/hadoop/windowing/parser/Windowing.g:77:24: COMMA ordercolumn
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:78:24: COMMA ordercolumn
             	    {
-            	    COMMA22=(Token)match(input,COMMA,FOLLOW_COMMA_in_orderby297); if (state.failed) return retval; 
-            	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA22);
+            	    COMMA24=(Token)match(input,COMMA,FOLLOW_COMMA_in_orderby319); if (state.failed) return retval; 
+            	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA24);
 
-            	    pushFollow(FOLLOW_ordercolumn_in_orderby299);
-            	    ordercolumn23=ordercolumn();
+            	    pushFollow(FOLLOW_ordercolumn_in_orderby321);
+            	    ordercolumn25=ordercolumn();
 
             	    state._fsp--;
             	    if (state.failed) return retval;
-            	    if ( state.backtracking==0 ) stream_ordercolumn.add(ordercolumn23.getTree());
+            	    if ( state.backtracking==0 ) stream_ordercolumn.add(ordercolumn25.getTree());
 
             	    }
             	    break;
 
             	default :
-            	    break loop7;
+            	    break loop9;
                 }
             } while (true);
 
@@ -844,9 +943,9 @@ public class WindowingParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 77:44: -> ^( ORDER ( ordercolumn )+ )
+            // 78:44: -> ^( ORDER ( ordercolumn )+ )
             {
-                // com/sap/hadoop/windowing/parser/Windowing.g:77:47: ^( ORDER ( ordercolumn )+ )
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:78:47: ^( ORDER ( ordercolumn )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_ORDER.nextNode(), root_1);
@@ -892,7 +991,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "ordercolumn"
-    // com/sap/hadoop/windowing/parser/Windowing.g:80:1: ordercolumn : ID (o= ASC | o= DESC )? -> ^( ORDERCOLUMN ID ( $o)? ) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:81:1: ordercolumn : ID (o= ASC | o= DESC )? -> ^( ORDERCOLUMN ID ( $o)? ) ;
     public final WindowingParser.ordercolumn_return ordercolumn() throws RecognitionException {
         WindowingParser.ordercolumn_return retval = new WindowingParser.ordercolumn_return();
         retval.start = input.LT(1);
@@ -900,50 +999,50 @@ public class WindowingParser extends Parser {
         Object root_0 = null;
 
         Token o=null;
-        Token ID24=null;
+        Token ID26=null;
 
         Object o_tree=null;
-        Object ID24_tree=null;
+        Object ID26_tree=null;
         RewriteRuleTokenStream stream_ASC=new RewriteRuleTokenStream(adaptor,"token ASC");
         RewriteRuleTokenStream stream_DESC=new RewriteRuleTokenStream(adaptor,"token DESC");
         RewriteRuleTokenStream stream_ID=new RewriteRuleTokenStream(adaptor,"token ID");
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:80:13: ( ID (o= ASC | o= DESC )? -> ^( ORDERCOLUMN ID ( $o)? ) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:81:2: ID (o= ASC | o= DESC )?
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:81:13: ( ID (o= ASC | o= DESC )? -> ^( ORDERCOLUMN ID ( $o)? ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:82:2: ID (o= ASC | o= DESC )?
             {
-            ID24=(Token)match(input,ID,FOLLOW_ID_in_ordercolumn320); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_ID.add(ID24);
+            ID26=(Token)match(input,ID,FOLLOW_ID_in_ordercolumn342); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_ID.add(ID26);
 
-            // com/sap/hadoop/windowing/parser/Windowing.g:81:5: (o= ASC | o= DESC )?
-            int alt8=3;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:82:5: (o= ASC | o= DESC )?
+            int alt10=3;
             switch ( input.LA(1) ) {
                 case ASC:
                     {
-                    alt8=1;
+                    alt10=1;
                     }
                     break;
                 case DESC:
                     {
-                    alt8=2;
+                    alt10=2;
                     }
                     break;
             }
 
-            switch (alt8) {
+            switch (alt10) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:81:6: o= ASC
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:82:6: o= ASC
                     {
-                    o=(Token)match(input,ASC,FOLLOW_ASC_in_ordercolumn325); if (state.failed) return retval; 
+                    o=(Token)match(input,ASC,FOLLOW_ASC_in_ordercolumn347); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ASC.add(o);
 
 
                     }
                     break;
                 case 2 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:81:14: o= DESC
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:82:14: o= DESC
                     {
-                    o=(Token)match(input,DESC,FOLLOW_DESC_in_ordercolumn331); if (state.failed) return retval; 
+                    o=(Token)match(input,DESC,FOLLOW_DESC_in_ordercolumn353); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_DESC.add(o);
 
 
@@ -955,7 +1054,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: ID, o
+            // elements: o, ID
             // token labels: o
             // rule labels: retval
             // token list labels: 
@@ -967,15 +1066,15 @@ public class WindowingParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 81:23: -> ^( ORDERCOLUMN ID ( $o)? )
+            // 82:23: -> ^( ORDERCOLUMN ID ( $o)? )
             {
-                // com/sap/hadoop/windowing/parser/Windowing.g:81:26: ^( ORDERCOLUMN ID ( $o)? )
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:82:26: ^( ORDERCOLUMN ID ( $o)? )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(ORDERCOLUMN, "ORDERCOLUMN"), root_1);
 
                 adaptor.addChild(root_1, stream_ID.nextNode());
-                // com/sap/hadoop/windowing/parser/Windowing.g:81:43: ( $o)?
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:82:43: ( $o)?
                 if ( stream_o.hasNext() ) {
                     adaptor.addChild(root_1, stream_o.nextNode());
 
@@ -1014,78 +1113,78 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "partitionby"
-    // com/sap/hadoop/windowing/parser/Windowing.g:84:1: partitionby : PARTITION BY ID ( COMMA ID )* -> ^( PARTITION ( ID )+ ) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:85:1: partitionby : PARTITION BY ID ( COMMA ID )* -> ^( PARTITION ( ID )+ ) ;
     public final WindowingParser.partitionby_return partitionby() throws RecognitionException {
         WindowingParser.partitionby_return retval = new WindowingParser.partitionby_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token PARTITION25=null;
-        Token BY26=null;
-        Token ID27=null;
-        Token COMMA28=null;
+        Token PARTITION27=null;
+        Token BY28=null;
         Token ID29=null;
+        Token COMMA30=null;
+        Token ID31=null;
 
-        Object PARTITION25_tree=null;
-        Object BY26_tree=null;
-        Object ID27_tree=null;
-        Object COMMA28_tree=null;
+        Object PARTITION27_tree=null;
+        Object BY28_tree=null;
         Object ID29_tree=null;
+        Object COMMA30_tree=null;
+        Object ID31_tree=null;
         RewriteRuleTokenStream stream_BY=new RewriteRuleTokenStream(adaptor,"token BY");
         RewriteRuleTokenStream stream_ID=new RewriteRuleTokenStream(adaptor,"token ID");
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleTokenStream stream_PARTITION=new RewriteRuleTokenStream(adaptor,"token PARTITION");
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:84:13: ( PARTITION BY ID ( COMMA ID )* -> ^( PARTITION ( ID )+ ) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:85:2: PARTITION BY ID ( COMMA ID )*
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:85:13: ( PARTITION BY ID ( COMMA ID )* -> ^( PARTITION ( ID )+ ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:86:2: PARTITION BY ID ( COMMA ID )*
             {
-            PARTITION25=(Token)match(input,PARTITION,FOLLOW_PARTITION_in_partitionby356); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_PARTITION.add(PARTITION25);
+            PARTITION27=(Token)match(input,PARTITION,FOLLOW_PARTITION_in_partitionby378); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_PARTITION.add(PARTITION27);
 
-            BY26=(Token)match(input,BY,FOLLOW_BY_in_partitionby358); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_BY.add(BY26);
+            BY28=(Token)match(input,BY,FOLLOW_BY_in_partitionby380); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_BY.add(BY28);
 
-            ID27=(Token)match(input,ID,FOLLOW_ID_in_partitionby360); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_ID.add(ID27);
+            ID29=(Token)match(input,ID,FOLLOW_ID_in_partitionby382); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_ID.add(ID29);
 
-            // com/sap/hadoop/windowing/parser/Windowing.g:85:18: ( COMMA ID )*
-            loop9:
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:86:18: ( COMMA ID )*
+            loop11:
             do {
-                int alt9=2;
+                int alt11=2;
                 switch ( input.LA(1) ) {
                 case COMMA:
                     {
-                    alt9=1;
+                    alt11=1;
                     }
                     break;
 
                 }
 
-                switch (alt9) {
+                switch (alt11) {
             	case 1 :
-            	    // com/sap/hadoop/windowing/parser/Windowing.g:85:19: COMMA ID
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:86:19: COMMA ID
             	    {
-            	    COMMA28=(Token)match(input,COMMA,FOLLOW_COMMA_in_partitionby363); if (state.failed) return retval; 
-            	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA28);
+            	    COMMA30=(Token)match(input,COMMA,FOLLOW_COMMA_in_partitionby385); if (state.failed) return retval; 
+            	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA30);
 
-            	    ID29=(Token)match(input,ID,FOLLOW_ID_in_partitionby365); if (state.failed) return retval; 
-            	    if ( state.backtracking==0 ) stream_ID.add(ID29);
+            	    ID31=(Token)match(input,ID,FOLLOW_ID_in_partitionby387); if (state.failed) return retval; 
+            	    if ( state.backtracking==0 ) stream_ID.add(ID31);
 
 
             	    }
             	    break;
 
             	default :
-            	    break loop9;
+            	    break loop11;
                 }
             } while (true);
 
 
 
             // AST REWRITE
-            // elements: PARTITION, ID
+            // elements: ID, PARTITION
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -1096,9 +1195,9 @@ public class WindowingParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 85:30: -> ^( PARTITION ( ID )+ )
+            // 86:30: -> ^( PARTITION ( ID )+ )
             {
-                // com/sap/hadoop/windowing/parser/Windowing.g:85:33: ^( PARTITION ( ID )+ )
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:86:33: ^( PARTITION ( ID )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_PARTITION.nextNode(), root_1);
@@ -1144,64 +1243,64 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "funclist"
-    // com/sap/hadoop/windowing/parser/Windowing.g:88:1: funclist : function ( COMMA function )* -> ^( FUNCTIONS ( function )+ ) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:89:1: funclist : function ( COMMA function )* -> ^( FUNCTIONS ( function )+ ) ;
     public final WindowingParser.funclist_return funclist() throws RecognitionException {
         WindowingParser.funclist_return retval = new WindowingParser.funclist_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token COMMA31=null;
-        WindowingParser.function_return function30 = null;
-
+        Token COMMA33=null;
         WindowingParser.function_return function32 = null;
 
+        WindowingParser.function_return function34 = null;
 
-        Object COMMA31_tree=null;
+
+        Object COMMA33_tree=null;
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleSubtreeStream stream_function=new RewriteRuleSubtreeStream(adaptor,"rule function");
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:88:10: ( function ( COMMA function )* -> ^( FUNCTIONS ( function )+ ) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:89:2: function ( COMMA function )*
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:89:10: ( function ( COMMA function )* -> ^( FUNCTIONS ( function )+ ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:90:2: function ( COMMA function )*
             {
-            pushFollow(FOLLOW_function_in_funclist387);
-            function30=function();
+            pushFollow(FOLLOW_function_in_funclist409);
+            function32=function();
 
             state._fsp--;
             if (state.failed) return retval;
-            if ( state.backtracking==0 ) stream_function.add(function30.getTree());
-            // com/sap/hadoop/windowing/parser/Windowing.g:89:11: ( COMMA function )*
-            loop10:
+            if ( state.backtracking==0 ) stream_function.add(function32.getTree());
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:90:11: ( COMMA function )*
+            loop12:
             do {
-                int alt10=2;
+                int alt12=2;
                 switch ( input.LA(1) ) {
                 case COMMA:
                     {
-                    alt10=1;
+                    alt12=1;
                     }
                     break;
 
                 }
 
-                switch (alt10) {
+                switch (alt12) {
             	case 1 :
-            	    // com/sap/hadoop/windowing/parser/Windowing.g:89:12: COMMA function
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:90:12: COMMA function
             	    {
-            	    COMMA31=(Token)match(input,COMMA,FOLLOW_COMMA_in_funclist390); if (state.failed) return retval; 
-            	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA31);
+            	    COMMA33=(Token)match(input,COMMA,FOLLOW_COMMA_in_funclist412); if (state.failed) return retval; 
+            	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA33);
 
-            	    pushFollow(FOLLOW_function_in_funclist392);
-            	    function32=function();
+            	    pushFollow(FOLLOW_function_in_funclist414);
+            	    function34=function();
 
             	    state._fsp--;
             	    if (state.failed) return retval;
-            	    if ( state.backtracking==0 ) stream_function.add(function32.getTree());
+            	    if ( state.backtracking==0 ) stream_function.add(function34.getTree());
 
             	    }
             	    break;
 
             	default :
-            	    break loop10;
+            	    break loop12;
                 }
             } while (true);
 
@@ -1219,9 +1318,9 @@ public class WindowingParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 89:29: -> ^( FUNCTIONS ( function )+ )
+            // 90:29: -> ^( FUNCTIONS ( function )+ )
             {
-                // com/sap/hadoop/windowing/parser/Windowing.g:89:32: ^( FUNCTIONS ( function )+ )
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:90:32: ^( FUNCTIONS ( function )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(FUNCTIONS, "FUNCTIONS"), root_1);
@@ -1267,7 +1366,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "function"
-    // com/sap/hadoop/windowing/parser/Windowing.g:92:1: function : name= ID LPAREN ( functionparam )? ( COMMA functionparam )* RPAREN ( window_expression )? AS alias= ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? ) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:93:1: function : name= ID LPAREN ( functionparam )? ( COMMA functionparam )* RPAREN ( window_expression )? AS alias= ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? ) ;
     public final WindowingParser.function_return function() throws RecognitionException {
         WindowingParser.function_return retval = new WindowingParser.function_return();
         retval.start = input.LT(1);
@@ -1277,28 +1376,28 @@ public class WindowingParser extends Parser {
         Token name=null;
         Token alias=null;
         Token typeNm=null;
-        Token LPAREN33=null;
-        Token COMMA35=null;
-        Token RPAREN37=null;
-        Token AS39=null;
-        Token LBRACKET40=null;
-        Token RBRACKET41=null;
-        WindowingParser.functionparam_return functionparam34 = null;
-
+        Token LPAREN35=null;
+        Token COMMA37=null;
+        Token RPAREN39=null;
+        Token AS41=null;
+        Token LBRACKET42=null;
+        Token RBRACKET43=null;
         WindowingParser.functionparam_return functionparam36 = null;
 
-        WindowingParser.window_expression_return window_expression38 = null;
+        WindowingParser.functionparam_return functionparam38 = null;
+
+        WindowingParser.window_expression_return window_expression40 = null;
 
 
         Object name_tree=null;
         Object alias_tree=null;
         Object typeNm_tree=null;
-        Object LPAREN33_tree=null;
-        Object COMMA35_tree=null;
-        Object RPAREN37_tree=null;
-        Object AS39_tree=null;
-        Object LBRACKET40_tree=null;
-        Object RBRACKET41_tree=null;
+        Object LPAREN35_tree=null;
+        Object COMMA37_tree=null;
+        Object RPAREN39_tree=null;
+        Object AS41_tree=null;
+        Object LBRACKET42_tree=null;
+        Object RBRACKET43_tree=null;
         RewriteRuleTokenStream stream_LBRACKET=new RewriteRuleTokenStream(adaptor,"token LBRACKET");
         RewriteRuleTokenStream stream_AS=new RewriteRuleTokenStream(adaptor,"token AS");
         RewriteRuleTokenStream stream_RPAREN=new RewriteRuleTokenStream(adaptor,"token RPAREN");
@@ -1309,86 +1408,22 @@ public class WindowingParser extends Parser {
         RewriteRuleSubtreeStream stream_window_expression=new RewriteRuleSubtreeStream(adaptor,"rule window_expression");
         RewriteRuleSubtreeStream stream_functionparam=new RewriteRuleSubtreeStream(adaptor,"rule functionparam");
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:92:10: (name= ID LPAREN ( functionparam )? ( COMMA functionparam )* RPAREN ( window_expression )? AS alias= ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? ) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:93:2: name= ID LPAREN ( functionparam )? ( COMMA functionparam )* RPAREN ( window_expression )? AS alias= ID ( LBRACKET typeNm= ID RBRACKET )?
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:93:10: (name= ID LPAREN ( functionparam )? ( COMMA functionparam )* RPAREN ( window_expression )? AS alias= ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:2: name= ID LPAREN ( functionparam )? ( COMMA functionparam )* RPAREN ( window_expression )? AS alias= ID ( LBRACKET typeNm= ID RBRACKET )?
             {
-            name=(Token)match(input,ID,FOLLOW_ID_in_function416); if (state.failed) return retval; 
+            name=(Token)match(input,ID,FOLLOW_ID_in_function438); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_ID.add(name);
 
-            LPAREN33=(Token)match(input,LPAREN,FOLLOW_LPAREN_in_function418); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_LPAREN.add(LPAREN33);
+            LPAREN35=(Token)match(input,LPAREN,FOLLOW_LPAREN_in_function440); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_LPAREN.add(LPAREN35);
 
-            // com/sap/hadoop/windowing/parser/Windowing.g:93:17: ( functionparam )?
-            int alt11=2;
-            switch ( input.LA(1) ) {
-                case ID:
-                case STRING:
-                case GROOVYEXPRESSION:
-                case NUMBER:
-                    {
-                    alt11=1;
-                    }
-                    break;
-            }
-
-            switch (alt11) {
-                case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:93:18: functionparam
-                    {
-                    pushFollow(FOLLOW_functionparam_in_function421);
-                    functionparam34=functionparam();
-
-                    state._fsp--;
-                    if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_functionparam.add(functionparam34.getTree());
-
-                    }
-                    break;
-
-            }
-
-            // com/sap/hadoop/windowing/parser/Windowing.g:93:34: ( COMMA functionparam )*
-            loop12:
-            do {
-                int alt12=2;
-                switch ( input.LA(1) ) {
-                case COMMA:
-                    {
-                    alt12=1;
-                    }
-                    break;
-
-                }
-
-                switch (alt12) {
-            	case 1 :
-            	    // com/sap/hadoop/windowing/parser/Windowing.g:93:35: COMMA functionparam
-            	    {
-            	    COMMA35=(Token)match(input,COMMA,FOLLOW_COMMA_in_function426); if (state.failed) return retval; 
-            	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA35);
-
-            	    pushFollow(FOLLOW_functionparam_in_function428);
-            	    functionparam36=functionparam();
-
-            	    state._fsp--;
-            	    if (state.failed) return retval;
-            	    if ( state.backtracking==0 ) stream_functionparam.add(functionparam36.getTree());
-
-            	    }
-            	    break;
-
-            	default :
-            	    break loop12;
-                }
-            } while (true);
-
-            RPAREN37=(Token)match(input,RPAREN,FOLLOW_RPAREN_in_function432); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_RPAREN.add(RPAREN37);
-
-            // com/sap/hadoop/windowing/parser/Windowing.g:93:64: ( window_expression )?
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:17: ( functionparam )?
             int alt13=2;
             switch ( input.LA(1) ) {
-                case OVER:
+                case ID:
+                case GROOVYEXPRESSION:
+                case STRING:
+                case NUMBER:
                     {
                     alt13=1;
                     }
@@ -1397,48 +1432,112 @@ public class WindowingParser extends Parser {
 
             switch (alt13) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:93:65: window_expression
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:18: functionparam
                     {
-                    pushFollow(FOLLOW_window_expression_in_function435);
-                    window_expression38=window_expression();
+                    pushFollow(FOLLOW_functionparam_in_function443);
+                    functionparam36=functionparam();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_window_expression.add(window_expression38.getTree());
+                    if ( state.backtracking==0 ) stream_functionparam.add(functionparam36.getTree());
 
                     }
                     break;
 
             }
 
-            AS39=(Token)match(input,AS,FOLLOW_AS_in_function439); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_AS.add(AS39);
-
-            alias=(Token)match(input,ID,FOLLOW_ID_in_function443); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_ID.add(alias);
-
-            // com/sap/hadoop/windowing/parser/Windowing.g:93:97: ( LBRACKET typeNm= ID RBRACKET )?
-            int alt14=2;
-            switch ( input.LA(1) ) {
-                case LBRACKET:
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:34: ( COMMA functionparam )*
+            loop14:
+            do {
+                int alt14=2;
+                switch ( input.LA(1) ) {
+                case COMMA:
                     {
                     alt14=1;
                     }
                     break;
+
+                }
+
+                switch (alt14) {
+            	case 1 :
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:35: COMMA functionparam
+            	    {
+            	    COMMA37=(Token)match(input,COMMA,FOLLOW_COMMA_in_function448); if (state.failed) return retval; 
+            	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA37);
+
+            	    pushFollow(FOLLOW_functionparam_in_function450);
+            	    functionparam38=functionparam();
+
+            	    state._fsp--;
+            	    if (state.failed) return retval;
+            	    if ( state.backtracking==0 ) stream_functionparam.add(functionparam38.getTree());
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop14;
+                }
+            } while (true);
+
+            RPAREN39=(Token)match(input,RPAREN,FOLLOW_RPAREN_in_function454); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_RPAREN.add(RPAREN39);
+
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:64: ( window_expression )?
+            int alt15=2;
+            switch ( input.LA(1) ) {
+                case OVER:
+                    {
+                    alt15=1;
+                    }
+                    break;
             }
 
-            switch (alt14) {
+            switch (alt15) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:93:98: LBRACKET typeNm= ID RBRACKET
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:65: window_expression
                     {
-                    LBRACKET40=(Token)match(input,LBRACKET,FOLLOW_LBRACKET_in_function446); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_LBRACKET.add(LBRACKET40);
+                    pushFollow(FOLLOW_window_expression_in_function457);
+                    window_expression40=window_expression();
 
-                    typeNm=(Token)match(input,ID,FOLLOW_ID_in_function450); if (state.failed) return retval; 
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_window_expression.add(window_expression40.getTree());
+
+                    }
+                    break;
+
+            }
+
+            AS41=(Token)match(input,AS,FOLLOW_AS_in_function461); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_AS.add(AS41);
+
+            alias=(Token)match(input,ID,FOLLOW_ID_in_function465); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_ID.add(alias);
+
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:97: ( LBRACKET typeNm= ID RBRACKET )?
+            int alt16=2;
+            switch ( input.LA(1) ) {
+                case LBRACKET:
+                    {
+                    alt16=1;
+                    }
+                    break;
+            }
+
+            switch (alt16) {
+                case 1 :
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:98: LBRACKET typeNm= ID RBRACKET
+                    {
+                    LBRACKET42=(Token)match(input,LBRACKET,FOLLOW_LBRACKET_in_function468); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_LBRACKET.add(LBRACKET42);
+
+                    typeNm=(Token)match(input,ID,FOLLOW_ID_in_function472); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ID.add(typeNm);
 
-                    RBRACKET41=(Token)match(input,RBRACKET,FOLLOW_RBRACKET_in_function452); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_RBRACKET.add(RBRACKET41);
+                    RBRACKET43=(Token)match(input,RBRACKET,FOLLOW_RBRACKET_in_function474); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_RBRACKET.add(RBRACKET43);
 
 
                     }
@@ -1449,7 +1548,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: window_expression, typeNm, name, functionparam, alias
+            // elements: functionparam, name, window_expression, alias, typeNm
             // token labels: typeNm, alias, name
             // rule labels: retval
             // token list labels: 
@@ -1463,24 +1562,24 @@ public class WindowingParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 93:128: -> ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? )
+            // 94:128: -> ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? )
             {
-                // com/sap/hadoop/windowing/parser/Windowing.g:94:7: ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? )
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:95:7: ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(FUNCTION, "FUNCTION"), root_1);
 
                 adaptor.addChild(root_1, stream_name.nextNode());
                 adaptor.addChild(root_1, stream_alias.nextNode());
-                // com/sap/hadoop/windowing/parser/Windowing.g:94:31: ( functionparam )*
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:95:31: ( functionparam )*
                 while ( stream_functionparam.hasNext() ) {
                     adaptor.addChild(root_1, stream_functionparam.nextTree());
 
                 }
                 stream_functionparam.reset();
-                // com/sap/hadoop/windowing/parser/Windowing.g:94:46: ( ^( TYPENAME $typeNm) )?
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:95:46: ( ^( TYPENAME $typeNm) )?
                 if ( stream_typeNm.hasNext() ) {
-                    // com/sap/hadoop/windowing/parser/Windowing.g:94:46: ^( TYPENAME $typeNm)
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:95:46: ^( TYPENAME $typeNm)
                     {
                     Object root_2 = (Object)adaptor.nil();
                     root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(TYPENAME, "TYPENAME"), root_2);
@@ -1492,7 +1591,7 @@ public class WindowingParser extends Parser {
 
                 }
                 stream_typeNm.reset();
-                // com/sap/hadoop/windowing/parser/Windowing.g:94:67: ( window_expression )?
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:95:67: ( window_expression )?
                 if ( stream_window_expression.hasNext() ) {
                     adaptor.addChild(root_1, stream_window_expression.nextTree());
 
@@ -1531,27 +1630,27 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "functionparam"
-    // com/sap/hadoop/windowing/parser/Windowing.g:97:1: functionparam : ( GROOVYEXPRESSION | STRING | ID | NUMBER );
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:98:1: functionparam : ( GROOVYEXPRESSION | STRING | ID | NUMBER );
     public final WindowingParser.functionparam_return functionparam() throws RecognitionException {
         WindowingParser.functionparam_return retval = new WindowingParser.functionparam_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token set42=null;
+        Token set44=null;
 
-        Object set42_tree=null;
+        Object set44_tree=null;
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:97:16: ( GROOVYEXPRESSION | STRING | ID | NUMBER )
-            // com/sap/hadoop/windowing/parser/Windowing.g:
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:98:16: ( GROOVYEXPRESSION | STRING | ID | NUMBER )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:
             {
             root_0 = (Object)adaptor.nil();
 
-            set42=(Token)input.LT(1);
-            if ( input.LA(1)==ID||input.LA(1)==STRING||(input.LA(1)>=GROOVYEXPRESSION && input.LA(1)<=NUMBER) ) {
+            set44=(Token)input.LT(1);
+            if ( input.LA(1)==ID||input.LA(1)==GROOVYEXPRESSION||input.LA(1)==STRING||input.LA(1)==NUMBER ) {
                 input.consume();
-                if ( state.backtracking==0 ) adaptor.addChild(root_0, (Object)adaptor.create(set42));
+                if ( state.backtracking==0 ) adaptor.addChild(root_0, (Object)adaptor.create(set44));
                 state.errorRecovery=false;state.failed=false;
             }
             else {
@@ -1587,71 +1686,71 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "window_expression"
-    // com/sap/hadoop/windowing/parser/Windowing.g:101:1: window_expression : OVER ( window_range_expression | window_value_expression ) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:102:1: window_expression : OVER ( window_range_expression | window_value_expression ) ;
     public final WindowingParser.window_expression_return window_expression() throws RecognitionException {
         WindowingParser.window_expression_return retval = new WindowingParser.window_expression_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token OVER43=null;
-        WindowingParser.window_range_expression_return window_range_expression44 = null;
+        Token OVER45=null;
+        WindowingParser.window_range_expression_return window_range_expression46 = null;
 
-        WindowingParser.window_value_expression_return window_value_expression45 = null;
+        WindowingParser.window_value_expression_return window_value_expression47 = null;
 
 
-        Object OVER43_tree=null;
+        Object OVER45_tree=null;
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:101:19: ( OVER ( window_range_expression | window_value_expression ) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:102:2: OVER ( window_range_expression | window_value_expression )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:102:19: ( OVER ( window_range_expression | window_value_expression ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:103:2: OVER ( window_range_expression | window_value_expression )
             {
             root_0 = (Object)adaptor.nil();
 
-            OVER43=(Token)match(input,OVER,FOLLOW_OVER_in_window_expression521); if (state.failed) return retval;
-            // com/sap/hadoop/windowing/parser/Windowing.g:103:2: ( window_range_expression | window_value_expression )
-            int alt15=2;
+            OVER45=(Token)match(input,OVER,FOLLOW_OVER_in_window_expression543); if (state.failed) return retval;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:104:2: ( window_range_expression | window_value_expression )
+            int alt17=2;
             switch ( input.LA(1) ) {
             case ROWS:
                 {
-                alt15=1;
+                alt17=1;
                 }
                 break;
             case RANGE:
                 {
-                alt15=2;
+                alt17=2;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 15, 0, input);
+                    new NoViableAltException("", 17, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt15) {
+            switch (alt17) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:103:3: window_range_expression
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:104:3: window_range_expression
                     {
-                    pushFollow(FOLLOW_window_range_expression_in_window_expression527);
-                    window_range_expression44=window_range_expression();
+                    pushFollow(FOLLOW_window_range_expression_in_window_expression549);
+                    window_range_expression46=window_range_expression();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, window_range_expression44.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, window_range_expression46.getTree());
 
                     }
                     break;
                 case 2 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:104:2: window_value_expression
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:105:2: window_value_expression
                     {
-                    pushFollow(FOLLOW_window_value_expression_in_window_expression532);
-                    window_value_expression45=window_value_expression();
+                    pushFollow(FOLLOW_window_value_expression_in_window_expression554);
+                    window_value_expression47=window_value_expression();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, window_value_expression45.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, window_value_expression47.getTree());
 
                     }
                     break;
@@ -1685,48 +1784,48 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "window_range_expression"
-    // com/sap/hadoop/windowing/parser/Windowing.g:108:1: window_range_expression : ROWS BETWEEN s= rowsboundary AND e= rowsboundary -> ^( WINDOWRANGE $s $e) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:109:1: window_range_expression : ROWS BETWEEN s= rowsboundary AND e= rowsboundary -> ^( WINDOWRANGE $s $e) ;
     public final WindowingParser.window_range_expression_return window_range_expression() throws RecognitionException {
         WindowingParser.window_range_expression_return retval = new WindowingParser.window_range_expression_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token ROWS46=null;
-        Token BETWEEN47=null;
-        Token AND48=null;
+        Token ROWS48=null;
+        Token BETWEEN49=null;
+        Token AND50=null;
         WindowingParser.rowsboundary_return s = null;
 
         WindowingParser.rowsboundary_return e = null;
 
 
-        Object ROWS46_tree=null;
-        Object BETWEEN47_tree=null;
-        Object AND48_tree=null;
+        Object ROWS48_tree=null;
+        Object BETWEEN49_tree=null;
+        Object AND50_tree=null;
         RewriteRuleTokenStream stream_ROWS=new RewriteRuleTokenStream(adaptor,"token ROWS");
         RewriteRuleTokenStream stream_AND=new RewriteRuleTokenStream(adaptor,"token AND");
         RewriteRuleTokenStream stream_BETWEEN=new RewriteRuleTokenStream(adaptor,"token BETWEEN");
         RewriteRuleSubtreeStream stream_rowsboundary=new RewriteRuleSubtreeStream(adaptor,"rule rowsboundary");
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:108:25: ( ROWS BETWEEN s= rowsboundary AND e= rowsboundary -> ^( WINDOWRANGE $s $e) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:109:2: ROWS BETWEEN s= rowsboundary AND e= rowsboundary
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:109:25: ( ROWS BETWEEN s= rowsboundary AND e= rowsboundary -> ^( WINDOWRANGE $s $e) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:110:2: ROWS BETWEEN s= rowsboundary AND e= rowsboundary
             {
-            ROWS46=(Token)match(input,ROWS,FOLLOW_ROWS_in_window_range_expression546); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_ROWS.add(ROWS46);
+            ROWS48=(Token)match(input,ROWS,FOLLOW_ROWS_in_window_range_expression568); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_ROWS.add(ROWS48);
 
-            BETWEEN47=(Token)match(input,BETWEEN,FOLLOW_BETWEEN_in_window_range_expression548); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_BETWEEN.add(BETWEEN47);
+            BETWEEN49=(Token)match(input,BETWEEN,FOLLOW_BETWEEN_in_window_range_expression570); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_BETWEEN.add(BETWEEN49);
 
-            pushFollow(FOLLOW_rowsboundary_in_window_range_expression552);
+            pushFollow(FOLLOW_rowsboundary_in_window_range_expression574);
             s=rowsboundary();
 
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_rowsboundary.add(s.getTree());
-            AND48=(Token)match(input,AND,FOLLOW_AND_in_window_range_expression554); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_AND.add(AND48);
+            AND50=(Token)match(input,AND,FOLLOW_AND_in_window_range_expression576); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_AND.add(AND50);
 
-            pushFollow(FOLLOW_rowsboundary_in_window_range_expression558);
+            pushFollow(FOLLOW_rowsboundary_in_window_range_expression580);
             e=rowsboundary();
 
             state._fsp--;
@@ -1748,9 +1847,9 @@ public class WindowingParser extends Parser {
             RewriteRuleSubtreeStream stream_s=new RewriteRuleSubtreeStream(adaptor,"rule s",s!=null?s.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 109:49: -> ^( WINDOWRANGE $s $e)
+            // 110:49: -> ^( WINDOWRANGE $s $e)
             {
-                // com/sap/hadoop/windowing/parser/Windowing.g:109:52: ^( WINDOWRANGE $s $e)
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:110:52: ^( WINDOWRANGE $s $e)
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(WINDOWRANGE, "WINDOWRANGE"), root_1);
@@ -1790,7 +1889,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "rowsboundary"
-    // com/sap/hadoop/windowing/parser/Windowing.g:112:1: rowsboundary : ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | NUMBER (d= PRECEDING | d= FOLLOWING ) -> ^( $d NUMBER ) );
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:113:1: rowsboundary : ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | NUMBER (d= PRECEDING | d= FOLLOWING ) -> ^( $d NUMBER ) );
     public final WindowingParser.rowsboundary_return rowsboundary() throws RecognitionException {
         WindowingParser.rowsboundary_return retval = new WindowingParser.rowsboundary_return();
         retval.start = input.LT(1);
@@ -1799,17 +1898,17 @@ public class WindowingParser extends Parser {
 
         Token r=null;
         Token d=null;
-        Token UNBOUNDED49=null;
-        Token CURRENT50=null;
-        Token ROW51=null;
-        Token NUMBER52=null;
+        Token UNBOUNDED51=null;
+        Token CURRENT52=null;
+        Token ROW53=null;
+        Token NUMBER54=null;
 
         Object r_tree=null;
         Object d_tree=null;
-        Object UNBOUNDED49_tree=null;
-        Object CURRENT50_tree=null;
-        Object ROW51_tree=null;
-        Object NUMBER52_tree=null;
+        Object UNBOUNDED51_tree=null;
+        Object CURRENT52_tree=null;
+        Object ROW53_tree=null;
+        Object NUMBER54_tree=null;
         RewriteRuleTokenStream stream_ROW=new RewriteRuleTokenStream(adaptor,"token ROW");
         RewriteRuleTokenStream stream_FOLLOWING=new RewriteRuleTokenStream(adaptor,"token FOLLOWING");
         RewriteRuleTokenStream stream_UNBOUNDED=new RewriteRuleTokenStream(adaptor,"token UNBOUNDED");
@@ -1818,74 +1917,74 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_NUMBER=new RewriteRuleTokenStream(adaptor,"token NUMBER");
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:112:14: ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | NUMBER (d= PRECEDING | d= FOLLOWING ) -> ^( $d NUMBER ) )
-            int alt18=3;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:113:14: ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | NUMBER (d= PRECEDING | d= FOLLOWING ) -> ^( $d NUMBER ) )
+            int alt20=3;
             switch ( input.LA(1) ) {
             case UNBOUNDED:
                 {
-                alt18=1;
+                alt20=1;
                 }
                 break;
             case CURRENT:
                 {
-                alt18=2;
+                alt20=2;
                 }
                 break;
             case NUMBER:
                 {
-                alt18=3;
+                alt20=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 18, 0, input);
+                    new NoViableAltException("", 20, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt18) {
+            switch (alt20) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:113:3: UNBOUNDED (r= PRECEDING | r= FOLLOWING )
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:114:3: UNBOUNDED (r= PRECEDING | r= FOLLOWING )
                     {
-                    UNBOUNDED49=(Token)match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_rowsboundary581); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_UNBOUNDED.add(UNBOUNDED49);
+                    UNBOUNDED51=(Token)match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_rowsboundary603); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_UNBOUNDED.add(UNBOUNDED51);
 
-                    // com/sap/hadoop/windowing/parser/Windowing.g:113:13: (r= PRECEDING | r= FOLLOWING )
-                    int alt16=2;
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:114:13: (r= PRECEDING | r= FOLLOWING )
+                    int alt18=2;
                     switch ( input.LA(1) ) {
                     case PRECEDING:
                         {
-                        alt16=1;
+                        alt18=1;
                         }
                         break;
                     case FOLLOWING:
                         {
-                        alt16=2;
+                        alt18=2;
                         }
                         break;
                     default:
                         if (state.backtracking>0) {state.failed=true; return retval;}
                         NoViableAltException nvae =
-                            new NoViableAltException("", 16, 0, input);
+                            new NoViableAltException("", 18, 0, input);
 
                         throw nvae;
                     }
 
-                    switch (alt16) {
+                    switch (alt18) {
                         case 1 :
-                            // com/sap/hadoop/windowing/parser/Windowing.g:113:14: r= PRECEDING
+                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:114:14: r= PRECEDING
                             {
-                            r=(Token)match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary586); if (state.failed) return retval; 
+                            r=(Token)match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary608); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_PRECEDING.add(r);
 
 
                             }
                             break;
                         case 2 :
-                            // com/sap/hadoop/windowing/parser/Windowing.g:113:26: r= FOLLOWING
+                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:114:26: r= FOLLOWING
                             {
-                            r=(Token)match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary590); if (state.failed) return retval; 
+                            r=(Token)match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary612); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_FOLLOWING.add(r);
 
 
@@ -1909,9 +2008,9 @@ public class WindowingParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 113:40: -> ^( $r UNBOUNDED )
+                    // 114:40: -> ^( $r UNBOUNDED )
                     {
-                        // com/sap/hadoop/windowing/parser/Windowing.g:113:43: ^( $r UNBOUNDED )
+                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:114:43: ^( $r UNBOUNDED )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_r.nextNode(), root_1);
@@ -1927,13 +2026,13 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:114:3: CURRENT ROW
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:115:3: CURRENT ROW
                     {
-                    CURRENT50=(Token)match(input,CURRENT,FOLLOW_CURRENT_in_rowsboundary608); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_CURRENT.add(CURRENT50);
+                    CURRENT52=(Token)match(input,CURRENT,FOLLOW_CURRENT_in_rowsboundary630); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_CURRENT.add(CURRENT52);
 
-                    ROW51=(Token)match(input,ROW,FOLLOW_ROW_in_rowsboundary610); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_ROW.add(ROW51);
+                    ROW53=(Token)match(input,ROW,FOLLOW_ROW_in_rowsboundary632); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_ROW.add(ROW53);
 
 
 
@@ -1949,9 +2048,9 @@ public class WindowingParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 114:16: -> ^( CURRENT )
+                    // 115:16: -> ^( CURRENT )
                     {
-                        // com/sap/hadoop/windowing/parser/Windowing.g:114:19: ^( CURRENT )
+                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:115:19: ^( CURRENT )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_CURRENT.nextNode(), root_1);
@@ -1965,46 +2064,46 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:115:3: NUMBER (d= PRECEDING | d= FOLLOWING )
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:116:3: NUMBER (d= PRECEDING | d= FOLLOWING )
                     {
-                    NUMBER52=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_rowsboundary623); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_NUMBER.add(NUMBER52);
+                    NUMBER54=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_rowsboundary645); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_NUMBER.add(NUMBER54);
 
-                    // com/sap/hadoop/windowing/parser/Windowing.g:115:10: (d= PRECEDING | d= FOLLOWING )
-                    int alt17=2;
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:116:10: (d= PRECEDING | d= FOLLOWING )
+                    int alt19=2;
                     switch ( input.LA(1) ) {
                     case PRECEDING:
                         {
-                        alt17=1;
+                        alt19=1;
                         }
                         break;
                     case FOLLOWING:
                         {
-                        alt17=2;
+                        alt19=2;
                         }
                         break;
                     default:
                         if (state.backtracking>0) {state.failed=true; return retval;}
                         NoViableAltException nvae =
-                            new NoViableAltException("", 17, 0, input);
+                            new NoViableAltException("", 19, 0, input);
 
                         throw nvae;
                     }
 
-                    switch (alt17) {
+                    switch (alt19) {
                         case 1 :
-                            // com/sap/hadoop/windowing/parser/Windowing.g:115:11: d= PRECEDING
+                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:116:11: d= PRECEDING
                             {
-                            d=(Token)match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary628); if (state.failed) return retval; 
+                            d=(Token)match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary650); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_PRECEDING.add(d);
 
 
                             }
                             break;
                         case 2 :
-                            // com/sap/hadoop/windowing/parser/Windowing.g:115:25: d= FOLLOWING
+                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:116:25: d= FOLLOWING
                             {
-                            d=(Token)match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary634); if (state.failed) return retval; 
+                            d=(Token)match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary656); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_FOLLOWING.add(d);
 
 
@@ -2028,9 +2127,9 @@ public class WindowingParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 115:39: -> ^( $d NUMBER )
+                    // 116:39: -> ^( $d NUMBER )
                     {
-                        // com/sap/hadoop/windowing/parser/Windowing.g:115:42: ^( $d NUMBER )
+                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:116:42: ^( $d NUMBER )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_d.nextNode(), root_1);
@@ -2071,48 +2170,48 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "window_value_expression"
-    // com/sap/hadoop/windowing/parser/Windowing.g:118:1: window_value_expression : RANGE BETWEEN s= valuesboundary AND e= valuesboundary -> ^( WINDOWVALUES $s $e) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:119:1: window_value_expression : RANGE BETWEEN s= valuesboundary AND e= valuesboundary -> ^( WINDOWVALUES $s $e) ;
     public final WindowingParser.window_value_expression_return window_value_expression() throws RecognitionException {
         WindowingParser.window_value_expression_return retval = new WindowingParser.window_value_expression_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token RANGE53=null;
-        Token BETWEEN54=null;
-        Token AND55=null;
+        Token RANGE55=null;
+        Token BETWEEN56=null;
+        Token AND57=null;
         WindowingParser.valuesboundary_return s = null;
 
         WindowingParser.valuesboundary_return e = null;
 
 
-        Object RANGE53_tree=null;
-        Object BETWEEN54_tree=null;
-        Object AND55_tree=null;
+        Object RANGE55_tree=null;
+        Object BETWEEN56_tree=null;
+        Object AND57_tree=null;
         RewriteRuleTokenStream stream_RANGE=new RewriteRuleTokenStream(adaptor,"token RANGE");
         RewriteRuleTokenStream stream_AND=new RewriteRuleTokenStream(adaptor,"token AND");
         RewriteRuleTokenStream stream_BETWEEN=new RewriteRuleTokenStream(adaptor,"token BETWEEN");
         RewriteRuleSubtreeStream stream_valuesboundary=new RewriteRuleSubtreeStream(adaptor,"rule valuesboundary");
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:118:25: ( RANGE BETWEEN s= valuesboundary AND e= valuesboundary -> ^( WINDOWVALUES $s $e) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:119:2: RANGE BETWEEN s= valuesboundary AND e= valuesboundary
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:119:25: ( RANGE BETWEEN s= valuesboundary AND e= valuesboundary -> ^( WINDOWVALUES $s $e) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:120:2: RANGE BETWEEN s= valuesboundary AND e= valuesboundary
             {
-            RANGE53=(Token)match(input,RANGE,FOLLOW_RANGE_in_window_value_expression655); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_RANGE.add(RANGE53);
+            RANGE55=(Token)match(input,RANGE,FOLLOW_RANGE_in_window_value_expression677); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_RANGE.add(RANGE55);
 
-            BETWEEN54=(Token)match(input,BETWEEN,FOLLOW_BETWEEN_in_window_value_expression657); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_BETWEEN.add(BETWEEN54);
+            BETWEEN56=(Token)match(input,BETWEEN,FOLLOW_BETWEEN_in_window_value_expression679); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_BETWEEN.add(BETWEEN56);
 
-            pushFollow(FOLLOW_valuesboundary_in_window_value_expression661);
+            pushFollow(FOLLOW_valuesboundary_in_window_value_expression683);
             s=valuesboundary();
 
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_valuesboundary.add(s.getTree());
-            AND55=(Token)match(input,AND,FOLLOW_AND_in_window_value_expression663); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_AND.add(AND55);
+            AND57=(Token)match(input,AND,FOLLOW_AND_in_window_value_expression685); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_AND.add(AND57);
 
-            pushFollow(FOLLOW_valuesboundary_in_window_value_expression667);
+            pushFollow(FOLLOW_valuesboundary_in_window_value_expression689);
             e=valuesboundary();
 
             state._fsp--;
@@ -2121,7 +2220,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: e, s
+            // elements: s, e
             // token labels: 
             // rule labels: retval, e, s
             // token list labels: 
@@ -2134,9 +2233,9 @@ public class WindowingParser extends Parser {
             RewriteRuleSubtreeStream stream_s=new RewriteRuleSubtreeStream(adaptor,"rule s",s!=null?s.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 119:54: -> ^( WINDOWVALUES $s $e)
+            // 120:54: -> ^( WINDOWVALUES $s $e)
             {
-                // com/sap/hadoop/windowing/parser/Windowing.g:119:57: ^( WINDOWVALUES $s $e)
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:120:57: ^( WINDOWVALUES $s $e)
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(WINDOWVALUES, "WINDOWVALUES"), root_1);
@@ -2176,7 +2275,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "valuesboundary"
-    // com/sap/hadoop/windowing/parser/Windowing.g:122:1: valuesboundary : ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | GROOVYEXPRESSION NUMBER (d= LESS | d= MORE ) -> ^( $d GROOVYEXPRESSION NUMBER ) );
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:123:1: valuesboundary : ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | GROOVYEXPRESSION NUMBER (d= LESS | d= MORE ) -> ^( $d GROOVYEXPRESSION NUMBER ) );
     public final WindowingParser.valuesboundary_return valuesboundary() throws RecognitionException {
         WindowingParser.valuesboundary_return retval = new WindowingParser.valuesboundary_return();
         retval.start = input.LT(1);
@@ -2185,19 +2284,19 @@ public class WindowingParser extends Parser {
 
         Token r=null;
         Token d=null;
-        Token UNBOUNDED56=null;
-        Token CURRENT57=null;
-        Token ROW58=null;
-        Token GROOVYEXPRESSION59=null;
-        Token NUMBER60=null;
+        Token UNBOUNDED58=null;
+        Token CURRENT59=null;
+        Token ROW60=null;
+        Token GROOVYEXPRESSION61=null;
+        Token NUMBER62=null;
 
         Object r_tree=null;
         Object d_tree=null;
-        Object UNBOUNDED56_tree=null;
-        Object CURRENT57_tree=null;
-        Object ROW58_tree=null;
-        Object GROOVYEXPRESSION59_tree=null;
-        Object NUMBER60_tree=null;
+        Object UNBOUNDED58_tree=null;
+        Object CURRENT59_tree=null;
+        Object ROW60_tree=null;
+        Object GROOVYEXPRESSION61_tree=null;
+        Object NUMBER62_tree=null;
         RewriteRuleTokenStream stream_MORE=new RewriteRuleTokenStream(adaptor,"token MORE");
         RewriteRuleTokenStream stream_ROW=new RewriteRuleTokenStream(adaptor,"token ROW");
         RewriteRuleTokenStream stream_FOLLOWING=new RewriteRuleTokenStream(adaptor,"token FOLLOWING");
@@ -2209,74 +2308,74 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_LESS=new RewriteRuleTokenStream(adaptor,"token LESS");
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:122:16: ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | GROOVYEXPRESSION NUMBER (d= LESS | d= MORE ) -> ^( $d GROOVYEXPRESSION NUMBER ) )
-            int alt21=3;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:123:16: ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | GROOVYEXPRESSION NUMBER (d= LESS | d= MORE ) -> ^( $d GROOVYEXPRESSION NUMBER ) )
+            int alt23=3;
             switch ( input.LA(1) ) {
             case UNBOUNDED:
                 {
-                alt21=1;
+                alt23=1;
                 }
                 break;
             case CURRENT:
                 {
-                alt21=2;
+                alt23=2;
                 }
                 break;
             case GROOVYEXPRESSION:
                 {
-                alt21=3;
+                alt23=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 21, 0, input);
+                    new NoViableAltException("", 23, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt21) {
+            switch (alt23) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:123:3: UNBOUNDED (r= PRECEDING | r= FOLLOWING )
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:124:3: UNBOUNDED (r= PRECEDING | r= FOLLOWING )
                     {
-                    UNBOUNDED56=(Token)match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_valuesboundary690); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_UNBOUNDED.add(UNBOUNDED56);
+                    UNBOUNDED58=(Token)match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_valuesboundary712); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_UNBOUNDED.add(UNBOUNDED58);
 
-                    // com/sap/hadoop/windowing/parser/Windowing.g:123:13: (r= PRECEDING | r= FOLLOWING )
-                    int alt19=2;
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:124:13: (r= PRECEDING | r= FOLLOWING )
+                    int alt21=2;
                     switch ( input.LA(1) ) {
                     case PRECEDING:
                         {
-                        alt19=1;
+                        alt21=1;
                         }
                         break;
                     case FOLLOWING:
                         {
-                        alt19=2;
+                        alt21=2;
                         }
                         break;
                     default:
                         if (state.backtracking>0) {state.failed=true; return retval;}
                         NoViableAltException nvae =
-                            new NoViableAltException("", 19, 0, input);
+                            new NoViableAltException("", 21, 0, input);
 
                         throw nvae;
                     }
 
-                    switch (alt19) {
+                    switch (alt21) {
                         case 1 :
-                            // com/sap/hadoop/windowing/parser/Windowing.g:123:14: r= PRECEDING
+                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:124:14: r= PRECEDING
                             {
-                            r=(Token)match(input,PRECEDING,FOLLOW_PRECEDING_in_valuesboundary695); if (state.failed) return retval; 
+                            r=(Token)match(input,PRECEDING,FOLLOW_PRECEDING_in_valuesboundary717); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_PRECEDING.add(r);
 
 
                             }
                             break;
                         case 2 :
-                            // com/sap/hadoop/windowing/parser/Windowing.g:123:26: r= FOLLOWING
+                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:124:26: r= FOLLOWING
                             {
-                            r=(Token)match(input,FOLLOWING,FOLLOW_FOLLOWING_in_valuesboundary699); if (state.failed) return retval; 
+                            r=(Token)match(input,FOLLOWING,FOLLOW_FOLLOWING_in_valuesboundary721); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_FOLLOWING.add(r);
 
 
@@ -2300,9 +2399,9 @@ public class WindowingParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 123:40: -> ^( $r UNBOUNDED )
+                    // 124:40: -> ^( $r UNBOUNDED )
                     {
-                        // com/sap/hadoop/windowing/parser/Windowing.g:123:43: ^( $r UNBOUNDED )
+                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:124:43: ^( $r UNBOUNDED )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_r.nextNode(), root_1);
@@ -2318,13 +2417,13 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:124:3: CURRENT ROW
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:125:3: CURRENT ROW
                     {
-                    CURRENT57=(Token)match(input,CURRENT,FOLLOW_CURRENT_in_valuesboundary717); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_CURRENT.add(CURRENT57);
+                    CURRENT59=(Token)match(input,CURRENT,FOLLOW_CURRENT_in_valuesboundary739); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_CURRENT.add(CURRENT59);
 
-                    ROW58=(Token)match(input,ROW,FOLLOW_ROW_in_valuesboundary719); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_ROW.add(ROW58);
+                    ROW60=(Token)match(input,ROW,FOLLOW_ROW_in_valuesboundary741); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_ROW.add(ROW60);
 
 
 
@@ -2340,9 +2439,9 @@ public class WindowingParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 124:16: -> ^( CURRENT )
+                    // 125:16: -> ^( CURRENT )
                     {
-                        // com/sap/hadoop/windowing/parser/Windowing.g:124:19: ^( CURRENT )
+                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:125:19: ^( CURRENT )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_CURRENT.nextNode(), root_1);
@@ -2356,49 +2455,49 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:125:3: GROOVYEXPRESSION NUMBER (d= LESS | d= MORE )
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:126:3: GROOVYEXPRESSION NUMBER (d= LESS | d= MORE )
                     {
-                    GROOVYEXPRESSION59=(Token)match(input,GROOVYEXPRESSION,FOLLOW_GROOVYEXPRESSION_in_valuesboundary732); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_GROOVYEXPRESSION.add(GROOVYEXPRESSION59);
+                    GROOVYEXPRESSION61=(Token)match(input,GROOVYEXPRESSION,FOLLOW_GROOVYEXPRESSION_in_valuesboundary754); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_GROOVYEXPRESSION.add(GROOVYEXPRESSION61);
 
-                    NUMBER60=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_valuesboundary734); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_NUMBER.add(NUMBER60);
+                    NUMBER62=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_valuesboundary756); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_NUMBER.add(NUMBER62);
 
-                    // com/sap/hadoop/windowing/parser/Windowing.g:125:27: (d= LESS | d= MORE )
-                    int alt20=2;
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:126:27: (d= LESS | d= MORE )
+                    int alt22=2;
                     switch ( input.LA(1) ) {
                     case LESS:
                         {
-                        alt20=1;
+                        alt22=1;
                         }
                         break;
                     case MORE:
                         {
-                        alt20=2;
+                        alt22=2;
                         }
                         break;
                     default:
                         if (state.backtracking>0) {state.failed=true; return retval;}
                         NoViableAltException nvae =
-                            new NoViableAltException("", 20, 0, input);
+                            new NoViableAltException("", 22, 0, input);
 
                         throw nvae;
                     }
 
-                    switch (alt20) {
+                    switch (alt22) {
                         case 1 :
-                            // com/sap/hadoop/windowing/parser/Windowing.g:125:28: d= LESS
+                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:126:28: d= LESS
                             {
-                            d=(Token)match(input,LESS,FOLLOW_LESS_in_valuesboundary739); if (state.failed) return retval; 
+                            d=(Token)match(input,LESS,FOLLOW_LESS_in_valuesboundary761); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_LESS.add(d);
 
 
                             }
                             break;
                         case 2 :
-                            // com/sap/hadoop/windowing/parser/Windowing.g:125:37: d= MORE
+                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:126:37: d= MORE
                             {
-                            d=(Token)match(input,MORE,FOLLOW_MORE_in_valuesboundary745); if (state.failed) return retval; 
+                            d=(Token)match(input,MORE,FOLLOW_MORE_in_valuesboundary767); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_MORE.add(d);
 
 
@@ -2410,7 +2509,7 @@ public class WindowingParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: d, NUMBER, GROOVYEXPRESSION
+                    // elements: NUMBER, GROOVYEXPRESSION, d
                     // token labels: d
                     // rule labels: retval
                     // token list labels: 
@@ -2422,9 +2521,9 @@ public class WindowingParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 125:46: -> ^( $d GROOVYEXPRESSION NUMBER )
+                    // 126:46: -> ^( $d GROOVYEXPRESSION NUMBER )
                     {
-                        // com/sap/hadoop/windowing/parser/Windowing.g:125:49: ^( $d GROOVYEXPRESSION NUMBER )
+                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:126:49: ^( $d GROOVYEXPRESSION NUMBER )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_d.nextNode(), root_1);
@@ -2466,70 +2565,70 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "select"
-    // com/sap/hadoop/windowing/parser/Windowing.g:128:1: select : SELECT selectColumn ( COMMA selectColumn )* -> ^( SELECT ( selectColumn )+ ) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:129:1: select : SELECT selectColumn ( COMMA selectColumn )* -> ^( SELECT ( selectColumn )+ ) ;
     public final WindowingParser.select_return select() throws RecognitionException {
         WindowingParser.select_return retval = new WindowingParser.select_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token SELECT61=null;
-        Token COMMA63=null;
-        WindowingParser.selectColumn_return selectColumn62 = null;
-
+        Token SELECT63=null;
+        Token COMMA65=null;
         WindowingParser.selectColumn_return selectColumn64 = null;
 
+        WindowingParser.selectColumn_return selectColumn66 = null;
 
-        Object SELECT61_tree=null;
-        Object COMMA63_tree=null;
+
+        Object SELECT63_tree=null;
+        Object COMMA65_tree=null;
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleTokenStream stream_SELECT=new RewriteRuleTokenStream(adaptor,"token SELECT");
         RewriteRuleSubtreeStream stream_selectColumn=new RewriteRuleSubtreeStream(adaptor,"rule selectColumn");
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:128:9: ( SELECT selectColumn ( COMMA selectColumn )* -> ^( SELECT ( selectColumn )+ ) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:129:3: SELECT selectColumn ( COMMA selectColumn )*
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:129:9: ( SELECT selectColumn ( COMMA selectColumn )* -> ^( SELECT ( selectColumn )+ ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:130:3: SELECT selectColumn ( COMMA selectColumn )*
             {
-            SELECT61=(Token)match(input,SELECT,FOLLOW_SELECT_in_select770); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_SELECT.add(SELECT61);
+            SELECT63=(Token)match(input,SELECT,FOLLOW_SELECT_in_select792); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_SELECT.add(SELECT63);
 
-            pushFollow(FOLLOW_selectColumn_in_select772);
-            selectColumn62=selectColumn();
+            pushFollow(FOLLOW_selectColumn_in_select794);
+            selectColumn64=selectColumn();
 
             state._fsp--;
             if (state.failed) return retval;
-            if ( state.backtracking==0 ) stream_selectColumn.add(selectColumn62.getTree());
-            // com/sap/hadoop/windowing/parser/Windowing.g:129:23: ( COMMA selectColumn )*
-            loop22:
+            if ( state.backtracking==0 ) stream_selectColumn.add(selectColumn64.getTree());
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:130:23: ( COMMA selectColumn )*
+            loop24:
             do {
-                int alt22=2;
+                int alt24=2;
                 switch ( input.LA(1) ) {
                 case COMMA:
                     {
-                    alt22=1;
+                    alt24=1;
                     }
                     break;
 
                 }
 
-                switch (alt22) {
+                switch (alt24) {
             	case 1 :
-            	    // com/sap/hadoop/windowing/parser/Windowing.g:129:24: COMMA selectColumn
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:130:24: COMMA selectColumn
             	    {
-            	    COMMA63=(Token)match(input,COMMA,FOLLOW_COMMA_in_select775); if (state.failed) return retval; 
-            	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA63);
+            	    COMMA65=(Token)match(input,COMMA,FOLLOW_COMMA_in_select797); if (state.failed) return retval; 
+            	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA65);
 
-            	    pushFollow(FOLLOW_selectColumn_in_select777);
-            	    selectColumn64=selectColumn();
+            	    pushFollow(FOLLOW_selectColumn_in_select799);
+            	    selectColumn66=selectColumn();
 
             	    state._fsp--;
             	    if (state.failed) return retval;
-            	    if ( state.backtracking==0 ) stream_selectColumn.add(selectColumn64.getTree());
+            	    if ( state.backtracking==0 ) stream_selectColumn.add(selectColumn66.getTree());
 
             	    }
             	    break;
 
             	default :
-            	    break loop22;
+            	    break loop24;
                 }
             } while (true);
 
@@ -2547,9 +2646,9 @@ public class WindowingParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 129:46: -> ^( SELECT ( selectColumn )+ )
+            // 130:46: -> ^( SELECT ( selectColumn )+ )
             {
-                // com/sap/hadoop/windowing/parser/Windowing.g:129:49: ^( SELECT ( selectColumn )+ )
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:130:49: ^( SELECT ( selectColumn )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_SELECT.nextNode(), root_1);
@@ -2595,7 +2694,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "selectColumn"
-    // com/sap/hadoop/windowing/parser/Windowing.g:132:1: selectColumn : ( GROOVYEXPRESSION AS ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? ) | ID -> ^( SELECTCOLUMN ID ) );
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:133:1: selectColumn : ( GROOVYEXPRESSION AS ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? ) | ID -> ^( SELECTCOLUMN ID ) );
     public final WindowingParser.selectColumn_return selectColumn() throws RecognitionException {
         WindowingParser.selectColumn_return retval = new WindowingParser.selectColumn_return();
         retval.start = input.LT(1);
@@ -2603,20 +2702,20 @@ public class WindowingParser extends Parser {
         Object root_0 = null;
 
         Token typeNm=null;
-        Token GROOVYEXPRESSION65=null;
-        Token AS66=null;
-        Token ID67=null;
-        Token LBRACKET68=null;
-        Token RBRACKET69=null;
-        Token ID70=null;
+        Token GROOVYEXPRESSION67=null;
+        Token AS68=null;
+        Token ID69=null;
+        Token LBRACKET70=null;
+        Token RBRACKET71=null;
+        Token ID72=null;
 
         Object typeNm_tree=null;
-        Object GROOVYEXPRESSION65_tree=null;
-        Object AS66_tree=null;
-        Object ID67_tree=null;
-        Object LBRACKET68_tree=null;
-        Object RBRACKET69_tree=null;
-        Object ID70_tree=null;
+        Object GROOVYEXPRESSION67_tree=null;
+        Object AS68_tree=null;
+        Object ID69_tree=null;
+        Object LBRACKET70_tree=null;
+        Object RBRACKET71_tree=null;
+        Object ID72_tree=null;
         RewriteRuleTokenStream stream_LBRACKET=new RewriteRuleTokenStream(adaptor,"token LBRACKET");
         RewriteRuleTokenStream stream_AS=new RewriteRuleTokenStream(adaptor,"token AS");
         RewriteRuleTokenStream stream_RBRACKET=new RewriteRuleTokenStream(adaptor,"token RBRACKET");
@@ -2624,62 +2723,62 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_GROOVYEXPRESSION=new RewriteRuleTokenStream(adaptor,"token GROOVYEXPRESSION");
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:132:13: ( GROOVYEXPRESSION AS ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? ) | ID -> ^( SELECTCOLUMN ID ) )
-            int alt24=2;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:133:13: ( GROOVYEXPRESSION AS ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? ) | ID -> ^( SELECTCOLUMN ID ) )
+            int alt26=2;
             switch ( input.LA(1) ) {
             case GROOVYEXPRESSION:
                 {
-                alt24=1;
+                alt26=1;
                 }
                 break;
             case ID:
                 {
-                alt24=2;
+                alt26=2;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 24, 0, input);
+                    new NoViableAltException("", 26, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt24) {
+            switch (alt26) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:133:3: GROOVYEXPRESSION AS ID ( LBRACKET typeNm= ID RBRACKET )?
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:134:3: GROOVYEXPRESSION AS ID ( LBRACKET typeNm= ID RBRACKET )?
                     {
-                    GROOVYEXPRESSION65=(Token)match(input,GROOVYEXPRESSION,FOLLOW_GROOVYEXPRESSION_in_selectColumn799); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_GROOVYEXPRESSION.add(GROOVYEXPRESSION65);
+                    GROOVYEXPRESSION67=(Token)match(input,GROOVYEXPRESSION,FOLLOW_GROOVYEXPRESSION_in_selectColumn821); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_GROOVYEXPRESSION.add(GROOVYEXPRESSION67);
 
-                    AS66=(Token)match(input,AS,FOLLOW_AS_in_selectColumn801); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_AS.add(AS66);
+                    AS68=(Token)match(input,AS,FOLLOW_AS_in_selectColumn823); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_AS.add(AS68);
 
-                    ID67=(Token)match(input,ID,FOLLOW_ID_in_selectColumn803); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_ID.add(ID67);
+                    ID69=(Token)match(input,ID,FOLLOW_ID_in_selectColumn825); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_ID.add(ID69);
 
-                    // com/sap/hadoop/windowing/parser/Windowing.g:133:26: ( LBRACKET typeNm= ID RBRACKET )?
-                    int alt23=2;
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:134:26: ( LBRACKET typeNm= ID RBRACKET )?
+                    int alt25=2;
                     switch ( input.LA(1) ) {
                         case LBRACKET:
                             {
-                            alt23=1;
+                            alt25=1;
                             }
                             break;
                     }
 
-                    switch (alt23) {
+                    switch (alt25) {
                         case 1 :
-                            // com/sap/hadoop/windowing/parser/Windowing.g:133:27: LBRACKET typeNm= ID RBRACKET
+                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:134:27: LBRACKET typeNm= ID RBRACKET
                             {
-                            LBRACKET68=(Token)match(input,LBRACKET,FOLLOW_LBRACKET_in_selectColumn806); if (state.failed) return retval; 
-                            if ( state.backtracking==0 ) stream_LBRACKET.add(LBRACKET68);
+                            LBRACKET70=(Token)match(input,LBRACKET,FOLLOW_LBRACKET_in_selectColumn828); if (state.failed) return retval; 
+                            if ( state.backtracking==0 ) stream_LBRACKET.add(LBRACKET70);
 
-                            typeNm=(Token)match(input,ID,FOLLOW_ID_in_selectColumn810); if (state.failed) return retval; 
+                            typeNm=(Token)match(input,ID,FOLLOW_ID_in_selectColumn832); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_ID.add(typeNm);
 
-                            RBRACKET69=(Token)match(input,RBRACKET,FOLLOW_RBRACKET_in_selectColumn812); if (state.failed) return retval; 
-                            if ( state.backtracking==0 ) stream_RBRACKET.add(RBRACKET69);
+                            RBRACKET71=(Token)match(input,RBRACKET,FOLLOW_RBRACKET_in_selectColumn834); if (state.failed) return retval; 
+                            if ( state.backtracking==0 ) stream_RBRACKET.add(RBRACKET71);
 
 
                             }
@@ -2702,18 +2801,18 @@ public class WindowingParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 133:57: -> ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? )
+                    // 134:57: -> ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? )
                     {
-                        // com/sap/hadoop/windowing/parser/Windowing.g:133:60: ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? )
+                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:134:60: ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(SELECTCOLUMN, "SELECTCOLUMN"), root_1);
 
                         adaptor.addChild(root_1, stream_ID.nextNode());
                         adaptor.addChild(root_1, stream_GROOVYEXPRESSION.nextNode());
-                        // com/sap/hadoop/windowing/parser/Windowing.g:133:95: ( ^( TYPENAME $typeNm) )?
+                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:134:95: ( ^( TYPENAME $typeNm) )?
                         if ( stream_typeNm.hasNext() ) {
-                            // com/sap/hadoop/windowing/parser/Windowing.g:133:95: ^( TYPENAME $typeNm)
+                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:134:95: ^( TYPENAME $typeNm)
                             {
                             Object root_2 = (Object)adaptor.nil();
                             root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(TYPENAME, "TYPENAME"), root_2);
@@ -2735,10 +2834,10 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:134:3: ID
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:135:3: ID
                     {
-                    ID70=(Token)match(input,ID,FOLLOW_ID_in_selectColumn838); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_ID.add(ID70);
+                    ID72=(Token)match(input,ID,FOLLOW_ID_in_selectColumn860); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_ID.add(ID72);
 
 
 
@@ -2754,9 +2853,9 @@ public class WindowingParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 134:6: -> ^( SELECTCOLUMN ID )
+                    // 135:6: -> ^( SELECTCOLUMN ID )
                     {
-                        // com/sap/hadoop/windowing/parser/Windowing.g:134:9: ^( SELECTCOLUMN ID )
+                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:135:9: ^( SELECTCOLUMN ID )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(SELECTCOLUMN, "SELECTCOLUMN"), root_1);
@@ -2797,33 +2896,33 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "where"
-    // com/sap/hadoop/windowing/parser/Windowing.g:137:1: where : ( WHERE GROOVYEXPRESSION ) -> ^( WHERE GROOVYEXPRESSION ) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:138:1: where : ( WHERE GROOVYEXPRESSION ) -> ^( WHERE GROOVYEXPRESSION ) ;
     public final WindowingParser.where_return where() throws RecognitionException {
         WindowingParser.where_return retval = new WindowingParser.where_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token WHERE71=null;
-        Token GROOVYEXPRESSION72=null;
+        Token WHERE73=null;
+        Token GROOVYEXPRESSION74=null;
 
-        Object WHERE71_tree=null;
-        Object GROOVYEXPRESSION72_tree=null;
+        Object WHERE73_tree=null;
+        Object GROOVYEXPRESSION74_tree=null;
         RewriteRuleTokenStream stream_WHERE=new RewriteRuleTokenStream(adaptor,"token WHERE");
         RewriteRuleTokenStream stream_GROOVYEXPRESSION=new RewriteRuleTokenStream(adaptor,"token GROOVYEXPRESSION");
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:137:7: ( ( WHERE GROOVYEXPRESSION ) -> ^( WHERE GROOVYEXPRESSION ) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:138:2: ( WHERE GROOVYEXPRESSION )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:138:7: ( ( WHERE GROOVYEXPRESSION ) -> ^( WHERE GROOVYEXPRESSION ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:139:2: ( WHERE GROOVYEXPRESSION )
             {
-            // com/sap/hadoop/windowing/parser/Windowing.g:138:2: ( WHERE GROOVYEXPRESSION )
-            // com/sap/hadoop/windowing/parser/Windowing.g:138:3: WHERE GROOVYEXPRESSION
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:139:2: ( WHERE GROOVYEXPRESSION )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:139:3: WHERE GROOVYEXPRESSION
             {
-            WHERE71=(Token)match(input,WHERE,FOLLOW_WHERE_in_where858); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_WHERE.add(WHERE71);
+            WHERE73=(Token)match(input,WHERE,FOLLOW_WHERE_in_where880); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_WHERE.add(WHERE73);
 
-            GROOVYEXPRESSION72=(Token)match(input,GROOVYEXPRESSION,FOLLOW_GROOVYEXPRESSION_in_where860); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_GROOVYEXPRESSION.add(GROOVYEXPRESSION72);
+            GROOVYEXPRESSION74=(Token)match(input,GROOVYEXPRESSION,FOLLOW_GROOVYEXPRESSION_in_where882); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_GROOVYEXPRESSION.add(GROOVYEXPRESSION74);
 
 
             }
@@ -2842,9 +2941,9 @@ public class WindowingParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 138:27: -> ^( WHERE GROOVYEXPRESSION )
+            // 139:27: -> ^( WHERE GROOVYEXPRESSION )
             {
-                // com/sap/hadoop/windowing/parser/Windowing.g:138:30: ^( WHERE GROOVYEXPRESSION )
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:139:30: ^( WHERE GROOVYEXPRESSION )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_WHERE.nextNode(), root_1);
@@ -2883,7 +2982,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "outputClause"
-    // com/sap/hadoop/windowing/parser/Windowing.g:141:1: outputClause : ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? ) -> ^( OUTPUTSPEC $p ( $f)? ) ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:142:1: outputClause : ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? ) -> ^( OUTPUTSPEC $p ( $f)? ) ;
     public final WindowingParser.outputClause_return outputClause() throws RecognitionException {
         WindowingParser.outputClause_return retval = new WindowingParser.outputClause_return();
         retval.start = input.LT(1);
@@ -2892,19 +2991,19 @@ public class WindowingParser extends Parser {
 
         Token p=null;
         Token f=null;
-        Token INTO73=null;
-        Token PATH74=null;
-        Token EQ75=null;
-        Token FORMAT76=null;
+        Token INTO75=null;
+        Token PATH76=null;
         Token EQ77=null;
+        Token FORMAT78=null;
+        Token EQ79=null;
 
         Object p_tree=null;
         Object f_tree=null;
-        Object INTO73_tree=null;
-        Object PATH74_tree=null;
-        Object EQ75_tree=null;
-        Object FORMAT76_tree=null;
+        Object INTO75_tree=null;
+        Object PATH76_tree=null;
         Object EQ77_tree=null;
+        Object FORMAT78_tree=null;
+        Object EQ79_tree=null;
         RewriteRuleTokenStream stream_FORMAT=new RewriteRuleTokenStream(adaptor,"token FORMAT");
         RewriteRuleTokenStream stream_EQ=new RewriteRuleTokenStream(adaptor,"token EQ");
         RewriteRuleTokenStream stream_PATH=new RewriteRuleTokenStream(adaptor,"token PATH");
@@ -2912,45 +3011,45 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_STRING=new RewriteRuleTokenStream(adaptor,"token STRING");
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:141:14: ( ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? ) -> ^( OUTPUTSPEC $p ( $f)? ) )
-            // com/sap/hadoop/windowing/parser/Windowing.g:142:2: ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:142:14: ( ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? ) -> ^( OUTPUTSPEC $p ( $f)? ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:143:2: ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? )
             {
-            // com/sap/hadoop/windowing/parser/Windowing.g:142:2: ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? )
-            // com/sap/hadoop/windowing/parser/Windowing.g:142:3: INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )?
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:143:2: ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:143:3: INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )?
             {
-            INTO73=(Token)match(input,INTO,FOLLOW_INTO_in_outputClause880); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_INTO.add(INTO73);
+            INTO75=(Token)match(input,INTO,FOLLOW_INTO_in_outputClause902); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_INTO.add(INTO75);
 
-            PATH74=(Token)match(input,PATH,FOLLOW_PATH_in_outputClause882); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_PATH.add(PATH74);
+            PATH76=(Token)match(input,PATH,FOLLOW_PATH_in_outputClause904); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_PATH.add(PATH76);
 
-            EQ75=(Token)match(input,EQ,FOLLOW_EQ_in_outputClause884); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_EQ.add(EQ75);
+            EQ77=(Token)match(input,EQ,FOLLOW_EQ_in_outputClause906); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_EQ.add(EQ77);
 
-            p=(Token)match(input,STRING,FOLLOW_STRING_in_outputClause888); if (state.failed) return retval; 
+            p=(Token)match(input,STRING,FOLLOW_STRING_in_outputClause910); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_STRING.add(p);
 
-            // com/sap/hadoop/windowing/parser/Windowing.g:142:25: ( FORMAT EQ f= STRING )?
-            int alt25=2;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:143:25: ( FORMAT EQ f= STRING )?
+            int alt27=2;
             switch ( input.LA(1) ) {
                 case FORMAT:
                     {
-                    alt25=1;
+                    alt27=1;
                     }
                     break;
             }
 
-            switch (alt25) {
+            switch (alt27) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:142:26: FORMAT EQ f= STRING
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:143:26: FORMAT EQ f= STRING
                     {
-                    FORMAT76=(Token)match(input,FORMAT,FOLLOW_FORMAT_in_outputClause891); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_FORMAT.add(FORMAT76);
+                    FORMAT78=(Token)match(input,FORMAT,FOLLOW_FORMAT_in_outputClause913); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_FORMAT.add(FORMAT78);
 
-                    EQ77=(Token)match(input,EQ,FOLLOW_EQ_in_outputClause893); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_EQ.add(EQ77);
+                    EQ79=(Token)match(input,EQ,FOLLOW_EQ_in_outputClause915); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_EQ.add(EQ79);
 
-                    f=(Token)match(input,STRING,FOLLOW_STRING_in_outputClause897); if (state.failed) return retval; 
+                    f=(Token)match(input,STRING,FOLLOW_STRING_in_outputClause919); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_STRING.add(f);
 
 
@@ -2978,15 +3077,15 @@ public class WindowingParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 142:48: -> ^( OUTPUTSPEC $p ( $f)? )
+            // 143:48: -> ^( OUTPUTSPEC $p ( $f)? )
             {
-                // com/sap/hadoop/windowing/parser/Windowing.g:142:51: ^( OUTPUTSPEC $p ( $f)? )
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:143:51: ^( OUTPUTSPEC $p ( $f)? )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(OUTPUTSPEC, "OUTPUTSPEC"), root_1);
 
                 adaptor.addChild(root_1, stream_p.nextNode());
-                // com/sap/hadoop/windowing/parser/Windowing.g:142:67: ( $f)?
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:143:67: ( $f)?
                 if ( stream_f.hasNext() ) {
                     adaptor.addChild(root_1, stream_f.nextNode());
 
@@ -3025,22 +3124,22 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "value_expression"
-    // com/sap/hadoop/windowing/parser/Windowing.g:145:1: value_expression : ( numeric_expression | STRING );
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:146:1: value_expression : ( numeric_expression | STRING );
     public final WindowingParser.value_expression_return value_expression() throws RecognitionException {
         WindowingParser.value_expression_return retval = new WindowingParser.value_expression_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token STRING79=null;
-        WindowingParser.numeric_expression_return numeric_expression78 = null;
+        Token STRING81=null;
+        WindowingParser.numeric_expression_return numeric_expression80 = null;
 
 
-        Object STRING79_tree=null;
+        Object STRING81_tree=null;
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:145:18: ( numeric_expression | STRING )
-            int alt26=2;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:146:18: ( numeric_expression | STRING )
+            int alt28=2;
             switch ( input.LA(1) ) {
             case ID:
             case LPAREN:
@@ -3049,46 +3148,46 @@ public class WindowingParser extends Parser {
             case MINUS:
             case DOT:
                 {
-                alt26=1;
+                alt28=1;
                 }
                 break;
             case STRING:
                 {
-                alt26=2;
+                alt28=2;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 26, 0, input);
+                    new NoViableAltException("", 28, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt26) {
+            switch (alt28) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:146:3: numeric_expression
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:147:3: numeric_expression
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_numeric_expression_in_value_expression924);
-                    numeric_expression78=numeric_expression();
+                    pushFollow(FOLLOW_numeric_expression_in_value_expression946);
+                    numeric_expression80=numeric_expression();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, numeric_expression78.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, numeric_expression80.getTree());
 
                     }
                     break;
                 case 2 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:147:3: STRING
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:148:3: STRING
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    STRING79=(Token)match(input,STRING,FOLLOW_STRING_in_value_expression930); if (state.failed) return retval;
+                    STRING81=(Token)match(input,STRING,FOLLOW_STRING_in_value_expression952); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
-                    STRING79_tree = (Object)adaptor.create(STRING79);
-                    adaptor.addChild(root_0, STRING79_tree);
+                    STRING81_tree = (Object)adaptor.create(STRING81);
+                    adaptor.addChild(root_0, STRING81_tree);
                     }
 
                     }
@@ -3119,93 +3218,93 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "numeric_expression"
-    // com/sap/hadoop/windowing/parser/Windowing.g:150:1: numeric_expression : term ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )* ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:151:1: numeric_expression : term ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )* ;
     public final WindowingParser.numeric_expression_return numeric_expression() throws RecognitionException {
         WindowingParser.numeric_expression_return retval = new WindowingParser.numeric_expression_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token PLUS81=null;
-        Token MINUS82=null;
-        WindowingParser.term_return term80 = null;
+        Token PLUS83=null;
+        Token MINUS84=null;
+        WindowingParser.term_return term82 = null;
 
-        WindowingParser.term_return term83 = null;
+        WindowingParser.term_return term85 = null;
 
 
-        Object PLUS81_tree=null;
-        Object MINUS82_tree=null;
+        Object PLUS83_tree=null;
+        Object MINUS84_tree=null;
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:150:20: ( term ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )* )
-            // com/sap/hadoop/windowing/parser/Windowing.g:151:3: term ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )*
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:151:20: ( term ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )* )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:152:3: term ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_term_in_numeric_expression942);
-            term80=term();
+            pushFollow(FOLLOW_term_in_numeric_expression964);
+            term82=term();
 
             state._fsp--;
             if (state.failed) return retval;
-            if ( state.backtracking==0 ) adaptor.addChild(root_0, term80.getTree());
-            // com/sap/hadoop/windowing/parser/Windowing.g:151:8: ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )*
-            loop28:
+            if ( state.backtracking==0 ) adaptor.addChild(root_0, term82.getTree());
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:152:8: ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )*
+            loop30:
             do {
-                int alt28=2;
-                int LA28_0 = input.LA(1);
+                int alt30=2;
+                int LA30_0 = input.LA(1);
 
-                if ( (LA28_0==PLUS) && (synpred1_Windowing())) {
-                    alt28=1;
+                if ( (LA30_0==PLUS) && (synpred1_Windowing())) {
+                    alt30=1;
                 }
-                else if ( (LA28_0==MINUS) && (synpred1_Windowing())) {
-                    alt28=1;
+                else if ( (LA30_0==MINUS) && (synpred1_Windowing())) {
+                    alt30=1;
                 }
 
 
-                switch (alt28) {
+                switch (alt30) {
             	case 1 :
-            	    // com/sap/hadoop/windowing/parser/Windowing.g:151:9: ( PLUS | MINUS )=> ( PLUS | MINUS ) term
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:152:9: ( PLUS | MINUS )=> ( PLUS | MINUS ) term
             	    {
-            	    // com/sap/hadoop/windowing/parser/Windowing.g:151:26: ( PLUS | MINUS )
-            	    int alt27=2;
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:152:26: ( PLUS | MINUS )
+            	    int alt29=2;
             	    switch ( input.LA(1) ) {
             	    case PLUS:
             	        {
-            	        alt27=1;
+            	        alt29=1;
             	        }
             	        break;
             	    case MINUS:
             	        {
-            	        alt27=2;
+            	        alt29=2;
             	        }
             	        break;
             	    default:
             	        if (state.backtracking>0) {state.failed=true; return retval;}
             	        NoViableAltException nvae =
-            	            new NoViableAltException("", 27, 0, input);
+            	            new NoViableAltException("", 29, 0, input);
 
             	        throw nvae;
             	    }
 
-            	    switch (alt27) {
+            	    switch (alt29) {
             	        case 1 :
-            	            // com/sap/hadoop/windowing/parser/Windowing.g:151:27: PLUS
+            	            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:152:27: PLUS
             	            {
-            	            PLUS81=(Token)match(input,PLUS,FOLLOW_PLUS_in_numeric_expression955); if (state.failed) return retval;
+            	            PLUS83=(Token)match(input,PLUS,FOLLOW_PLUS_in_numeric_expression977); if (state.failed) return retval;
             	            if ( state.backtracking==0 ) {
-            	            PLUS81_tree = (Object)adaptor.create(PLUS81);
-            	            root_0 = (Object)adaptor.becomeRoot(PLUS81_tree, root_0);
+            	            PLUS83_tree = (Object)adaptor.create(PLUS83);
+            	            root_0 = (Object)adaptor.becomeRoot(PLUS83_tree, root_0);
             	            }
 
             	            }
             	            break;
             	        case 2 :
-            	            // com/sap/hadoop/windowing/parser/Windowing.g:151:35: MINUS
+            	            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:152:35: MINUS
             	            {
-            	            MINUS82=(Token)match(input,MINUS,FOLLOW_MINUS_in_numeric_expression960); if (state.failed) return retval;
+            	            MINUS84=(Token)match(input,MINUS,FOLLOW_MINUS_in_numeric_expression982); if (state.failed) return retval;
             	            if ( state.backtracking==0 ) {
-            	            MINUS82_tree = (Object)adaptor.create(MINUS82);
-            	            root_0 = (Object)adaptor.becomeRoot(MINUS82_tree, root_0);
+            	            MINUS84_tree = (Object)adaptor.create(MINUS84);
+            	            root_0 = (Object)adaptor.becomeRoot(MINUS84_tree, root_0);
             	            }
 
             	            }
@@ -3213,18 +3312,18 @@ public class WindowingParser extends Parser {
 
             	    }
 
-            	    pushFollow(FOLLOW_term_in_numeric_expression964);
-            	    term83=term();
+            	    pushFollow(FOLLOW_term_in_numeric_expression986);
+            	    term85=term();
 
             	    state._fsp--;
             	    if (state.failed) return retval;
-            	    if ( state.backtracking==0 ) adaptor.addChild(root_0, term83.getTree());
+            	    if ( state.backtracking==0 ) adaptor.addChild(root_0, term85.getTree());
 
             	    }
             	    break;
 
             	default :
-            	    break loop28;
+            	    break loop30;
                 }
             } while (true);
 
@@ -3255,93 +3354,93 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "term"
-    // com/sap/hadoop/windowing/parser/Windowing.g:154:1: term : numeric_primary_expression ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )* ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:155:1: term : numeric_primary_expression ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )* ;
     public final WindowingParser.term_return term() throws RecognitionException {
         WindowingParser.term_return retval = new WindowingParser.term_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token ASTERISK85=null;
-        Token SOLIDUS86=null;
-        WindowingParser.numeric_primary_expression_return numeric_primary_expression84 = null;
+        Token ASTERISK87=null;
+        Token SOLIDUS88=null;
+        WindowingParser.numeric_primary_expression_return numeric_primary_expression86 = null;
 
-        WindowingParser.numeric_primary_expression_return numeric_primary_expression87 = null;
+        WindowingParser.numeric_primary_expression_return numeric_primary_expression89 = null;
 
 
-        Object ASTERISK85_tree=null;
-        Object SOLIDUS86_tree=null;
+        Object ASTERISK87_tree=null;
+        Object SOLIDUS88_tree=null;
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:154:7: ( numeric_primary_expression ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )* )
-            // com/sap/hadoop/windowing/parser/Windowing.g:155:3: numeric_primary_expression ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )*
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:155:7: ( numeric_primary_expression ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )* )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:156:3: numeric_primary_expression ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_numeric_primary_expression_in_term982);
-            numeric_primary_expression84=numeric_primary_expression();
+            pushFollow(FOLLOW_numeric_primary_expression_in_term1004);
+            numeric_primary_expression86=numeric_primary_expression();
 
             state._fsp--;
             if (state.failed) return retval;
-            if ( state.backtracking==0 ) adaptor.addChild(root_0, numeric_primary_expression84.getTree());
-            // com/sap/hadoop/windowing/parser/Windowing.g:155:30: ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )*
-            loop30:
+            if ( state.backtracking==0 ) adaptor.addChild(root_0, numeric_primary_expression86.getTree());
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:156:30: ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )*
+            loop32:
             do {
-                int alt30=2;
-                int LA30_0 = input.LA(1);
+                int alt32=2;
+                int LA32_0 = input.LA(1);
 
-                if ( (LA30_0==ASTERISK) && (synpred2_Windowing())) {
-                    alt30=1;
+                if ( (LA32_0==ASTERISK) && (synpred2_Windowing())) {
+                    alt32=1;
                 }
-                else if ( (LA30_0==SOLIDUS) && (synpred2_Windowing())) {
-                    alt30=1;
+                else if ( (LA32_0==SOLIDUS) && (synpred2_Windowing())) {
+                    alt32=1;
                 }
 
 
-                switch (alt30) {
+                switch (alt32) {
             	case 1 :
-            	    // com/sap/hadoop/windowing/parser/Windowing.g:155:31: ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:156:31: ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression
             	    {
-            	    // com/sap/hadoop/windowing/parser/Windowing.g:155:54: ( ASTERISK | SOLIDUS )
-            	    int alt29=2;
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:156:54: ( ASTERISK | SOLIDUS )
+            	    int alt31=2;
             	    switch ( input.LA(1) ) {
             	    case ASTERISK:
             	        {
-            	        alt29=1;
+            	        alt31=1;
             	        }
             	        break;
             	    case SOLIDUS:
             	        {
-            	        alt29=2;
+            	        alt31=2;
             	        }
             	        break;
             	    default:
             	        if (state.backtracking>0) {state.failed=true; return retval;}
             	        NoViableAltException nvae =
-            	            new NoViableAltException("", 29, 0, input);
+            	            new NoViableAltException("", 31, 0, input);
 
             	        throw nvae;
             	    }
 
-            	    switch (alt29) {
+            	    switch (alt31) {
             	        case 1 :
-            	            // com/sap/hadoop/windowing/parser/Windowing.g:155:55: ASTERISK
+            	            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:156:55: ASTERISK
             	            {
-            	            ASTERISK85=(Token)match(input,ASTERISK,FOLLOW_ASTERISK_in_term995); if (state.failed) return retval;
+            	            ASTERISK87=(Token)match(input,ASTERISK,FOLLOW_ASTERISK_in_term1017); if (state.failed) return retval;
             	            if ( state.backtracking==0 ) {
-            	            ASTERISK85_tree = (Object)adaptor.create(ASTERISK85);
-            	            root_0 = (Object)adaptor.becomeRoot(ASTERISK85_tree, root_0);
+            	            ASTERISK87_tree = (Object)adaptor.create(ASTERISK87);
+            	            root_0 = (Object)adaptor.becomeRoot(ASTERISK87_tree, root_0);
             	            }
 
             	            }
             	            break;
             	        case 2 :
-            	            // com/sap/hadoop/windowing/parser/Windowing.g:155:67: SOLIDUS
+            	            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:156:67: SOLIDUS
             	            {
-            	            SOLIDUS86=(Token)match(input,SOLIDUS,FOLLOW_SOLIDUS_in_term1000); if (state.failed) return retval;
+            	            SOLIDUS88=(Token)match(input,SOLIDUS,FOLLOW_SOLIDUS_in_term1022); if (state.failed) return retval;
             	            if ( state.backtracking==0 ) {
-            	            SOLIDUS86_tree = (Object)adaptor.create(SOLIDUS86);
-            	            root_0 = (Object)adaptor.becomeRoot(SOLIDUS86_tree, root_0);
+            	            SOLIDUS88_tree = (Object)adaptor.create(SOLIDUS88);
+            	            root_0 = (Object)adaptor.becomeRoot(SOLIDUS88_tree, root_0);
             	            }
 
             	            }
@@ -3349,18 +3448,18 @@ public class WindowingParser extends Parser {
 
             	    }
 
-            	    pushFollow(FOLLOW_numeric_primary_expression_in_term1004);
-            	    numeric_primary_expression87=numeric_primary_expression();
+            	    pushFollow(FOLLOW_numeric_primary_expression_in_term1026);
+            	    numeric_primary_expression89=numeric_primary_expression();
 
             	    state._fsp--;
             	    if (state.failed) return retval;
-            	    if ( state.backtracking==0 ) adaptor.addChild(root_0, numeric_primary_expression87.getTree());
+            	    if ( state.backtracking==0 ) adaptor.addChild(root_0, numeric_primary_expression89.getTree());
 
             	    }
             	    break;
 
             	default :
-            	    break loop30;
+            	    break loop32;
                 }
             } while (true);
 
@@ -3391,32 +3490,32 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "numeric_primary_expression"
-    // com/sap/hadoop/windowing/parser/Windowing.g:158:1: numeric_primary_expression : ( identifier | signed_numeric_literal | LPAREN numeric_expression RPAREN );
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:159:1: numeric_primary_expression : ( identifier | signed_numeric_literal | LPAREN numeric_expression RPAREN );
     public final WindowingParser.numeric_primary_expression_return numeric_primary_expression() throws RecognitionException {
         WindowingParser.numeric_primary_expression_return retval = new WindowingParser.numeric_primary_expression_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token LPAREN90=null;
-        Token RPAREN92=null;
-        WindowingParser.identifier_return identifier88 = null;
+        Token LPAREN92=null;
+        Token RPAREN94=null;
+        WindowingParser.identifier_return identifier90 = null;
 
-        WindowingParser.signed_numeric_literal_return signed_numeric_literal89 = null;
+        WindowingParser.signed_numeric_literal_return signed_numeric_literal91 = null;
 
-        WindowingParser.numeric_expression_return numeric_expression91 = null;
+        WindowingParser.numeric_expression_return numeric_expression93 = null;
 
 
-        Object LPAREN90_tree=null;
-        Object RPAREN92_tree=null;
+        Object LPAREN92_tree=null;
+        Object RPAREN94_tree=null;
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:158:28: ( identifier | signed_numeric_literal | LPAREN numeric_expression RPAREN )
-            int alt31=3;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:159:28: ( identifier | signed_numeric_literal | LPAREN numeric_expression RPAREN )
+            int alt33=3;
             switch ( input.LA(1) ) {
             case ID:
                 {
-                alt31=1;
+                alt33=1;
                 }
                 break;
             case NUMBER:
@@ -3424,71 +3523,71 @@ public class WindowingParser extends Parser {
             case MINUS:
             case DOT:
                 {
-                alt31=2;
+                alt33=2;
                 }
                 break;
             case LPAREN:
                 {
-                alt31=3;
+                alt33=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 31, 0, input);
+                    new NoViableAltException("", 33, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt31) {
+            switch (alt33) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:159:3: identifier
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:160:3: identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_identifier_in_numeric_primary_expression1018);
-                    identifier88=identifier();
+                    pushFollow(FOLLOW_identifier_in_numeric_primary_expression1040);
+                    identifier90=identifier();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, identifier88.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, identifier90.getTree());
 
                     }
                     break;
                 case 2 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:160:3: signed_numeric_literal
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:161:3: signed_numeric_literal
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_signed_numeric_literal_in_numeric_primary_expression1025);
-                    signed_numeric_literal89=signed_numeric_literal();
+                    pushFollow(FOLLOW_signed_numeric_literal_in_numeric_primary_expression1047);
+                    signed_numeric_literal91=signed_numeric_literal();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, signed_numeric_literal89.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, signed_numeric_literal91.getTree());
 
                     }
                     break;
                 case 3 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:161:3: LPAREN numeric_expression RPAREN
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:162:3: LPAREN numeric_expression RPAREN
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    LPAREN90=(Token)match(input,LPAREN,FOLLOW_LPAREN_in_numeric_primary_expression1032); if (state.failed) return retval;
+                    LPAREN92=(Token)match(input,LPAREN,FOLLOW_LPAREN_in_numeric_primary_expression1054); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
-                    LPAREN90_tree = (Object)adaptor.create(LPAREN90);
-                    adaptor.addChild(root_0, LPAREN90_tree);
+                    LPAREN92_tree = (Object)adaptor.create(LPAREN92);
+                    adaptor.addChild(root_0, LPAREN92_tree);
                     }
-                    pushFollow(FOLLOW_numeric_expression_in_numeric_primary_expression1034);
-                    numeric_expression91=numeric_expression();
+                    pushFollow(FOLLOW_numeric_expression_in_numeric_primary_expression1056);
+                    numeric_expression93=numeric_expression();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, numeric_expression91.getTree());
-                    RPAREN92=(Token)match(input,RPAREN,FOLLOW_RPAREN_in_numeric_primary_expression1036); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, numeric_expression93.getTree());
+                    RPAREN94=(Token)match(input,RPAREN,FOLLOW_RPAREN_in_numeric_primary_expression1058); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
-                    RPAREN92_tree = (Object)adaptor.create(RPAREN92);
-                    adaptor.addChild(root_0, RPAREN92_tree);
+                    RPAREN94_tree = (Object)adaptor.create(RPAREN94);
+                    adaptor.addChild(root_0, RPAREN94_tree);
                     }
 
                     }
@@ -3519,44 +3618,44 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "signed_numeric_literal"
-    // com/sap/hadoop/windowing/parser/Windowing.g:164:1: signed_numeric_literal : ( PLUS | MINUS )? unsigned_numeric_literal ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:165:1: signed_numeric_literal : ( PLUS | MINUS )? unsigned_numeric_literal ;
     public final WindowingParser.signed_numeric_literal_return signed_numeric_literal() throws RecognitionException {
         WindowingParser.signed_numeric_literal_return retval = new WindowingParser.signed_numeric_literal_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token set93=null;
-        WindowingParser.unsigned_numeric_literal_return unsigned_numeric_literal94 = null;
+        Token set95=null;
+        WindowingParser.unsigned_numeric_literal_return unsigned_numeric_literal96 = null;
 
 
-        Object set93_tree=null;
+        Object set95_tree=null;
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:164:24: ( ( PLUS | MINUS )? unsigned_numeric_literal )
-            // com/sap/hadoop/windowing/parser/Windowing.g:165:3: ( PLUS | MINUS )? unsigned_numeric_literal
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:165:24: ( ( PLUS | MINUS )? unsigned_numeric_literal )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:166:3: ( PLUS | MINUS )? unsigned_numeric_literal
             {
             root_0 = (Object)adaptor.nil();
 
-            // com/sap/hadoop/windowing/parser/Windowing.g:165:3: ( PLUS | MINUS )?
-            int alt32=2;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:166:3: ( PLUS | MINUS )?
+            int alt34=2;
             switch ( input.LA(1) ) {
                 case PLUS:
                 case MINUS:
                     {
-                    alt32=1;
+                    alt34=1;
                     }
                     break;
             }
 
-            switch (alt32) {
+            switch (alt34) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:
                     {
-                    set93=(Token)input.LT(1);
+                    set95=(Token)input.LT(1);
                     if ( (input.LA(1)>=PLUS && input.LA(1)<=MINUS) ) {
                         input.consume();
-                        if ( state.backtracking==0 ) adaptor.addChild(root_0, (Object)adaptor.create(set93));
+                        if ( state.backtracking==0 ) adaptor.addChild(root_0, (Object)adaptor.create(set95));
                         state.errorRecovery=false;state.failed=false;
                     }
                     else {
@@ -3571,12 +3670,12 @@ public class WindowingParser extends Parser {
 
             }
 
-            pushFollow(FOLLOW_unsigned_numeric_literal_in_signed_numeric_literal1055);
-            unsigned_numeric_literal94=unsigned_numeric_literal();
+            pushFollow(FOLLOW_unsigned_numeric_literal_in_signed_numeric_literal1077);
+            unsigned_numeric_literal96=unsigned_numeric_literal();
 
             state._fsp--;
             if (state.failed) return retval;
-            if ( state.backtracking==0 ) adaptor.addChild(root_0, unsigned_numeric_literal94.getTree());
+            if ( state.backtracking==0 ) adaptor.addChild(root_0, unsigned_numeric_literal96.getTree());
 
             }
 
@@ -3604,22 +3703,22 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "unsigned_numeric_literal"
-    // com/sap/hadoop/windowing/parser/Windowing.g:171:1: unsigned_numeric_literal : ( exact_numeric_literal | approximate_numeric_literal );
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:172:1: unsigned_numeric_literal : ( exact_numeric_literal | approximate_numeric_literal );
     public final WindowingParser.unsigned_numeric_literal_return unsigned_numeric_literal() throws RecognitionException {
         WindowingParser.unsigned_numeric_literal_return retval = new WindowingParser.unsigned_numeric_literal_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        WindowingParser.exact_numeric_literal_return exact_numeric_literal95 = null;
+        WindowingParser.exact_numeric_literal_return exact_numeric_literal97 = null;
 
-        WindowingParser.approximate_numeric_literal_return approximate_numeric_literal96 = null;
+        WindowingParser.approximate_numeric_literal_return approximate_numeric_literal98 = null;
 
 
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:171:26: ( exact_numeric_literal | approximate_numeric_literal )
-            int alt33=2;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:172:26: ( exact_numeric_literal | approximate_numeric_literal )
+            int alt35=2;
             switch ( input.LA(1) ) {
             case NUMBER:
                 {
@@ -3637,18 +3736,18 @@ public class WindowingParser extends Parser {
                         case ASTERISK:
                         case SOLIDUS:
                             {
-                            alt33=1;
+                            alt35=1;
                             }
                             break;
                         case 100:
                             {
-                            alt33=2;
+                            alt35=2;
                             }
                             break;
                         default:
                             if (state.backtracking>0) {state.failed=true; return retval;}
                             NoViableAltException nvae =
-                                new NoViableAltException("", 33, 7, input);
+                                new NoViableAltException("", 35, 7, input);
 
                             throw nvae;
                         }
@@ -3658,7 +3757,7 @@ public class WindowingParser extends Parser {
                     default:
                         if (state.backtracking>0) {state.failed=true; return retval;}
                         NoViableAltException nvae =
-                            new NoViableAltException("", 33, 3, input);
+                            new NoViableAltException("", 35, 3, input);
 
                         throw nvae;
                     }
@@ -3672,18 +3771,18 @@ public class WindowingParser extends Parser {
                 case ASTERISK:
                 case SOLIDUS:
                     {
-                    alt33=1;
+                    alt35=1;
                     }
                     break;
                 case 100:
                     {
-                    alt33=2;
+                    alt35=2;
                     }
                     break;
                 default:
                     if (state.backtracking>0) {state.failed=true; return retval;}
                     NoViableAltException nvae =
-                        new NoViableAltException("", 33, 1, input);
+                        new NoViableAltException("", 35, 1, input);
 
                     throw nvae;
                 }
@@ -3703,18 +3802,18 @@ public class WindowingParser extends Parser {
                     case ASTERISK:
                     case SOLIDUS:
                         {
-                        alt33=1;
+                        alt35=1;
                         }
                         break;
                     case 100:
                         {
-                        alt33=2;
+                        alt35=2;
                         }
                         break;
                     default:
                         if (state.backtracking>0) {state.failed=true; return retval;}
                         NoViableAltException nvae =
-                            new NoViableAltException("", 33, 6, input);
+                            new NoViableAltException("", 35, 6, input);
 
                         throw nvae;
                     }
@@ -3724,7 +3823,7 @@ public class WindowingParser extends Parser {
                 default:
                     if (state.backtracking>0) {state.failed=true; return retval;}
                     NoViableAltException nvae =
-                        new NoViableAltException("", 33, 2, input);
+                        new NoViableAltException("", 35, 2, input);
 
                     throw nvae;
                 }
@@ -3734,37 +3833,37 @@ public class WindowingParser extends Parser {
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 33, 0, input);
+                    new NoViableAltException("", 35, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt33) {
+            switch (alt35) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:172:3: exact_numeric_literal
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:173:3: exact_numeric_literal
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_exact_numeric_literal_in_unsigned_numeric_literal1068);
-                    exact_numeric_literal95=exact_numeric_literal();
+                    pushFollow(FOLLOW_exact_numeric_literal_in_unsigned_numeric_literal1090);
+                    exact_numeric_literal97=exact_numeric_literal();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, exact_numeric_literal95.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, exact_numeric_literal97.getTree());
 
                     }
                     break;
                 case 2 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:173:3: approximate_numeric_literal
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:174:3: approximate_numeric_literal
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_approximate_numeric_literal_in_unsigned_numeric_literal1074);
-                    approximate_numeric_literal96=approximate_numeric_literal();
+                    pushFollow(FOLLOW_approximate_numeric_literal_in_unsigned_numeric_literal1096);
+                    approximate_numeric_literal98=approximate_numeric_literal();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, approximate_numeric_literal96.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, approximate_numeric_literal98.getTree());
 
                     }
                     break;
@@ -3794,44 +3893,44 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "approximate_numeric_literal"
-    // com/sap/hadoop/windowing/parser/Windowing.g:176:1: approximate_numeric_literal : mantissa 'E' exponent ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:177:1: approximate_numeric_literal : mantissa 'E' exponent ;
     public final WindowingParser.approximate_numeric_literal_return approximate_numeric_literal() throws RecognitionException {
         WindowingParser.approximate_numeric_literal_return retval = new WindowingParser.approximate_numeric_literal_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token char_literal98=null;
-        WindowingParser.mantissa_return mantissa97 = null;
+        Token char_literal100=null;
+        WindowingParser.mantissa_return mantissa99 = null;
 
-        WindowingParser.exponent_return exponent99 = null;
+        WindowingParser.exponent_return exponent101 = null;
 
 
-        Object char_literal98_tree=null;
+        Object char_literal100_tree=null;
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:176:29: ( mantissa 'E' exponent )
-            // com/sap/hadoop/windowing/parser/Windowing.g:177:3: mantissa 'E' exponent
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:177:29: ( mantissa 'E' exponent )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:178:3: mantissa 'E' exponent
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_mantissa_in_approximate_numeric_literal1085);
-            mantissa97=mantissa();
+            pushFollow(FOLLOW_mantissa_in_approximate_numeric_literal1107);
+            mantissa99=mantissa();
 
             state._fsp--;
             if (state.failed) return retval;
-            if ( state.backtracking==0 ) adaptor.addChild(root_0, mantissa97.getTree());
-            char_literal98=(Token)match(input,100,FOLLOW_100_in_approximate_numeric_literal1087); if (state.failed) return retval;
+            if ( state.backtracking==0 ) adaptor.addChild(root_0, mantissa99.getTree());
+            char_literal100=(Token)match(input,100,FOLLOW_100_in_approximate_numeric_literal1109); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
-            char_literal98_tree = (Object)adaptor.create(char_literal98);
-            adaptor.addChild(root_0, char_literal98_tree);
+            char_literal100_tree = (Object)adaptor.create(char_literal100);
+            adaptor.addChild(root_0, char_literal100_tree);
             }
-            pushFollow(FOLLOW_exponent_in_approximate_numeric_literal1089);
-            exponent99=exponent();
+            pushFollow(FOLLOW_exponent_in_approximate_numeric_literal1111);
+            exponent101=exponent();
 
             state._fsp--;
             if (state.failed) return retval;
-            if ( state.backtracking==0 ) adaptor.addChild(root_0, exponent99.getTree());
+            if ( state.backtracking==0 ) adaptor.addChild(root_0, exponent101.getTree());
 
             }
 
@@ -3859,95 +3958,63 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "exponent"
-    // com/sap/hadoop/windowing/parser/Windowing.g:180:1: exponent : ( PLUS NUMBER -> NUMBER | MINUS NUMBER -> ^( UMINUS NUMBER ) | NUMBER -> NUMBER );
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:181:1: exponent : ( PLUS NUMBER -> NUMBER | MINUS NUMBER -> ^( UMINUS NUMBER ) | NUMBER -> NUMBER );
     public final WindowingParser.exponent_return exponent() throws RecognitionException {
         WindowingParser.exponent_return retval = new WindowingParser.exponent_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token PLUS100=null;
-        Token NUMBER101=null;
-        Token MINUS102=null;
+        Token PLUS102=null;
         Token NUMBER103=null;
-        Token NUMBER104=null;
+        Token MINUS104=null;
+        Token NUMBER105=null;
+        Token NUMBER106=null;
 
-        Object PLUS100_tree=null;
-        Object NUMBER101_tree=null;
-        Object MINUS102_tree=null;
+        Object PLUS102_tree=null;
         Object NUMBER103_tree=null;
-        Object NUMBER104_tree=null;
+        Object MINUS104_tree=null;
+        Object NUMBER105_tree=null;
+        Object NUMBER106_tree=null;
         RewriteRuleTokenStream stream_PLUS=new RewriteRuleTokenStream(adaptor,"token PLUS");
         RewriteRuleTokenStream stream_MINUS=new RewriteRuleTokenStream(adaptor,"token MINUS");
         RewriteRuleTokenStream stream_NUMBER=new RewriteRuleTokenStream(adaptor,"token NUMBER");
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:180:10: ( PLUS NUMBER -> NUMBER | MINUS NUMBER -> ^( UMINUS NUMBER ) | NUMBER -> NUMBER )
-            int alt34=3;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:181:10: ( PLUS NUMBER -> NUMBER | MINUS NUMBER -> ^( UMINUS NUMBER ) | NUMBER -> NUMBER )
+            int alt36=3;
             switch ( input.LA(1) ) {
             case PLUS:
                 {
-                alt34=1;
+                alt36=1;
                 }
                 break;
             case MINUS:
                 {
-                alt34=2;
+                alt36=2;
                 }
                 break;
             case NUMBER:
                 {
-                alt34=3;
+                alt36=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 34, 0, input);
+                    new NoViableAltException("", 36, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt34) {
+            switch (alt36) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:181:3: PLUS NUMBER
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:182:3: PLUS NUMBER
                     {
-                    PLUS100=(Token)match(input,PLUS,FOLLOW_PLUS_in_exponent1100); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_PLUS.add(PLUS100);
+                    PLUS102=(Token)match(input,PLUS,FOLLOW_PLUS_in_exponent1122); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_PLUS.add(PLUS102);
 
-                    NUMBER101=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exponent1102); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_NUMBER.add(NUMBER101);
-
-
-
-                    // AST REWRITE
-                    // elements: NUMBER
-                    // token labels: 
-                    // rule labels: retval
-                    // token list labels: 
-                    // rule list labels: 
-                    // wildcard labels: 
-                    if ( state.backtracking==0 ) {
-                    retval.tree = root_0;
-                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
-
-                    root_0 = (Object)adaptor.nil();
-                    // 181:15: -> NUMBER
-                    {
-                        adaptor.addChild(root_0, stream_NUMBER.nextNode());
-
-                    }
-
-                    retval.tree = root_0;}
-                    }
-                    break;
-                case 2 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:182:3: MINUS NUMBER
-                    {
-                    MINUS102=(Token)match(input,MINUS,FOLLOW_MINUS_in_exponent1112); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_MINUS.add(MINUS102);
-
-                    NUMBER103=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exponent1114); if (state.failed) return retval; 
+                    NUMBER103=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exponent1124); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_NUMBER.add(NUMBER103);
 
 
@@ -3964,28 +4031,23 @@ public class WindowingParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 182:16: -> ^( UMINUS NUMBER )
+                    // 182:15: -> NUMBER
                     {
-                        // com/sap/hadoop/windowing/parser/Windowing.g:182:19: ^( UMINUS NUMBER )
-                        {
-                        Object root_1 = (Object)adaptor.nil();
-                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(UMINUS, "UMINUS"), root_1);
-
-                        adaptor.addChild(root_1, stream_NUMBER.nextNode());
-
-                        adaptor.addChild(root_0, root_1);
-                        }
+                        adaptor.addChild(root_0, stream_NUMBER.nextNode());
 
                     }
 
                     retval.tree = root_0;}
                     }
                     break;
-                case 3 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:183:3: NUMBER
+                case 2 :
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:183:3: MINUS NUMBER
                     {
-                    NUMBER104=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exponent1128); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_NUMBER.add(NUMBER104);
+                    MINUS104=(Token)match(input,MINUS,FOLLOW_MINUS_in_exponent1134); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_MINUS.add(MINUS104);
+
+                    NUMBER105=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exponent1136); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_NUMBER.add(NUMBER105);
 
 
 
@@ -4001,7 +4063,44 @@ public class WindowingParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 183:10: -> NUMBER
+                    // 183:16: -> ^( UMINUS NUMBER )
+                    {
+                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:183:19: ^( UMINUS NUMBER )
+                        {
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(UMINUS, "UMINUS"), root_1);
+
+                        adaptor.addChild(root_1, stream_NUMBER.nextNode());
+
+                        adaptor.addChild(root_0, root_1);
+                        }
+
+                    }
+
+                    retval.tree = root_0;}
+                    }
+                    break;
+                case 3 :
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:184:3: NUMBER
+                    {
+                    NUMBER106=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exponent1150); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_NUMBER.add(NUMBER106);
+
+
+
+                    // AST REWRITE
+                    // elements: NUMBER
+                    // token labels: 
+                    // rule labels: retval
+                    // token list labels: 
+                    // rule list labels: 
+                    // wildcard labels: 
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
+
+                    root_0 = (Object)adaptor.nil();
+                    // 184:10: -> NUMBER
                     {
                         adaptor.addChild(root_0, stream_NUMBER.nextNode());
 
@@ -4036,29 +4135,29 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "mantissa"
-    // com/sap/hadoop/windowing/parser/Windowing.g:186:1: mantissa : exact_numeric_literal ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:187:1: mantissa : exact_numeric_literal ;
     public final WindowingParser.mantissa_return mantissa() throws RecognitionException {
         WindowingParser.mantissa_return retval = new WindowingParser.mantissa_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        WindowingParser.exact_numeric_literal_return exact_numeric_literal105 = null;
+        WindowingParser.exact_numeric_literal_return exact_numeric_literal107 = null;
 
 
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:186:10: ( exact_numeric_literal )
-            // com/sap/hadoop/windowing/parser/Windowing.g:187:3: exact_numeric_literal
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:187:10: ( exact_numeric_literal )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:188:3: exact_numeric_literal
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_exact_numeric_literal_in_mantissa1144);
-            exact_numeric_literal105=exact_numeric_literal();
+            pushFollow(FOLLOW_exact_numeric_literal_in_mantissa1166);
+            exact_numeric_literal107=exact_numeric_literal();
 
             state._fsp--;
             if (state.failed) return retval;
-            if ( state.backtracking==0 ) adaptor.addChild(root_0, exact_numeric_literal105.getTree());
+            if ( state.backtracking==0 ) adaptor.addChild(root_0, exact_numeric_literal107.getTree());
 
             }
 
@@ -4086,7 +4185,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "exact_numeric_literal"
-    // com/sap/hadoop/windowing/parser/Windowing.g:190:1: exact_numeric_literal : (n1= NUMBER ( DOT n2= NUMBER )? -> | DOT n1= NUMBER ->);
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:191:1: exact_numeric_literal : (n1= NUMBER ( DOT n2= NUMBER )? -> | DOT n1= NUMBER ->);
     public final WindowingParser.exact_numeric_literal_return exact_numeric_literal() throws RecognitionException {
         WindowingParser.exact_numeric_literal_return retval = new WindowingParser.exact_numeric_literal_return();
         retval.start = input.LT(1);
@@ -4095,63 +4194,63 @@ public class WindowingParser extends Parser {
 
         Token n1=null;
         Token n2=null;
-        Token DOT106=null;
-        Token DOT107=null;
+        Token DOT108=null;
+        Token DOT109=null;
 
         Object n1_tree=null;
         Object n2_tree=null;
-        Object DOT106_tree=null;
-        Object DOT107_tree=null;
+        Object DOT108_tree=null;
+        Object DOT109_tree=null;
         RewriteRuleTokenStream stream_DOT=new RewriteRuleTokenStream(adaptor,"token DOT");
         RewriteRuleTokenStream stream_NUMBER=new RewriteRuleTokenStream(adaptor,"token NUMBER");
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:190:23: (n1= NUMBER ( DOT n2= NUMBER )? -> | DOT n1= NUMBER ->)
-            int alt36=2;
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:191:23: (n1= NUMBER ( DOT n2= NUMBER )? -> | DOT n1= NUMBER ->)
+            int alt38=2;
             switch ( input.LA(1) ) {
             case NUMBER:
                 {
-                alt36=1;
+                alt38=1;
                 }
                 break;
             case DOT:
                 {
-                alt36=2;
+                alt38=2;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 36, 0, input);
+                    new NoViableAltException("", 38, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt36) {
+            switch (alt38) {
                 case 1 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:192:3: n1= NUMBER ( DOT n2= NUMBER )?
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:193:3: n1= NUMBER ( DOT n2= NUMBER )?
                     {
-                    n1=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exact_numeric_literal1160); if (state.failed) return retval; 
+                    n1=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exact_numeric_literal1182); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_NUMBER.add(n1);
 
-                    // com/sap/hadoop/windowing/parser/Windowing.g:192:13: ( DOT n2= NUMBER )?
-                    int alt35=2;
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:193:13: ( DOT n2= NUMBER )?
+                    int alt37=2;
                     switch ( input.LA(1) ) {
                         case DOT:
                             {
-                            alt35=1;
+                            alt37=1;
                             }
                             break;
                     }
 
-                    switch (alt35) {
+                    switch (alt37) {
                         case 1 :
-                            // com/sap/hadoop/windowing/parser/Windowing.g:192:14: DOT n2= NUMBER
+                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:193:14: DOT n2= NUMBER
                             {
-                            DOT106=(Token)match(input,DOT,FOLLOW_DOT_in_exact_numeric_literal1163); if (state.failed) return retval; 
-                            if ( state.backtracking==0 ) stream_DOT.add(DOT106);
+                            DOT108=(Token)match(input,DOT,FOLLOW_DOT_in_exact_numeric_literal1185); if (state.failed) return retval; 
+                            if ( state.backtracking==0 ) stream_DOT.add(DOT108);
 
-                            n2=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exact_numeric_literal1167); if (state.failed) return retval; 
+                            n2=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exact_numeric_literal1189); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_NUMBER.add(n2);
 
 
@@ -4174,7 +4273,7 @@ public class WindowingParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 192:31: ->
+                    // 193:31: ->
                     {
                         adaptor.addChild(root_0, 
                         	      ( n2 != null ? adaptor.create(NUMERIC, (n1!=null?n1.getText():null) + '.' + (n2!=null?n2.getText():null)) :  adaptor.create(INTEGER, (n1!=null?n1.getText():null)) )
@@ -4186,12 +4285,12 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com/sap/hadoop/windowing/parser/Windowing.g:196:3: DOT n1= NUMBER
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:197:3: DOT n1= NUMBER
                     {
-                    DOT107=(Token)match(input,DOT,FOLLOW_DOT_in_exact_numeric_literal1188); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_DOT.add(DOT107);
+                    DOT109=(Token)match(input,DOT,FOLLOW_DOT_in_exact_numeric_literal1210); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_DOT.add(DOT109);
 
-                    n1=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exact_numeric_literal1192); if (state.failed) return retval; 
+                    n1=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exact_numeric_literal1214); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_NUMBER.add(n1);
 
 
@@ -4208,7 +4307,7 @@ public class WindowingParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 196:17: ->
+                    // 197:17: ->
                     {
                         adaptor.addChild(root_0,  adaptor.create(NUMERIC, '.' + (n1!=null?n1.getText():null)));
 
@@ -4243,27 +4342,27 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "identifier"
-    // com/sap/hadoop/windowing/parser/Windowing.g:199:1: identifier : ID ;
+    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:200:1: identifier : ID ;
     public final WindowingParser.identifier_return identifier() throws RecognitionException {
         WindowingParser.identifier_return retval = new WindowingParser.identifier_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token ID108=null;
+        Token ID110=null;
 
-        Object ID108_tree=null;
+        Object ID110_tree=null;
 
         try {
-            // com/sap/hadoop/windowing/parser/Windowing.g:199:12: ( ID )
-            // com/sap/hadoop/windowing/parser/Windowing.g:200:3: ID
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:200:12: ( ID )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:201:3: ID
             {
             root_0 = (Object)adaptor.nil();
 
-            ID108=(Token)match(input,ID,FOLLOW_ID_in_identifier1208); if (state.failed) return retval;
+            ID110=(Token)match(input,ID,FOLLOW_ID_in_identifier1230); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
-            ID108_tree = (Object)adaptor.create(ID108);
-            adaptor.addChild(root_0, ID108_tree);
+            ID110_tree = (Object)adaptor.create(ID110);
+            adaptor.addChild(root_0, ID110_tree);
             }
 
             }
@@ -4288,8 +4387,8 @@ public class WindowingParser extends Parser {
 
     // $ANTLR start synpred1_Windowing
     public final void synpred1_Windowing_fragment() throws RecognitionException {   
-        // com/sap/hadoop/windowing/parser/Windowing.g:151:9: ( PLUS | MINUS )
-        // com/sap/hadoop/windowing/parser/Windowing.g:
+        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:152:9: ( PLUS | MINUS )
+        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:
         {
         if ( (input.LA(1)>=PLUS && input.LA(1)<=MINUS) ) {
             input.consume();
@@ -4308,8 +4407,8 @@ public class WindowingParser extends Parser {
 
     // $ANTLR start synpred2_Windowing
     public final void synpred2_Windowing_fragment() throws RecognitionException {   
-        // com/sap/hadoop/windowing/parser/Windowing.g:155:31: ( ASTERISK | SOLIDUS )
-        // com/sap/hadoop/windowing/parser/Windowing.g:
+        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:156:31: ( ASTERISK | SOLIDUS )
+        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:
         {
         if ( (input.LA(1)>=ASTERISK && input.LA(1)<=SOLIDUS) ) {
             input.consume();
@@ -4360,9 +4459,9 @@ public class WindowingParser extends Parser {
 
  
 
-    public static final BitSet FOLLOW_FROM_in_query138 = new BitSet(new long[]{0x0000000000180000L});
-    public static final BitSet FOLLOW_tableSpec_in_query140 = new BitSet(new long[]{0x0000000040000000L});
-    public static final BitSet FOLLOW_partitionby_in_query143 = new BitSet(new long[]{0x0000000004000000L});
+    public static final BitSet FOLLOW_FROM_in_query138 = new BitSet(new long[]{0x0000000000B80000L});
+    public static final BitSet FOLLOW_tableSpec_in_query140 = new BitSet(new long[]{0x0000000080000000L});
+    public static final BitSet FOLLOW_partitionby_in_query143 = new BitSet(new long[]{0x0000000008000000L});
     public static final BitSet FOLLOW_orderby_in_query146 = new BitSet(new long[]{0x0000000000040000L});
     public static final BitSet FOLLOW_WITH_in_query149 = new BitSet(new long[]{0x0000000000080000L});
     public static final BitSet FOLLOW_funclist_in_query151 = new BitSet(new long[]{0x0001000000000000L});
@@ -4371,130 +4470,133 @@ public class WindowingParser extends Parser {
     public static final BitSet FOLLOW_outputClause_in_query162 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_hivetable_in_tableSpec195 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ID_in_tableSpec200 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_TABLEINPUT_in_hivetable218 = new BitSet(new long[]{0x0000000000200000L});
-    public static final BitSet FOLLOW_LPAREN_in_hivetable220 = new BitSet(new long[]{0x0000000001C80000L});
-    public static final BitSet FOLLOW_namevalue_in_hivetable223 = new BitSet(new long[]{0x0000000000C00000L});
-    public static final BitSet FOLLOW_COMMA_in_hivetable228 = new BitSet(new long[]{0x0000000001080000L});
-    public static final BitSet FOLLOW_namevalue_in_hivetable230 = new BitSet(new long[]{0x0000000000C00000L});
-    public static final BitSet FOLLOW_RPAREN_in_hivetable234 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_namevalue257 = new BitSet(new long[]{0x0000000002000000L});
-    public static final BitSet FOLLOW_STRING_in_namevalue261 = new BitSet(new long[]{0x0000000002000000L});
-    public static final BitSet FOLLOW_EQ_in_namevalue264 = new BitSet(new long[]{0x0000000001000000L});
-    public static final BitSet FOLLOW_STRING_in_namevalue268 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ORDER_in_orderby290 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_BY_in_orderby292 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_ordercolumn_in_orderby294 = new BitSet(new long[]{0x0000000000400002L});
-    public static final BitSet FOLLOW_COMMA_in_orderby297 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_ordercolumn_in_orderby299 = new BitSet(new long[]{0x0000000000400002L});
-    public static final BitSet FOLLOW_ID_in_ordercolumn320 = new BitSet(new long[]{0x0000000030000002L});
-    public static final BitSet FOLLOW_ASC_in_ordercolumn325 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DESC_in_ordercolumn331 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_PARTITION_in_partitionby356 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_BY_in_partitionby358 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_ID_in_partitionby360 = new BitSet(new long[]{0x0000000000400002L});
-    public static final BitSet FOLLOW_COMMA_in_partitionby363 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_ID_in_partitionby365 = new BitSet(new long[]{0x0000000000400002L});
-    public static final BitSet FOLLOW_function_in_funclist387 = new BitSet(new long[]{0x0000000000400002L});
-    public static final BitSet FOLLOW_COMMA_in_funclist390 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_function_in_funclist392 = new BitSet(new long[]{0x0000000000400002L});
-    public static final BitSet FOLLOW_ID_in_function416 = new BitSet(new long[]{0x0000000000200000L});
-    public static final BitSet FOLLOW_LPAREN_in_function418 = new BitSet(new long[]{0x0000000C01C80000L});
-    public static final BitSet FOLLOW_functionparam_in_function421 = new BitSet(new long[]{0x0000000000C00000L});
-    public static final BitSet FOLLOW_COMMA_in_function426 = new BitSet(new long[]{0x0000000C01080000L});
-    public static final BitSet FOLLOW_functionparam_in_function428 = new BitSet(new long[]{0x0000000000C00000L});
-    public static final BitSet FOLLOW_RPAREN_in_function432 = new BitSet(new long[]{0x0000001080000000L});
-    public static final BitSet FOLLOW_window_expression_in_function435 = new BitSet(new long[]{0x0000000080000000L});
-    public static final BitSet FOLLOW_AS_in_function439 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_ID_in_function443 = new BitSet(new long[]{0x0000000100000002L});
-    public static final BitSet FOLLOW_LBRACKET_in_function446 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_ID_in_function450 = new BitSet(new long[]{0x0000000200000000L});
-    public static final BitSet FOLLOW_RBRACKET_in_function452 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LPAREN_in_tableSpec213 = new BitSet(new long[]{0x0000000000200000L});
+    public static final BitSet FOLLOW_GROOVYEXPRESSION_in_tableSpec218 = new BitSet(new long[]{0x0000000000400002L});
+    public static final BitSet FOLLOW_RPAREN_in_tableSpec220 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_TABLEINPUT_in_hivetable240 = new BitSet(new long[]{0x0000000000100000L});
+    public static final BitSet FOLLOW_LPAREN_in_hivetable242 = new BitSet(new long[]{0x0000000003480000L});
+    public static final BitSet FOLLOW_namevalue_in_hivetable245 = new BitSet(new long[]{0x0000000001400000L});
+    public static final BitSet FOLLOW_COMMA_in_hivetable250 = new BitSet(new long[]{0x0000000002080000L});
+    public static final BitSet FOLLOW_namevalue_in_hivetable252 = new BitSet(new long[]{0x0000000001400000L});
+    public static final BitSet FOLLOW_RPAREN_in_hivetable256 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_namevalue279 = new BitSet(new long[]{0x0000000004000000L});
+    public static final BitSet FOLLOW_STRING_in_namevalue283 = new BitSet(new long[]{0x0000000004000000L});
+    public static final BitSet FOLLOW_EQ_in_namevalue286 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_STRING_in_namevalue290 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ORDER_in_orderby312 = new BitSet(new long[]{0x0000000010000000L});
+    public static final BitSet FOLLOW_BY_in_orderby314 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_ordercolumn_in_orderby316 = new BitSet(new long[]{0x0000000001000002L});
+    public static final BitSet FOLLOW_COMMA_in_orderby319 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_ordercolumn_in_orderby321 = new BitSet(new long[]{0x0000000001000002L});
+    public static final BitSet FOLLOW_ID_in_ordercolumn342 = new BitSet(new long[]{0x0000000060000002L});
+    public static final BitSet FOLLOW_ASC_in_ordercolumn347 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DESC_in_ordercolumn353 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_PARTITION_in_partitionby378 = new BitSet(new long[]{0x0000000010000000L});
+    public static final BitSet FOLLOW_BY_in_partitionby380 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_ID_in_partitionby382 = new BitSet(new long[]{0x0000000001000002L});
+    public static final BitSet FOLLOW_COMMA_in_partitionby385 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_ID_in_partitionby387 = new BitSet(new long[]{0x0000000001000002L});
+    public static final BitSet FOLLOW_function_in_funclist409 = new BitSet(new long[]{0x0000000001000002L});
+    public static final BitSet FOLLOW_COMMA_in_funclist412 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_function_in_funclist414 = new BitSet(new long[]{0x0000000001000002L});
+    public static final BitSet FOLLOW_ID_in_function438 = new BitSet(new long[]{0x0000000000100000L});
+    public static final BitSet FOLLOW_LPAREN_in_function440 = new BitSet(new long[]{0x0000000803680000L});
+    public static final BitSet FOLLOW_functionparam_in_function443 = new BitSet(new long[]{0x0000000001400000L});
+    public static final BitSet FOLLOW_COMMA_in_function448 = new BitSet(new long[]{0x0000000802280000L});
+    public static final BitSet FOLLOW_functionparam_in_function450 = new BitSet(new long[]{0x0000000001400000L});
+    public static final BitSet FOLLOW_RPAREN_in_function454 = new BitSet(new long[]{0x0000001100000000L});
+    public static final BitSet FOLLOW_window_expression_in_function457 = new BitSet(new long[]{0x0000000100000000L});
+    public static final BitSet FOLLOW_AS_in_function461 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_ID_in_function465 = new BitSet(new long[]{0x0000000200000002L});
+    public static final BitSet FOLLOW_LBRACKET_in_function468 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_ID_in_function472 = new BitSet(new long[]{0x0000000400000000L});
+    public static final BitSet FOLLOW_RBRACKET_in_function474 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_functionparam0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_OVER_in_window_expression521 = new BitSet(new long[]{0x0000202000000000L});
-    public static final BitSet FOLLOW_window_range_expression_in_window_expression527 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_window_value_expression_in_window_expression532 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ROWS_in_window_range_expression546 = new BitSet(new long[]{0x0000004000000000L});
-    public static final BitSet FOLLOW_BETWEEN_in_window_range_expression548 = new BitSet(new long[]{0x0000090800000000L});
-    public static final BitSet FOLLOW_rowsboundary_in_window_range_expression552 = new BitSet(new long[]{0x0000008000000000L});
-    public static final BitSet FOLLOW_AND_in_window_range_expression554 = new BitSet(new long[]{0x0000090800000000L});
-    public static final BitSet FOLLOW_rowsboundary_in_window_range_expression558 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_UNBOUNDED_in_rowsboundary581 = new BitSet(new long[]{0x0000060000000000L});
-    public static final BitSet FOLLOW_PRECEDING_in_rowsboundary586 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FOLLOWING_in_rowsboundary590 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CURRENT_in_rowsboundary608 = new BitSet(new long[]{0x0000100000000000L});
-    public static final BitSet FOLLOW_ROW_in_rowsboundary610 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NUMBER_in_rowsboundary623 = new BitSet(new long[]{0x0000060000000000L});
-    public static final BitSet FOLLOW_PRECEDING_in_rowsboundary628 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FOLLOWING_in_rowsboundary634 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RANGE_in_window_value_expression655 = new BitSet(new long[]{0x0000004000000000L});
-    public static final BitSet FOLLOW_BETWEEN_in_window_value_expression657 = new BitSet(new long[]{0x0000090400000000L});
-    public static final BitSet FOLLOW_valuesboundary_in_window_value_expression661 = new BitSet(new long[]{0x0000008000000000L});
-    public static final BitSet FOLLOW_AND_in_window_value_expression663 = new BitSet(new long[]{0x0000090400000000L});
-    public static final BitSet FOLLOW_valuesboundary_in_window_value_expression667 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_UNBOUNDED_in_valuesboundary690 = new BitSet(new long[]{0x0000060000000000L});
-    public static final BitSet FOLLOW_PRECEDING_in_valuesboundary695 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FOLLOWING_in_valuesboundary699 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CURRENT_in_valuesboundary717 = new BitSet(new long[]{0x0000100000000000L});
-    public static final BitSet FOLLOW_ROW_in_valuesboundary719 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_GROOVYEXPRESSION_in_valuesboundary732 = new BitSet(new long[]{0x0000000800000000L});
-    public static final BitSet FOLLOW_NUMBER_in_valuesboundary734 = new BitSet(new long[]{0x0000C00000000000L});
-    public static final BitSet FOLLOW_LESS_in_valuesboundary739 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MORE_in_valuesboundary745 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SELECT_in_select770 = new BitSet(new long[]{0x0000000400080000L});
-    public static final BitSet FOLLOW_selectColumn_in_select772 = new BitSet(new long[]{0x0000000000400002L});
-    public static final BitSet FOLLOW_COMMA_in_select775 = new BitSet(new long[]{0x0000000400080000L});
-    public static final BitSet FOLLOW_selectColumn_in_select777 = new BitSet(new long[]{0x0000000000400002L});
-    public static final BitSet FOLLOW_GROOVYEXPRESSION_in_selectColumn799 = new BitSet(new long[]{0x0000000080000000L});
-    public static final BitSet FOLLOW_AS_in_selectColumn801 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_ID_in_selectColumn803 = new BitSet(new long[]{0x0000000100000002L});
-    public static final BitSet FOLLOW_LBRACKET_in_selectColumn806 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_ID_in_selectColumn810 = new BitSet(new long[]{0x0000000200000000L});
-    public static final BitSet FOLLOW_RBRACKET_in_selectColumn812 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_selectColumn838 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_WHERE_in_where858 = new BitSet(new long[]{0x0000000400000000L});
-    public static final BitSet FOLLOW_GROOVYEXPRESSION_in_where860 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INTO_in_outputClause880 = new BitSet(new long[]{0x0008000000000000L});
-    public static final BitSet FOLLOW_PATH_in_outputClause882 = new BitSet(new long[]{0x0000000002000000L});
-    public static final BitSet FOLLOW_EQ_in_outputClause884 = new BitSet(new long[]{0x0000000001000000L});
-    public static final BitSet FOLLOW_STRING_in_outputClause888 = new BitSet(new long[]{0x0010000000000002L});
-    public static final BitSet FOLLOW_FORMAT_in_outputClause891 = new BitSet(new long[]{0x0000000002000000L});
-    public static final BitSet FOLLOW_EQ_in_outputClause893 = new BitSet(new long[]{0x0000000001000000L});
-    public static final BitSet FOLLOW_STRING_in_outputClause897 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_numeric_expression_in_value_expression924 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_STRING_in_value_expression930 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_term_in_numeric_expression942 = new BitSet(new long[]{0x0060000000000002L});
-    public static final BitSet FOLLOW_PLUS_in_numeric_expression955 = new BitSet(new long[]{0x0260000800280000L});
-    public static final BitSet FOLLOW_MINUS_in_numeric_expression960 = new BitSet(new long[]{0x0260000800280000L});
+    public static final BitSet FOLLOW_OVER_in_window_expression543 = new BitSet(new long[]{0x0000202000000000L});
+    public static final BitSet FOLLOW_window_range_expression_in_window_expression549 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_window_value_expression_in_window_expression554 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ROWS_in_window_range_expression568 = new BitSet(new long[]{0x0000004000000000L});
+    public static final BitSet FOLLOW_BETWEEN_in_window_range_expression570 = new BitSet(new long[]{0x0000090800000000L});
+    public static final BitSet FOLLOW_rowsboundary_in_window_range_expression574 = new BitSet(new long[]{0x0000008000000000L});
+    public static final BitSet FOLLOW_AND_in_window_range_expression576 = new BitSet(new long[]{0x0000090800000000L});
+    public static final BitSet FOLLOW_rowsboundary_in_window_range_expression580 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_UNBOUNDED_in_rowsboundary603 = new BitSet(new long[]{0x0000060000000000L});
+    public static final BitSet FOLLOW_PRECEDING_in_rowsboundary608 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FOLLOWING_in_rowsboundary612 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CURRENT_in_rowsboundary630 = new BitSet(new long[]{0x0000100000000000L});
+    public static final BitSet FOLLOW_ROW_in_rowsboundary632 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NUMBER_in_rowsboundary645 = new BitSet(new long[]{0x0000060000000000L});
+    public static final BitSet FOLLOW_PRECEDING_in_rowsboundary650 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FOLLOWING_in_rowsboundary656 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RANGE_in_window_value_expression677 = new BitSet(new long[]{0x0000004000000000L});
+    public static final BitSet FOLLOW_BETWEEN_in_window_value_expression679 = new BitSet(new long[]{0x0000090000200000L});
+    public static final BitSet FOLLOW_valuesboundary_in_window_value_expression683 = new BitSet(new long[]{0x0000008000000000L});
+    public static final BitSet FOLLOW_AND_in_window_value_expression685 = new BitSet(new long[]{0x0000090000200000L});
+    public static final BitSet FOLLOW_valuesboundary_in_window_value_expression689 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_UNBOUNDED_in_valuesboundary712 = new BitSet(new long[]{0x0000060000000000L});
+    public static final BitSet FOLLOW_PRECEDING_in_valuesboundary717 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FOLLOWING_in_valuesboundary721 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CURRENT_in_valuesboundary739 = new BitSet(new long[]{0x0000100000000000L});
+    public static final BitSet FOLLOW_ROW_in_valuesboundary741 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_GROOVYEXPRESSION_in_valuesboundary754 = new BitSet(new long[]{0x0000000800000000L});
+    public static final BitSet FOLLOW_NUMBER_in_valuesboundary756 = new BitSet(new long[]{0x0000C00000000000L});
+    public static final BitSet FOLLOW_LESS_in_valuesboundary761 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MORE_in_valuesboundary767 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SELECT_in_select792 = new BitSet(new long[]{0x0000000000280000L});
+    public static final BitSet FOLLOW_selectColumn_in_select794 = new BitSet(new long[]{0x0000000001000002L});
+    public static final BitSet FOLLOW_COMMA_in_select797 = new BitSet(new long[]{0x0000000000280000L});
+    public static final BitSet FOLLOW_selectColumn_in_select799 = new BitSet(new long[]{0x0000000001000002L});
+    public static final BitSet FOLLOW_GROOVYEXPRESSION_in_selectColumn821 = new BitSet(new long[]{0x0000000100000000L});
+    public static final BitSet FOLLOW_AS_in_selectColumn823 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_ID_in_selectColumn825 = new BitSet(new long[]{0x0000000200000002L});
+    public static final BitSet FOLLOW_LBRACKET_in_selectColumn828 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_ID_in_selectColumn832 = new BitSet(new long[]{0x0000000400000000L});
+    public static final BitSet FOLLOW_RBRACKET_in_selectColumn834 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_selectColumn860 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_WHERE_in_where880 = new BitSet(new long[]{0x0000000000200000L});
+    public static final BitSet FOLLOW_GROOVYEXPRESSION_in_where882 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INTO_in_outputClause902 = new BitSet(new long[]{0x0008000000000000L});
+    public static final BitSet FOLLOW_PATH_in_outputClause904 = new BitSet(new long[]{0x0000000004000000L});
+    public static final BitSet FOLLOW_EQ_in_outputClause906 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_STRING_in_outputClause910 = new BitSet(new long[]{0x0010000000000002L});
+    public static final BitSet FOLLOW_FORMAT_in_outputClause913 = new BitSet(new long[]{0x0000000004000000L});
+    public static final BitSet FOLLOW_EQ_in_outputClause915 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_STRING_in_outputClause919 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_numeric_expression_in_value_expression946 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_STRING_in_value_expression952 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_term_in_numeric_expression964 = new BitSet(new long[]{0x0060000000000002L});
-    public static final BitSet FOLLOW_numeric_primary_expression_in_term982 = new BitSet(new long[]{0x0180000000000002L});
-    public static final BitSet FOLLOW_ASTERISK_in_term995 = new BitSet(new long[]{0x0260000800280000L});
-    public static final BitSet FOLLOW_SOLIDUS_in_term1000 = new BitSet(new long[]{0x0260000800280000L});
+    public static final BitSet FOLLOW_PLUS_in_numeric_expression977 = new BitSet(new long[]{0x0260000800180000L});
+    public static final BitSet FOLLOW_MINUS_in_numeric_expression982 = new BitSet(new long[]{0x0260000800180000L});
+    public static final BitSet FOLLOW_term_in_numeric_expression986 = new BitSet(new long[]{0x0060000000000002L});
     public static final BitSet FOLLOW_numeric_primary_expression_in_term1004 = new BitSet(new long[]{0x0180000000000002L});
-    public static final BitSet FOLLOW_identifier_in_numeric_primary_expression1018 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_signed_numeric_literal_in_numeric_primary_expression1025 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LPAREN_in_numeric_primary_expression1032 = new BitSet(new long[]{0x0260000800280000L});
-    public static final BitSet FOLLOW_numeric_expression_in_numeric_primary_expression1034 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_RPAREN_in_numeric_primary_expression1036 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_set_in_signed_numeric_literal1048 = new BitSet(new long[]{0x0260000800000000L});
-    public static final BitSet FOLLOW_unsigned_numeric_literal_in_signed_numeric_literal1055 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_exact_numeric_literal_in_unsigned_numeric_literal1068 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_approximate_numeric_literal_in_unsigned_numeric_literal1074 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_mantissa_in_approximate_numeric_literal1085 = new BitSet(new long[]{0x0000000000000000L,0x0000001000000000L});
-    public static final BitSet FOLLOW_100_in_approximate_numeric_literal1087 = new BitSet(new long[]{0x0060000800000000L});
-    public static final BitSet FOLLOW_exponent_in_approximate_numeric_literal1089 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_PLUS_in_exponent1100 = new BitSet(new long[]{0x0000000800000000L});
-    public static final BitSet FOLLOW_NUMBER_in_exponent1102 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MINUS_in_exponent1112 = new BitSet(new long[]{0x0000000800000000L});
-    public static final BitSet FOLLOW_NUMBER_in_exponent1114 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NUMBER_in_exponent1128 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_exact_numeric_literal_in_mantissa1144 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NUMBER_in_exact_numeric_literal1160 = new BitSet(new long[]{0x0200000000000002L});
-    public static final BitSet FOLLOW_DOT_in_exact_numeric_literal1163 = new BitSet(new long[]{0x0000000800000000L});
-    public static final BitSet FOLLOW_NUMBER_in_exact_numeric_literal1167 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DOT_in_exact_numeric_literal1188 = new BitSet(new long[]{0x0000000800000000L});
-    public static final BitSet FOLLOW_NUMBER_in_exact_numeric_literal1192 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_identifier1208 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_set_in_synpred1_Windowing945 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_set_in_synpred2_Windowing985 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ASTERISK_in_term1017 = new BitSet(new long[]{0x0260000800180000L});
+    public static final BitSet FOLLOW_SOLIDUS_in_term1022 = new BitSet(new long[]{0x0260000800180000L});
+    public static final BitSet FOLLOW_numeric_primary_expression_in_term1026 = new BitSet(new long[]{0x0180000000000002L});
+    public static final BitSet FOLLOW_identifier_in_numeric_primary_expression1040 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_signed_numeric_literal_in_numeric_primary_expression1047 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LPAREN_in_numeric_primary_expression1054 = new BitSet(new long[]{0x0260000800180000L});
+    public static final BitSet FOLLOW_numeric_expression_in_numeric_primary_expression1056 = new BitSet(new long[]{0x0000000000400000L});
+    public static final BitSet FOLLOW_RPAREN_in_numeric_primary_expression1058 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_set_in_signed_numeric_literal1070 = new BitSet(new long[]{0x0260000800000000L});
+    public static final BitSet FOLLOW_unsigned_numeric_literal_in_signed_numeric_literal1077 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_exact_numeric_literal_in_unsigned_numeric_literal1090 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_approximate_numeric_literal_in_unsigned_numeric_literal1096 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_mantissa_in_approximate_numeric_literal1107 = new BitSet(new long[]{0x0000000000000000L,0x0000001000000000L});
+    public static final BitSet FOLLOW_100_in_approximate_numeric_literal1109 = new BitSet(new long[]{0x0060000800000000L});
+    public static final BitSet FOLLOW_exponent_in_approximate_numeric_literal1111 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_PLUS_in_exponent1122 = new BitSet(new long[]{0x0000000800000000L});
+    public static final BitSet FOLLOW_NUMBER_in_exponent1124 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MINUS_in_exponent1134 = new BitSet(new long[]{0x0000000800000000L});
+    public static final BitSet FOLLOW_NUMBER_in_exponent1136 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NUMBER_in_exponent1150 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_exact_numeric_literal_in_mantissa1166 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NUMBER_in_exact_numeric_literal1182 = new BitSet(new long[]{0x0200000000000002L});
+    public static final BitSet FOLLOW_DOT_in_exact_numeric_literal1185 = new BitSet(new long[]{0x0000000800000000L});
+    public static final BitSet FOLLOW_NUMBER_in_exact_numeric_literal1189 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DOT_in_exact_numeric_literal1210 = new BitSet(new long[]{0x0000000800000000L});
+    public static final BitSet FOLLOW_NUMBER_in_exact_numeric_literal1214 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_identifier1230 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_set_in_synpred1_Windowing967 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_set_in_synpred2_Windowing1007 = new BitSet(new long[]{0x0000000000000002L});
 
 }

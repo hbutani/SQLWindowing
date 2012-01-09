@@ -23,7 +23,7 @@ abstract class MRBaseTest
 	{
 		outStream = new ByteArrayOutputStream()
 		
-		Configuration conf = HOME_LOCALMR();
+		Configuration conf = HOME();
 		
 		wshell = new WindowingShell(conf, new MRTranslator(), 
 			new MRExecutor())

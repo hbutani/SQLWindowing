@@ -268,7 +268,7 @@ ID    :  ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*
 
 GROOVYEXPRESSION : '<' 
 		(GroovyEscapeSequence | ~('>'))*
-		'>' {setText(getText().substring(1, getText().length()-1));}
+		'>' {setText(getText().substring(1, getText().length()-1).replaceAll("\\\\>", ">"));}
 ;
 
 fragment

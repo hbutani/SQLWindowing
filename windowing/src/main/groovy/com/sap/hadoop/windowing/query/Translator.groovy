@@ -36,6 +36,7 @@ abstract class Translator
 		setupQueryInput(qry)
 		setupWindowFunctions(wshell, qry)
 		setupOutput(qry)
+		setupWhereClause(qry)
 		return qry
 	}
 	
@@ -241,6 +242,26 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		
 		//3. for now assume type is 'double'. (revisit: analyze grrovy expressions to infer type)
 		oc.typeInfo = TypeInfoFactory.getPrimitiveTypeInfo('double')
+	}
+	
+	void setupWhereClause(Query q) throws WindowingException
+	{
+		String whereExpr = q.qSpec.whereExpr
+		try
+		{
+			if (whereExpr != null)
+			{
+				q.whereExpr = q.wshell.parse(whereExpr)
+			}
+			else
+			{
+				q.whereExpr = null
+			}
+		}
+		catch(Throwable t)
+		{
+			throw new WindowingException(sprintf("Failed to parse where Clause '%s'", whereExpr), t)
+		}
 	}
 	
 	OutputStream getOutputStream()

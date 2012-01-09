@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:46:29 com\\sap\\hadoop\\windowing\\parser\\Windowing.g 2011-12-08 12:07:52
+// $ANTLR 3.3 Nov 30, 2010 12:46:29 com/sap/hadoop/windowing/parser/Windowing.g 2012-01-07 18:33:47
 
 package com.sap.hadoop.windowing.parser;
 
@@ -137,7 +137,7 @@ public class WindowingParser extends Parser {
     }
 
     public String[] getTokenNames() { return WindowingParser.tokenNames; }
-    public String getGrammarFileName() { return "com\\sap\\hadoop\\windowing\\parser\\Windowing.g"; }
+    public String getGrammarFileName() { return "com/sap/hadoop/windowing/parser/Windowing.g"; }
 
 
     	protected void mismatch(IntStream input, int ttype, BitSet follow) throws RecognitionException
@@ -156,7 +156,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "query"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:53:1: query : FROM tableSpec partitionby orderby WITH funclist select ( where )? ( outputClause )? -> ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? ) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:53:1: query : FROM tableSpec partitionby orderby WITH funclist select ( where )? ( outputClause )? -> ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? ) ;
     public final WindowingParser.query_return query() throws RecognitionException {
         WindowingParser.query_return retval = new WindowingParser.query_return();
         retval.start = input.LT(1);
@@ -192,8 +192,8 @@ public class WindowingParser extends Parser {
         RewriteRuleSubtreeStream stream_where=new RewriteRuleSubtreeStream(adaptor,"rule where");
         RewriteRuleSubtreeStream stream_outputClause=new RewriteRuleSubtreeStream(adaptor,"rule outputClause");
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:53:7: ( FROM tableSpec partitionby orderby WITH funclist select ( where )? ( outputClause )? -> ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:54:2: FROM tableSpec partitionby orderby WITH funclist select ( where )? ( outputClause )?
+            // com/sap/hadoop/windowing/parser/Windowing.g:53:7: ( FROM tableSpec partitionby orderby WITH funclist select ( where )? ( outputClause )? -> ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:54:2: FROM tableSpec partitionby orderby WITH funclist select ( where )? ( outputClause )?
             {
             FROM1=(Token)match(input,FROM,FOLLOW_FROM_in_query138); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_FROM.add(FROM1);
@@ -231,7 +231,7 @@ public class WindowingParser extends Parser {
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_select.add(select7.getTree());
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:59:2: ( where )?
+            // com/sap/hadoop/windowing/parser/Windowing.g:59:2: ( where )?
             int alt1=2;
             switch ( input.LA(1) ) {
                 case WHERE:
@@ -243,7 +243,7 @@ public class WindowingParser extends Parser {
 
             switch (alt1) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:59:2: where
+                    // com/sap/hadoop/windowing/parser/Windowing.g:59:2: where
                     {
                     pushFollow(FOLLOW_where_in_query157);
                     where8=where();
@@ -257,7 +257,7 @@ public class WindowingParser extends Parser {
 
             }
 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:60:2: ( outputClause )?
+            // com/sap/hadoop/windowing/parser/Windowing.g:60:2: ( outputClause )?
             int alt2=2;
             switch ( input.LA(1) ) {
                 case INTO:
@@ -269,7 +269,7 @@ public class WindowingParser extends Parser {
 
             switch (alt2) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:60:2: outputClause
+                    // com/sap/hadoop/windowing/parser/Windowing.g:60:2: outputClause
                     {
                     pushFollow(FOLLOW_outputClause_in_query162);
                     outputClause9=outputClause();
@@ -286,7 +286,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: partitionby, where, tableSpec, select, outputClause, funclist, orderby
+            // elements: where, select, partitionby, tableSpec, orderby, funclist, outputClause
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -299,7 +299,7 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 60:16: -> ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? )
             {
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:60:19: ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? )
+                // com/sap/hadoop/windowing/parser/Windowing.g:60:19: ^( QUERY tableSpec partitionby orderby funclist select ( where )? ( outputClause )? )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(QUERY, "QUERY"), root_1);
@@ -309,13 +309,13 @@ public class WindowingParser extends Parser {
                 adaptor.addChild(root_1, stream_orderby.nextTree());
                 adaptor.addChild(root_1, stream_funclist.nextTree());
                 adaptor.addChild(root_1, stream_select.nextTree());
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:60:73: ( where )?
+                // com/sap/hadoop/windowing/parser/Windowing.g:60:73: ( where )?
                 if ( stream_where.hasNext() ) {
                     adaptor.addChild(root_1, stream_where.nextTree());
 
                 }
                 stream_where.reset();
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:60:80: ( outputClause )?
+                // com/sap/hadoop/windowing/parser/Windowing.g:60:80: ( outputClause )?
                 if ( stream_outputClause.hasNext() ) {
                     adaptor.addChild(root_1, stream_outputClause.nextTree());
 
@@ -354,7 +354,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "tableSpec"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:63:1: tableSpec : ( hivetable | ID -> ^( TABLEINPUT ID ) );
+    // com/sap/hadoop/windowing/parser/Windowing.g:63:1: tableSpec : ( hivetable | ID -> ^( TABLEINPUT ID ) );
     public final WindowingParser.tableSpec_return tableSpec() throws RecognitionException {
         WindowingParser.tableSpec_return retval = new WindowingParser.tableSpec_return();
         retval.start = input.LT(1);
@@ -369,7 +369,7 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_ID=new RewriteRuleTokenStream(adaptor,"token ID");
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:63:11: ( hivetable | ID -> ^( TABLEINPUT ID ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:63:11: ( hivetable | ID -> ^( TABLEINPUT ID ) )
             int alt3=2;
             switch ( input.LA(1) ) {
             case TABLEINPUT:
@@ -392,7 +392,7 @@ public class WindowingParser extends Parser {
 
             switch (alt3) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:64:2: hivetable
+                    // com/sap/hadoop/windowing/parser/Windowing.g:64:2: hivetable
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -406,7 +406,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:65:2: ID
+                    // com/sap/hadoop/windowing/parser/Windowing.g:65:2: ID
                     {
                     ID11=(Token)match(input,ID,FOLLOW_ID_in_tableSpec200); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ID.add(ID11);
@@ -427,7 +427,7 @@ public class WindowingParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 65:5: -> ^( TABLEINPUT ID )
                     {
-                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:65:8: ^( TABLEINPUT ID )
+                        // com/sap/hadoop/windowing/parser/Windowing.g:65:8: ^( TABLEINPUT ID )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(TABLEINPUT, "TABLEINPUT"), root_1);
@@ -468,7 +468,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "hivetable"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:68:1: hivetable : TABLEINPUT LPAREN ( namevalue )? ( COMMA namevalue )* RPAREN -> ^( TABLEINPUT ( namevalue )* ) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:68:1: hivetable : TABLEINPUT LPAREN ( namevalue )? ( COMMA namevalue )* RPAREN -> ^( TABLEINPUT ( namevalue )* ) ;
     public final WindowingParser.hivetable_return hivetable() throws RecognitionException {
         WindowingParser.hivetable_return retval = new WindowingParser.hivetable_return();
         retval.start = input.LT(1);
@@ -494,8 +494,8 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_LPAREN=new RewriteRuleTokenStream(adaptor,"token LPAREN");
         RewriteRuleSubtreeStream stream_namevalue=new RewriteRuleSubtreeStream(adaptor,"rule namevalue");
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:68:11: ( TABLEINPUT LPAREN ( namevalue )? ( COMMA namevalue )* RPAREN -> ^( TABLEINPUT ( namevalue )* ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:69:2: TABLEINPUT LPAREN ( namevalue )? ( COMMA namevalue )* RPAREN
+            // com/sap/hadoop/windowing/parser/Windowing.g:68:11: ( TABLEINPUT LPAREN ( namevalue )? ( COMMA namevalue )* RPAREN -> ^( TABLEINPUT ( namevalue )* ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:69:2: TABLEINPUT LPAREN ( namevalue )? ( COMMA namevalue )* RPAREN
             {
             TABLEINPUT12=(Token)match(input,TABLEINPUT,FOLLOW_TABLEINPUT_in_hivetable218); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_TABLEINPUT.add(TABLEINPUT12);
@@ -503,7 +503,7 @@ public class WindowingParser extends Parser {
             LPAREN13=(Token)match(input,LPAREN,FOLLOW_LPAREN_in_hivetable220); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_LPAREN.add(LPAREN13);
 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:69:20: ( namevalue )?
+            // com/sap/hadoop/windowing/parser/Windowing.g:69:20: ( namevalue )?
             int alt4=2;
             switch ( input.LA(1) ) {
                 case ID:
@@ -516,7 +516,7 @@ public class WindowingParser extends Parser {
 
             switch (alt4) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:69:21: namevalue
+                    // com/sap/hadoop/windowing/parser/Windowing.g:69:21: namevalue
                     {
                     pushFollow(FOLLOW_namevalue_in_hivetable223);
                     namevalue14=namevalue();
@@ -530,7 +530,7 @@ public class WindowingParser extends Parser {
 
             }
 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:69:33: ( COMMA namevalue )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:69:33: ( COMMA namevalue )*
             loop5:
             do {
                 int alt5=2;
@@ -545,7 +545,7 @@ public class WindowingParser extends Parser {
 
                 switch (alt5) {
             	case 1 :
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:69:34: COMMA namevalue
+            	    // com/sap/hadoop/windowing/parser/Windowing.g:69:34: COMMA namevalue
             	    {
             	    COMMA15=(Token)match(input,COMMA,FOLLOW_COMMA_in_hivetable228); if (state.failed) return retval; 
             	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA15);
@@ -571,7 +571,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: namevalue, TABLEINPUT
+            // elements: TABLEINPUT, namevalue
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -584,12 +584,12 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 69:60: -> ^( TABLEINPUT ( namevalue )* )
             {
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:69:63: ^( TABLEINPUT ( namevalue )* )
+                // com/sap/hadoop/windowing/parser/Windowing.g:69:63: ^( TABLEINPUT ( namevalue )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_TABLEINPUT.nextNode(), root_1);
 
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:69:76: ( namevalue )*
+                // com/sap/hadoop/windowing/parser/Windowing.g:69:76: ( namevalue )*
                 while ( stream_namevalue.hasNext() ) {
                     adaptor.addChild(root_1, stream_namevalue.nextTree());
 
@@ -628,7 +628,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "namevalue"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:72:1: namevalue : (i= ID | i= STRING ) EQ v= STRING -> ^( PARAM $i $v) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:72:1: namevalue : (i= ID | i= STRING ) EQ v= STRING -> ^( PARAM $i $v) ;
     public final WindowingParser.namevalue_return namevalue() throws RecognitionException {
         WindowingParser.namevalue_return retval = new WindowingParser.namevalue_return();
         retval.start = input.LT(1);
@@ -647,10 +647,10 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_STRING=new RewriteRuleTokenStream(adaptor,"token STRING");
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:72:11: ( (i= ID | i= STRING ) EQ v= STRING -> ^( PARAM $i $v) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:73:2: (i= ID | i= STRING ) EQ v= STRING
+            // com/sap/hadoop/windowing/parser/Windowing.g:72:11: ( (i= ID | i= STRING ) EQ v= STRING -> ^( PARAM $i $v) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:73:2: (i= ID | i= STRING ) EQ v= STRING
             {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:73:2: (i= ID | i= STRING )
+            // com/sap/hadoop/windowing/parser/Windowing.g:73:2: (i= ID | i= STRING )
             int alt6=2;
             switch ( input.LA(1) ) {
             case ID:
@@ -673,7 +673,7 @@ public class WindowingParser extends Parser {
 
             switch (alt6) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:73:3: i= ID
+                    // com/sap/hadoop/windowing/parser/Windowing.g:73:3: i= ID
                     {
                     i=(Token)match(input,ID,FOLLOW_ID_in_namevalue257); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ID.add(i);
@@ -682,7 +682,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:73:8: i= STRING
+                    // com/sap/hadoop/windowing/parser/Windowing.g:73:8: i= STRING
                     {
                     i=(Token)match(input,STRING,FOLLOW_STRING_in_namevalue261); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_STRING.add(i);
@@ -717,7 +717,7 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 73:30: -> ^( PARAM $i $v)
             {
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:73:33: ^( PARAM $i $v)
+                // com/sap/hadoop/windowing/parser/Windowing.g:73:33: ^( PARAM $i $v)
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(PARAM, "PARAM"), root_1);
@@ -757,7 +757,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "orderby"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:76:1: orderby : ORDER BY ordercolumn ( COMMA ordercolumn )* -> ^( ORDER ( ordercolumn )+ ) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:76:1: orderby : ORDER BY ordercolumn ( COMMA ordercolumn )* -> ^( ORDER ( ordercolumn )+ ) ;
     public final WindowingParser.orderby_return orderby() throws RecognitionException {
         WindowingParser.orderby_return retval = new WindowingParser.orderby_return();
         retval.start = input.LT(1);
@@ -780,8 +780,8 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleSubtreeStream stream_ordercolumn=new RewriteRuleSubtreeStream(adaptor,"rule ordercolumn");
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:76:9: ( ORDER BY ordercolumn ( COMMA ordercolumn )* -> ^( ORDER ( ordercolumn )+ ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:77:2: ORDER BY ordercolumn ( COMMA ordercolumn )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:76:9: ( ORDER BY ordercolumn ( COMMA ordercolumn )* -> ^( ORDER ( ordercolumn )+ ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:77:2: ORDER BY ordercolumn ( COMMA ordercolumn )*
             {
             ORDER19=(Token)match(input,ORDER,FOLLOW_ORDER_in_orderby290); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_ORDER.add(ORDER19);
@@ -795,7 +795,7 @@ public class WindowingParser extends Parser {
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_ordercolumn.add(ordercolumn21.getTree());
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:77:23: ( COMMA ordercolumn )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:77:23: ( COMMA ordercolumn )*
             loop7:
             do {
                 int alt7=2;
@@ -810,7 +810,7 @@ public class WindowingParser extends Parser {
 
                 switch (alt7) {
             	case 1 :
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:77:24: COMMA ordercolumn
+            	    // com/sap/hadoop/windowing/parser/Windowing.g:77:24: COMMA ordercolumn
             	    {
             	    COMMA22=(Token)match(input,COMMA,FOLLOW_COMMA_in_orderby297); if (state.failed) return retval; 
             	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA22);
@@ -846,7 +846,7 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 77:44: -> ^( ORDER ( ordercolumn )+ )
             {
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:77:47: ^( ORDER ( ordercolumn )+ )
+                // com/sap/hadoop/windowing/parser/Windowing.g:77:47: ^( ORDER ( ordercolumn )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_ORDER.nextNode(), root_1);
@@ -892,7 +892,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "ordercolumn"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:80:1: ordercolumn : ID (o= ASC | o= DESC )? -> ^( ORDERCOLUMN ID ( $o)? ) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:80:1: ordercolumn : ID (o= ASC | o= DESC )? -> ^( ORDERCOLUMN ID ( $o)? ) ;
     public final WindowingParser.ordercolumn_return ordercolumn() throws RecognitionException {
         WindowingParser.ordercolumn_return retval = new WindowingParser.ordercolumn_return();
         retval.start = input.LT(1);
@@ -909,13 +909,13 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_ID=new RewriteRuleTokenStream(adaptor,"token ID");
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:80:13: ( ID (o= ASC | o= DESC )? -> ^( ORDERCOLUMN ID ( $o)? ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:81:2: ID (o= ASC | o= DESC )?
+            // com/sap/hadoop/windowing/parser/Windowing.g:80:13: ( ID (o= ASC | o= DESC )? -> ^( ORDERCOLUMN ID ( $o)? ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:81:2: ID (o= ASC | o= DESC )?
             {
             ID24=(Token)match(input,ID,FOLLOW_ID_in_ordercolumn320); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_ID.add(ID24);
 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:81:5: (o= ASC | o= DESC )?
+            // com/sap/hadoop/windowing/parser/Windowing.g:81:5: (o= ASC | o= DESC )?
             int alt8=3;
             switch ( input.LA(1) ) {
                 case ASC:
@@ -932,7 +932,7 @@ public class WindowingParser extends Parser {
 
             switch (alt8) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:81:6: o= ASC
+                    // com/sap/hadoop/windowing/parser/Windowing.g:81:6: o= ASC
                     {
                     o=(Token)match(input,ASC,FOLLOW_ASC_in_ordercolumn325); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ASC.add(o);
@@ -941,7 +941,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:81:14: o= DESC
+                    // com/sap/hadoop/windowing/parser/Windowing.g:81:14: o= DESC
                     {
                     o=(Token)match(input,DESC,FOLLOW_DESC_in_ordercolumn331); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_DESC.add(o);
@@ -969,13 +969,13 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 81:23: -> ^( ORDERCOLUMN ID ( $o)? )
             {
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:81:26: ^( ORDERCOLUMN ID ( $o)? )
+                // com/sap/hadoop/windowing/parser/Windowing.g:81:26: ^( ORDERCOLUMN ID ( $o)? )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(ORDERCOLUMN, "ORDERCOLUMN"), root_1);
 
                 adaptor.addChild(root_1, stream_ID.nextNode());
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:81:43: ( $o)?
+                // com/sap/hadoop/windowing/parser/Windowing.g:81:43: ( $o)?
                 if ( stream_o.hasNext() ) {
                     adaptor.addChild(root_1, stream_o.nextNode());
 
@@ -1014,7 +1014,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "partitionby"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:84:1: partitionby : PARTITION BY ID ( COMMA ID )* -> ^( PARTITION ( ID )+ ) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:84:1: partitionby : PARTITION BY ID ( COMMA ID )* -> ^( PARTITION ( ID )+ ) ;
     public final WindowingParser.partitionby_return partitionby() throws RecognitionException {
         WindowingParser.partitionby_return retval = new WindowingParser.partitionby_return();
         retval.start = input.LT(1);
@@ -1038,8 +1038,8 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_PARTITION=new RewriteRuleTokenStream(adaptor,"token PARTITION");
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:84:13: ( PARTITION BY ID ( COMMA ID )* -> ^( PARTITION ( ID )+ ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:85:2: PARTITION BY ID ( COMMA ID )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:84:13: ( PARTITION BY ID ( COMMA ID )* -> ^( PARTITION ( ID )+ ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:85:2: PARTITION BY ID ( COMMA ID )*
             {
             PARTITION25=(Token)match(input,PARTITION,FOLLOW_PARTITION_in_partitionby356); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_PARTITION.add(PARTITION25);
@@ -1050,7 +1050,7 @@ public class WindowingParser extends Parser {
             ID27=(Token)match(input,ID,FOLLOW_ID_in_partitionby360); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_ID.add(ID27);
 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:85:18: ( COMMA ID )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:85:18: ( COMMA ID )*
             loop9:
             do {
                 int alt9=2;
@@ -1065,7 +1065,7 @@ public class WindowingParser extends Parser {
 
                 switch (alt9) {
             	case 1 :
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:85:19: COMMA ID
+            	    // com/sap/hadoop/windowing/parser/Windowing.g:85:19: COMMA ID
             	    {
             	    COMMA28=(Token)match(input,COMMA,FOLLOW_COMMA_in_partitionby363); if (state.failed) return retval; 
             	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA28);
@@ -1085,7 +1085,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: ID, PARTITION
+            // elements: PARTITION, ID
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -1098,7 +1098,7 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 85:30: -> ^( PARTITION ( ID )+ )
             {
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:85:33: ^( PARTITION ( ID )+ )
+                // com/sap/hadoop/windowing/parser/Windowing.g:85:33: ^( PARTITION ( ID )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_PARTITION.nextNode(), root_1);
@@ -1144,7 +1144,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "funclist"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:88:1: funclist : function ( COMMA function )* -> ^( FUNCTIONS ( function )+ ) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:88:1: funclist : function ( COMMA function )* -> ^( FUNCTIONS ( function )+ ) ;
     public final WindowingParser.funclist_return funclist() throws RecognitionException {
         WindowingParser.funclist_return retval = new WindowingParser.funclist_return();
         retval.start = input.LT(1);
@@ -1161,8 +1161,8 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleSubtreeStream stream_function=new RewriteRuleSubtreeStream(adaptor,"rule function");
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:88:10: ( function ( COMMA function )* -> ^( FUNCTIONS ( function )+ ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:89:2: function ( COMMA function )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:88:10: ( function ( COMMA function )* -> ^( FUNCTIONS ( function )+ ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:89:2: function ( COMMA function )*
             {
             pushFollow(FOLLOW_function_in_funclist387);
             function30=function();
@@ -1170,7 +1170,7 @@ public class WindowingParser extends Parser {
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_function.add(function30.getTree());
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:89:11: ( COMMA function )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:89:11: ( COMMA function )*
             loop10:
             do {
                 int alt10=2;
@@ -1185,7 +1185,7 @@ public class WindowingParser extends Parser {
 
                 switch (alt10) {
             	case 1 :
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:89:12: COMMA function
+            	    // com/sap/hadoop/windowing/parser/Windowing.g:89:12: COMMA function
             	    {
             	    COMMA31=(Token)match(input,COMMA,FOLLOW_COMMA_in_funclist390); if (state.failed) return retval; 
             	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA31);
@@ -1221,7 +1221,7 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 89:29: -> ^( FUNCTIONS ( function )+ )
             {
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:89:32: ^( FUNCTIONS ( function )+ )
+                // com/sap/hadoop/windowing/parser/Windowing.g:89:32: ^( FUNCTIONS ( function )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(FUNCTIONS, "FUNCTIONS"), root_1);
@@ -1267,7 +1267,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "function"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:92:1: function : name= ID LPAREN ( functionparam )? ( COMMA functionparam )* RPAREN ( window_expression )? AS alias= ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? ) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:92:1: function : name= ID LPAREN ( functionparam )? ( COMMA functionparam )* RPAREN ( window_expression )? AS alias= ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? ) ;
     public final WindowingParser.function_return function() throws RecognitionException {
         WindowingParser.function_return retval = new WindowingParser.function_return();
         retval.start = input.LT(1);
@@ -1309,8 +1309,8 @@ public class WindowingParser extends Parser {
         RewriteRuleSubtreeStream stream_window_expression=new RewriteRuleSubtreeStream(adaptor,"rule window_expression");
         RewriteRuleSubtreeStream stream_functionparam=new RewriteRuleSubtreeStream(adaptor,"rule functionparam");
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:92:10: (name= ID LPAREN ( functionparam )? ( COMMA functionparam )* RPAREN ( window_expression )? AS alias= ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:93:2: name= ID LPAREN ( functionparam )? ( COMMA functionparam )* RPAREN ( window_expression )? AS alias= ID ( LBRACKET typeNm= ID RBRACKET )?
+            // com/sap/hadoop/windowing/parser/Windowing.g:92:10: (name= ID LPAREN ( functionparam )? ( COMMA functionparam )* RPAREN ( window_expression )? AS alias= ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:93:2: name= ID LPAREN ( functionparam )? ( COMMA functionparam )* RPAREN ( window_expression )? AS alias= ID ( LBRACKET typeNm= ID RBRACKET )?
             {
             name=(Token)match(input,ID,FOLLOW_ID_in_function416); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_ID.add(name);
@@ -1318,7 +1318,7 @@ public class WindowingParser extends Parser {
             LPAREN33=(Token)match(input,LPAREN,FOLLOW_LPAREN_in_function418); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_LPAREN.add(LPAREN33);
 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:93:17: ( functionparam )?
+            // com/sap/hadoop/windowing/parser/Windowing.g:93:17: ( functionparam )?
             int alt11=2;
             switch ( input.LA(1) ) {
                 case ID:
@@ -1333,7 +1333,7 @@ public class WindowingParser extends Parser {
 
             switch (alt11) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:93:18: functionparam
+                    // com/sap/hadoop/windowing/parser/Windowing.g:93:18: functionparam
                     {
                     pushFollow(FOLLOW_functionparam_in_function421);
                     functionparam34=functionparam();
@@ -1347,7 +1347,7 @@ public class WindowingParser extends Parser {
 
             }
 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:93:34: ( COMMA functionparam )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:93:34: ( COMMA functionparam )*
             loop12:
             do {
                 int alt12=2;
@@ -1362,7 +1362,7 @@ public class WindowingParser extends Parser {
 
                 switch (alt12) {
             	case 1 :
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:93:35: COMMA functionparam
+            	    // com/sap/hadoop/windowing/parser/Windowing.g:93:35: COMMA functionparam
             	    {
             	    COMMA35=(Token)match(input,COMMA,FOLLOW_COMMA_in_function426); if (state.failed) return retval; 
             	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA35);
@@ -1385,7 +1385,7 @@ public class WindowingParser extends Parser {
             RPAREN37=(Token)match(input,RPAREN,FOLLOW_RPAREN_in_function432); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_RPAREN.add(RPAREN37);
 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:93:64: ( window_expression )?
+            // com/sap/hadoop/windowing/parser/Windowing.g:93:64: ( window_expression )?
             int alt13=2;
             switch ( input.LA(1) ) {
                 case OVER:
@@ -1397,7 +1397,7 @@ public class WindowingParser extends Parser {
 
             switch (alt13) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:93:65: window_expression
+                    // com/sap/hadoop/windowing/parser/Windowing.g:93:65: window_expression
                     {
                     pushFollow(FOLLOW_window_expression_in_function435);
                     window_expression38=window_expression();
@@ -1417,7 +1417,7 @@ public class WindowingParser extends Parser {
             alias=(Token)match(input,ID,FOLLOW_ID_in_function443); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_ID.add(alias);
 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:93:97: ( LBRACKET typeNm= ID RBRACKET )?
+            // com/sap/hadoop/windowing/parser/Windowing.g:93:97: ( LBRACKET typeNm= ID RBRACKET )?
             int alt14=2;
             switch ( input.LA(1) ) {
                 case LBRACKET:
@@ -1429,7 +1429,7 @@ public class WindowingParser extends Parser {
 
             switch (alt14) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:93:98: LBRACKET typeNm= ID RBRACKET
+                    // com/sap/hadoop/windowing/parser/Windowing.g:93:98: LBRACKET typeNm= ID RBRACKET
                     {
                     LBRACKET40=(Token)match(input,LBRACKET,FOLLOW_LBRACKET_in_function446); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_LBRACKET.add(LBRACKET40);
@@ -1449,7 +1449,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: alias, typeNm, name, functionparam, window_expression
+            // elements: window_expression, typeNm, name, functionparam, alias
             // token labels: typeNm, alias, name
             // rule labels: retval
             // token list labels: 
@@ -1465,22 +1465,22 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 93:128: -> ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? )
             {
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:7: ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? )
+                // com/sap/hadoop/windowing/parser/Windowing.g:94:7: ^( FUNCTION $name $alias ( functionparam )* ( ^( TYPENAME $typeNm) )? ( window_expression )? )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(FUNCTION, "FUNCTION"), root_1);
 
                 adaptor.addChild(root_1, stream_name.nextNode());
                 adaptor.addChild(root_1, stream_alias.nextNode());
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:31: ( functionparam )*
+                // com/sap/hadoop/windowing/parser/Windowing.g:94:31: ( functionparam )*
                 while ( stream_functionparam.hasNext() ) {
                     adaptor.addChild(root_1, stream_functionparam.nextTree());
 
                 }
                 stream_functionparam.reset();
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:46: ( ^( TYPENAME $typeNm) )?
+                // com/sap/hadoop/windowing/parser/Windowing.g:94:46: ( ^( TYPENAME $typeNm) )?
                 if ( stream_typeNm.hasNext() ) {
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:46: ^( TYPENAME $typeNm)
+                    // com/sap/hadoop/windowing/parser/Windowing.g:94:46: ^( TYPENAME $typeNm)
                     {
                     Object root_2 = (Object)adaptor.nil();
                     root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(TYPENAME, "TYPENAME"), root_2);
@@ -1492,7 +1492,7 @@ public class WindowingParser extends Parser {
 
                 }
                 stream_typeNm.reset();
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:94:67: ( window_expression )?
+                // com/sap/hadoop/windowing/parser/Windowing.g:94:67: ( window_expression )?
                 if ( stream_window_expression.hasNext() ) {
                     adaptor.addChild(root_1, stream_window_expression.nextTree());
 
@@ -1531,7 +1531,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "functionparam"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:97:1: functionparam : ( GROOVYEXPRESSION | STRING | ID | NUMBER );
+    // com/sap/hadoop/windowing/parser/Windowing.g:97:1: functionparam : ( GROOVYEXPRESSION | STRING | ID | NUMBER );
     public final WindowingParser.functionparam_return functionparam() throws RecognitionException {
         WindowingParser.functionparam_return retval = new WindowingParser.functionparam_return();
         retval.start = input.LT(1);
@@ -1543,8 +1543,8 @@ public class WindowingParser extends Parser {
         Object set42_tree=null;
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:97:16: ( GROOVYEXPRESSION | STRING | ID | NUMBER )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:
+            // com/sap/hadoop/windowing/parser/Windowing.g:97:16: ( GROOVYEXPRESSION | STRING | ID | NUMBER )
+            // com/sap/hadoop/windowing/parser/Windowing.g:
             {
             root_0 = (Object)adaptor.nil();
 
@@ -1587,7 +1587,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "window_expression"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:101:1: window_expression : OVER ( window_range_expression | window_value_expression ) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:101:1: window_expression : OVER ( window_range_expression | window_value_expression ) ;
     public final WindowingParser.window_expression_return window_expression() throws RecognitionException {
         WindowingParser.window_expression_return retval = new WindowingParser.window_expression_return();
         retval.start = input.LT(1);
@@ -1603,13 +1603,13 @@ public class WindowingParser extends Parser {
         Object OVER43_tree=null;
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:101:19: ( OVER ( window_range_expression | window_value_expression ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:102:2: OVER ( window_range_expression | window_value_expression )
+            // com/sap/hadoop/windowing/parser/Windowing.g:101:19: ( OVER ( window_range_expression | window_value_expression ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:102:2: OVER ( window_range_expression | window_value_expression )
             {
             root_0 = (Object)adaptor.nil();
 
             OVER43=(Token)match(input,OVER,FOLLOW_OVER_in_window_expression521); if (state.failed) return retval;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:103:2: ( window_range_expression | window_value_expression )
+            // com/sap/hadoop/windowing/parser/Windowing.g:103:2: ( window_range_expression | window_value_expression )
             int alt15=2;
             switch ( input.LA(1) ) {
             case ROWS:
@@ -1632,7 +1632,7 @@ public class WindowingParser extends Parser {
 
             switch (alt15) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:103:3: window_range_expression
+                    // com/sap/hadoop/windowing/parser/Windowing.g:103:3: window_range_expression
                     {
                     pushFollow(FOLLOW_window_range_expression_in_window_expression527);
                     window_range_expression44=window_range_expression();
@@ -1644,7 +1644,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:104:2: window_value_expression
+                    // com/sap/hadoop/windowing/parser/Windowing.g:104:2: window_value_expression
                     {
                     pushFollow(FOLLOW_window_value_expression_in_window_expression532);
                     window_value_expression45=window_value_expression();
@@ -1685,7 +1685,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "window_range_expression"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:108:1: window_range_expression : ROWS BETWEEN s= rowsboundary AND e= rowsboundary -> ^( WINDOWRANGE $s $e) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:108:1: window_range_expression : ROWS BETWEEN s= rowsboundary AND e= rowsboundary -> ^( WINDOWRANGE $s $e) ;
     public final WindowingParser.window_range_expression_return window_range_expression() throws RecognitionException {
         WindowingParser.window_range_expression_return retval = new WindowingParser.window_range_expression_return();
         retval.start = input.LT(1);
@@ -1708,8 +1708,8 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_BETWEEN=new RewriteRuleTokenStream(adaptor,"token BETWEEN");
         RewriteRuleSubtreeStream stream_rowsboundary=new RewriteRuleSubtreeStream(adaptor,"rule rowsboundary");
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:108:25: ( ROWS BETWEEN s= rowsboundary AND e= rowsboundary -> ^( WINDOWRANGE $s $e) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:109:2: ROWS BETWEEN s= rowsboundary AND e= rowsboundary
+            // com/sap/hadoop/windowing/parser/Windowing.g:108:25: ( ROWS BETWEEN s= rowsboundary AND e= rowsboundary -> ^( WINDOWRANGE $s $e) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:109:2: ROWS BETWEEN s= rowsboundary AND e= rowsboundary
             {
             ROWS46=(Token)match(input,ROWS,FOLLOW_ROWS_in_window_range_expression546); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_ROWS.add(ROWS46);
@@ -1735,7 +1735,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: e, s
+            // elements: s, e
             // token labels: 
             // rule labels: retval, e, s
             // token list labels: 
@@ -1750,7 +1750,7 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 109:49: -> ^( WINDOWRANGE $s $e)
             {
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:109:52: ^( WINDOWRANGE $s $e)
+                // com/sap/hadoop/windowing/parser/Windowing.g:109:52: ^( WINDOWRANGE $s $e)
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(WINDOWRANGE, "WINDOWRANGE"), root_1);
@@ -1790,7 +1790,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "rowsboundary"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:112:1: rowsboundary : ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | NUMBER (d= PRECEDING | d= FOLLOWING ) -> ^( $d NUMBER ) );
+    // com/sap/hadoop/windowing/parser/Windowing.g:112:1: rowsboundary : ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | NUMBER (d= PRECEDING | d= FOLLOWING ) -> ^( $d NUMBER ) );
     public final WindowingParser.rowsboundary_return rowsboundary() throws RecognitionException {
         WindowingParser.rowsboundary_return retval = new WindowingParser.rowsboundary_return();
         retval.start = input.LT(1);
@@ -1818,7 +1818,7 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_NUMBER=new RewriteRuleTokenStream(adaptor,"token NUMBER");
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:112:14: ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | NUMBER (d= PRECEDING | d= FOLLOWING ) -> ^( $d NUMBER ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:112:14: ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | NUMBER (d= PRECEDING | d= FOLLOWING ) -> ^( $d NUMBER ) )
             int alt18=3;
             switch ( input.LA(1) ) {
             case UNBOUNDED:
@@ -1846,12 +1846,12 @@ public class WindowingParser extends Parser {
 
             switch (alt18) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:113:3: UNBOUNDED (r= PRECEDING | r= FOLLOWING )
+                    // com/sap/hadoop/windowing/parser/Windowing.g:113:3: UNBOUNDED (r= PRECEDING | r= FOLLOWING )
                     {
                     UNBOUNDED49=(Token)match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_rowsboundary581); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_UNBOUNDED.add(UNBOUNDED49);
 
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:113:13: (r= PRECEDING | r= FOLLOWING )
+                    // com/sap/hadoop/windowing/parser/Windowing.g:113:13: (r= PRECEDING | r= FOLLOWING )
                     int alt16=2;
                     switch ( input.LA(1) ) {
                     case PRECEDING:
@@ -1874,7 +1874,7 @@ public class WindowingParser extends Parser {
 
                     switch (alt16) {
                         case 1 :
-                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:113:14: r= PRECEDING
+                            // com/sap/hadoop/windowing/parser/Windowing.g:113:14: r= PRECEDING
                             {
                             r=(Token)match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary586); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_PRECEDING.add(r);
@@ -1883,7 +1883,7 @@ public class WindowingParser extends Parser {
                             }
                             break;
                         case 2 :
-                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:113:26: r= FOLLOWING
+                            // com/sap/hadoop/windowing/parser/Windowing.g:113:26: r= FOLLOWING
                             {
                             r=(Token)match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary590); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_FOLLOWING.add(r);
@@ -1911,7 +1911,7 @@ public class WindowingParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 113:40: -> ^( $r UNBOUNDED )
                     {
-                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:113:43: ^( $r UNBOUNDED )
+                        // com/sap/hadoop/windowing/parser/Windowing.g:113:43: ^( $r UNBOUNDED )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_r.nextNode(), root_1);
@@ -1927,7 +1927,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:114:3: CURRENT ROW
+                    // com/sap/hadoop/windowing/parser/Windowing.g:114:3: CURRENT ROW
                     {
                     CURRENT50=(Token)match(input,CURRENT,FOLLOW_CURRENT_in_rowsboundary608); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_CURRENT.add(CURRENT50);
@@ -1951,7 +1951,7 @@ public class WindowingParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 114:16: -> ^( CURRENT )
                     {
-                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:114:19: ^( CURRENT )
+                        // com/sap/hadoop/windowing/parser/Windowing.g:114:19: ^( CURRENT )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_CURRENT.nextNode(), root_1);
@@ -1965,12 +1965,12 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:115:3: NUMBER (d= PRECEDING | d= FOLLOWING )
+                    // com/sap/hadoop/windowing/parser/Windowing.g:115:3: NUMBER (d= PRECEDING | d= FOLLOWING )
                     {
                     NUMBER52=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_rowsboundary623); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_NUMBER.add(NUMBER52);
 
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:115:10: (d= PRECEDING | d= FOLLOWING )
+                    // com/sap/hadoop/windowing/parser/Windowing.g:115:10: (d= PRECEDING | d= FOLLOWING )
                     int alt17=2;
                     switch ( input.LA(1) ) {
                     case PRECEDING:
@@ -1993,7 +1993,7 @@ public class WindowingParser extends Parser {
 
                     switch (alt17) {
                         case 1 :
-                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:115:11: d= PRECEDING
+                            // com/sap/hadoop/windowing/parser/Windowing.g:115:11: d= PRECEDING
                             {
                             d=(Token)match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary628); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_PRECEDING.add(d);
@@ -2002,7 +2002,7 @@ public class WindowingParser extends Parser {
                             }
                             break;
                         case 2 :
-                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:115:25: d= FOLLOWING
+                            // com/sap/hadoop/windowing/parser/Windowing.g:115:25: d= FOLLOWING
                             {
                             d=(Token)match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary634); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_FOLLOWING.add(d);
@@ -2030,7 +2030,7 @@ public class WindowingParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 115:39: -> ^( $d NUMBER )
                     {
-                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:115:42: ^( $d NUMBER )
+                        // com/sap/hadoop/windowing/parser/Windowing.g:115:42: ^( $d NUMBER )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_d.nextNode(), root_1);
@@ -2071,7 +2071,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "window_value_expression"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:118:1: window_value_expression : RANGE BETWEEN s= valuesboundary AND e= valuesboundary -> ^( WINDOWVALUES $s $e) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:118:1: window_value_expression : RANGE BETWEEN s= valuesboundary AND e= valuesboundary -> ^( WINDOWVALUES $s $e) ;
     public final WindowingParser.window_value_expression_return window_value_expression() throws RecognitionException {
         WindowingParser.window_value_expression_return retval = new WindowingParser.window_value_expression_return();
         retval.start = input.LT(1);
@@ -2094,8 +2094,8 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_BETWEEN=new RewriteRuleTokenStream(adaptor,"token BETWEEN");
         RewriteRuleSubtreeStream stream_valuesboundary=new RewriteRuleSubtreeStream(adaptor,"rule valuesboundary");
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:118:25: ( RANGE BETWEEN s= valuesboundary AND e= valuesboundary -> ^( WINDOWVALUES $s $e) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:119:2: RANGE BETWEEN s= valuesboundary AND e= valuesboundary
+            // com/sap/hadoop/windowing/parser/Windowing.g:118:25: ( RANGE BETWEEN s= valuesboundary AND e= valuesboundary -> ^( WINDOWVALUES $s $e) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:119:2: RANGE BETWEEN s= valuesboundary AND e= valuesboundary
             {
             RANGE53=(Token)match(input,RANGE,FOLLOW_RANGE_in_window_value_expression655); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_RANGE.add(RANGE53);
@@ -2136,7 +2136,7 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 119:54: -> ^( WINDOWVALUES $s $e)
             {
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:119:57: ^( WINDOWVALUES $s $e)
+                // com/sap/hadoop/windowing/parser/Windowing.g:119:57: ^( WINDOWVALUES $s $e)
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(WINDOWVALUES, "WINDOWVALUES"), root_1);
@@ -2176,7 +2176,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "valuesboundary"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:122:1: valuesboundary : ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | GROOVYEXPRESSION NUMBER (d= LESS | d= MORE ) -> ^( $d GROOVYEXPRESSION NUMBER ) );
+    // com/sap/hadoop/windowing/parser/Windowing.g:122:1: valuesboundary : ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | GROOVYEXPRESSION NUMBER (d= LESS | d= MORE ) -> ^( $d GROOVYEXPRESSION NUMBER ) );
     public final WindowingParser.valuesboundary_return valuesboundary() throws RecognitionException {
         WindowingParser.valuesboundary_return retval = new WindowingParser.valuesboundary_return();
         retval.start = input.LT(1);
@@ -2209,7 +2209,7 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_LESS=new RewriteRuleTokenStream(adaptor,"token LESS");
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:122:16: ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | GROOVYEXPRESSION NUMBER (d= LESS | d= MORE ) -> ^( $d GROOVYEXPRESSION NUMBER ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:122:16: ( UNBOUNDED (r= PRECEDING | r= FOLLOWING ) -> ^( $r UNBOUNDED ) | CURRENT ROW -> ^( CURRENT ) | GROOVYEXPRESSION NUMBER (d= LESS | d= MORE ) -> ^( $d GROOVYEXPRESSION NUMBER ) )
             int alt21=3;
             switch ( input.LA(1) ) {
             case UNBOUNDED:
@@ -2237,12 +2237,12 @@ public class WindowingParser extends Parser {
 
             switch (alt21) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:123:3: UNBOUNDED (r= PRECEDING | r= FOLLOWING )
+                    // com/sap/hadoop/windowing/parser/Windowing.g:123:3: UNBOUNDED (r= PRECEDING | r= FOLLOWING )
                     {
                     UNBOUNDED56=(Token)match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_valuesboundary690); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_UNBOUNDED.add(UNBOUNDED56);
 
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:123:13: (r= PRECEDING | r= FOLLOWING )
+                    // com/sap/hadoop/windowing/parser/Windowing.g:123:13: (r= PRECEDING | r= FOLLOWING )
                     int alt19=2;
                     switch ( input.LA(1) ) {
                     case PRECEDING:
@@ -2265,7 +2265,7 @@ public class WindowingParser extends Parser {
 
                     switch (alt19) {
                         case 1 :
-                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:123:14: r= PRECEDING
+                            // com/sap/hadoop/windowing/parser/Windowing.g:123:14: r= PRECEDING
                             {
                             r=(Token)match(input,PRECEDING,FOLLOW_PRECEDING_in_valuesboundary695); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_PRECEDING.add(r);
@@ -2274,7 +2274,7 @@ public class WindowingParser extends Parser {
                             }
                             break;
                         case 2 :
-                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:123:26: r= FOLLOWING
+                            // com/sap/hadoop/windowing/parser/Windowing.g:123:26: r= FOLLOWING
                             {
                             r=(Token)match(input,FOLLOWING,FOLLOW_FOLLOWING_in_valuesboundary699); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_FOLLOWING.add(r);
@@ -2302,7 +2302,7 @@ public class WindowingParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 123:40: -> ^( $r UNBOUNDED )
                     {
-                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:123:43: ^( $r UNBOUNDED )
+                        // com/sap/hadoop/windowing/parser/Windowing.g:123:43: ^( $r UNBOUNDED )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_r.nextNode(), root_1);
@@ -2318,7 +2318,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:124:3: CURRENT ROW
+                    // com/sap/hadoop/windowing/parser/Windowing.g:124:3: CURRENT ROW
                     {
                     CURRENT57=(Token)match(input,CURRENT,FOLLOW_CURRENT_in_valuesboundary717); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_CURRENT.add(CURRENT57);
@@ -2342,7 +2342,7 @@ public class WindowingParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 124:16: -> ^( CURRENT )
                     {
-                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:124:19: ^( CURRENT )
+                        // com/sap/hadoop/windowing/parser/Windowing.g:124:19: ^( CURRENT )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_CURRENT.nextNode(), root_1);
@@ -2356,7 +2356,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:125:3: GROOVYEXPRESSION NUMBER (d= LESS | d= MORE )
+                    // com/sap/hadoop/windowing/parser/Windowing.g:125:3: GROOVYEXPRESSION NUMBER (d= LESS | d= MORE )
                     {
                     GROOVYEXPRESSION59=(Token)match(input,GROOVYEXPRESSION,FOLLOW_GROOVYEXPRESSION_in_valuesboundary732); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_GROOVYEXPRESSION.add(GROOVYEXPRESSION59);
@@ -2364,7 +2364,7 @@ public class WindowingParser extends Parser {
                     NUMBER60=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_valuesboundary734); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_NUMBER.add(NUMBER60);
 
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:125:27: (d= LESS | d= MORE )
+                    // com/sap/hadoop/windowing/parser/Windowing.g:125:27: (d= LESS | d= MORE )
                     int alt20=2;
                     switch ( input.LA(1) ) {
                     case LESS:
@@ -2387,7 +2387,7 @@ public class WindowingParser extends Parser {
 
                     switch (alt20) {
                         case 1 :
-                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:125:28: d= LESS
+                            // com/sap/hadoop/windowing/parser/Windowing.g:125:28: d= LESS
                             {
                             d=(Token)match(input,LESS,FOLLOW_LESS_in_valuesboundary739); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_LESS.add(d);
@@ -2396,7 +2396,7 @@ public class WindowingParser extends Parser {
                             }
                             break;
                         case 2 :
-                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:125:37: d= MORE
+                            // com/sap/hadoop/windowing/parser/Windowing.g:125:37: d= MORE
                             {
                             d=(Token)match(input,MORE,FOLLOW_MORE_in_valuesboundary745); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_MORE.add(d);
@@ -2410,7 +2410,7 @@ public class WindowingParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: NUMBER, d, GROOVYEXPRESSION
+                    // elements: d, NUMBER, GROOVYEXPRESSION
                     // token labels: d
                     // rule labels: retval
                     // token list labels: 
@@ -2424,7 +2424,7 @@ public class WindowingParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 125:46: -> ^( $d GROOVYEXPRESSION NUMBER )
                     {
-                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:125:49: ^( $d GROOVYEXPRESSION NUMBER )
+                        // com/sap/hadoop/windowing/parser/Windowing.g:125:49: ^( $d GROOVYEXPRESSION NUMBER )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_d.nextNode(), root_1);
@@ -2466,7 +2466,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "select"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:128:1: select : SELECT selectColumn ( COMMA selectColumn )* -> ^( SELECT ( selectColumn )+ ) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:128:1: select : SELECT selectColumn ( COMMA selectColumn )* -> ^( SELECT ( selectColumn )+ ) ;
     public final WindowingParser.select_return select() throws RecognitionException {
         WindowingParser.select_return retval = new WindowingParser.select_return();
         retval.start = input.LT(1);
@@ -2486,8 +2486,8 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_SELECT=new RewriteRuleTokenStream(adaptor,"token SELECT");
         RewriteRuleSubtreeStream stream_selectColumn=new RewriteRuleSubtreeStream(adaptor,"rule selectColumn");
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:128:9: ( SELECT selectColumn ( COMMA selectColumn )* -> ^( SELECT ( selectColumn )+ ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:129:3: SELECT selectColumn ( COMMA selectColumn )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:128:9: ( SELECT selectColumn ( COMMA selectColumn )* -> ^( SELECT ( selectColumn )+ ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:129:3: SELECT selectColumn ( COMMA selectColumn )*
             {
             SELECT61=(Token)match(input,SELECT,FOLLOW_SELECT_in_select770); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_SELECT.add(SELECT61);
@@ -2498,7 +2498,7 @@ public class WindowingParser extends Parser {
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_selectColumn.add(selectColumn62.getTree());
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:129:23: ( COMMA selectColumn )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:129:23: ( COMMA selectColumn )*
             loop22:
             do {
                 int alt22=2;
@@ -2513,7 +2513,7 @@ public class WindowingParser extends Parser {
 
                 switch (alt22) {
             	case 1 :
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:129:24: COMMA selectColumn
+            	    // com/sap/hadoop/windowing/parser/Windowing.g:129:24: COMMA selectColumn
             	    {
             	    COMMA63=(Token)match(input,COMMA,FOLLOW_COMMA_in_select775); if (state.failed) return retval; 
             	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA63);
@@ -2536,7 +2536,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: selectColumn, SELECT
+            // elements: SELECT, selectColumn
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -2549,7 +2549,7 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 129:46: -> ^( SELECT ( selectColumn )+ )
             {
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:129:49: ^( SELECT ( selectColumn )+ )
+                // com/sap/hadoop/windowing/parser/Windowing.g:129:49: ^( SELECT ( selectColumn )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_SELECT.nextNode(), root_1);
@@ -2595,7 +2595,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "selectColumn"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:132:1: selectColumn : ( GROOVYEXPRESSION AS ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? ) | ID -> ^( SELECTCOLUMN ID ) );
+    // com/sap/hadoop/windowing/parser/Windowing.g:132:1: selectColumn : ( GROOVYEXPRESSION AS ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? ) | ID -> ^( SELECTCOLUMN ID ) );
     public final WindowingParser.selectColumn_return selectColumn() throws RecognitionException {
         WindowingParser.selectColumn_return retval = new WindowingParser.selectColumn_return();
         retval.start = input.LT(1);
@@ -2624,7 +2624,7 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_GROOVYEXPRESSION=new RewriteRuleTokenStream(adaptor,"token GROOVYEXPRESSION");
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:132:13: ( GROOVYEXPRESSION AS ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? ) | ID -> ^( SELECTCOLUMN ID ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:132:13: ( GROOVYEXPRESSION AS ID ( LBRACKET typeNm= ID RBRACKET )? -> ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? ) | ID -> ^( SELECTCOLUMN ID ) )
             int alt24=2;
             switch ( input.LA(1) ) {
             case GROOVYEXPRESSION:
@@ -2647,7 +2647,7 @@ public class WindowingParser extends Parser {
 
             switch (alt24) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:133:3: GROOVYEXPRESSION AS ID ( LBRACKET typeNm= ID RBRACKET )?
+                    // com/sap/hadoop/windowing/parser/Windowing.g:133:3: GROOVYEXPRESSION AS ID ( LBRACKET typeNm= ID RBRACKET )?
                     {
                     GROOVYEXPRESSION65=(Token)match(input,GROOVYEXPRESSION,FOLLOW_GROOVYEXPRESSION_in_selectColumn799); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_GROOVYEXPRESSION.add(GROOVYEXPRESSION65);
@@ -2658,7 +2658,7 @@ public class WindowingParser extends Parser {
                     ID67=(Token)match(input,ID,FOLLOW_ID_in_selectColumn803); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ID.add(ID67);
 
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:133:26: ( LBRACKET typeNm= ID RBRACKET )?
+                    // com/sap/hadoop/windowing/parser/Windowing.g:133:26: ( LBRACKET typeNm= ID RBRACKET )?
                     int alt23=2;
                     switch ( input.LA(1) ) {
                         case LBRACKET:
@@ -2670,7 +2670,7 @@ public class WindowingParser extends Parser {
 
                     switch (alt23) {
                         case 1 :
-                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:133:27: LBRACKET typeNm= ID RBRACKET
+                            // com/sap/hadoop/windowing/parser/Windowing.g:133:27: LBRACKET typeNm= ID RBRACKET
                             {
                             LBRACKET68=(Token)match(input,LBRACKET,FOLLOW_LBRACKET_in_selectColumn806); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_LBRACKET.add(LBRACKET68);
@@ -2690,7 +2690,7 @@ public class WindowingParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: GROOVYEXPRESSION, ID, typeNm
+                    // elements: GROOVYEXPRESSION, typeNm, ID
                     // token labels: typeNm
                     // rule labels: retval
                     // token list labels: 
@@ -2704,16 +2704,16 @@ public class WindowingParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 133:57: -> ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? )
                     {
-                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:133:60: ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? )
+                        // com/sap/hadoop/windowing/parser/Windowing.g:133:60: ^( SELECTCOLUMN ID GROOVYEXPRESSION ( ^( TYPENAME $typeNm) )? )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(SELECTCOLUMN, "SELECTCOLUMN"), root_1);
 
                         adaptor.addChild(root_1, stream_ID.nextNode());
                         adaptor.addChild(root_1, stream_GROOVYEXPRESSION.nextNode());
-                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:133:95: ( ^( TYPENAME $typeNm) )?
+                        // com/sap/hadoop/windowing/parser/Windowing.g:133:95: ( ^( TYPENAME $typeNm) )?
                         if ( stream_typeNm.hasNext() ) {
-                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:133:95: ^( TYPENAME $typeNm)
+                            // com/sap/hadoop/windowing/parser/Windowing.g:133:95: ^( TYPENAME $typeNm)
                             {
                             Object root_2 = (Object)adaptor.nil();
                             root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(TYPENAME, "TYPENAME"), root_2);
@@ -2735,7 +2735,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:134:3: ID
+                    // com/sap/hadoop/windowing/parser/Windowing.g:134:3: ID
                     {
                     ID70=(Token)match(input,ID,FOLLOW_ID_in_selectColumn838); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ID.add(ID70);
@@ -2756,7 +2756,7 @@ public class WindowingParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 134:6: -> ^( SELECTCOLUMN ID )
                     {
-                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:134:9: ^( SELECTCOLUMN ID )
+                        // com/sap/hadoop/windowing/parser/Windowing.g:134:9: ^( SELECTCOLUMN ID )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(SELECTCOLUMN, "SELECTCOLUMN"), root_1);
@@ -2797,7 +2797,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "where"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:137:1: where : ( WHERE GROOVYEXPRESSION ) -> ^( WHERE GROOVYEXPRESSION ) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:137:1: where : ( WHERE GROOVYEXPRESSION ) -> ^( WHERE GROOVYEXPRESSION ) ;
     public final WindowingParser.where_return where() throws RecognitionException {
         WindowingParser.where_return retval = new WindowingParser.where_return();
         retval.start = input.LT(1);
@@ -2813,11 +2813,11 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_GROOVYEXPRESSION=new RewriteRuleTokenStream(adaptor,"token GROOVYEXPRESSION");
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:137:7: ( ( WHERE GROOVYEXPRESSION ) -> ^( WHERE GROOVYEXPRESSION ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:138:2: ( WHERE GROOVYEXPRESSION )
+            // com/sap/hadoop/windowing/parser/Windowing.g:137:7: ( ( WHERE GROOVYEXPRESSION ) -> ^( WHERE GROOVYEXPRESSION ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:138:2: ( WHERE GROOVYEXPRESSION )
             {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:138:2: ( WHERE GROOVYEXPRESSION )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:138:3: WHERE GROOVYEXPRESSION
+            // com/sap/hadoop/windowing/parser/Windowing.g:138:2: ( WHERE GROOVYEXPRESSION )
+            // com/sap/hadoop/windowing/parser/Windowing.g:138:3: WHERE GROOVYEXPRESSION
             {
             WHERE71=(Token)match(input,WHERE,FOLLOW_WHERE_in_where858); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_WHERE.add(WHERE71);
@@ -2844,7 +2844,7 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 138:27: -> ^( WHERE GROOVYEXPRESSION )
             {
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:138:30: ^( WHERE GROOVYEXPRESSION )
+                // com/sap/hadoop/windowing/parser/Windowing.g:138:30: ^( WHERE GROOVYEXPRESSION )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_WHERE.nextNode(), root_1);
@@ -2883,7 +2883,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "outputClause"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:141:1: outputClause : ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? ) -> ^( OUTPUTSPEC $p ( $f)? ) ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:141:1: outputClause : ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? ) -> ^( OUTPUTSPEC $p ( $f)? ) ;
     public final WindowingParser.outputClause_return outputClause() throws RecognitionException {
         WindowingParser.outputClause_return retval = new WindowingParser.outputClause_return();
         retval.start = input.LT(1);
@@ -2912,11 +2912,11 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_STRING=new RewriteRuleTokenStream(adaptor,"token STRING");
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:141:14: ( ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? ) -> ^( OUTPUTSPEC $p ( $f)? ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:142:2: ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? )
+            // com/sap/hadoop/windowing/parser/Windowing.g:141:14: ( ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? ) -> ^( OUTPUTSPEC $p ( $f)? ) )
+            // com/sap/hadoop/windowing/parser/Windowing.g:142:2: ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? )
             {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:142:2: ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:142:3: INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )?
+            // com/sap/hadoop/windowing/parser/Windowing.g:142:2: ( INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )? )
+            // com/sap/hadoop/windowing/parser/Windowing.g:142:3: INTO PATH EQ p= STRING ( FORMAT EQ f= STRING )?
             {
             INTO73=(Token)match(input,INTO,FOLLOW_INTO_in_outputClause880); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_INTO.add(INTO73);
@@ -2930,7 +2930,7 @@ public class WindowingParser extends Parser {
             p=(Token)match(input,STRING,FOLLOW_STRING_in_outputClause888); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_STRING.add(p);
 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:142:25: ( FORMAT EQ f= STRING )?
+            // com/sap/hadoop/windowing/parser/Windowing.g:142:25: ( FORMAT EQ f= STRING )?
             int alt25=2;
             switch ( input.LA(1) ) {
                 case FORMAT:
@@ -2942,7 +2942,7 @@ public class WindowingParser extends Parser {
 
             switch (alt25) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:142:26: FORMAT EQ f= STRING
+                    // com/sap/hadoop/windowing/parser/Windowing.g:142:26: FORMAT EQ f= STRING
                     {
                     FORMAT76=(Token)match(input,FORMAT,FOLLOW_FORMAT_in_outputClause891); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_FORMAT.add(FORMAT76);
@@ -2980,13 +2980,13 @@ public class WindowingParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 142:48: -> ^( OUTPUTSPEC $p ( $f)? )
             {
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:142:51: ^( OUTPUTSPEC $p ( $f)? )
+                // com/sap/hadoop/windowing/parser/Windowing.g:142:51: ^( OUTPUTSPEC $p ( $f)? )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(OUTPUTSPEC, "OUTPUTSPEC"), root_1);
 
                 adaptor.addChild(root_1, stream_p.nextNode());
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:142:67: ( $f)?
+                // com/sap/hadoop/windowing/parser/Windowing.g:142:67: ( $f)?
                 if ( stream_f.hasNext() ) {
                     adaptor.addChild(root_1, stream_f.nextNode());
 
@@ -3025,7 +3025,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "value_expression"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:145:1: value_expression : ( numeric_expression | STRING );
+    // com/sap/hadoop/windowing/parser/Windowing.g:145:1: value_expression : ( numeric_expression | STRING );
     public final WindowingParser.value_expression_return value_expression() throws RecognitionException {
         WindowingParser.value_expression_return retval = new WindowingParser.value_expression_return();
         retval.start = input.LT(1);
@@ -3039,7 +3039,7 @@ public class WindowingParser extends Parser {
         Object STRING79_tree=null;
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:145:18: ( numeric_expression | STRING )
+            // com/sap/hadoop/windowing/parser/Windowing.g:145:18: ( numeric_expression | STRING )
             int alt26=2;
             switch ( input.LA(1) ) {
             case ID:
@@ -3067,7 +3067,7 @@ public class WindowingParser extends Parser {
 
             switch (alt26) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:146:3: numeric_expression
+                    // com/sap/hadoop/windowing/parser/Windowing.g:146:3: numeric_expression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3081,7 +3081,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:147:3: STRING
+                    // com/sap/hadoop/windowing/parser/Windowing.g:147:3: STRING
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3119,7 +3119,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "numeric_expression"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:150:1: numeric_expression : term ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )* ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:150:1: numeric_expression : term ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )* ;
     public final WindowingParser.numeric_expression_return numeric_expression() throws RecognitionException {
         WindowingParser.numeric_expression_return retval = new WindowingParser.numeric_expression_return();
         retval.start = input.LT(1);
@@ -3137,8 +3137,8 @@ public class WindowingParser extends Parser {
         Object MINUS82_tree=null;
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:150:20: ( term ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )* )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:151:3: term ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:150:20: ( term ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )* )
+            // com/sap/hadoop/windowing/parser/Windowing.g:151:3: term ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -3148,7 +3148,7 @@ public class WindowingParser extends Parser {
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) adaptor.addChild(root_0, term80.getTree());
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:151:8: ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:151:8: ( ( PLUS | MINUS )=> ( PLUS | MINUS ) term )*
             loop28:
             do {
                 int alt28=2;
@@ -3164,9 +3164,9 @@ public class WindowingParser extends Parser {
 
                 switch (alt28) {
             	case 1 :
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:151:9: ( PLUS | MINUS )=> ( PLUS | MINUS ) term
+            	    // com/sap/hadoop/windowing/parser/Windowing.g:151:9: ( PLUS | MINUS )=> ( PLUS | MINUS ) term
             	    {
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:151:26: ( PLUS | MINUS )
+            	    // com/sap/hadoop/windowing/parser/Windowing.g:151:26: ( PLUS | MINUS )
             	    int alt27=2;
             	    switch ( input.LA(1) ) {
             	    case PLUS:
@@ -3189,7 +3189,7 @@ public class WindowingParser extends Parser {
 
             	    switch (alt27) {
             	        case 1 :
-            	            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:151:27: PLUS
+            	            // com/sap/hadoop/windowing/parser/Windowing.g:151:27: PLUS
             	            {
             	            PLUS81=(Token)match(input,PLUS,FOLLOW_PLUS_in_numeric_expression955); if (state.failed) return retval;
             	            if ( state.backtracking==0 ) {
@@ -3200,7 +3200,7 @@ public class WindowingParser extends Parser {
             	            }
             	            break;
             	        case 2 :
-            	            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:151:35: MINUS
+            	            // com/sap/hadoop/windowing/parser/Windowing.g:151:35: MINUS
             	            {
             	            MINUS82=(Token)match(input,MINUS,FOLLOW_MINUS_in_numeric_expression960); if (state.failed) return retval;
             	            if ( state.backtracking==0 ) {
@@ -3255,7 +3255,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "term"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:154:1: term : numeric_primary_expression ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )* ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:154:1: term : numeric_primary_expression ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )* ;
     public final WindowingParser.term_return term() throws RecognitionException {
         WindowingParser.term_return retval = new WindowingParser.term_return();
         retval.start = input.LT(1);
@@ -3273,8 +3273,8 @@ public class WindowingParser extends Parser {
         Object SOLIDUS86_tree=null;
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:154:7: ( numeric_primary_expression ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )* )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:155:3: numeric_primary_expression ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:154:7: ( numeric_primary_expression ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )* )
+            // com/sap/hadoop/windowing/parser/Windowing.g:155:3: numeric_primary_expression ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -3284,7 +3284,7 @@ public class WindowingParser extends Parser {
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) adaptor.addChild(root_0, numeric_primary_expression84.getTree());
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:155:30: ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )*
+            // com/sap/hadoop/windowing/parser/Windowing.g:155:30: ( ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression )*
             loop30:
             do {
                 int alt30=2;
@@ -3300,9 +3300,9 @@ public class WindowingParser extends Parser {
 
                 switch (alt30) {
             	case 1 :
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:155:31: ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression
+            	    // com/sap/hadoop/windowing/parser/Windowing.g:155:31: ( ASTERISK | SOLIDUS )=> ( ASTERISK | SOLIDUS ) numeric_primary_expression
             	    {
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:155:54: ( ASTERISK | SOLIDUS )
+            	    // com/sap/hadoop/windowing/parser/Windowing.g:155:54: ( ASTERISK | SOLIDUS )
             	    int alt29=2;
             	    switch ( input.LA(1) ) {
             	    case ASTERISK:
@@ -3325,7 +3325,7 @@ public class WindowingParser extends Parser {
 
             	    switch (alt29) {
             	        case 1 :
-            	            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:155:55: ASTERISK
+            	            // com/sap/hadoop/windowing/parser/Windowing.g:155:55: ASTERISK
             	            {
             	            ASTERISK85=(Token)match(input,ASTERISK,FOLLOW_ASTERISK_in_term995); if (state.failed) return retval;
             	            if ( state.backtracking==0 ) {
@@ -3336,7 +3336,7 @@ public class WindowingParser extends Parser {
             	            }
             	            break;
             	        case 2 :
-            	            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:155:67: SOLIDUS
+            	            // com/sap/hadoop/windowing/parser/Windowing.g:155:67: SOLIDUS
             	            {
             	            SOLIDUS86=(Token)match(input,SOLIDUS,FOLLOW_SOLIDUS_in_term1000); if (state.failed) return retval;
             	            if ( state.backtracking==0 ) {
@@ -3391,7 +3391,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "numeric_primary_expression"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:158:1: numeric_primary_expression : ( identifier | signed_numeric_literal | LPAREN numeric_expression RPAREN );
+    // com/sap/hadoop/windowing/parser/Windowing.g:158:1: numeric_primary_expression : ( identifier | signed_numeric_literal | LPAREN numeric_expression RPAREN );
     public final WindowingParser.numeric_primary_expression_return numeric_primary_expression() throws RecognitionException {
         WindowingParser.numeric_primary_expression_return retval = new WindowingParser.numeric_primary_expression_return();
         retval.start = input.LT(1);
@@ -3411,7 +3411,7 @@ public class WindowingParser extends Parser {
         Object RPAREN92_tree=null;
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:158:28: ( identifier | signed_numeric_literal | LPAREN numeric_expression RPAREN )
+            // com/sap/hadoop/windowing/parser/Windowing.g:158:28: ( identifier | signed_numeric_literal | LPAREN numeric_expression RPAREN )
             int alt31=3;
             switch ( input.LA(1) ) {
             case ID:
@@ -3442,7 +3442,7 @@ public class WindowingParser extends Parser {
 
             switch (alt31) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:159:3: identifier
+                    // com/sap/hadoop/windowing/parser/Windowing.g:159:3: identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3456,7 +3456,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:160:3: signed_numeric_literal
+                    // com/sap/hadoop/windowing/parser/Windowing.g:160:3: signed_numeric_literal
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3470,7 +3470,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:161:3: LPAREN numeric_expression RPAREN
+                    // com/sap/hadoop/windowing/parser/Windowing.g:161:3: LPAREN numeric_expression RPAREN
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3519,7 +3519,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "signed_numeric_literal"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:164:1: signed_numeric_literal : ( PLUS | MINUS )? unsigned_numeric_literal ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:164:1: signed_numeric_literal : ( PLUS | MINUS )? unsigned_numeric_literal ;
     public final WindowingParser.signed_numeric_literal_return signed_numeric_literal() throws RecognitionException {
         WindowingParser.signed_numeric_literal_return retval = new WindowingParser.signed_numeric_literal_return();
         retval.start = input.LT(1);
@@ -3533,12 +3533,12 @@ public class WindowingParser extends Parser {
         Object set93_tree=null;
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:164:24: ( ( PLUS | MINUS )? unsigned_numeric_literal )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:165:3: ( PLUS | MINUS )? unsigned_numeric_literal
+            // com/sap/hadoop/windowing/parser/Windowing.g:164:24: ( ( PLUS | MINUS )? unsigned_numeric_literal )
+            // com/sap/hadoop/windowing/parser/Windowing.g:165:3: ( PLUS | MINUS )? unsigned_numeric_literal
             {
             root_0 = (Object)adaptor.nil();
 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:165:3: ( PLUS | MINUS )?
+            // com/sap/hadoop/windowing/parser/Windowing.g:165:3: ( PLUS | MINUS )?
             int alt32=2;
             switch ( input.LA(1) ) {
                 case PLUS:
@@ -3551,7 +3551,7 @@ public class WindowingParser extends Parser {
 
             switch (alt32) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:
+                    // com/sap/hadoop/windowing/parser/Windowing.g:
                     {
                     set93=(Token)input.LT(1);
                     if ( (input.LA(1)>=PLUS && input.LA(1)<=MINUS) ) {
@@ -3604,7 +3604,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "unsigned_numeric_literal"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:171:1: unsigned_numeric_literal : ( exact_numeric_literal | approximate_numeric_literal );
+    // com/sap/hadoop/windowing/parser/Windowing.g:171:1: unsigned_numeric_literal : ( exact_numeric_literal | approximate_numeric_literal );
     public final WindowingParser.unsigned_numeric_literal_return unsigned_numeric_literal() throws RecognitionException {
         WindowingParser.unsigned_numeric_literal_return retval = new WindowingParser.unsigned_numeric_literal_return();
         retval.start = input.LT(1);
@@ -3618,7 +3618,7 @@ public class WindowingParser extends Parser {
 
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:171:26: ( exact_numeric_literal | approximate_numeric_literal )
+            // com/sap/hadoop/windowing/parser/Windowing.g:171:26: ( exact_numeric_literal | approximate_numeric_literal )
             int alt33=2;
             switch ( input.LA(1) ) {
             case NUMBER:
@@ -3741,7 +3741,7 @@ public class WindowingParser extends Parser {
 
             switch (alt33) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:172:3: exact_numeric_literal
+                    // com/sap/hadoop/windowing/parser/Windowing.g:172:3: exact_numeric_literal
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3755,7 +3755,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:173:3: approximate_numeric_literal
+                    // com/sap/hadoop/windowing/parser/Windowing.g:173:3: approximate_numeric_literal
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3794,7 +3794,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "approximate_numeric_literal"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:176:1: approximate_numeric_literal : mantissa 'E' exponent ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:176:1: approximate_numeric_literal : mantissa 'E' exponent ;
     public final WindowingParser.approximate_numeric_literal_return approximate_numeric_literal() throws RecognitionException {
         WindowingParser.approximate_numeric_literal_return retval = new WindowingParser.approximate_numeric_literal_return();
         retval.start = input.LT(1);
@@ -3810,8 +3810,8 @@ public class WindowingParser extends Parser {
         Object char_literal98_tree=null;
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:176:29: ( mantissa 'E' exponent )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:177:3: mantissa 'E' exponent
+            // com/sap/hadoop/windowing/parser/Windowing.g:176:29: ( mantissa 'E' exponent )
+            // com/sap/hadoop/windowing/parser/Windowing.g:177:3: mantissa 'E' exponent
             {
             root_0 = (Object)adaptor.nil();
 
@@ -3859,7 +3859,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "exponent"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:180:1: exponent : ( PLUS NUMBER -> NUMBER | MINUS NUMBER -> ^( UMINUS NUMBER ) | NUMBER -> NUMBER );
+    // com/sap/hadoop/windowing/parser/Windowing.g:180:1: exponent : ( PLUS NUMBER -> NUMBER | MINUS NUMBER -> ^( UMINUS NUMBER ) | NUMBER -> NUMBER );
     public final WindowingParser.exponent_return exponent() throws RecognitionException {
         WindowingParser.exponent_return retval = new WindowingParser.exponent_return();
         retval.start = input.LT(1);
@@ -3882,7 +3882,7 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_NUMBER=new RewriteRuleTokenStream(adaptor,"token NUMBER");
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:180:10: ( PLUS NUMBER -> NUMBER | MINUS NUMBER -> ^( UMINUS NUMBER ) | NUMBER -> NUMBER )
+            // com/sap/hadoop/windowing/parser/Windowing.g:180:10: ( PLUS NUMBER -> NUMBER | MINUS NUMBER -> ^( UMINUS NUMBER ) | NUMBER -> NUMBER )
             int alt34=3;
             switch ( input.LA(1) ) {
             case PLUS:
@@ -3910,7 +3910,7 @@ public class WindowingParser extends Parser {
 
             switch (alt34) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:181:3: PLUS NUMBER
+                    // com/sap/hadoop/windowing/parser/Windowing.g:181:3: PLUS NUMBER
                     {
                     PLUS100=(Token)match(input,PLUS,FOLLOW_PLUS_in_exponent1100); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_PLUS.add(PLUS100);
@@ -3942,7 +3942,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:182:3: MINUS NUMBER
+                    // com/sap/hadoop/windowing/parser/Windowing.g:182:3: MINUS NUMBER
                     {
                     MINUS102=(Token)match(input,MINUS,FOLLOW_MINUS_in_exponent1112); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_MINUS.add(MINUS102);
@@ -3966,7 +3966,7 @@ public class WindowingParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 182:16: -> ^( UMINUS NUMBER )
                     {
-                        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:182:19: ^( UMINUS NUMBER )
+                        // com/sap/hadoop/windowing/parser/Windowing.g:182:19: ^( UMINUS NUMBER )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(UMINUS, "UMINUS"), root_1);
@@ -3982,7 +3982,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:183:3: NUMBER
+                    // com/sap/hadoop/windowing/parser/Windowing.g:183:3: NUMBER
                     {
                     NUMBER104=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exponent1128); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_NUMBER.add(NUMBER104);
@@ -4036,7 +4036,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "mantissa"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:186:1: mantissa : exact_numeric_literal ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:186:1: mantissa : exact_numeric_literal ;
     public final WindowingParser.mantissa_return mantissa() throws RecognitionException {
         WindowingParser.mantissa_return retval = new WindowingParser.mantissa_return();
         retval.start = input.LT(1);
@@ -4048,8 +4048,8 @@ public class WindowingParser extends Parser {
 
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:186:10: ( exact_numeric_literal )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:187:3: exact_numeric_literal
+            // com/sap/hadoop/windowing/parser/Windowing.g:186:10: ( exact_numeric_literal )
+            // com/sap/hadoop/windowing/parser/Windowing.g:187:3: exact_numeric_literal
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4086,7 +4086,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "exact_numeric_literal"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:190:1: exact_numeric_literal : (n1= NUMBER ( DOT n2= NUMBER )? -> | DOT n1= NUMBER ->);
+    // com/sap/hadoop/windowing/parser/Windowing.g:190:1: exact_numeric_literal : (n1= NUMBER ( DOT n2= NUMBER )? -> | DOT n1= NUMBER ->);
     public final WindowingParser.exact_numeric_literal_return exact_numeric_literal() throws RecognitionException {
         WindowingParser.exact_numeric_literal_return retval = new WindowingParser.exact_numeric_literal_return();
         retval.start = input.LT(1);
@@ -4106,7 +4106,7 @@ public class WindowingParser extends Parser {
         RewriteRuleTokenStream stream_NUMBER=new RewriteRuleTokenStream(adaptor,"token NUMBER");
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:190:23: (n1= NUMBER ( DOT n2= NUMBER )? -> | DOT n1= NUMBER ->)
+            // com/sap/hadoop/windowing/parser/Windowing.g:190:23: (n1= NUMBER ( DOT n2= NUMBER )? -> | DOT n1= NUMBER ->)
             int alt36=2;
             switch ( input.LA(1) ) {
             case NUMBER:
@@ -4129,12 +4129,12 @@ public class WindowingParser extends Parser {
 
             switch (alt36) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:192:3: n1= NUMBER ( DOT n2= NUMBER )?
+                    // com/sap/hadoop/windowing/parser/Windowing.g:192:3: n1= NUMBER ( DOT n2= NUMBER )?
                     {
                     n1=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_exact_numeric_literal1160); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_NUMBER.add(n1);
 
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:192:13: ( DOT n2= NUMBER )?
+                    // com/sap/hadoop/windowing/parser/Windowing.g:192:13: ( DOT n2= NUMBER )?
                     int alt35=2;
                     switch ( input.LA(1) ) {
                         case DOT:
@@ -4146,7 +4146,7 @@ public class WindowingParser extends Parser {
 
                     switch (alt35) {
                         case 1 :
-                            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:192:14: DOT n2= NUMBER
+                            // com/sap/hadoop/windowing/parser/Windowing.g:192:14: DOT n2= NUMBER
                             {
                             DOT106=(Token)match(input,DOT,FOLLOW_DOT_in_exact_numeric_literal1163); if (state.failed) return retval; 
                             if ( state.backtracking==0 ) stream_DOT.add(DOT106);
@@ -4186,7 +4186,7 @@ public class WindowingParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:196:3: DOT n1= NUMBER
+                    // com/sap/hadoop/windowing/parser/Windowing.g:196:3: DOT n1= NUMBER
                     {
                     DOT107=(Token)match(input,DOT,FOLLOW_DOT_in_exact_numeric_literal1188); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_DOT.add(DOT107);
@@ -4243,7 +4243,7 @@ public class WindowingParser extends Parser {
     };
 
     // $ANTLR start "identifier"
-    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:199:1: identifier : ID ;
+    // com/sap/hadoop/windowing/parser/Windowing.g:199:1: identifier : ID ;
     public final WindowingParser.identifier_return identifier() throws RecognitionException {
         WindowingParser.identifier_return retval = new WindowingParser.identifier_return();
         retval.start = input.LT(1);
@@ -4255,8 +4255,8 @@ public class WindowingParser extends Parser {
         Object ID108_tree=null;
 
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:199:12: ( ID )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:200:3: ID
+            // com/sap/hadoop/windowing/parser/Windowing.g:199:12: ( ID )
+            // com/sap/hadoop/windowing/parser/Windowing.g:200:3: ID
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4288,8 +4288,8 @@ public class WindowingParser extends Parser {
 
     // $ANTLR start synpred1_Windowing
     public final void synpred1_Windowing_fragment() throws RecognitionException {   
-        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:151:9: ( PLUS | MINUS )
-        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:
+        // com/sap/hadoop/windowing/parser/Windowing.g:151:9: ( PLUS | MINUS )
+        // com/sap/hadoop/windowing/parser/Windowing.g:
         {
         if ( (input.LA(1)>=PLUS && input.LA(1)<=MINUS) ) {
             input.consume();
@@ -4308,8 +4308,8 @@ public class WindowingParser extends Parser {
 
     // $ANTLR start synpred2_Windowing
     public final void synpred2_Windowing_fragment() throws RecognitionException {   
-        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:155:31: ( ASTERISK | SOLIDUS )
-        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:
+        // com/sap/hadoop/windowing/parser/Windowing.g:155:31: ( ASTERISK | SOLIDUS )
+        // com/sap/hadoop/windowing/parser/Windowing.g:
         {
         if ( (input.LA(1)>=ASTERISK && input.LA(1)<=SOLIDUS) ) {
             input.consume();

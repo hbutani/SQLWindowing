@@ -23,6 +23,7 @@ class Executor
 	{
 		Configuration conf = qry.cfg
 		QueryOutput qryOut = qry.output
+		boolean applyWhere = (qry.whereExpr != null)
 		
 		def windowFns = qry.wnFns
 		def windowFnAliases = qry.wnAliases
@@ -33,6 +34,13 @@ class Executor
 			oc.groovyExpr.binding = orow
 			orow.registerFunctions(oc.groovyExpr)
 		}
+		
+		if ( applyWhere )
+		{
+			qry.whereExpr.binding = orow
+			orow.registerFunctions(qry.whereExpr)
+		}
+		
 		orow.resultMap = [:]
 		Partitioner partitions = new Partitioner(qry)
 		while(partitions.hasNext())
@@ -47,7 +55,8 @@ class Executor
 			for(row in p)
 			{
 				orow.iObj = row
-				writeOutputRow(orow, qry)
+				if ( !applyWhere || qry.whereExpr.run() )
+					writeOutputRow(orow, qry)
 			}
 			
 		}

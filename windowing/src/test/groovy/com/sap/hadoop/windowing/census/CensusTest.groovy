@@ -39,4 +39,21 @@ class CensusTest extends MRBaseTest
 		select county, name, pop100, r, <sprintf("%4.2f",((double)pop100)/s *100)> as percentPop[string]
 		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat''""")
 	}
+	
+	/*
+	 * top 2 subcounties for each county
+	 */
+	@Test
+	void testQ22()
+	{
+		wshell.execute("""
+		from census_q2
+		partition by county
+		order by pop100 desc
+		with rank() as r,
+			sum(pop100) as s
+		select county, name, pop100, r
+		where <r < 3>
+		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat''""")
+	}
 }

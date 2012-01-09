@@ -24,6 +24,7 @@ class Query
 	ArrayList<IWindowFunction> wnFns
 	ArrayList<String> wnAliases
 	QueryOutput output
+	Script whereExpr
 }
 
 /**

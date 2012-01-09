@@ -13,4 +13,7 @@ public class Constants
 	public static final String WINDOW_ORDER_COLUMNS = "com.sap.hadoop.windowing.order.columns";
 	
 	public static final String INPUT_SERDE_CLASS = "serdeclass";
+	
+	public static final String HIVE_THRIFTSERVER = "com.sap.hadoop.windowing.hivethriftserver";
+	public static final String HIVE_THRIFTSERVER_PORT = "com.sap.hadoop.windowing.hivethriftserver.port";
 }

@@ -23,6 +23,7 @@ class WindowingShell
 	Executor executor
 	Translator translator
 	private GroovyShell wshell
+	HiveQueryExecutor hiveQryExec
 	
 	
 	WindowingShell(Configuration cfg, Translator translator, Executor executor)
@@ -65,6 +66,13 @@ class WindowingShell
 		QuerySpec qSpec = parse(query)
 		Query q = translator.translate(wshell, qSpec, cfg);
 		executor.execute(q)
+	}
+	
+	public void executeHiveQuery(String hQry) throws WindowingException
+	{
+		if ( hiveQryExec == null)
+			throw new WindowingException("cannot execute hive Query: hiveQryExec not setup");
+		hiveQryExec.exeuteHiveQuery(hQry);
 	}
 
 }

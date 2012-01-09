@@ -56,4 +56,22 @@ class CensusTest extends MRBaseTest
 		where <r < 3>
 		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat''""")
 	}
+	
+	/*
+	 * percentage of largest subcounty, difference from next largest county
+	 */
+	@Test
+	void testQ23()
+	{
+		wshell.execute("""
+		from census_q2
+		partition by county
+		order by pop100 desc
+		with rank() as r,
+			sum(pop100) as s,
+			first_value(pop100) as fv
+		select county, name, pop100, r, <((double)pop100)/fv *100> as percentOfTopSubCounty[double],
+				<lag('pop100', 1) - pop100> as diffFromNextLargestSubCounty[int] 
+		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat''""")
+	}
 }

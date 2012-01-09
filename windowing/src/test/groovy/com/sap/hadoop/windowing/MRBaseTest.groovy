@@ -11,6 +11,7 @@ import com.sap.hadoop.windowing.runtime.mr.MRTranslator;
 import com.sap.hadoop.windowing.runtime.mr.MRExecutor;
 import com.sap.hadoop.windowing.runtime.Mode;
 import com.sap.hadoop.windowing.runtime.TestExecutor;
+import com.sap.hadoop.windowing.runtime.WindowingShell;
 
 abstract class MRBaseTest
 {

@@ -13,13 +13,13 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Writable;
 
-import com.sap.hadoop.windowing.WindowingShell;
 import com.sap.hadoop.windowing.query.Column;
 import com.sap.hadoop.windowing.query.OutputColumn;
 import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.QueryInput;
 import com.sap.hadoop.windowing.query.QueryOutput;
 import com.sap.hadoop.windowing.runtime.OutputObj;
+import com.sap.hadoop.windowing.runtime.WindowingShell;
 
 public class Reduce extends MapReduceBase implements Reducer<Writable, Writable, Writable, Writable>
 {

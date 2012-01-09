@@ -17,6 +17,7 @@ import org.apache.hadoop.io.Writable;
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.runtime.Mode;
 import com.sap.hadoop.windowing.runtime.Utils;
+import com.sap.hadoop.windowing.runtime.WindowingShell;
 import com.sap.hadoop.windowing.runtime.mr.Job;
 
 class WindowingDriver

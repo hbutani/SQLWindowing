@@ -19,8 +19,8 @@ import org.apache.log4j.Logger;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.WindowingHiveCliDriver;
-import com.sap.hadoop.windowing.WindowingShell;
 import com.sap.hadoop.windowing.runtime.Mode;
+import com.sap.hadoop.windowing.runtime.WindowingShell;
 import com.sap.hadoop.windowing.runtime.mr.Job;
 
 class WindowingServer

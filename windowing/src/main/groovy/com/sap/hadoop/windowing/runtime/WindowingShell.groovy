@@ -1,4 +1,4 @@
-package com.sap.hadoop.windowing
+package com.sap.hadoop.windowing.runtime
 
 import groovy.lang.GroovyShell;
 
@@ -9,14 +9,13 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
 import org.apache.hadoop.conf.Configuration;
 
+import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.parser.WindowingLexer;
 import com.sap.hadoop.windowing.parser.WindowingParser;
 import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.query.QuerySpecBuilder;
 import com.sap.hadoop.windowing.query.Translator;
-import com.sap.hadoop.windowing.runtime.Executor;
-import com.sap.hadoop.windowing.runtime.Mode;
 
 class WindowingShell
 {

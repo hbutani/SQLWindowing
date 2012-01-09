@@ -15,7 +15,7 @@ import com.sap.hadoop.windowing.BaseTest;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.runtime.Mode;
-import com.sap.hadoop.windowing.WindowingShell;
+import com.sap.hadoop.windowing.runtime.WindowingShell;
 
 class ParserTest extends BaseTest
 {

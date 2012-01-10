@@ -59,6 +59,7 @@ class Job extends Configured
 	public static final String WINDOWING_KEY_TYPE = CompositeDataType.COMPOSITE_DATA_TYPE;
 	public static final String WINDOWING_NUM_PARTION_COLUMNS = "windowing.number.of.partition.columns";
 	public static final String WINDOWING_QUERY_STRING = "windowing.query.string";
+	public static final String WINDOWING_TEMP_TABLE = "windowing.hivequery.temptable";
 
 	public Job()
 	{

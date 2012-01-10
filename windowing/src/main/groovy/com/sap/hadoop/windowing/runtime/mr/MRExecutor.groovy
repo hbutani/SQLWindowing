@@ -18,6 +18,11 @@ class MRExecutor extends Executor
 		hConf.set("mapred.map.max.attempts", "2");
 		hConf.set("mapred.child.java.opts", "-Xmx2048m")
 		hConf.set(Job.WINDOWING_QUERY_STRING, qry.qSpec.queryStr)
+		if ( qry.qSpec.tableIn.hiveQuery != null )
+		{
+			hConf.set(Job.WINDOWING_TEMP_TABLE, qry.qSpec.tableIn.tableName)
+		}
+
 		j.setConf(hConf);
 		int eCode = j.run(qry);
 	}

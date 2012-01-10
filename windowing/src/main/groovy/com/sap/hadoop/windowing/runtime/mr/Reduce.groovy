@@ -18,6 +18,7 @@ import com.sap.hadoop.windowing.query.OutputColumn;
 import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.QueryInput;
 import com.sap.hadoop.windowing.query.QueryOutput;
+import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.runtime.OutputObj;
 import com.sap.hadoop.windowing.runtime.WindowingShell;
 
@@ -31,7 +32,16 @@ public class Reduce extends MapReduceBase implements Reducer<Writable, Writable,
 	{
 		String qryStr = job.get(Job.WINDOWING_QUERY_STRING);
 		wshell = new WindowingShell(job, new MRTranslator(), new MRExecutor())
-		qry = wshell.translate(qryStr)
+		
+		QuerySpec qSpec = wshell.parse(qryStr);
+		
+		if ( qSpec.tableIn.hiveQuery != null )
+		{
+			String tt = job.get(Job.WINDOWING_TEMP_TABLE);
+			qSpec.tableIn.tableName = tt;
+		}
+		
+		qry = wshell.translate(qSpec)
 		
 		ArrayList<StructField> partitionColumnFields = []
 		for(Column c in qry.input.partitionColumns)

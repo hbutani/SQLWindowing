@@ -15,10 +15,12 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.service.HiveInterface;
 import org.apache.log4j.Logger;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.WindowingHiveCliDriver;
+import com.sap.hadoop.windowing.runtime.HiveQueryExecutor;
 import com.sap.hadoop.windowing.runtime.Mode;
 import com.sap.hadoop.windowing.runtime.WindowingShell;
 import com.sap.hadoop.windowing.runtime.mr.Job;
@@ -192,7 +194,9 @@ class SlaveConnection
 		String qry = CommUtils.readString(socketChannel, szb)
 		try
 		{
-			wshell.execute(qry); // todo: pass an Object to wshell that can be used to execute Hive Queries
+			wshell.hiveQryExec = new WClientBasedHiveQueryExecutor(socketChannel, resp, szb)
+			wshell.execute(qry);
+			// todo: drop the temptable
 			resp.type = ResponseType.OK;
 		}
 		catch(Throwable e)
@@ -202,6 +206,62 @@ class SlaveConnection
 		}
 	}
 	
+}
+
+class WClientBasedHiveQueryExecutor implements HiveQueryExecutor
+{
+	SocketChannel socketChannel;
+	Response resp;
+	ByteBuffer szb
+	
+	WClientBasedHiveQueryExecutor(SocketChannel socketChannel, Response resp, ByteBuffer szb)
+	{
+		this.socketChannel = socketChannel
+		this.resp = resp
+		this.szb = szb;
+	}
+	
+	public void executeHiveQuery(String hQry) throws WindowingException
+	{
+		try
+		{
+			resp.type = ResponseType.QUERY
+			resp.query = hQry;
+			resp.write(socketChannel, szb);
+			
+			// read response
+			resp.read(socketChannel, szb);
+			if ( resp.type == ResponseType.OK)
+			{
+				return;
+			}
+			else if ( resp.type == ResponseType.ERROR )
+			{
+				
+				throw new WindowingException(sprintf("Error in executing Hive Query %s: %s", hQry, resp.errMsg))
+			}
+			else
+			{
+				throw new WindowingException(sprintf("Error in executing Hive Query %s", hQry))
+			}
+		}
+		catch(WindowingException we)
+		{
+			throw we;
+		}
+		catch(Throwable t)
+		{
+			throw new WindowingException(sprintf("Failed to execute Hive Query %s", hQry), t)
+		}
+	}
+	
+	public String createTableAsQuery(String hQry) throws WindowingException
+	{
+		String tableName = "WindowingTempTable_${System.currentTimeMillis()}"
+		hQry = "Create table ${tableName} as ${hQry}"
+		executeHiveQuery(hQry)
+		return tableName
+	}
 }
 
 enum ResponseType

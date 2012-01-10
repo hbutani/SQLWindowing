@@ -74,4 +74,19 @@ class CensusTest extends MRBaseTest
 				<lag('pop100', 1) - pop100> as diffFromNextLargestSubCounty[int] 
 		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat''""")
 	}
+	
+	/*
+	* @CTAS create table census_q1 as select county, tract, arealand from geo_header_sf1 where sumlev = 140 ;
+	*/
+   @Test
+   void testQ3()
+   {
+	   wshell.execute("""
+	   from <select county, tract, arealand from geo_header_sf1 where sumlev = 140>
+	   partition by county
+	   order by county, arealand desc
+	   with rank() as r
+	   select county, tract, arealand, r
+	   into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat''""")
+   }
 }

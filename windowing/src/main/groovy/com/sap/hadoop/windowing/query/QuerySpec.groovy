@@ -44,6 +44,7 @@ class QuerySpec
 class TableInput
 {
 	String tableName
+	String hiveQuery
 	String windowingInputClass
 	String inputPath
 	String keyClass
@@ -57,6 +58,10 @@ class TableInput
 		if (tableName != null )
 		{
 			return sprintf('hiveTable=%s', tableName)
+		}
+		else if ( hiveQuery != null )
+		{
+			return sprintf('hiveQuery=<%s>', hiveQuery)
 		}
 		return sprintf( 'windowInputClass=%s, inputPath=%s, keyClass=%s, valueClass=%s, inputFormatClass=%s, serDeClass=%s, serDeProps=%s', 
 			windowingInputClass, inputPath, keyClass, valueClass, inputFormatClass, serDeClass, serDeProps)

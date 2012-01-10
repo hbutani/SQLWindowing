@@ -58,13 +58,18 @@ class WindowingShell
 	public Query translate(String query) throws WindowingException
 	{
 		QuerySpec qSpec = parse(query);
-		return translator.translate(wshell, qSpec, cfg);
+		return translator.translate(wshell, qSpec, cfg, hiveQryExec);
+	}
+	
+	public Query translate(QuerySpec qSpec) throws WindowingException
+	{
+		return translator.translate(wshell, qSpec, cfg, hiveQryExec);
 	}
 
 	public void execute(String query) throws WindowingException
 	{
 		QuerySpec qSpec = parse(query)
-		Query q = translator.translate(wshell, qSpec, cfg);
+		Query q = translator.translate(wshell, qSpec, cfg, hiveQryExec);
 		executor.execute(q)
 	}
 	
@@ -72,13 +77,14 @@ class WindowingShell
 	{
 		if ( hiveQryExec == null)
 			throw new WindowingException("cannot execute hive Query: hiveQryExec not setup");
-		hiveQryExec.exeuteHiveQuery(hQry);
+		hiveQryExec.executeHiveQuery(hQry);
 	}
 
 }
 
 interface HiveQueryExecutor
 {
-	void exeuteHiveQuery(String hQry) throws WindowingException;
+	void executeHiveQuery(String hQry) throws WindowingException;
+	String createTableAsQuery(String hQry) throws WindowingException;
 }
 

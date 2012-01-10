@@ -101,6 +101,10 @@ class QuerySpecBuilder
 		{
 			tableIn.tableName = child.text
 		}
+		else if ( child.getType() == WindowingParser.GROOVYEXPRESSION )
+		{
+			tableIn.hiveQuery = child.text
+		}
 	}
 	
 	void visitParam(CommonTree node, TableInput tableInput)

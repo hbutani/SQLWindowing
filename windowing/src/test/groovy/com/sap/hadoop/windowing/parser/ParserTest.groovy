@@ -166,7 +166,15 @@ select p_mfgr,p_name, p_size, r
 		
 		println qSpec.toString();
 		
-		//assert qSpec.toString() == """
-//"""
+		assert qSpec.toString() == """Query:
+	tableInput=(hiveQuery=<select p_mfgr, p_name, p_size 
+				from part_rc>)
+	partitionColumns=p_mfgr
+	orderColumns=p_mfgr ASC, p_name ASC
+	funcSpecs=[rank(alias=r, param=[], type=null, window=null)]
+	select=p_mfgr, p_name, p_size, r
+	whereExpr=null
+	tableOutput=(serDeProps={}, outputPath=/tmp/wout, outputFormat=org.apache.hadoop.mapred.TextOutputFormat)
+"""
 	}
 }

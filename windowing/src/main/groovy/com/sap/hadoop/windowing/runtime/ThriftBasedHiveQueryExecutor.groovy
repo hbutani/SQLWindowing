@@ -33,7 +33,7 @@ class ThriftBasedHiveQueryExecutor implements HiveQueryExecutor
 		}
 	}
 	
-	public void exeuteHiveQuery(String hQry) throws WindowingException
+	public void executeHiveQuery(String hQry) throws WindowingException
 	{
 		try
 		{
@@ -43,5 +43,13 @@ class ThriftBasedHiveQueryExecutor implements HiveQueryExecutor
 		{
 			throw new WindowingException(sprintf("Failed to execute Hive Query %s", hQry), t)
 		}
+	}
+	
+	public String createTableAsQuery(String hQry) throws WindowingException
+	{
+		String tableName = "WindowingTempTable_${System.currentTimeMillis()}"
+		hQry = "Create table ${tableName} as ${hQry}"
+		executeHiveQuery(hQry)
+		return tableName
 	}
 }

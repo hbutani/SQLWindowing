@@ -22,28 +22,42 @@ import com.sap.hadoop.windowing.functions.annotations.FunctionDef;
 import com.sap.hadoop.windowing.io.HiveWindowingInput;
 import com.sap.hadoop.windowing.io.WindowingInput;
 import com.sap.hadoop.windowing.runtime.ArgType;
+import com.sap.hadoop.windowing.runtime.HiveQueryExecutor;
 import com.sap.hadoop.windowing.*;
 
 abstract class Translator
 {
 	
-	Query translate(GroovyShell wshell, QuerySpec qrySpec, Configuration cfg)
+	Query translate(GroovyShell wshell, QuerySpec qrySpec, Configuration cfg, HiveQueryExecutor hiveQryExec)
 	throws WindowingException
 	{
 		Query qry = new Query(qSpec: qrySpec,
 			wshell : wshell,
 			cfg : cfg)
-		setupQueryInput(qry)
+		setupQueryInput(qry, hiveQryExec)
 		setupWindowFunctions(wshell, qry)
 		setupOutput(qry)
 		setupWhereClause(qry)
 		return qry
 	}
 	
-	void setupQueryInput(Query qry) throws WindowingException 
+	void setupQueryInput(Query qry, HiveQueryExecutor hiveQryExec) throws WindowingException 
 	{
 		QueryInput qryIn = new QueryInput()
 		qry.input = qryIn
+		
+		/*
+		 * if a hive query is specified execute it and set input to the temp table created
+		 */
+		if ( qry.qSpec.tableIn.hiveQuery != null && qry.qSpec.tableIn.tableName == null )
+		{
+			if ( hiveQryExec == null )
+			{
+				throw new WindowingException("Attempt to execute a embedded Hive Query in an unsupported Context");
+			}
+			qry.qSpec.tableIn.tableName = hiveQryExec.createTableAsQuery(qry.qSpec.tableIn.hiveQuery)
+		}
+		
 		WindowingInput inputStream = setupWindowingInput(qry)
 		qryIn.wInput = inputStream
 		qryIn.deserializer = inputStream.getDeserializer()

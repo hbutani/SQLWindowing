@@ -34,7 +34,9 @@ class MRTest extends MRBaseTest
 		first_value(p_size) as fv, last_value(p_size) as lv,
 		first_value(p_size, 'true') over rows between 2 preceding and 2 following as fv2
 select p_mfgr,p_name, p_size, r, dr, cud, pr, nt, c, ca, cd, avg, st, fv,lv, fv2
-		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat'""")
+		into path='/tmp/wout' 
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
 
 
@@ -58,7 +60,9 @@ select p_mfgr,p_name, p_size, r, dr, cud, pr, nt, c, ca, cd, avg, st, fv,lv, fv2
 		first_value(p_size) as fv, last_value(p_size) as lv,
 		first_value(p_size, 'true') over rows between 2 preceding and 2 following as fv2
 select p_mfgr,p_name, p_size, r, dr, cud, pr, nt, c, ca, cd, avg, st, fv,lv, fv2
-		into path='/tmp/wout2' format='org.apache.hadoop.mapred.TextOutputFormat'""")
+		into path='/tmp/wout2'
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
 
 }

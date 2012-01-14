@@ -12,6 +12,7 @@ class QuerySpecBuilder
 {
 	CommonTreeAdaptor adaptor;
 	QuerySpec qSpec = new QuerySpec()
+	boolean processingInput = true
 	
 	void visit(CommonTree node) throws WindowingException
 	{
@@ -27,6 +28,12 @@ class QuerySpecBuilder
 	
 	void _preVisit(CommonTree node)
 	{
+		switch(node.getType())
+		{
+			case WindowingParser.OUTPUTSPEC:
+				processingInput =false
+				break;
+		}
 	}
 	
 	void _postVisit(CommonTree node) throws WindowingException
@@ -34,11 +41,12 @@ class QuerySpecBuilder
 		switch(node.getType())
 		{
 			case WindowingParser.QUERY:
-				//fixme
-				qSpec.tableOut.serDeProps = qSpec.tableIn.serDeProps;
 				break;
 			case WindowingParser.PARAM:
-				visitParam(node, qSpec.tableIn);
+				if (processingInput) 
+					visitInputParam(node, qSpec.tableIn);
+				else
+					visitOutputParam(node, qSpec.tableOut);
 				break;
 			case WindowingParser.TABLEINPUT:
 				visitTableInput(node, qSpec.tableIn);
@@ -107,7 +115,7 @@ class QuerySpecBuilder
 		}
 	}
 	
-	void visitParam(CommonTree node, TableInput tableInput)
+	void visitInputParam(CommonTree node, TableInput tableInput)
 	{
 		String name = node.children[0].text
 		String value = node.children[1].text
@@ -138,13 +146,31 @@ class QuerySpecBuilder
 		}
 	}
 	
+	void visitOutputParam(CommonTree node, TableOutput tableOutput)
+	{
+		String name = node.children[0].text
+		String value = node.children[1].text
+		
+		tableOutput.serDeProps.setProperty(name, value)
+	}
+	
 	void ouputSpec(CommonTree node, TableOutput tableOut)
 	{
 		int cCnt = node.children.size()
 		tableOut.outputPath = node.children[0].text
 		if ( cCnt > 1 )
 		{
-			tableOut.outputFormat = node.children[1].text
+			CommonTree serDe = node.children[1]
+			tableOut.serDeClass = serDe.children[0].text
+			CommonTree rWrtrOrFmt = serDe.children[1]
+			if ( rWrtrOrFmt.getType() == WindowingParser.RECORDWRITER)
+			{
+				tableOut.recordwriterClass = rWrtrOrFmt.children[0].text
+			}
+			else
+			{
+				tableOut.outputFormat = rWrtrOrFmt.children[0].text
+			}
 		}
 	}
 	

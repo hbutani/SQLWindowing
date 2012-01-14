@@ -19,6 +19,8 @@ class OrderingTest extends MRBaseTest
 		with
 		rank() as r
 select p_mfgr,p_name, p_size, r
-		into path='/tmp/wout2' format='org.apache.hadoop.mapred.TextOutputFormat'""")
+		into path='/tmp/wout2' 
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
 }

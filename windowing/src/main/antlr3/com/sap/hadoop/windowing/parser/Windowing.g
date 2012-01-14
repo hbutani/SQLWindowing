@@ -41,6 +41,11 @@ package com.sap.hadoop.windowing.parser;
 	{
 		throw e;
 	}
+  protected Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet follow)
+    throws RecognitionException
+  {
+  throw new MismatchedTokenException(ttype, input);
+  }
 }
 
 @rulecatch {
@@ -49,7 +54,6 @@ throw rex;
 }
 }
 
-
 query :
  FROM tableSpec
  partitionby
@@ -57,7 +61,8 @@ query :
  WITH funclist
  select
  where? 
- outputClause? -> ^(QUERY tableSpec partitionby orderby funclist select where? outputClause?)
+ outputClause? 
+ EOF -> ^(QUERY tableSpec partitionby orderby funclist select where? outputClause?)
 ;
 
 tableSpec :
@@ -140,9 +145,22 @@ where :
 ;
 
 outputClause :
- (INTO PATH EQ p=STRING (FORMAT EQ f=STRING)?) -> ^(OUTPUTSPEC $p $f?)
+ INTO PATH EQ p=STRING s=outputSerDe? -> ^(OUTPUTSPEC $p $s?)
 ;
 
+outputSerDe :
+  SERDE s=STRING p=outputSerDePropeties? o=outputFormatOrWriter -> ^(SERDE $s $o $p?)
+;
+
+outputSerDePropeties:
+  WITH SERDEPROPERTIES LPAREN (namevalue)? (COMMA namevalue)* RPAREN 
+     -> ^(SERDEPROPERTIES namevalue*)
+;
+
+outputFormatOrWriter :
+  RECORDWRITER STRING -> ^(RECORDWRITER STRING) |
+  FORMAT STRING -> ^(FORMAT STRING)
+;
 value_expression :
   numeric_expression |
   STRING
@@ -250,6 +268,8 @@ OVER		  : O V E R;
 INTO    : I N T O;
 PATH    : P A T H;
 FORMAT  : F O R M A T;
+SERDE   : S E R D E;
+SERDEPROPERTIES : S E R D E P R O P E R T I E S;
 /*
 /*
   boolean operators

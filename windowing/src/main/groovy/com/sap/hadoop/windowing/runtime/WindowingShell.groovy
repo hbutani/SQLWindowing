@@ -51,7 +51,7 @@ class WindowingShell
 		}
 		catch(RecognitionException re)
 		{
-			throw new WindowingException("Parse Error:" + re.getMessage(), re)
+			throw new WindowingException("Parse Error:" + re.toString(), re)
 		}
 	}
 	

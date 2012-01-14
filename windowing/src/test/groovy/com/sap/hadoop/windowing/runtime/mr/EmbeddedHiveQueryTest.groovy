@@ -16,7 +16,9 @@ class EmbeddedHiveQueryTest extends MRBaseTest
 		with
 		rank() as r
 select p_mfgr,p_name, p_size, r
-		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat'""")
+		into path='/tmp/wout' 
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
 
 }

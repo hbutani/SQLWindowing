@@ -20,7 +20,9 @@ class CensusTest extends MRBaseTest
 		order by county, arealand desc 
 		with rank() as r 
 		select county, tract, arealand, r 
-		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat''""")
+		into path='/tmp/wout' 
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
 	
 	/*
@@ -37,7 +39,9 @@ class CensusTest extends MRBaseTest
 		with rank() as r,
 			sum(pop100) as s
 		select county, name, pop100, r, <sprintf("%4.2f",((double)pop100)/s *100)> as percentPop[string]
-		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat''""")
+		into path='/tmp/wout' 
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
 	
 	/*
@@ -54,7 +58,9 @@ class CensusTest extends MRBaseTest
 			sum(pop100) as s
 		select county, name, pop100, r
 		where <r < 3>
-		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat''""")
+		into path='/tmp/wout' 
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
 	
 	/*
@@ -72,7 +78,9 @@ class CensusTest extends MRBaseTest
 			first_value(pop100) as fv
 		select county, name, pop100, r, <((double)pop100)/fv *100> as percentOfTopSubCounty[double],
 				<lag('pop100', 1) - pop100> as diffFromNextLargestSubCounty[int] 
-		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat''""")
+		into path='/tmp/wout' 
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
 	
 	/*
@@ -87,6 +95,8 @@ class CensusTest extends MRBaseTest
 	   order by county, arealand desc
 	   with rank() as r
 	   select county, tract, arealand, r
-	   into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat''""")
+	   into path='/tmp/wout' 
+	   serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+	   format 'org.apache.hadoop.mapred.TextOutputFormat'""")
    }
 }

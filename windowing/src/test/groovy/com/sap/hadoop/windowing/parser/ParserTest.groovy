@@ -75,7 +75,7 @@ select p_mfgr,p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, 
 		first_value(alias=fv2, param=[id=p_size, strVal=true], type=null, window=window(start=range(2 PRECEDING), end=range(2 FOLLOWING)))]
 	select=p_mfgr, p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, fv, lv, fv2
 	whereExpr=null
-	tableOutput=(output(path=null, serde=null, serDeProps={columns=p_partkey,p_name,p_mfgr,p_brand,p_type,p_size,p_container,p_retailprice,p_comment, columns.types=int,string,string,string,string,int,string,double,string}, format=null)
+	tableOutput=(output(path=null, serde=null, serDeProps={}, format=null)
 """	
 	}
 	
@@ -138,7 +138,9 @@ select p_mfgr,p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, 
 		with
 			rank() as r
 		select p_mfgr,p_name, p_size, r
-		into path='/tmp/wout' format='org.apache.hadoop.mapred.SequenceFileOutputFormat'""")
+		into path='/tmp/wout' 
+		serde 'org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe' 
+		format 'org.apache.hadoop.mapred.SequenceFileOutputFormat'""")
 		//print qSpec.toString()
 		assert qSpec.toString() == """Query:
 	tableInput=(hiveTable=part)
@@ -147,7 +149,7 @@ select p_mfgr,p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, 
 	funcSpecs=[rank(alias=r, param=[], type=null, window=null)]
 	select=p_mfgr, p_name, p_size, r
 	whereExpr=null
-	tableOutput=(output(path=/tmp/wout, serde=null, serDeProps={}, format=org.apache.hadoop.mapred.SequenceFileOutputFormat)
+	tableOutput=(output(path=/tmp/wout, serde=org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe, serDeProps={}, format=org.apache.hadoop.mapred.SequenceFileOutputFormat)
 """
 	}
 	
@@ -162,9 +164,11 @@ select p_mfgr,p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, 
 		with
 		rank() as r
 select p_mfgr,p_name, p_size, r
-		into path='/tmp/wout' format='org.apache.hadoop.mapred.TextOutputFormat'""")
+		into path='/tmp/wout' 
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
-		//println qSpec.toString();
+		println qSpec.toString();
 		
 		assert qSpec.toString() == """Query:
 	tableInput=(hiveQuery=<select p_mfgr, p_name, p_size 
@@ -174,7 +178,7 @@ select p_mfgr,p_name, p_size, r
 	funcSpecs=[rank(alias=r, param=[], type=null, window=null)]
 	select=p_mfgr, p_name, p_size, r
 	whereExpr=null
-	tableOutput=(output(path=/tmp/wout, serde=null, serDeProps={}, format=org.apache.hadoop.mapred.TextOutputFormat)
+	tableOutput=(output(path=/tmp/wout, serde=org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, serDeProps={}, format=org.apache.hadoop.mapred.TextOutputFormat)
 """
 	}
 }

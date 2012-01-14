@@ -8,7 +8,9 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
 import org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordWriter;
 import org.apache.hadoop.hive.ql.exec.RecordWriter;
+import org.apache.hadoop.hive.ql.io.RCFile;
 import org.apache.hadoop.hive.serde2.SerDe;
+import org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
 import org.apache.hadoop.hive.serde2.objectinspector.SettableStructObjectInspector;
@@ -295,6 +297,12 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 			Properties props = tblOut.serDeProps
 			props.setProperty(HiveConstants.LIST_COLUMNS, colnames)
 			props.setProperty(HiveConstants.LIST_COLUMN_TYPES, coltypes)
+			
+			// ugly; todo: find a better way.
+			if ( ColumnarSerDe.class.isInstance(qryOut.serDe))
+			{
+				qry.cfg.setInt(RCFile.COLUMN_NUMBER_CONF_STR, qryOut.columns.size())
+			}
 			
 			qryOut.serDe.initialize(qry.cfg, props);
 		}

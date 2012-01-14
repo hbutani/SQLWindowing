@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:46:29 com\\sap\\hadoop\\windowing\\parser\\Windowing.g 2012-01-13 17:44:26
+// $ANTLR 3.3 Nov 30, 2010 12:46:29 com\\sap\\hadoop\\windowing\\parser\\Windowing.g 2012-01-13 19:09:12
 
 package com.sap.hadoop.windowing.parser;
 
@@ -300,7 +300,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: funclist, outputClause, partitionby, select, orderby, tableSpec, where
+            // elements: funclist, partitionby, outputClause, select, where, tableSpec, orderby
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -684,7 +684,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: TABLEINPUT, namevalue
+            // elements: namevalue, TABLEINPUT
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -815,7 +815,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: i, v
+            // elements: v, i
             // token labels: v, i
             // rule labels: retval
             // token list labels: 
@@ -946,7 +946,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: ordercolumn, ORDER
+            // elements: ORDER, ordercolumn
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -1198,7 +1198,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: ID, PARTITION
+            // elements: PARTITION, ID
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -1562,7 +1562,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: alias, functionparam, name, window_expression, typeNm
+            // elements: typeNm, name, functionparam, window_expression, alias
             // token labels: typeNm, alias, name
             // rule labels: retval
             // token list labels: 
@@ -1848,7 +1848,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: e, s
+            // elements: s, e
             // token labels: 
             // rule labels: retval, e, s
             // token list labels: 
@@ -2129,7 +2129,7 @@ public class WindowingParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: d, NUMBER
+                    // elements: NUMBER, d
                     // token labels: d
                     // rule labels: retval
                     // token list labels: 
@@ -2234,7 +2234,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: e, s
+            // elements: s, e
             // token labels: 
             // rule labels: retval, e, s
             // token list labels: 
@@ -2401,7 +2401,7 @@ public class WindowingParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: UNBOUNDED, r
+                    // elements: r, UNBOUNDED
                     // token labels: r
                     // rule labels: retval
                     // token list labels: 
@@ -2523,7 +2523,7 @@ public class WindowingParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: NUMBER, GROOVYEXPRESSION, d
+                    // elements: d, NUMBER, GROOVYEXPRESSION
                     // token labels: d
                     // rule labels: retval
                     // token list labels: 
@@ -2649,7 +2649,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: selectColumn, SELECT
+            // elements: SELECT, selectColumn
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -2803,7 +2803,7 @@ public class WindowingParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: GROOVYEXPRESSION, typeNm, ID
+                    // elements: ID, typeNm, GROOVYEXPRESSION
                     // token labels: typeNm
                     // rule labels: retval
                     // token list labels: 
@@ -2944,7 +2944,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: GROOVYEXPRESSION, WHERE
+            // elements: WHERE, GROOVYEXPRESSION
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -3064,7 +3064,7 @@ public class WindowingParser extends Parser {
 
 
             // AST REWRITE
-            // elements: p, s
+            // elements: s, p
             // token labels: p
             // rule labels: retval, s
             // token list labels: 
@@ -3472,7 +3472,7 @@ public class WindowingParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: RECORDWRITER, STRING
+                    // elements: STRING, RECORDWRITER
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -3512,7 +3512,7 @@ public class WindowingParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: FORMAT, STRING
+                    // elements: STRING, FORMAT
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 

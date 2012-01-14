@@ -270,6 +270,8 @@ PATH    : P A T H;
 FORMAT  : F O R M A T;
 SERDE   : S E R D E;
 SERDEPROPERTIES : S E R D E P R O P E R T I E S;
+RECORDWRITER : R E C O R D W R I T E R;
+
 /*
 /*
   boolean operators

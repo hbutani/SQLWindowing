@@ -70,12 +70,28 @@ class TableInput
 
 class TableOutput
 {
-	String outputFormat
+	static final String DEFAULT_SERDE_CLASS = "org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe"
+	static final String DEFAULT_FORMAT_CLASS = 'org.apache.hadoop.mapred.TextOutputFormat'
+	static final String DEFAULT_RECORDWRITER_CLASS = "org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordWriter"
+	
 	String outputPath
+	String serDeClass
 	Properties serDeProps = new Properties()
+	String outputFormat
+	String recordwriterClass
+	
 	public String toString()
 	{
-		return sprintf( 'serDeProps=%s, outputPath=%s, outputFormat=%s', serDeProps, outputPath, outputFormat)
+		if ( outputFormat )
+		{
+			return sprintf("output(path=%s, serde=%s, serDeProps=%s, format=%s", 
+				outputPath, serDeClass, serDeProps, outputFormat)
+		}
+		else
+		{
+			return sprintf("output(path=%s, serde=%s, serDeProps=%s, format=%s",
+				outputPath, serDeClass, serDeProps, outputFormat)
+		}
 	}
 }
 

@@ -7,6 +7,7 @@ import org.antlr.runtime.tree.CommonTree;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
 import org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordWriter;
+import org.apache.hadoop.hive.ql.exec.RecordWriter;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
@@ -149,26 +150,22 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 	{
 		try
 		{
+			TableOutput tblOut = qry.qSpec.tableOut
 			QueryOutput qryOut = new QueryOutput()
 			qry.output = qryOut
 			setupOutputColumns(qry)
 			
+			validateOutputSpec(tblOut)
+			
 			// 1. setup SerDe
-			def coltypes = qryOut.columns.typeInfo.typeName.join(",")
-			def colnames = qryOut.columns.alias.join(",")
-			Properties props = new Properties()
-			props.setProperty(HiveConstants.LIST_COLUMNS, colnames)
-			props.setProperty(HiveConstants.LIST_COLUMN_TYPES, coltypes)
-			qryOut.serDe = getOutputSerDe(props);
+			setupOutputSerDe(qry)
 			
 			// 2. setup internal processing serDe
-			qryOut.serDe.initialize(qry.cfg, props);
 			qryOut.outputOI = qryOut.serDe.getObjectInspector()
 			qryOut.processingOI = ObjectInspectorUtils.getStandardObjectInspector(qryOut.outputOI, ObjectInspectorCopyOption.JAVA)
 			
 			//3. setup writer
-			qryOut.wrtr = new TypedBytesRecordWriter();
-			qryOut.wrtr.initialize(getOutputStream(), qry.cfg);
+			setupWriter(qry)
 			
 			//4. fill in fieldRefs to Columns
 			for(int i in 0..<qryOut.columns.size())
@@ -283,9 +280,78 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		return System.out
 	}
 	
-	SerDe getOutputSerDe(Properties props)
+	void setupOutputSerDe(Query qry) throws WindowingException
 	{
-		return new TypedBytesSerDe();
+		QueryOutput qryOut = qry.output
+		TableOutput tblOut = qry.qSpec.tableOut
+		try
+		{
+			// 1. setup SerDe
+			def coltypes = qryOut.columns.typeInfo.typeName.join(",")
+			def colnames = qryOut.columns.alias.join(",")
+			Class<? extends SerDe> c = (Class<? extends SerDe>) Class.forName(tblOut.serDeClass)
+			qryOut.serDe =  c.newInstance();
+			
+			Properties props = tblOut.serDeProps
+			props.setProperty(HiveConstants.LIST_COLUMNS, colnames)
+			props.setProperty(HiveConstants.LIST_COLUMN_TYPES, coltypes)
+			
+			qryOut.serDe.initialize(qry.cfg, props);
+		}
+		catch(Throwable t)
+		{
+			throw new WindowingException(
+				sprintf("Failed to setup Output SerDe %s", tblOut.serDeClass), t)
+		}
+	}
+	
+	void setupWriter(Query qry) throws WindowingException
+	{
+		QueryOutput qryOut = qry.output
+		TableOutput tblOut = qry.qSpec.tableOut
+		try
+		{
+			Class<? extends RecordWriter> c = (Class<? extends RecordWriter>) Class.forName(tblOut.recordwriterClass)
+			qryOut.wrtr = c.newInstance()
+			qryOut.wrtr.initialize(getOutputStream(), qry.cfg);
+		}
+		catch(Throwable t)
+		{
+			throw new WindowingException(
+				sprintf("Failed to setup Output Writer %s", tblOut.serDeClass), t)
+		}
+	}
+	
+	void validateOutputSpec(TableOutput tblOut) throws WindowingException
+	{
+		// validate serDeClass
+		tblOut.serDeClass = (tblOut.serDeClass == null ? TableOutput.DEFAULT_SERDE_CLASS : tblOut.serDeClass)
+		try
+		{
+			Class.forName(tblOut.serDeClass)
+		}
+		catch(Throwable t)
+		{
+			throw new WindowingException(sprintf("Unknown SerDe Class %s", tblOut.serDeClass), t)
+		}
+		
+		// validate writer
+		tblOut.recordwriterClass = (tblOut.recordwriterClass == null ? TableOutput.DEFAULT_RECORDWRITER_CLASS : tblOut.recordwriterClass)
+		try
+		{
+			Class.forName(tblOut.recordwriterClass)
+		}
+		catch(Throwable t)
+		{
+			throw new WindowingException(
+				sprintf("Unknown RecordWriter Class %s", tblOut.recordwriterClass), t)
+		}
+		
+		// ensure user has not specified a FormatClass
+		if ( tblOut.outputFormat != null )
+		{
+			throw new WindowingException("Illegal Output Spec: Output Format class only valid in MR mode")
+		} 
 	}
 }
 

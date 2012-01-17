@@ -1,0 +1,1159 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>windowing</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="windowing"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2012-01-16 21:15:47 PST"/>
+<meta name="author" content="Harish Butani"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">windowing</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Modes</a></li>
+<li><a href="#sec-2">2 Default Query Execution</a>
+<ul>
+<li><a href="#sec-2-1">2.1 The Input Row</a>
+<ul>
+<li><a href="#sec-2-1-1">2.1.1 deal with the original structure; avoid converting to a StandardObject</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2">2.2 Partitioner</a>
+<ul>
+<li><a href="#sec-2-2-1">2.2.1 optimize comparison in Partition object; Convert first row of Partition only once.</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-3">2.3 The processing of Windowing Functions</a></li>
+<li><a href="#sec-2-4">2.4 The Output Object</a></li>
+<li><a href="#sec-2-5">2.5 The generation of Output Rows for a Partition</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3 Windowing CLI operation</a>
+<ul>
+<li><a href="#sec-3-1">3.1 Overall Architecture</a></li>
+<li><a href="#sec-3-2">3.2 Query execution</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4 Reading and Writing data</a>
+<ul>
+<li><a href="#sec-4-1">4.1 The WindowingInput interface</a>
+<ul>
+<li><a href="#sec-4-1-1">4.1.1 LocalTranslator and TableWindowingInput</a></li>
+<li><a href="#sec-4-1-2">4.1.2 HiveTranslator &amp; HiveWindowingInput</a></li>
+<li><a href="#sec-4-1-3">4.1.3 MRTranslator &amp; MRWindowingInput</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-2">4.2 Writing Result Rows</a>
+<ul>
+<li><a href="#sec-4-2-1">4.2.1 MR mode</a></li>
+<li><a href="#sec-4-2-2">4.2.2 Default behavior (non MR mode)</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-3">4.3 Enhacing Output Behavior</a>
+<ul>
+<li><a href="#sec-4-3-1">4.3.1 The Query Interface</a></li>
+</ul></li>
+</ul>
+</li>
+<li><a href="#sec-5">5 Composite Record mechanics</a>
+<ul>
+<li><a href="#sec-5-1">5.1 Types</a>
+<ul>
+<li><a href="#sec-5-1-1">5.1.1 CompositeDataType and CompositeWritable</a></li>
+<li><a href="#sec-5-1-2">5.1.2 CompositeSerialization</a></li>
+</ul></li>
+</ul>
+</li>
+<li><a href="#sec-6">6 Windowing processing in a MR Job</a>
+<ul>
+<li><a href="#sec-6-1">6.1 Job definition</a>
+<ul>
+<li><a href="#sec-6-1-1">6.1.1 Configure Hive Table as Job Input</a></li>
+<li><a href="#sec-6-1-2">6.1.2 Type Information</a></li>
+<li><a href="#sec-6-1-3">6.1.3 Remaining Parameters</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-2">6.2 Job Execution</a>
+<ul>
+<li><a href="#sec-6-2-1">6.2.1 Map Job</a></li>
+<li><a href="#sec-6-2-2">6.2.2 Partitioning</a></li>
+<li><a href="#sec-6-2-3">6.2.3 OutputGroupingComparator</a></li>
+<li><a href="#sec-6-2-4">6.2.4 Reduce Job</a></li>
+</ul></li>
+</ul>
+</li>
+<li><a href="#sec-7">7 The Language</a></li>
+<li><a href="#sec-8">8 Parsing and Translation</a></li>
+<li><a href="#sec-9">9 A Windowing Function</a></li>
+<li><a href="#sec-10">10 Where Clause handling</a></li>
+<li><a href="#sec-11">11 Hive Client</a></li>
+<li><a href="#sec-12">12 Testing</a>
+<ul>
+<li><a href="#sec-12-1">12.1 Setup of Census tables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Modes</h2>
+<div class="outline-text-2" id="text-1">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">Mode</th><th scope="col" class="left">Translator</th><th scope="col" class="left">Executor</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">Local</td><td class="left">LocalTranslator</td><td class="left">Executor</td></tr>
+<tr><td class="left">TEST</td><td class="left">LocalTranslator</td><td class="left">TestExecutor</td></tr>
+<tr><td class="left">HIVE</td><td class="left">HiveTranslator</td><td class="left">Executor</td></tr>
+<tr><td class="left">HIVETEST</td><td class="left">HiveTranslator</td><td class="left">TestExecutor</td></tr>
+<tr><td class="left">MR</td><td class="left">MRTranslator</td><td class="left">MRExecutor</td></tr>
+<tr><td class="left">MRTEST</td><td class="left">MRTranslator</td><td class="left">MRExecutor</td></tr>
+</tbody>
+</table>
+
+
+<ul>
+<li>Translators differentiated by how they setup the Queries WindowingInput
+<ul>
+<li>LocalTranslator:
+<ul>
+<li>expects complete details of input: keyClass, valueClass,
+      iFmtCls, serDeCls, columnNames, columnTypes and WindowingInputCls
+</li>
+<li>works with TableWindowingInput; reads input using FileSystem API
+</li>
+<li>was used when not tied to Hive Metastoreserver
+</li>
+</ul>
+
+<p>    -ni more used
+</p></li>
+<li>HiveTranslator:
+<ul>
+<li>used when Hive Script Operator spawns WindowingDriver
+</li>
+<li>not actively maintained
+</li>
+</ul>
+
+</li>
+<li>MRTranslator:
+<ul>
+<li>works with MRWindowingInput
+</li>
+<li>mRWindowingInput needs a tableName in the Query; and extracts
+      the SerDe by talking to the MetaStoreServer
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li>Executors: differentiated by how result rows are output
+<ul>
+<li>TestExecutor:
+<ul>
+<li>configured with a PrintStream; default is System.out
+</li>
+<li>output row is created as a list and printed to PrintStream
+</li>
+<li>used in BasicTests.
+</li>
+</ul>
+
+</li>
+<li>MRExecutor:
+<ul>
+<li>is bridge between Query &amp; mR Job.
+</li>
+<li>Setups a HiveConf for the Job
+</li>
+<li>sets the Query and temptable created(for hive query) in conf
+</li>
+<li>invokes job.run 
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li>Why do we have MR &amp; MRTEST modes
+<ul>
+<li>utilized by WindowingDriver to decide how to set WINDOWING<sub>JAR</sub><sub>FILE</sub>
+</li>
+<li>this needs to be cleaned up
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Default Query Execution</h2>
+<div class="outline-text-2" id="text-2">
+
+
+
+<p>
+<img src="defaultQryExec.png"  alt="defaultQryExec.png" />
+</p>
+<ul>
+<li>The execution of Windowing Functions &amp; expressions happen in a
+  GroovyShell. There is a GroovyShell associated with each
+  RunningContext. This Shell is attached to the Query.
+</li>
+</ul>
+
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> The Input Row</h3>
+<div class="outline-text-3" id="text-2-1">
+
+<ul>
+<li>Each Query has an associated WindowingInput. This is used to read
+  the next structured row.
+</li>
+<li>This Object is converted to a ArrayList using ObjectInspectorUtils.copyToStandardObject
+</li>
+<li>These are held as sets in a Partition Object.
+</li>
+<li>An InputObject is a Groovy Binding that is associated with an index
+  of the Partition object.
+</li>
+<li>When a value is requested from it; it gets the value from the
+  underlying StandardOI.
+</li>
+</ul>
+
+
+</div>
+
+<div id="outline-container-2-1-1" class="outline-4">
+<h4 id="sec-2-1-1"><span class="section-number-4">2.1.1</span> <span class="todo TODO"> TODO</span> deal with the original structure; avoid converting to a StandardObject</h4>
+<div class="outline-text-4" id="text-2-1-1">
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Partitioner</h3>
+<div class="outline-text-3" id="text-2-2">
+
+<ul>
+<li>is responsible for breaking up a stream of Input rows into a stream of Partitions.
+</li>
+<li>it calls on the WindowingInput for the next set of rows and collects them into a Partition object 
+</li>
+</ul>
+
+
+</div>
+
+<div id="outline-container-2-2-1" class="outline-4">
+<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> <span class="todo TODO"> TODO</span> optimize comparison in Partition object; Convert first row of Partition only once.</h4>
+<div class="outline-text-4" id="text-2-2-1">
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> The processing of Windowing Functions</h3>
+<div class="outline-text-3" id="text-2-3">
+
+<ul>
+<li>wrap the input stream in a Partioner. Now process each Partition
+</li>
+<li>Maintain a ResultMap( ExpressioName -&gt; List )
+</li>
+<li>for each WindowingFunction invoke processPartition(p).
+<ul>
+<li>the processPartion contract requires the WFunction to return a
+    list whose size is equal to the Partition's size. The elements of
+    the list are of type specified by the Function's signature.
+</li>
+</ul>
+
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> The Output Object</h3>
+<div class="outline-text-3" id="text-2-4">
+
+<ul>
+<li>is also a Groovy Binding.
+</li>
+<li>it encapsulates an InputObject
+</li>
+<li>it also encapsulates the ResultMap for a partition.
+</li>
+<li>a name is resolved either as a evaluated value or as an input
+  column. The InputObject associated with it specifies the row in the
+  Partition that is used.
+</li>
+<li>Output Object also provides functions usable in the select
+  clause. Currently it has the lead and lag functions.
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> The generation of Output Rows for a Partition</h3>
+<div class="outline-text-3" id="text-2-5">
+
+<ul>
+<li>An OutputObj is associated with the Partition and its ResultMap
+</li>
+<li>now for each row in the Partition:
+<ul>
+<li>the input row is bound to the OutputObj
+</li>
+<li>the whereClause is evaluated to decide if this row needs to be Output
+</li>
+<li>if yes:
+</li>
+<li>an output array is constructed by evaluating expression for the OutputColumns of the Query.
+</li>
+<li>The Array is serailized using the Serializer associated with the query
+</li>
+<li>and wriiten using the RecordWriter associated wit the Query.
+</li>
+</ul>
+
+</li>
+</ul>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Windowing CLI operation</h2>
+<div class="outline-text-2" id="text-3">
+
+
+</div>
+
+<div id="outline-container-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Overall Architecture</h3>
+<div class="outline-text-3" id="text-3-1">
+
+
+
+<p>
+<img src="cliOperation.png"  alt="cliOperation.png" />
+</p></div>
+
+</div>
+
+<div id="outline-container-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Query execution</h3>
+<div class="outline-text-3" id="text-3-2">
+
+
+
+<p>
+<img src="cliQueryExecFlow.png"  alt="cliQueryExecFlow.png" />
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Reading and Writing data</h2>
+<div class="outline-text-2" id="text-4">
+
+<ul>
+<li>query is associated with a input Deserializer and an output SerDe.
+</li>
+</ul>
+
+
+</div>
+
+<div id="outline-container-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> The WindowingInput interface</h3>
+<div class="outline-text-3" id="text-4-1">
+
+<ul>
+<li>extends the RecordReader interface. The RecordReader interface
+  provides a way for rows to flow as Writables from the Hive Script Operator to an
+  external program. This was chosen because the first integration
+  developed was via the Script Operator.
+</li>
+<li>A WindowingInput is also responsible for providing a SerDe
+  for the input. So that raw Writables can be transformed to
+  structured objects.
+</li>
+<li>A WindowingInput is setup during translation by the
+  setupWindowingInput(Query) call. A WindowingInput class is closely
+  associated with a particular Translator.
+</li>
+</ul>
+
+
+</div>
+
+<div id="outline-container-4-1-1" class="outline-4">
+<h4 id="sec-4-1-1"><span class="section-number-4">4.1.1</span> LocalTranslator and TableWindowingInput</h4>
+<div class="outline-text-4" id="text-4-1-1">
+
+<ul>
+<li>used to read directly from a File. Bypasses hive metadata
+  layer. Hence Query must specify all the details.
+</li>
+<li>the query must specify:
+<ul>
+<li>the Key &amp; Value Classes
+</li>
+<li>the InputFormatClass
+</li>
+<li>the SerDe class; the Column Names and Types of records
+</li>
+<li>the location of the directory containing the data files
+</li>
+</ul>
+
+</li>
+<li>TableWindowingInput then
+<ul>
+<li>creates a SerDe instance
+</li>
+<li>validates the tablePath
+</li>
+<li>setups an InputFormat instance
+</li>
+<li>reads the splits for the Path using the FileSystem API
+</li>
+<li>sets itself for iteration of the input rows; gets the RecordReader
+    from the first split
+</li>
+<li>the iteration logic drains the current RecordReader. Once done it
+    tries to open the next split if it exists and starts returning
+    rows from it; otherwise it stops
+</li>
+</ul>
+
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-4-1-2" class="outline-4">
+<h4 id="sec-4-1-2"><span class="section-number-4">4.1.2</span> HiveTranslator &amp; HiveWindowingInput</h4>
+<div class="outline-text-4" id="text-4-1-2">
+
+<ul>
+<li>this is used when the Hive Script Operator spawns a Windowing Process
+</li>
+<li>The Script Operator is configured to stream data using the TypedBytesRecordWriter
+</li>
+<li>So on the WindowingRecordReader side the corrsponding
+  TypedBytesRecordReader is used to read Writables from the raw stream.
+</li>
+<li>The Reader is configured to read from System.in, as this is the
+  mechanism used by Hive Script Operator
+</li>
+<li>The Query must provide details about the structure of the
+  records. So the query must contain:
+<ul>
+<li>the SerDe class; the Column Names and Types of records
+</li>
+</ul>
+
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-4-1-3" class="outline-4">
+<h4 id="sec-4-1-3"><span class="section-number-4">4.1.3</span> MRTranslator &amp; MRWindowingInput</h4>
+<div class="outline-text-4" id="text-4-1-3">
+
+<ul>
+<li>this is used when Windowing operations run in the Reduce Phase of a
+  MR Job.
+</li>
+<li>In this situation the WindowingInput is not as a source of
+  Writables; but it still used to provide the Deserializer to convert
+  a raw Writable into a structured record.
+</li>
+<li>The information about the table is read by making a connection to a
+  Hive MetaStore Server.
+</li>
+<li>The Query only needs to refer to a Hive Table.
+</li>
+</ul>
+
+<ul>
+<li id="sec-4-1-3-1">handling embedded Hive Query<br/>
+<ul>
+<li>in place of a Hive table a hive query may alternatively be specified
+</li>
+<li>in this case the Query is wrapped in a CTAS statement; the tableName
+  is generated using the currentTimeMillis(); and the temptable is
+  used as the input to the Query.
+</li>
+</ul>
+
+</li>
+</ul>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> Writing Result Rows</h3>
+<div class="outline-text-3" id="text-4-2">
+
+<ul>
+<li>the translator infers the types and names of the columns of the
+  output record.
+</li>
+<li>currently the OutputSerDe is hard-coded: (1/13/12 this is no more the case, see <a href="#sec-4-3">Enhacing Output Behavior</a>)
+<ul>
+<li>LazySimpleSerDe in MR mode
+</li>
+<li>TypedBytesSerDe in other modes
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+</div>
+
+<div id="outline-container-4-2-1" class="outline-4">
+<h4 id="sec-4-2-1"><span class="section-number-4">4.2.1</span> MR mode</h4>
+<div class="outline-text-4" id="text-4-2-1">
+
+<ul>
+<li>the MR job is configured using the outputformat specified in the
+  Query. Currently tested with TextOutputFormat.
+</li>
+<li>The output SerDe is fixed to  LazySimpleSerDe
+</li>
+<li>In the Reduce function the output columns are converted using the LazySimpleSerDe
+</li>
+<li>And then passed to the OutputCollector
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-4-2-2" class="outline-4">
+<h4 id="sec-4-2-2"><span class="section-number-4">4.2.2</span> Default behavior (non MR mode)</h4>
+<div class="outline-text-4" id="text-4-2-2">
+
+<ul>
+<li>data is wriiten to System.out
+</li>
+<li>data is written using the TypedBytesRecordWriter
+</li>
+<li>so in the case of Hive Mode
+<ul>
+<li>output is streamed back to the Hive Script Operator as Writables
+    which are read using the corresponding TypedBytesRecordReader
+</li>
+</ul>
+
+</li>
+<li>in Local mode data is written to System.out using the same TypedBytesRecordWriter
+</li>
+<li>there is a TestExecutor that shortcircuits writing output by
+  directly writing the output columns of a row as an array to System.out
+</li>
+</ul>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4-3" class="outline-3">
+<h3 id="sec-4-3"><span class="section-number-3">4.3</span> Enhacing Output Behavior</h3>
+<div class="outline-text-3" id="text-4-3">
+
+
+</div>
+
+<div id="outline-container-4-3-1" class="outline-4">
+<h4 id="sec-4-3-1"><span class="section-number-4">4.3.1</span> The Query Interface</h4>
+<div class="outline-text-4" id="text-4-3-1">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">parameter</th><th scope="col" class="left">description</th><th scope="col" class="left">default</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">MR mode:</td><td class="left"></td><td class="left"></td></tr>
+<tr><td class="left">output_file_name</td><td class="left">where the Output should be stored</td><td class="left">required</td></tr>
+<tr><td class="left">output_serde,</td><td class="left">specify serde and fileformat class,</td><td class="left">TypedBytesSerDe,</td></tr>
+<tr><td class="left">output_fileformat</td><td class="left">and serde properties</td><td class="left">User-specified</td></tr>
+<tr><td class="left">Hive/Local mode:</td><td class="left"></td><td class="left"></td></tr>
+<tr><td class="left">output serde</td><td class="left"></td><td class="left">TypedBytesSerDe</td></tr>
+<tr><td class="left">output RecordWriter</td><td class="left"></td><td class="left">TypedBytesRecordWriter</td></tr>
+</tbody>
+</table>
+
+
+<ul>
+<li>Output clause
+</li>
+</ul>
+
+
+
+
+<pre class="example">into PATH=&lt;user specified path&gt;
+[ SERDE &lt;serdeClass&gt; (WITH SERDEPROPERTIES namevalue*)?
+  ( RECORDWRITER &lt;recordwriterClass&gt; |
+    OUTPUTFORMAT &lt;outputformatClass&gt;
+  )
+]
+</pre>
+
+<ul>
+<li>QuerySpec:TableOutput datastruct
+</li>
+</ul>
+
+
+
+
+<pre class="example">class TableOutput
+{
+  String path
+  String serDeClass = "org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe"
+  Properties serDeProps = new Properties()
+  String formatClass = 'org.apache.hadoop.mapred.TextOutputFormat'
+  String recordwriterClass = "org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordWriter"
+  public String toString()
+}
+</pre>
+
+<ul>
+<li>Query;QueryOutput
+</li>
+</ul>
+
+
+
+
+<pre class="example">class QueryOutput
+{
+  ArrayList&lt;OutputColumn&gt; columns = []
+  StructObjectInspector outputOI;
+  SerDe serDe
+  StructObjectInspector processingOI;
+  RecordWriter wrtr
+}
+</pre>
+
+
+<ul>
+<li>Translation hooks:
+<ol>
+<li>validateOutputSpec
+<ul>
+<li>MR: valid serDe, format; no writer
+</li>
+<li>Rest: valid serDe, writer; no outputformat
+</li>
+</ul>
+
+</li>
+<li>getOutputSerDe() : based on QSpec serDeClass
+</li>
+<li>setupOutputWriter()
+<ul>
+<li>not needed in MR mode; but validate formatClass is valid.
+</li>
+</ul>
+
+</li>
+</ol>
+
+</li>
+</ul>
+
+
+</div>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Composite Record mechanics</h2>
+<div class="outline-text-2" id="text-5">
+
+
+</div>
+
+<div id="outline-container-5-1" class="outline-3">
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> Types</h3>
+<div class="outline-text-3" id="text-5-1">
+
+<ul>
+<li>a DataType&lt;T&gt; captures type information about a WritableComparable
+  class
+</li>
+<li>A DataType can be asked to create, cast, clone the type T it represents
+</li>
+<li>It also has a RawComparator and can be asked to raw compare to byte
+  arrays representing instances.
+</li>
+<li>Basic DataTypes are BOOLEAN, BYTE, SHORT, INT, VINT, LONG, VLONG,
+  FLOAT, DOUBLE and TEXT
+</li>
+</ul>
+
+
+</div>
+
+<div id="outline-container-5-1-1" class="outline-4">
+<h4 id="sec-5-1-1"><span class="section-number-4">5.1.1</span> CompositeDataType and CompositeWritable</h4>
+<div class="outline-text-4" id="text-5-1-1">
+
+<ul>
+<li>represents a structure of DataTypes
+</li>
+<li>structs may contain structs
+</li>
+<li>a CompositeDataType can be created from a Hive StructObjectInspector
+</li>
+<li>a CompositeWritable represents an instance of a CompositeDataType struct
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-5-1-2" class="outline-4">
+<h4 id="sec-5-1-2"><span class="section-number-4">5.1.2</span> CompositeSerialization</h4>
+<div class="outline-text-4" id="text-5-1-2">
+
+<ul>
+<li>a CompositeDeserializer casts Writable to the approriate
+  CompositeType before invoking readFields.
+</li>
+<li>Conf parameter "windowing.composite.datatype" specifies the
+  CompositeDataType details. A CompositeDataType instance is
+  instantiated based on the valueof this parameter
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Windowing processing in a MR Job</h2>
+<div class="outline-text-2" id="text-6">
+
+
+</div>
+
+<div id="outline-container-6-1" class="outline-3">
+<h3 id="sec-6-1"><span class="section-number-3">6.1</span> Job definition</h3>
+<div class="outline-text-3" id="text-6-1">
+
+
+</div>
+
+<div id="outline-container-6-1-1" class="outline-4">
+<h4 id="sec-6-1-1"><span class="section-number-4">6.1.1</span> Configure Hive Table as Job Input</h4>
+<div class="outline-text-4" id="text-6-1-1">
+
+<ul>
+<li>get the Hive Table details from the Hive MetaStoreServer
+</li>
+<li>add the StorageDescriptor location as the inputPath for the Job
+</li>
+<li>set the Job's InputFormat class based on the information the StorageDescriptor
+</li>
+<li>set the Job's MapOutputValueClass based on the InputFormat(get it
+  from its RecordReader)
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-6-1-2" class="outline-4">
+<h4 id="sec-6-1-2"><span class="section-number-4">6.1.2</span> Type Information</h4>
+<div class="outline-text-4" id="text-6-1-2">
+
+<ul>
+<li>From the Query's sort &amp; partition columns a ObjectInspector and then
+  a CompositeDataType is constructed. This is added to the Job
+  Conf. The order of the columns is the partition columns followed by
+  the sort columns.
+</li>
+<li>Job "io.serialization" is set to <a href="#sec-5-1-2">CompositeSerialization</a>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-6-1-3" class="outline-4">
+<h4 id="sec-6-1-3"><span class="section-number-4">6.1.3</span> Remaining Parameters</h4>
+<div class="outline-text-4" id="text-6-1-3">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">Param</th><th scope="col" class="left">Value</th><th scope="col" class="left">Notes</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">jar</td><td class="left">windoingJar file</td><td class="left">enables these jobs w/o</td></tr>
+<tr><td class="left"></td><td class="left">specified in the running</td><td class="left">having to add the jar</td></tr>
+<tr><td class="left"></td><td class="left">context</td><td class="left">to the task nodes beforehand.</td></tr>
+<tr><td class="left">OutputValueClass</td><td class="left">Text</td><td class="left">hardcode for now</td></tr>
+<tr><td class="left">MapOutputKeyClass</td><td class="left"><a href="#CompositeWritable">CompositeWritable</a></td><td class="left">used to extract fields in</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">Partition + Sort clause.</td></tr>
+<tr><td class="left">OutputKeyClass</td><td class="left">NullWritable</td><td class="left"></td></tr>
+<tr><td class="left">PartitionerClass</td><td class="left"><a href="#sec-6-2-2">Partitioning</a></td><td class="left">partition only by Part. columns</td></tr>
+<tr><td class="left">OutputKeyComparatorClass</td><td class="left">OutputKeyComparator</td><td class="left"></td></tr>
+<tr><td class="left">OutputValueGroupingComparator</td><td class="left"><a href="#sec-6-2-3">OutputGroupingComparator</a></td><td class="left"></td></tr>
+<tr><td class="left">windowing.input.database</td><td class="left">db set in Qry</td><td class="left">currently always null</td></tr>
+<tr><td class="left">windowing.input.table</td><td class="left">table from Qry</td><td class="left"></td></tr>
+<tr><td class="left">windowing.partition.cols</td><td class="left">from Qry</td><td class="left">represented as comma seperated</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">String</td></tr>
+<tr><td class="left">windowing.sort.cols</td><td class="left">from Qry</td><td class="left">represented as comma sep. String</td></tr>
+<tr><td class="left">windowing.sort.order</td><td class="left">from Qry</td><td class="left">comma sep; ASC/DESC list</td></tr>
+<tr><td class="left">windowing.number.of.partition.columns</td><td class="left">computed from Part. list</td><td class="left"></td></tr>
+<tr><td class="left">windowing.query.string</td><td class="left">the Qry</td><td class="left">currently Qry is reparsed at</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">each Reducer</td></tr>
+<tr><td class="left">windowing.hivequery.temptable</td><td class="left">name of TempTable</td><td class="left">the TT created for the embedded</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">Hive Query.</td></tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6-2" class="outline-3">
+<h3 id="sec-6-2"><span class="section-number-3">6.2</span> Job Execution</h3>
+<div class="outline-text-3" id="text-6-2">
+
+
+</div>
+
+<div id="outline-container-6-2-1" class="outline-4">
+<h4 id="sec-6-2-1"><span class="section-number-4">6.2.1</span> Map Job</h4>
+<div class="outline-text-4" id="text-6-2-1">
+
+<ul>
+<li>On Configure read the sortCols and CompositeDataType from the Conf
+</li>
+<li>Map function: create a CompositeWritable containing the columns from
+  the Partition + Sort lists. Output this CompositeWritable and the
+  input Writable as the Key, Value
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-6-2-2" class="outline-4">
+<h4 id="sec-6-2-2"><span class="section-number-4">6.2.2</span> Partitioning</h4>
+<div class="outline-text-4" id="text-6-2-2">
+
+<ul>
+<li>we want all the rows having the same values for the Partition
+  columns to go to the same reducer.
+</li>
+<li>the Partition class uses the "windowing.number.of.partition.columns"
+  param to only compare based on the p first elems of the
+  CompositeWritable.
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-6-2-3" class="outline-4">
+<h4 id="sec-6-2-3"><span class="section-number-4">6.2.3</span> OutputGroupingComparator</h4>
+<div class="outline-text-4" id="text-6-2-3">
+
+<ul>
+<li>configured to sort rows in a Reduce Partition.
+</li>
+<li>in this case these are sorted based on all the elements in the CompositeWritable.
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-6-2-4" class="outline-4">
+<h4 id="sec-6-2-4"><span class="section-number-4">6.2.4</span> Reduce Job</h4>
+<div class="outline-text-4" id="text-6-2-4">
+
+<ul>
+<li>operates almost identically to the <a href="#sec-2">Default Query Execution</a>
+<ul>
+<li>Partitions are formed manually by creating a Partition object
+</li>
+<li>Output Writables are written to the OutputCollector.
+</li>
+</ul>
+
+</li>
+</ul>
+
+<ul>
+<li id="sec-6-2-4-1">currently the query String is passed in the Job Conf. Hence each Reducer reparses the Query.<br/>
+<ul>
+<li id="sec-6-2-4-1-1"><span class="todo TODO"> TODO</span> pass a translated representation of the Query in the Job.<br/>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> The Language</h2>
+<div class="outline-text-2" id="text-7">
+
+</div>
+
+</div>
+
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Parsing and Translation</h2>
+<div class="outline-text-2" id="text-8">
+
+</div>
+
+</div>
+
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> A Windowing Function</h2>
+<div class="outline-text-2" id="text-9">
+
+</div>
+
+</div>
+
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> Where Clause handling</h2>
+<div class="outline-text-2" id="text-10">
+
+<ul>
+<li>currently where clause is parsed but not translated
+<ul>
+<li>where clause is a Groovy expression
+</li>
+</ul>
+
+</li>
+<li>set it on Query; compile it
+</li>
+<li>in Executor apply where expression to each row and output only rows that eval to true
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> Hive Client</h2>
+<div class="outline-text-2" id="text-11">
+
+<ul>
+<li>WindowingShell has a HiveClient that can execute a Query
+</li>
+<li>2 implementations of HiveClient:
+<ul>
+<li>for tests: connects to HiveServer
+</li>
+<li>in WindowingServer asks Client to execute Query
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> Testing</h2>
+<div class="outline-text-2" id="text-12">
+
+
+</div>
+
+<div id="outline-container-12-1" class="outline-3">
+<h3 id="sec-12-1"><span class="section-number-3">12.1</span> Setup of Census tables</h3>
+<div class="outline-text-3" id="text-12-1">
+
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2012-01-16 21:15:47 PST</p>
+<p class="author">Author: Harish Butani</p>
+<p class="creator">Org version 7.8.03 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>

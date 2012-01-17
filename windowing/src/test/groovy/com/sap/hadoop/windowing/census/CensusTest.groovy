@@ -22,6 +22,7 @@ class CensusTest extends MRBaseTest
 		select county, tract, arealand, r 
 		into path='/tmp/wout' 
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		with serdeproperties('field.delim'=',')
 		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
 	

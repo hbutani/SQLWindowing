@@ -15,7 +15,7 @@ Getting Started
 ==============
 
 MR Mode:
-
+=======
 - download SQLWindowing jar & the jar-with-dependencies
 - copy jar to $HIVE_HOME/lib
 - cp $HIVE_HOME/bin/ext/cli.sh $HIVE_HOME/bin/ext/windowCli.sh
@@ -39,8 +39,38 @@ windowingCli_help () {
 - to run pass -w <jar-with-dependencies> option.
 
 Hive Mode:
+=========
 - download jar-with-dependencies
-- invoke java from Hive Script Transform clause passing the jar in classpath. Use -q option to pass WindowingQuery.
+- Copy jar-with-dependencies to all machines. Say in WINDOWING_LIB_DIR
+for rest of doc assume WINDOWING_LIB_DIR=/tmp
+- In hive session invoke add jar on hive-contrib-0.9.0-SNAPSHOT.jar
+for e.g.:
+add jar /media/MyPassport/hadoop/hive2/hive/build/dist/lib/hive-contrib-0.9.0-SNAPSHOT.jar;
+- Test an Example
+CREATE TABLE windowing_test as
+select p_mfgr,p_name, p_size, r
+from
+(
+from (
+  from part
+  select transform(p_partkey,p_name,p_mfgr,p_brand,p_type,p_size,p_container,p_retailprice,p_comment)
+    ROW FORMAT SERDE 'org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe'
+    RECORDWRITER 'org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordWriter'
+    USING '/bin/cat'
+    as (p_partkey,p_name,p_mfgr,p_brand,p_type,p_size,p_container,p_retailprice,p_comment)
+    ROW FORMAT SERDE 'org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe'
+    RECORDREADER 'org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordReader'
+    DISTRIBUTE BY p_mfgr
+    SORT BY p_mfgr, p_name
+) map_output
+  select transform(p_partkey,p_name,p_mfgr,p_brand,p_type,p_size,p_container,p_retailprice,p_comment)
+    ROW FORMAT SERDE 'org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe'
+    RECORDWRITER 'org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordWriter'
+    USING 'java -Xms512m -Xmx2048m -cp "/tmp/com.sap.hadoop.windowing-0.0.1-SNAPSHOT-jar-with-dependencies.jar" com.sap.hadoop.windowing.WindowingDriver -m hive -q "from tableinput(columns = \'p_partkey,p_name,p_mfgr,p_brand,p_type,p_size,p_container,p_retailprice,p_comment\', \'columns.types\' = \'int,string,string,string,string,int,string,double,string\' ) partition by p_mfgr order by p_mfgr, p_name with rank() as r select p_mfgr,p_name, p_size, r"'
+as (p_mfgr,p_name, p_size, r)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe'
+RECORDREADER 'org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordReader'
+) reduce_output;
 
 
 Requirements

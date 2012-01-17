@@ -14,6 +14,35 @@ Details at https://github.com/hbutani/SQLWindowing/blob/master/docs/Windowing.pd
 Getting Started
 ==============
 
+MR Mode:
+
+- download SQLWindowing jar & the jar-with-dependencies
+- copy jar to $HIVE_HOME/lib
+- cp $HIVE_HOME/bin/ext/cli.sh $HIVE_HOME/bin/ext/windowCli.sh
+- edit windowCli.sh; change to
+THISSERVICE=windowingCli
+export SERVICE_LIST="${SERVICE_LIST}${THISSERVICE} "
+
+windowingCli () {
+  CLASS=com.sap.hadoop.windowing.WindowingHiveCliDriver
+  if $cygwin; then
+    HIVE_LIB=`cygpath -w "$HIVE_LIB"`
+  fi
+  JAR=${HIVE_LIB}/com.sap.hadoop.windowing-*.jar
+  exec $HADOOP jar $JAR $CLASS "$@"
+}
+
+windowingCli_help () {
+  windowingCli "--help"
+} 
+
+- to run pass -w <jar-with-dependencies> option.
+
+Hive Mode:
+- download jar-with-dependencies
+- invoke java from Hive Script Transform clause passing the jar in classpath. Use -q option to pass WindowingQuery.
+
+
 Requirements
 ============
 

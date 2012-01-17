@@ -1,0 +1,62 @@
+digraph G {
+	size ="6 6";
+	nodesep=.2;
+	rankdir=LR;
+	ranksep=.25;
+	node [shape=record];
+	compound=true;
+
+	{
+	subgraph cluster1 {
+		//node [style=filled,color=white];
+		//style=filled;
+		//color=lightgrey;
+		cat;
+	};
+
+	subgraph cluster0 {
+		//color=lightgrey;
+		style=bold;
+		label = "Hive"; fontsize=24;
+		input[shape=record,label="Input\nTable|Split 1|...|Splitn"];
+		maptask[label="Map Task1|..|Map Taskn", shape=record];
+		maprcdwrtr[label="Record\nWriter"]
+		maprcdrdr[label="Record\nReader"]
+		shuffle[label="Shuffle|Part. 1|Part2|...|Part. n"]
+		reducetask[label="Reduce Task1|...|ReduceTaskn"];
+		reducercdwrtr[label="Record\nWriter"]
+		reducercdrdr[label="Record\nReader"]
+		output[label="Output\nTable|Part. 1|...|Part. n"];
+	};
+
+	subgraph cluster2 {
+		//color=lightgrey;
+		style=bold;
+		label = "Windowing Driver (Reduce) "; fontsize=24;
+		rinputThrd[label="Record\nReader"];
+		rprocessThrd[label="Processor"];
+		rwdrcdwrtr[label="Record\nWriter"]
+		rinputThrd -> rprocessThrd;
+		rprocessThrd -> rwdrcdwrtr;
+	};
+
+	};
+
+	input -> maptask [label="1"];
+	maptask -> maprcdwrtr[label="2"];
+	maprcdwrtr -> cat [lhead=cluster1,label="3"];
+	cat -> maprcdrdr[label="4"];
+	maprcdrdr -> shuffle[label="5"];
+	shuffle -> reducetask[label="6"];
+	reducetask -> reducercdwrtr[label="7"];
+	reducercdwrtr -> rinputThrd[label="8"];
+	rwdrcdwrtr -> reducercdrdr[label="9"];
+	reducercdrdr -> output[label="10"];
+
+	//{rank=min; input}
+	{rank=same; maprcdwrtr; maprcdrdr;}
+	{rank=same; cat; input;}
+	//{rank=same; reducercdwrtr; reducetask;}
+	//{rank=same; rinputThrd; rprocessThrd; rwdrcdwrtr}
+	
+}

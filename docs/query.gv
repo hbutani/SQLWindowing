@@ -1,0 +1,47 @@
+digraph G {
+	size ="6 6";
+	nodesep=.2;
+	//rankdir=LR;
+	ranksep=.25;
+	node [shape=record];
+	compound=true;
+
+
+	queryStr[label="Query String"];
+	parser[label="Parser"];
+	translator[label="Translator"];
+	wi[label="Windowing Input"];
+
+	subgraph cluster0 {
+		//color=lightgrey;
+		style=bold;
+		label = "Executor"; fontsize=24;
+		partitioner[label="Partitioner"];
+		partitions[label="{<phead> Partition 1..n|row 1|...|row n}"];
+		functions[shape=record,label="<f1> Function 1|<f2> Function 2|...|<fn> Function n"];
+		output[label="{Output|row 1|...|row n}"]
+		f1out[label="{Function1 \n Output|row 1|...|row n}"]
+		f2out[label="{Function2 \n Output|row 1|...|row n}"]
+		fnout[label="{Functionn \n Output|row 1|...|row n}"]
+		where[label="Where Filtering"]
+		partitioner -> partitions;
+		partitions -> functions:f1;
+		partitions -> functions:f2;
+		partitions -> functions:fn;
+		functions:f1 -> f1out;
+		functions:f2 -> f2out;
+		functions:fn -> fnout;
+		f1out -> output; f2out -> output; fnout -> output; partitions -> output;
+		output -> where;
+		{rank=same; partitioner; partitions; }
+		{rank=same; output; where;}
+	}
+
+	wo[label="Windowing Output"];
+
+	queryStr -> parser;
+	parser -> translator [label="Query Spec"];
+	translator -> partitioner [label = "Query", lhead=cluster0];
+	wi -> partitioner;
+	where -> wo;
+}

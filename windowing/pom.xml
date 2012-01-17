@@ -8,7 +8,27 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <build>
     <plugins>
 	<plugin>
-
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+              <archive>
+                    <manifest>
+                      <addClasspath>true</addClasspath>
+                      <mainClass>com.sap.hadoop.windowing.WindowingDriver</mainClass>
+                    </manifest>
+              </archive>
+            </configuration>
+            </plugin>
+            <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+              <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
+            </configuration>
+    </plugin>
+	<plugin>
 		<groupId>org.antlr</groupId>
 		<artifactId>antlr3-maven-plugin</artifactId>
 		<version>3.3</version>
@@ -92,6 +112,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-all</artifactId>
       <version>1.8.0</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -109,36 +130,43 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 		<groupId>org.apache.hadoop.hive</groupId>
 		<artifactId>hive-serde</artifactId>
 		<version>0.7.1-cdh3u1</version>
+	    <scope>provided</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.apache.hadoop.hive</groupId>
 		<artifactId>hive-exec</artifactId>
 		<version>0.7.1-cdh3u1</version>
+	    <scope>provided</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.apache.hadoop.hive</groupId>
 		<artifactId>hive-contrib</artifactId>
 		<version>0.7.1-cdh3u1</version>
+	    <scope>provided</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.apache.hadoop.hive</groupId>
 		<artifactId>hive-metastore</artifactId>
 		<version>0.7.1-cdh3u1</version>
+	    <scope>provided</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.apache.hadoop</groupId>
 		<artifactId>hadoop-core</artifactId>
 		<version>0.20.2-cdh3u1</version>
+	    <scope>provided</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.slf4j</groupId>
 		<artifactId>slf4j-api</artifactId>
 		<version>1.6.4</version>
+	    <scope>provided</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.apache.hadoop.hive</groupId>
 		<artifactId>hive-cli</artifactId>
 		<version>0.7.1-cdh3u1</version>
+	    <scope>provided</scope>
 	</dependency>
   </dependencies>
   <repositories>

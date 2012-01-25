@@ -12,6 +12,7 @@ class Partition
 	private ArrayList elems;
 	InputObj pObj
 	def partitionColumnFields
+	private ArrayList partitionFieldVals = []
 	
 	Partition(ObjectInspector OI, ObjectInspector standardOI, partitionColumnFields)
 	{
@@ -40,10 +41,19 @@ class Partition
 	}
 	boolean belongs(o)
 	{
-		if (! elems) return true
+		if (! elems) 
+		{
+			for(k in partitionColumnFields)
+			{
+				def eval = standardOI.getStructFieldData(o, k)
+				partitionFieldVals << eval
+			}
+			return true
+		}
+		int i = 0
 		for(k in partitionColumnFields)
 		{
-			def eval = standardOI.getStructFieldData(elems[0], k)
+			def eval = partitionFieldVals[i++]
 			def val = standardOI.getStructFieldData(o, k)
 			if ( (eval == null && val == null ) || (eval != val ) )
 				return false

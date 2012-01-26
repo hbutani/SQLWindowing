@@ -80,12 +80,10 @@ public class Reduce extends MapReduceBase implements Reducer<Writable, Writable,
 		}
 		
 		orow.resultMap = [:]
-		com.sap.hadoop.windowing.runtime.Partition p = new com.sap.hadoop.windowing.runtime.Partition(
-			qryIn.inputOI, qryIn.processingOI, partitionColumnFields)
+		com.sap.hadoop.windowing.runtime.Partition p = new com.sap.hadoop.windowing.runtime.Partition(qryIn.wInput, qryIn.inputOI, qryIn.deserializer, partitionColumnFields)
 		while(values.hasNext())
 		{
-			p << ObjectInspectorUtils.copyToStandardObject(qryIn.deserializer.deserialize(values.next()), 
-				qryIn.inputOI, ObjectInspectorCopyOption.JAVA)
+			p << values.next()
 		}
 		orow.p = p
 		orow.resultMap.clear()

@@ -31,7 +31,15 @@ class MRWindowingInput implements WindowingInput
 
 	Writable createRow() throws IOException 
 	{
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
+		try
+		{
+			return serDe.getSerializedClass().newInstance();
+		}
+		catch(Throwable t)
+		{
+			throw new IOException(t);
+		}
 	}
 
 	/**

@@ -1,23 +1,44 @@
 package com.sap.hadoop.windowing.runtime
 
+import groovy.lang.Binding;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
+import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
+import org.apache.hadoop.io.Writable
 
+import com.sap.hadoop.ds.list.ByteBasedList;
+import com.sap.hadoop.windowing.io.WindowingInput;
+
+/**
+ * A Partition is a container of all input rows.
+ * Input rows are held as Writables. Partition returns rows as {@link InputObj} which is a Groovy Binding that 
+ * converts fields to Java values on demand.
+ *
+ */
 class Partition 
 {
-	StructObjectInspector standardOI;
-	private ArrayList elems;
+	StructObjectInspector inputOI;
+	Deserializer deserializer
+	WindowingInput wInput
+	ByteBasedList elems;
 	InputObj pObj
-	def partitionColumnFields
+	ArrayList<StructField> partitionColumnFields
 	private ArrayList partitionFieldVals = []
 	
-	Partition(ObjectInspector OI, ObjectInspector standardOI, partitionColumnFields)
+	Partition(WindowingInput wInput, ObjectInspector inputOI, Deserializer deserializer, 
+		ArrayList<StructField> partitionColumnFields)
 	{
-		this.standardOI = standardOI
-		this.elems = []
+		this.wInput = wInput
+		this.inputOI = inputOI
+		this.deserializer = deserializer
+		this.elems = new ByteBasedList(0, ByteBasedList.LARGE_SIZE)
 		this.partitionColumnFields = partitionColumnFields
 		pObj = new InputObj(p: this)
 	}
@@ -27,25 +48,22 @@ class Partition
 		pObj.idx = i
 		return pObj
 	}
-	def leftShift(o)
+	
+	def leftShift(Writable o)
 	{
-//		def jo = ObjectInspectorUtils.copyToStandardObject(o, OI, ObjectInspectorCopyOption.JAVA)
-//			StructObjectInspector soi = (StructObjectInspector) OI
-//			List<? extends StructField> fields = soi.getAllStructFieldRefs();
-//			ArrayList<Object> struct = new ArrayList<Object>(fields.size());
-//			for (StructField f : fields) {
-//				println soi.getStructFieldData(o, f)
-//			}
-//		println jo
-		elems << o
+		elems.append(o);
 	}
-	boolean belongs(o)
+
+	boolean belongs(Writable o)
 	{
-		if (! elems) 
+		if ( o == null )
+			return false;
+		TmpInputObj t = new TmpInputObj(this, o)
+		if (elems.size() == 0) 
 		{
 			for(k in partitionColumnFields)
 			{
-				def eval = standardOI.getStructFieldData(o, k)
+				def eval = t[k.fieldName]
 				partitionFieldVals << eval
 			}
 			return true
@@ -54,7 +72,7 @@ class Partition
 		for(k in partitionColumnFields)
 		{
 			def eval = partitionFieldVals[i++]
-			def val = standardOI.getStructFieldData(o, k)
+			def val = t[k.fieldName]
 			if ( (eval == null && val == null ) || (eval != val ) )
 				return false
 		}
@@ -79,5 +97,42 @@ class PItr implements Iterator
 	boolean hasNext() { return idx < p.size(); }
 	def next() { return p[idx++]; }
 	void remove() { throw new UnsupportedOperationException() }
+}
+
+class TmpInputObj extends Binding
+{
+	Partition p
+	Object o
+	
+	TmpInputObj(Partition p, Writable wObj)
+	{
+		this.p = p
+		this.wObj = wObj
+		o = p.deserializer.deserialize(wObj)
+	}
+	
+	def getVariable(String name)
+	{
+		try
+		{
+			StructField fRef = p.inputOI.getStructFieldRef(name)
+			if (fRef)
+			{
+				Object val = p.inputOI.getStructFieldData(o, fRef)
+				ObjectInspector oi = fRef.getFieldObjectInspector()
+				if (oi.getCategory() == Category.PRIMITIVE )
+				{
+					return ((PrimitiveObjectInspector)oi).getPrimitiveJavaObject(val)
+				}
+				return val
+			}
+			else
+				return super.getVariable(name)
+		}
+		catch(Throwable t)
+		{
+			throw t
+		}
+	}	
 }
 

@@ -85,9 +85,9 @@ abstract class Translator
 	{
 		QueryInput qryIn = qry.input
 		QuerySpec qSpec = qry.qSpec
-		StructObjectInspector processingOI = qryIn.processingOI
+		StructObjectInspector inputOI = qryIn.inputOI
 		Map<String, Column> fieldMap = [:]
-		for(StructField f in processingOI.allStructFieldRefs)
+		for(StructField f in inputOI.allStructFieldRefs)
 		{
 			Column c = new Column(field: f)
 			fieldMap[c.name] = c

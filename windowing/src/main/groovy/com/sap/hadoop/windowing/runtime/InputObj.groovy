@@ -1,34 +1,48 @@
 package com.sap.hadoop.windowing.runtime
 
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
+import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.StructField;
+import org.apache.hadoop.io.Writable
 import groovy.lang.Binding;
 
 class InputObj extends Binding
 {
 	Partition p
 	int idx
+	Writable wObj
 	
 	def getVariable(String name)
 	{
+		Object o = p.deserializer.deserialize(wObj)
 		try
 		{
-			def fRef = p.standardOI.getStructFieldRef(name)
+			StructField fRef = p.inputOI.getStructFieldRef(name)
 			if (fRef)
-				return p.standardOI.getStructFieldData(p.elems[idx], fRef)
-				else
+			{
+				Object val = p.inputOI.getStructFieldData(o, fRef)
+				ObjectInspector oi = fRef.getFieldObjectInspector()
+				if (oi.getCategory() == Category.PRIMITIVE )
+				{
+					return ((PrimitiveObjectInspector)oi).getPrimitiveJavaObject(val)
+				}
+				return val
+			}
+			else
 				return super.getVariable(name)
 		}
 		catch(Throwable t)
 		{
-//			printf("%s, %s\n", name, name.class)
-//			def fl =  p.standardOI.allStructFieldRefs.fieldName
-//			println fl
-//			println name in fl
-//			println fl[1].class
-//			println fl[1]
-//			println fl[1].equals("movie_name")
-//			t.printStackTrace()
 			throw t
 		}
+	}
+	
+	def setIdx(int i)
+	{
+		idx = i
+		wObj = p.wInput.createRow()
+		p.elems.get(i, wObj)
 	}
 	
 }

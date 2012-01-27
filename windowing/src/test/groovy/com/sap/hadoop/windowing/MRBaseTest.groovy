@@ -25,7 +25,7 @@ abstract class MRBaseTest
 	{
 		outStream = new ByteArrayOutputStream()
 		
-		Configuration conf = WORK_LOCALMR();
+		Configuration conf = HOME();
 		
 		wshell = new WindowingShell(conf, new MRTranslator(), 
 			new MRExecutor())
@@ -48,6 +48,7 @@ abstract class MRBaseTest
 		//conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
 		conf.set("windowing.jar.file", "e:/windowing/windowing.jar");
+		conf.set(" mapred.reduce.tasks", "8");
 		
 		conf.set(Constants.HIVE_THRIFTSERVER, "hbserver7.dhcp.pal.sap.corp")
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
@@ -65,6 +66,7 @@ abstract class MRBaseTest
 		//conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
 		conf.set("windowing.jar.file", "/media/MyPassport/windowing/windowing.jar");
+		conf.set(" mapred.reduce.tasks", "4");
 		
 		conf.set(Constants.HIVE_THRIFTSERVER, "localhost")
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)

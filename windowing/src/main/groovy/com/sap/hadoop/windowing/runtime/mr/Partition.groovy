@@ -19,7 +19,7 @@ class Partition implements Partitioner<CompositeWritable, org.apache.hadoop.io.W
 		{
 			result = prime * result + elems[i].hashCode();
 		}
-		return result % numPartitions;
+		return Math.abs(result) % numPartitions;
 	}
 
 	@Override

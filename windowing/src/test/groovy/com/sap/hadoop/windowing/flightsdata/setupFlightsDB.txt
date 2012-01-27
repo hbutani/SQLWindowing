@@ -1,0 +1,84 @@
+- Download data from http://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236&DB_Short_Name=On-Time
+- I checked everything except 'Gate Return Information at Origin Airport', and 'Diverted Airport Information' sections
+- create a table (see below) 
+- cleanup the downloaded csvs (see below)
+
+Schema:
+
+-- the downloaded files contain 2 extra fields, marked as unknown1 and unknown2 in the table definition.
+create table flightsdata (
+YEAR int,
+QUARTER int,
+MONTH int,
+DAY_OF_MONTH int,
+DAY_OF_WEEK int,
+FL_DATE string,
+UNIQUE_CARRIER string,
+AIRLINE_ID int,
+CARRIER string,
+TAIL_NUM string,
+FL_NUM string,
+ORIGIN_AIRPORT_ID int,
+ORIGIN_AIRPORT_SEQ_ID int,
+ORIGIN_CITY_MARKET_ID int,
+ORIGIN string,
+ORIGIN_CITY_NAME string,
+ORIGIN_STATE_ABR string,
+ORIGIN_STATE_FIPS string,
+unknown1 string,
+ORIGIN_STATE_NM string,
+ORIGIN_WAC int,
+DEST_AIRPORT_ID int,
+DEST_AIRPORT_SEQ_ID int,
+DEST_CITY_MARKET_ID int,
+DEST string,
+DEST_CITY_NAME string,
+DEST_STATE_ABR string,
+DEST_STATE_FIPS string,
+unknown2 string,
+DEST_STATE_NM string,
+DEST_WAC int,
+CRS_DEP_TIME string,
+DEP_TIME string,
+DEP_DELAY float,
+DEP_DELAY_NEW float,
+DEP_DEL15 float,
+DEP_DELAY_GROUP int,
+DEP_TIME_BLK string,
+TAXI_OUT float,
+WHEELS_OFF string,
+WHEELS_ON string,
+TAXI_IN float,
+CRS_ARR_TIME string,
+ARR_TIME string,
+ARR_DELAY float,
+ARR_DELAY_NEW float,
+ARR_DEL15 float,
+ARR_DELAY_GROUP int,
+ARR_TIME_BLK string,
+CANCELLED float,
+CANCELLATION_CODE string,
+DIVERTED float,
+CRS_ELAPSED_TIME float,
+ACTUAL_ELAPSED_TIME float,
+AIR_TIME float,
+FLIGHTS float,
+DISTANCE float,
+DISTANCE_GROUP int,
+CARRIER_DELAY string,
+WEATHER_DELAY string,
+NAS_DELAY string,
+SECURITY_DELAY string,
+LATE_AIRCRAFT_DELAY string )
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+;
+
+Cleanup files:
+- remove first line
+- sed -i s/.$// ritadec10-orig.csv
+- sed -i s/\"//g ritadec10.csv  > ritadec102.csv
+
+load data local inpath '/tmp/ritajan11.csv' overwrite into table flightsdata;
+load data local inpath '/tmp/ritadec10.csv' into table flightsdata;
+load data local inpath '/tmp/ritanov10.csv' into table flightsdata;
+load data local inpath '/tmp/ritaoct10.csv' into table flightsdata;

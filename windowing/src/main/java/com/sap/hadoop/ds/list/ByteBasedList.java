@@ -41,7 +41,7 @@ public class ByteBasedList
 	
 	int currentSize;
 	ReentrantReadWriteLock lock;
-	long lastModified;
+	volatile long lastModified;
 	
 	
 	public ByteBasedList(int startOffset, int capacity)
@@ -87,9 +87,9 @@ public class ByteBasedList
 	{
 		int j = i - startOffset;
 		j = j << 1;
-		if ( i > currentSize )
+		if ( j >  2 * currentSize )
 		{
-			throw new BaseException(sprintf("index invalid %i", i));
+			throw new BaseException(sprintf("index invalid %d", i));
 		}
 		return j;
 	}
@@ -190,7 +190,7 @@ public class ByteBasedList
 	
 	public Iterator<Writable> iterator(Writable wObj) throws BaseException
 	{
-		return new WIterator(wObj); 
+		return new WIterator(wObj, startOffset); 
 	}
 	
 	public Iterator<Object> iterator(Deserializer deserializer, Writable wObj)  throws BaseException
@@ -227,11 +227,11 @@ public class ByteBasedList
 		long checkTime;
 		int i;
 		
-		WIterator(Writable wObj)
+		WIterator(Writable wObj, int offset)
 		{
 			this.wObj = wObj;
 			checkTime = lastModified;
-			i = 0;
+			i = offset;
 		}
 
 		@Override
@@ -328,10 +328,8 @@ public class ByteBasedList
 	
 	private static final int INCREMENT_SIZE = (int) Math.pow(2, 16); 
 	
-	@SuppressWarnings("unused")
-	private static final int SMALL_SIZE =  (int) Math.pow(2, 6 +10);           // 64KB
-	private static final int MEDIAN_SIZE = (int) Math.pow(2, (10 + 10));            // 1 MB
-	@SuppressWarnings("unused")
-	private static final int LARGE_SIZE = (int) Math.pow(2, (6 + 10 + 10));         // 64 MB
+	static final int SMALL_SIZE =  (int) Math.pow(2, 6 +10);                // 64KB
+	static final int MEDIAN_SIZE = (int) Math.pow(2, (10 + 10));            // 1 MB
+	static final int LARGE_SIZE = (int) Math.pow(2, (6 + 10 + 10));         // 64 MB
 
 }

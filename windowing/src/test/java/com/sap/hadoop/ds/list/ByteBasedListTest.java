@@ -1,4 +1,4 @@
-package com.sap.hadoop;
+package com.sap.hadoop.ds.list;
 
 import java.util.Iterator;
 
@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.sap.hadoop.Utils;
 import com.sap.hadoop.ds.BaseException;
 import com.sap.hadoop.ds.list.ByteBasedList;
 
@@ -80,7 +81,7 @@ public class ByteBasedListTest
 	}
 	
 	
-	private static final String[] table = new String[] {
+	static final String[] table = new String[] {
 		"Manufacturer#1,2,2",
 		"Manufacturer#1,2,34",
 		"Manufacturer#1,34,6",

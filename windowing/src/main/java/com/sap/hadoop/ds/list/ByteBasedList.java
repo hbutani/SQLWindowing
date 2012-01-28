@@ -1,5 +1,6 @@
 package com.sap.hadoop.ds.list;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -57,6 +58,14 @@ public class ByteBasedList
 	public ByteBasedList()
 	{
 		this(0, MEDIAN_SIZE);
+	}
+	
+	/*
+	 * internal api; used by {@link PersistentByteBasedList} to setup BBList from a file.
+	 */
+	protected ByteBasedList(File file)
+	{
+		lock = new ReentrantReadWriteLock();
 	}
 	
 	private void ensureCapacity(int wlen) throws ListFullException
@@ -179,17 +188,17 @@ public class ByteBasedList
 		}
 	}
 	
-	public Iterator<Writable> iterator(Writable wObj)
+	public Iterator<Writable> iterator(Writable wObj) throws BaseException
 	{
 		return new WIterator(wObj); 
 	}
 	
-	public Iterator<Object> iterator(Deserializer deserializer, Writable wObj)
+	public Iterator<Object> iterator(Deserializer deserializer, Writable wObj)  throws BaseException
 	{
 		return new OIterator(deserializer, wObj); 
 	}
 	
-	public void dump(StringBuilder bldr, Writable wObj) throws IOException
+	public void dump(StringBuilder bldr, Writable wObj) throws IOException, BaseException
 	{
 		bldr.append("[");
 		Iterator<Writable> wi = iterator(wObj);
@@ -201,7 +210,7 @@ public class ByteBasedList
 		bldr.append("]\n");
 	}
 	
-	public void dump(StringBuilder bldr, Deserializer deserializer, Writable wObj) throws IOException
+	public void dump(StringBuilder bldr, Deserializer deserializer, Writable wObj) throws IOException, BaseException
 	{
 		bldr.append("[");
 		Iterator<Object> oi = iterator(deserializer, wObj);
@@ -259,7 +268,7 @@ public class ByteBasedList
 		Deserializer deserializer;
 		Iterator<Writable> wi;
 		
-		OIterator(Deserializer deserializer, Writable wObj)
+		OIterator(Deserializer deserializer, Writable wObj) throws BaseException
 		{
 			wi = iterator(wObj);
 			this.deserializer = deserializer;

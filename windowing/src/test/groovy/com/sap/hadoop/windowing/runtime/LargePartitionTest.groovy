@@ -2,11 +2,31 @@ package com.sap.hadoop.windowing.runtime;
 
 import static org.junit.Assert.*;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.apache.hadoop.conf.Configuration;
 
+import com.sap.hadoop.ds.list.ByteBasedList;
+import com.sap.hadoop.windowing.query.LocalTranslator;
+import com.sap.hadoop.windowing.runtime.Mode;
+import com.sap.hadoop.windowing.runtime.TestExecutor;
+import com.sap.hadoop.windowing.runtime.WindowingShell;
 import com.sap.hadoop.windowing.BaseTest;
+import com.sap.hadoop.windowing.Constants;
 
-class LargePartitionTest extends BaseTest {
+class LargePartitionTest extends BaseTest 
+{
+	@BeforeClass
+	public static void setupClass()
+	{
+		outStream = new ByteArrayOutputStream()
+		Configuration cfg = new Configuration()
+		cfg.setInt(Constants.WINDOW_PARTITION_MEM_SIZE, ByteBasedList.LARGE_SIZE);
+		wshell = new WindowingShell(cfg, new LocalTranslator(), new TestExecutor(out : new PrintStream(outStream)))
+	}
+
 	@Test
 	void testLag() {
 		wshell.execute("""

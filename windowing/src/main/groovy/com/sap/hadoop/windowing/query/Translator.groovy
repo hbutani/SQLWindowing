@@ -1,6 +1,8 @@
 package com.sap.hadoop.windowing.query
 
 import groovy.lang.GroovyShell;
+
+import com.sap.hadoop.ds.list.ByteBasedList;
 import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import org.antlr.runtime.tree.CommonTree;
@@ -41,6 +43,9 @@ abstract class Translator
 		setupWindowFunctions(wshell, qry)
 		setupOutput(qry)
 		setupWhereClause(qry)
+		
+		qry.partitionMemSize = cfg.getInt(Constants.WINDOW_PARTITION_MEM_SIZE, ByteBasedList.MEDIUM_SIZE);
+		
 		return qry
 	}
 	

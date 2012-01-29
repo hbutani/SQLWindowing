@@ -34,12 +34,12 @@ class Partition
 	private ArrayList partitionFieldVals = []
 	
 	Partition(WindowingInput wInput, ObjectInspector inputOI, Deserializer deserializer, 
-		ArrayList<StructField> partitionColumnFields)
+		ArrayList<StructField> partitionColumnFields, int partitionMemSize)
 	{
 		this.wInput = wInput
 		this.inputOI = inputOI
 		this.deserializer = deserializer
-		this.elems = new PartitionedByteBasedList(ByteBasedList.MEDIUM_SIZE)
+		this.elems = new PartitionedByteBasedList(partitionMemSize)
 		this.partitionColumnFields = partitionColumnFields
 		pObj = new InputObj(p: this)
 	}

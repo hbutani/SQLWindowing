@@ -16,4 +16,6 @@ public class Constants
 	
 	public static final String HIVE_THRIFTSERVER = "com.sap.hadoop.windowing.hivethriftserver";
 	public static final String HIVE_THRIFTSERVER_PORT = "com.sap.hadoop.windowing.hivethriftserver.port";
+	
+	public static final String WINDOW_PARTITION_MEM_SIZE = "com.sap.hadoop.windowing.partition.memory.size";
 }

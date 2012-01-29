@@ -14,6 +14,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.io.Writable
 
 import com.sap.hadoop.ds.list.ByteBasedList;
+import com.sap.hadoop.ds.list.PartitionedByteBasedList;
 import com.sap.hadoop.windowing.io.WindowingInput;
 
 /**
@@ -38,7 +39,7 @@ class Partition
 		this.wInput = wInput
 		this.inputOI = inputOI
 		this.deserializer = deserializer
-		this.elems = new ByteBasedList(0, ByteBasedList.LARGE_SIZE)
+		this.elems = new PartitionedByteBasedList(ByteBasedList.MEDIUM_SIZE)
 		this.partitionColumnFields = partitionColumnFields
 		pObj = new InputObj(p: this)
 	}

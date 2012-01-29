@@ -57,7 +57,7 @@ public class ByteBasedList
 	
 	public ByteBasedList()
 	{
-		this(0, MEDIAN_SIZE);
+		this(0, MEDIUM_SIZE);
 	}
 	
 	/*
@@ -75,9 +75,9 @@ public class ByteBasedList
 			throw new ListFullException();
 		}
 		
-		if (offsetsArray.length == 2 * currentSize)
+		if ( (2 * currentSize + 1) > offsetsArray.length )
 		{
-			int[] na = new int[currentSize + INCREMENT_SIZE];
+			int[] na = new int[offsetsArray.length + INCREMENT_SIZE];
 			System.arraycopy(offsetsArray, 0, na, 0, offsetsArray.length);
 			offsetsArray = na;
 		}
@@ -329,7 +329,7 @@ public class ByteBasedList
 	private static final int INCREMENT_SIZE = (int) Math.pow(2, 16); 
 	
 	static final int SMALL_SIZE =  (int) Math.pow(2, 6 +10);                // 64KB
-	static final int MEDIAN_SIZE = (int) Math.pow(2, (10 + 10));            // 1 MB
+	static final int MEDIUM_SIZE = (int) Math.pow(2, (10 + 10));            // 1 MB
 	static final int LARGE_SIZE = (int) Math.pow(2, (6 + 10 + 10));         // 64 MB
 
 }

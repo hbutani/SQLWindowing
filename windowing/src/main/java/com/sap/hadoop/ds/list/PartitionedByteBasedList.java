@@ -27,18 +27,7 @@ public class PartitionedByteBasedList extends ByteBasedList
 		this.batchSize = batchSize;
 		currentSize = 0;
 		dir = Files.createTempDir();
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run()
-			{
-				try
-				{
-					Files.deleteRecursively(dir);
-				}
-				catch(IOException ie)
-				{
-				}
-			}
-		});
+		Runtime.getRuntime().addShutdownHook(new ShutdownHook(dir));
 		
 		partitions = new ArrayList<ByteBasedList>();
 		partitionOffsets = new ArrayList<Integer>();
@@ -219,6 +208,28 @@ public class PartitionedByteBasedList extends ByteBasedList
 		{
 			throw new UnsupportedOperationException();
 		}
+	}
+	
+	static class ShutdownHook extends Thread
+	{
+		File dir;
+		
+		public ShutdownHook(File dir)
+		{
+			this.dir = dir;
+		}
+		
+		public void run()
+		{
+			try
+			{
+				Files.deleteRecursively(dir);
+			}
+			catch(IOException ie)
+			{
+			}
+		}
+		
 	}
 
 }

@@ -20,5 +20,20 @@ select p_mfgr,p_name, p_size, r
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
+	
+	@Test
+	void testSpacesInHiveQuery()
+	{
+		wshell.execute("""
+		from < select p_mfgr, p_name, p_size from part_rc where p_size < 20  >
+		partition by p_mfgr
+		order by p_mfgr, p_name
+		with
+		rank() as r
+select p_mfgr,p_name, p_size, r
+		into path='/tmp/wout'
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+	}
 
 }

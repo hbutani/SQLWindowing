@@ -27,7 +27,7 @@ from tableinput(
 			 recordreaderclass='com.sap.hadoop.windowing.io.TableWindowingInput',
        keyClass='org.apache.hadoop.io.Text', 
        valueClass='org.apache.hadoop.io.Text',
-			 inputPath='$basedir/com/sap/hadoop/windowing/partsmall',
+			 inputPath='$basedir/data/partsmall',
 			 inputformatClass='org.apache.hadoop.mapred.TextInputFormat',
 			 serdeClass='org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe',
 			 columns = 'p_partkey,p_name,p_mfgr,p_brand,p_type,p_size,p_container,p_retailprice,p_comment',
@@ -54,7 +54,7 @@ select p_mfgr,p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, 
 		
 		//print qSpec.toString()
 		assert qSpec.toString() == """Query:
-	tableInput=(windowInputClass=com.sap.hadoop.windowing.io.TableWindowingInput, inputPath=$basedir/com/sap/hadoop/windowing/partsmall, keyClass=org.apache.hadoop.io.Text, valueClass=org.apache.hadoop.io.Text, inputFormatClass=org.apache.hadoop.mapred.TextInputFormat, serDeClass=org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, serDeProps={columns=p_partkey,p_name,p_mfgr,p_brand,p_type,p_size,p_container,p_retailprice,p_comment, columns.types=int,string,string,string,string,int,string,double,string})
+	tableInput=(windowInputClass=com.sap.hadoop.windowing.io.TableWindowingInput, inputPath=$basedir/data/partsmall, keyClass=org.apache.hadoop.io.Text, valueClass=org.apache.hadoop.io.Text, inputFormatClass=org.apache.hadoop.mapred.TextInputFormat, serDeClass=org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, serDeProps={columns=p_partkey,p_name,p_mfgr,p_brand,p_type,p_size,p_container,p_retailprice,p_comment, columns.types=int,string,string,string,string,int,string,double,string})
 	partitionColumns=p_mfgr
 	orderColumns=p_mfgr ASC, p_name ASC
 	funcSpecs=[rank(alias=r, param=[], type=null, window=null),

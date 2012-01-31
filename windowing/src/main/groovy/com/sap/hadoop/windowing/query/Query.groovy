@@ -25,6 +25,7 @@ class Query
 	ArrayList<String> wnAliases
 	QueryOutput output
 	Script whereExpr
+	int partitionMemSize;
 }
 
 /**

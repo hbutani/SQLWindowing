@@ -29,6 +29,7 @@ import com.sap.hadoop.windowing.io.WindowingInput;
 import com.sap.hadoop.windowing.runtime.ArgType;
 import com.sap.hadoop.windowing.runtime.HiveQueryExecutor;
 import com.sap.hadoop.windowing.*;
+import com.sap.hadoop.windowing.functions.WindowingTableFunction;
 
 abstract class Translator
 {
@@ -41,6 +42,7 @@ abstract class Translator
 			cfg : cfg)
 		setupQueryInput(qry, hiveQryExec)
 		setupWindowFunctions(wshell, qry)
+		setupTableFunction(qry)
 		setupOutput(qry)
 		setupWhereClause(qry)
 		
@@ -151,6 +153,12 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 			qry.wnFns << FunctionRegistry.getTranslator(fnSpec).translate(wshell, qry, fnSpec)
 			qry.wnAliases << fnSpec.alias
 		}
+	}
+	
+	void setupTableFunction(Query qry) throws WindowingException
+	{
+		qry.tableFunction = new WindowingTableFunction(qry)
+		qry.inputtableFunction = qry.tableFunction
 	}
 	
 	void setupOutput(Query qry) throws WindowingException

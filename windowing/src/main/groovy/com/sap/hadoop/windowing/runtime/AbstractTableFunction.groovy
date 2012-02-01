@@ -6,9 +6,8 @@ abstract class AbstractTableFunction implements IPartitionIterator
 {
 	IPartitionIterator input;
 	
-	AbstractTableFunction(IPartitionIterator input)
+	AbstractTableFunction()
 	{
-		this.input = input;
 	}
 	
 	boolean hasNext()
@@ -27,6 +26,8 @@ abstract class AbstractTableFunction implements IPartitionIterator
 			throw new RuntimeException(we);
 		}
 	}
+	
+	void remove() { input.remove(); }
 	
 	abstract protected IPartition execute(IPartition inpPart) throws WindowingException;
 }

@@ -19,7 +19,11 @@ import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.QueryInput;
 import com.sap.hadoop.windowing.query.QueryOutput;
 import com.sap.hadoop.windowing.query.QuerySpec;
+import com.sap.hadoop.windowing.runtime.AbstractTableFunction;
+import com.sap.hadoop.windowing.runtime.IPartition;
+import com.sap.hadoop.windowing.runtime.IPartitionIterator;
 import com.sap.hadoop.windowing.runtime.OutputObj;
+import com.sap.hadoop.windowing.runtime.Row;
 import com.sap.hadoop.windowing.runtime.WindowingShell;
 
 public class Reduce extends MapReduceBase implements Reducer<Writable, Writable, Writable, Writable>
@@ -56,52 +60,36 @@ public class Reduce extends MapReduceBase implements Reducer<Writable, Writable,
 	public void reduce(Writable key, Iterator<Writable> values,
 			OutputCollector<Writable, Writable> output, Reporter reporter)
 			throws IOException
-	{
-		/*while(values.hasNext())
-		{
-			output.collect(NullWritable.get(), values.next());
-		}*/
-		
-		QueryInput qryIn = qry.input
-		def windowFns = qry.wnFns
-		def windowFnAliases = qry.wnAliases
+	{		
 		boolean applyWhere = (qry.whereExpr != null)
+		
+		AbstractTableFunction tFunc = qry.tableFunction;
+		AbstractTableFunction inpTFunc = qry.inputtableFunction
+		
+		inpTFunc.input = new MRPartitioner(qry, values, partitionColumnFields)
+		
+		while(tFunc.hasNext())
+		{
+			IPartition p = tFunc.next();
+			Row orow = p.getRowObject();
+			for(OutputColumn oc in qry.output.columns)
+			{
+				orow.bind(oc.groovyExpr)
+			}
 			
-		OutputObj orow = new OutputObj();
-		for(OutputColumn oc in qry.output.columns)
-		{
-			oc.groovyExpr.binding = orow
-			orow.registerFunctions(oc.groovyExpr)
-		}
-		if ( applyWhere )
-		{
-			qry.whereExpr.binding = orow
-			orow.registerFunctions(qry.whereExpr)
-		}
-		
-		orow.resultMap = [:]
-		com.sap.hadoop.windowing.runtime.Partition p = new com.sap.hadoop.windowing.runtime.Partition(qryIn.wInput, 
-			qryIn.inputOI, qryIn.deserializer, partitionColumnFields, qry.partitionMemSize)
-		while(values.hasNext())
-		{
-			p << values.next()
-		}
-		orow.p = p
-		orow.resultMap.clear()
-		for (i in 0..<windowFns.size())
-		{
-			orow.resultMap[windowFnAliases[i]] = windowFns[i].processPartition(p)
-		}
-		
-		for(row in p)
-		{
-			orow.iObj = row
-			if ( !applyWhere || qry.whereExpr.run() )
-				writeOutputRow(orow, qry, output)
+			if ( applyWhere )
+			{
+				orow.bind(qry.whereExpr)
+			}
+			for(r in p)
+			{
+				if ( !applyWhere || qry.whereExpr.run() )
+					writeOutputRow(r, qry, output)
+			}
 		}
 	}
 	
-	void writeOutputRow(OutputObj orow, Query qry, OutputCollector<Writable, Writable> output)
+	void writeOutputRow(Row orow, Query qry, OutputCollector<Writable, Writable> output)
 	{
 		QueryOutput qryOut = qry.output
 		ArrayList o = []
@@ -114,4 +102,41 @@ public class Reduce extends MapReduceBase implements Reducer<Writable, Writable,
 	}
 	
 }
+
+
+class MRPartitioner implements IPartitionIterator
+{
+	Iterator<Writable> values
+	boolean returnedPart
+	Query qry
+	ArrayList<StructField> partitionColumnFields
+	
+	MRPartitioner(Query qry, Iterator<Writable> values, ArrayList<StructField> partitionColumnFields)
+	{
+		this.qry = qry
+		this.values = values
+		this.returnedPart = false
+		this.partitionColumnFields = partitionColumnFields
+	}
+	
+	boolean hasNext()
+	{
+		return !returnedPart
+	}
+	
+	IPartition next()
+	{
+		QueryInput qryIn = qry.input
+		com.sap.hadoop.windowing.runtime.Partition p = new com.sap.hadoop.windowing.runtime.Partition(qryIn.wInput,
+			qryIn.inputOI, qryIn.deserializer, partitionColumnFields, qry.partitionMemSize)
+		while(values.hasNext())
+		{
+			p << values.next()
+		}
+		returnedPart = true
+		return p
+	}
+	void remove() { throw new UnsupportedOperationException() }
+}
+
 

@@ -13,14 +13,13 @@ import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.runtime.IPartition;
 
 
-abstract class WindowingTableFunction extends AbstractTableFunction
+class WindowingTableFunction extends AbstractTableFunction
 {
 	ArrayList<IWindowFunction> wnFns
 	ArrayList<String> wnAliases
 	
 	WindowingTableFunction(Query qry)
 	{
-		super(new Partitioner(qry))
 		wnFns = qry.wnFns
 		wnAliases = qry.wnAliases
 	}

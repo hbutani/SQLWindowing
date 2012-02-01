@@ -1,10 +1,9 @@
 package com.sap.hadoop.windowing.runtime
 
+import groovy.lang.Script;
 import groovy.lang.Binding;
-
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
@@ -18,12 +17,56 @@ import com.sap.hadoop.ds.list.PartitionedByteBasedList;
 import com.sap.hadoop.windowing.io.WindowingInput;
 
 /**
- * A Partition is a container of all input rows.
+ * represents a row in a partition.
+ * @author harish.butani
+ *
+ */
+class Row extends Binding
+{
+	void bind(Script sc)
+	{
+		sc.binding = this;
+		registerFunctions(sc);
+	}
+	
+	void registerFunctions(Script sc) {}
+}
+
+/**
+* A Partition is a container of all rows.
+*/
+abstract class IPartition implements Iterable<Row>
+{
+	abstract Row getAt(i); 
+	abstract int size();
+	abstract Row getRowObject();
+	Iterator<Row> iterator() { return new PItr(this); }
+}
+
+class PItr implements Iterator<Row>
+{
+	IPartition p
+	int idx
+	
+	PItr(p)
+	{
+		this.p = p;
+		idx = 0
+	}
+	
+	boolean hasNext() { return idx < p.size(); }
+	Row next() { return p[idx++]; }
+	void remove() { throw new UnsupportedOperationException() }
+}
+
+
+/**
+ * A Partition for the input from a WindowingInput.
  * Input rows are held as Writables. Partition returns rows as {@link InputObj} which is a Groovy Binding that 
  * converts fields to Java values on demand.
  *
  */
-class Partition 
+class Partition extends IPartition
 {
 	StructObjectInspector inputOI;
 	Deserializer deserializer
@@ -44,7 +87,7 @@ class Partition
 		pObj = new InputObj(p: this)
 	}
 	
-	def getAt(i) 
+	Row getAt(i) 
 	{ 
 		pObj.idx = i
 		return pObj
@@ -79,25 +122,9 @@ class Partition
 		}
 		return true;
 	}
-	def iterator() { return new PItr(this); }
 	
-	def size() { return elems.size() }
-}
-
-class PItr implements Iterator
-{
-	Partition p
-	int idx
-	
-	PItr(p) 
-	{ 
-		this.p = p; 
-		idx = 0
-	}
-	
-	boolean hasNext() { return idx < p.size(); }
-	def next() { return p[idx++]; }
-	void remove() { throw new UnsupportedOperationException() }
+	int size() { return elems.size() }
+	Row getRowObject() { return pObj; }
 }
 
 class TmpInputObj extends Binding

@@ -47,7 +47,7 @@ class LargePartitionTest extends BaseTest
 	select c""")
 
 		String r = outStream.toString()
-		//r = r.replace("\r\n", "\n")
+		r = r.replace("\r\n", "\n")
 		String[] rows = r.split("\\n")
 		assert rows[0] == "[1000000]"
 	}

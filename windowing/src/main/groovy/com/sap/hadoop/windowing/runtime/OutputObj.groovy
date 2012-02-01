@@ -81,24 +81,3 @@ class OutputObj extends Row
 	}
 }
 
-class OutputPartition extends IPartition
-{
-	Partition inputPartition
-	OutputObj outObj
-	
-	OutputPartition(Partition p)
-	{
-		inputPartition = p
-		outObj = new OutputObj();
-	}
-	
-	Row getAt(i)
-	{
-		outObj.iObj = inputPartition[i];
-		return outObj;
-	}
-	int size() { return inputPartition.size();}
-	Row getRowObject() { return outObj; }
-}
-
-

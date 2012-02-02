@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:46:29 com\\sap\\hadoop\\windowing\\parser\\Windowing.g 2012-02-01 16:39:19
+// $ANTLR 3.3 Nov 30, 2010 12:46:29 com\\sap\\hadoop\\windowing\\parser\\Windowing.g 2012-02-01 17:57:16
 
 package com.sap.hadoop.windowing.parser;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class WindowingLexer extends Lexer {
     public static final int EOF=-1;
-    public static final int T__103=103;
+    public static final int T__105=105;
     public static final int NUMERIC=4;
     public static final int INTEGER=5;
     public static final int UMINUS=6;
@@ -24,92 +24,94 @@ public class WindowingLexer extends Lexer {
     public static final int TYPENAME=14;
     public static final int SELECTCOLUMN=15;
     public static final int OUTPUTSPEC=16;
-    public static final int FROM=17;
-    public static final int WITH=18;
-    public static final int ID=19;
-    public static final int LPAREN=20;
-    public static final int GROOVYEXPRESSION=21;
-    public static final int RPAREN=22;
-    public static final int TABLEINPUT=23;
-    public static final int COMMA=24;
-    public static final int STRING=25;
-    public static final int EQ=26;
-    public static final int ORDER=27;
-    public static final int BY=28;
-    public static final int ASC=29;
-    public static final int DESC=30;
-    public static final int PARTITION=31;
-    public static final int AS=32;
-    public static final int LBRACKET=33;
-    public static final int RBRACKET=34;
-    public static final int NUMBER=35;
-    public static final int OVER=36;
-    public static final int ROWS=37;
-    public static final int BETWEEN=38;
-    public static final int AND=39;
-    public static final int UNBOUNDED=40;
-    public static final int PRECEDING=41;
-    public static final int FOLLOWING=42;
-    public static final int CURRENT=43;
-    public static final int ROW=44;
-    public static final int RANGE=45;
-    public static final int LESS=46;
-    public static final int MORE=47;
-    public static final int SELECT=48;
-    public static final int WHERE=49;
-    public static final int INTO=50;
-    public static final int PATH=51;
-    public static final int SERDE=52;
-    public static final int SERDEPROPERTIES=53;
-    public static final int RECORDWRITER=54;
-    public static final int FORMAT=55;
-    public static final int PLUS=56;
-    public static final int MINUS=57;
-    public static final int ASTERISK=58;
-    public static final int SOLIDUS=59;
-    public static final int DOT=60;
-    public static final int QUOTE=61;
-    public static final int COLON=62;
-    public static final int SEMICOLON=63;
-    public static final int GE=64;
-    public static final int GT=65;
-    public static final int LBRACE=66;
-    public static final int LE=67;
-    public static final int LT=68;
-    public static final int NE=69;
-    public static final int RBRACE=70;
-    public static final int S=71;
-    public static final int E=72;
-    public static final int L=73;
-    public static final int C=74;
-    public static final int T=75;
-    public static final int F=76;
-    public static final int R=77;
-    public static final int O=78;
-    public static final int M=79;
-    public static final int W=80;
-    public static final int H=81;
-    public static final int A=82;
-    public static final int B=83;
-    public static final int I=84;
-    public static final int N=85;
-    public static final int P=86;
-    public static final int U=87;
-    public static final int D=88;
-    public static final int Y=89;
-    public static final int G=90;
-    public static final int V=91;
-    public static final int NOT=92;
-    public static final int OR=93;
-    public static final int X=94;
-    public static final int XOR=95;
-    public static final int GroovyEscapeSequence=96;
-    public static final int EscapeSequence=97;
-    public static final int WS=98;
-    public static final int J=99;
-    public static final int K=100;
-    public static final int Q=101;
-    public static final int Z=102;
+    public static final int TBLFUNCPARAM=17;
+    public static final int TBLFUNCTION=18;
+    public static final int FROM=19;
+    public static final int WITH=20;
+    public static final int ID=21;
+    public static final int GROOVYEXPRESSION=22;
+    public static final int LPAREN=23;
+    public static final int RPAREN=24;
+    public static final int COMMA=25;
+    public static final int TABLEINPUT=26;
+    public static final int STRING=27;
+    public static final int EQ=28;
+    public static final int ORDER=29;
+    public static final int BY=30;
+    public static final int ASC=31;
+    public static final int DESC=32;
+    public static final int PARTITION=33;
+    public static final int AS=34;
+    public static final int LBRACKET=35;
+    public static final int RBRACKET=36;
+    public static final int NUMBER=37;
+    public static final int OVER=38;
+    public static final int ROWS=39;
+    public static final int BETWEEN=40;
+    public static final int AND=41;
+    public static final int UNBOUNDED=42;
+    public static final int PRECEDING=43;
+    public static final int FOLLOWING=44;
+    public static final int CURRENT=45;
+    public static final int ROW=46;
+    public static final int RANGE=47;
+    public static final int LESS=48;
+    public static final int MORE=49;
+    public static final int SELECT=50;
+    public static final int WHERE=51;
+    public static final int INTO=52;
+    public static final int PATH=53;
+    public static final int SERDE=54;
+    public static final int SERDEPROPERTIES=55;
+    public static final int RECORDWRITER=56;
+    public static final int FORMAT=57;
+    public static final int PLUS=58;
+    public static final int MINUS=59;
+    public static final int ASTERISK=60;
+    public static final int SOLIDUS=61;
+    public static final int DOT=62;
+    public static final int QUOTE=63;
+    public static final int COLON=64;
+    public static final int SEMICOLON=65;
+    public static final int GE=66;
+    public static final int GT=67;
+    public static final int LBRACE=68;
+    public static final int LE=69;
+    public static final int LT=70;
+    public static final int NE=71;
+    public static final int RBRACE=72;
+    public static final int S=73;
+    public static final int E=74;
+    public static final int L=75;
+    public static final int C=76;
+    public static final int T=77;
+    public static final int F=78;
+    public static final int R=79;
+    public static final int O=80;
+    public static final int M=81;
+    public static final int W=82;
+    public static final int H=83;
+    public static final int A=84;
+    public static final int B=85;
+    public static final int I=86;
+    public static final int N=87;
+    public static final int P=88;
+    public static final int U=89;
+    public static final int D=90;
+    public static final int Y=91;
+    public static final int G=92;
+    public static final int V=93;
+    public static final int NOT=94;
+    public static final int OR=95;
+    public static final int X=96;
+    public static final int XOR=97;
+    public static final int GroovyEscapeSequence=98;
+    public static final int EscapeSequence=99;
+    public static final int WS=100;
+    public static final int J=101;
+    public static final int K=102;
+    public static final int Q=103;
+    public static final int Z=104;
 
     // delegates
     // delegators
@@ -124,10 +126,10 @@ public class WindowingLexer extends Lexer {
     }
     public String getGrammarFileName() { return "com\\sap\\hadoop\\windowing\\parser\\Windowing.g"; }
 
-    // $ANTLR start "T__103"
-    public final void mT__103() throws RecognitionException {
+    // $ANTLR start "T__105"
+    public final void mT__105() throws RecognitionException {
         try {
-            int _type = T__103;
+            int _type = T__105;
             int _channel = DEFAULT_TOKEN_CHANNEL;
             // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:11:8: ( 'E' )
             // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:11:10: 'E'
@@ -142,15 +144,15 @@ public class WindowingLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "T__103"
+    // $ANTLR end "T__105"
 
     // $ANTLR start "QUOTE"
     public final void mQUOTE() throws RecognitionException {
         try {
             int _type = QUOTE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:226:19: ( '\\'' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:226:21: '\\''
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:239:19: ( '\\'' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:239:21: '\\''
             {
             match('\''); 
 
@@ -169,8 +171,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = ASTERISK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:227:19: ( '*' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:227:21: '*'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:240:19: ( '*' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:240:21: '*'
             {
             match('*'); 
 
@@ -189,8 +191,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = COLON;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:228:19: ( ':' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:228:21: ':'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:241:19: ( ':' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:241:21: ':'
             {
             match(':'); 
 
@@ -209,8 +211,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = SEMICOLON;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:229:19: ( ';' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:229:21: ';'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:242:19: ( ';' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:242:21: ';'
             {
             match(';'); 
 
@@ -229,8 +231,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = COMMA;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:230:19: ( ',' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:230:21: ','
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:243:19: ( ',' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:243:21: ','
             {
             match(','); 
 
@@ -249,8 +251,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = DOT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:231:19: ( '.' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:231:21: '.'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:244:19: ( '.' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:244:21: '.'
             {
             match('.'); 
 
@@ -269,8 +271,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = EQ;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:232:19: ( '=' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:232:21: '='
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:245:19: ( '=' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:245:21: '='
             {
             match('='); 
 
@@ -289,8 +291,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = GE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:233:19: ( '>=' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:233:21: '>='
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:246:19: ( '>=' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:246:21: '>='
             {
             match(">="); 
 
@@ -310,8 +312,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = GT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:234:19: ( '>' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:234:21: '>'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:247:19: ( '>' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:247:21: '>'
             {
             match('>'); 
 
@@ -330,8 +332,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = LBRACKET;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:235:19: ( '[' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:235:21: '['
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:248:19: ( '[' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:248:21: '['
             {
             match('['); 
 
@@ -350,8 +352,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = LBRACE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:236:19: ( '{' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:236:21: '{'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:249:19: ( '{' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:249:21: '{'
             {
             match('{'); 
 
@@ -370,8 +372,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = LE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:237:19: ( '<=' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:237:21: '<='
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:250:19: ( '<=' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:250:21: '<='
             {
             match("<="); 
 
@@ -391,8 +393,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = LPAREN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:238:19: ( '(' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:238:21: '('
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:251:19: ( '(' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:251:21: '('
             {
             match('('); 
 
@@ -411,8 +413,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = LT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:239:19: ( '<' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:239:21: '<'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:252:19: ( '<' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:252:21: '<'
             {
             match('<'); 
 
@@ -431,8 +433,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = MINUS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:240:19: ( '-' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:240:21: '-'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:253:19: ( '-' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:253:21: '-'
             {
             match('-'); 
 
@@ -451,8 +453,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = NE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:241:19: ( '<>' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:241:21: '<>'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:254:19: ( '<>' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:254:21: '<>'
             {
             match("<>"); 
 
@@ -472,8 +474,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = PLUS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:242:19: ( '+' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:242:21: '+'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:255:19: ( '+' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:255:21: '+'
             {
             match('+'); 
 
@@ -492,8 +494,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = RBRACE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:243:19: ( '}' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:243:21: '}'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:256:19: ( '}' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:256:21: '}'
             {
             match('}'); 
 
@@ -512,8 +514,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = RBRACKET;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:244:19: ( ']' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:244:21: ']'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:257:19: ( ']' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:257:21: ']'
             {
             match(']'); 
 
@@ -532,8 +534,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = RPAREN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:245:19: ( ')' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:245:21: ')'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:258:19: ( ')' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:258:21: ')'
             {
             match(')'); 
 
@@ -552,8 +554,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = SOLIDUS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:246:19: ( '/' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:246:21: '/'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:259:19: ( '/' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:259:21: '/'
             {
             match('/'); 
 
@@ -572,8 +574,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = SELECT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:248:19: ( S E L E C T )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:248:21: S E L E C T
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:261:19: ( S E L E C T )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:261:21: S E L E C T
             {
             mS(); 
             mE(); 
@@ -597,8 +599,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = FROM;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:249:19: ( F R O M )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:249:21: F R O M
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:262:19: ( F R O M )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:262:21: F R O M
             {
             mF(); 
             mR(); 
@@ -620,8 +622,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = WHERE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:250:19: ( W H E R E )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:250:21: W H E R E
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:263:19: ( W H E R E )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:263:21: W H E R E
             {
             mW(); 
             mH(); 
@@ -644,8 +646,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = TABLEINPUT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:251:19: ( T A B L E I N P U T )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:251:21: T A B L E I N P U T
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:264:19: ( T A B L E I N P U T )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:264:21: T A B L E I N P U T
             {
             mT(); 
             mA(); 
@@ -673,8 +675,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = ORDER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:252:19: ( O R D E R )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:252:21: O R D E R
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:265:19: ( O R D E R )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:265:21: O R D E R
             {
             mO(); 
             mR(); 
@@ -697,8 +699,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = BY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:253:19: ( B Y )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:253:21: B Y
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:266:19: ( B Y )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:266:21: B Y
             {
             mB(); 
             mY(); 
@@ -718,8 +720,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = PARTITION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:254:19: ( P A R T I T I O N )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:254:21: P A R T I T I O N
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:267:19: ( P A R T I T I O N )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:267:21: P A R T I T I O N
             {
             mP(); 
             mA(); 
@@ -746,8 +748,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = WITH;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:255:19: ( W I T H )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:255:21: W I T H
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:268:19: ( W I T H )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:268:21: W I T H
             {
             mW(); 
             mI(); 
@@ -769,8 +771,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = ROWS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:256:19: ( R O W S )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:256:21: R O W S
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:269:19: ( R O W S )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:269:21: R O W S
             {
             mR(); 
             mO(); 
@@ -792,8 +794,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = RANGE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:257:18: ( R A N G E )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:257:20: R A N G E
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:270:18: ( R A N G E )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:270:20: R A N G E
             {
             mR(); 
             mA(); 
@@ -816,8 +818,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = BETWEEN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:258:12: ( B E T W E E N )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:258:14: B E T W E E N
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:271:12: ( B E T W E E N )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:271:14: B E T W E E N
             {
             mB(); 
             mE(); 
@@ -842,8 +844,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = CURRENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:259:12: ( C U R R E N T )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:259:14: C U R R E N T
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:272:12: ( C U R R E N T )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:272:14: C U R R E N T
             {
             mC(); 
             mU(); 
@@ -868,8 +870,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = ROW;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:260:8: ( R O W )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:260:10: R O W
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:273:8: ( R O W )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:273:10: R O W
             {
             mR(); 
             mO(); 
@@ -890,8 +892,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = UNBOUNDED;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:261:16: ( U N B O U N D E D )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:261:18: U N B O U N D E D
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:274:16: ( U N B O U N D E D )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:274:18: U N B O U N D E D
             {
             mU(); 
             mN(); 
@@ -918,8 +920,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = PRECEDING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:262:19: ( P R E C E D I N G )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:262:21: P R E C E D I N G
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:275:19: ( P R E C E D I N G )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:275:21: P R E C E D I N G
             {
             mP(); 
             mR(); 
@@ -946,8 +948,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = FOLLOWING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:263:19: ( F O L L O W I N G )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:263:21: F O L L O W I N G
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:276:19: ( F O L L O W I N G )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:276:21: F O L L O W I N G
             {
             mF(); 
             mO(); 
@@ -974,8 +976,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = LESS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:264:9: ( L E S S )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:264:11: L E S S
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:277:9: ( L E S S )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:277:11: L E S S
             {
             mL(); 
             mE(); 
@@ -997,8 +999,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = MORE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:265:9: ( M O R E )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:265:11: M O R E
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:278:9: ( M O R E )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:278:11: M O R E
             {
             mM(); 
             mO(); 
@@ -1020,8 +1022,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = AS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:266:7: ( A S )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:266:9: A S
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:279:7: ( A S )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:279:9: A S
             {
             mA(); 
             mS(); 
@@ -1041,8 +1043,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = OVER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:267:9: ( O V E R )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:267:11: O V E R
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:280:9: ( O V E R )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:280:11: O V E R
             {
             mO(); 
             mV(); 
@@ -1064,8 +1066,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = INTO;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:268:9: ( I N T O )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:268:11: I N T O
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:281:9: ( I N T O )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:281:11: I N T O
             {
             mI(); 
             mN(); 
@@ -1087,8 +1089,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = PATH;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:269:9: ( P A T H )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:269:11: P A T H
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:282:9: ( P A T H )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:282:11: P A T H
             {
             mP(); 
             mA(); 
@@ -1110,8 +1112,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = FORMAT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:270:9: ( F O R M A T )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:270:11: F O R M A T
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:283:9: ( F O R M A T )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:283:11: F O R M A T
             {
             mF(); 
             mO(); 
@@ -1135,8 +1137,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = SERDE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:271:9: ( S E R D E )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:271:11: S E R D E
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:284:9: ( S E R D E )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:284:11: S E R D E
             {
             mS(); 
             mE(); 
@@ -1159,8 +1161,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = SERDEPROPERTIES;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:272:17: ( S E R D E P R O P E R T I E S )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:272:19: S E R D E P R O P E R T I E S
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:285:17: ( S E R D E P R O P E R T I E S )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:285:19: S E R D E P R O P E R T I E S
             {
             mS(); 
             mE(); 
@@ -1193,8 +1195,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = RECORDWRITER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:273:14: ( R E C O R D W R I T E R )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:273:16: R E C O R D W R I T E R
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:286:14: ( R E C O R D W R I T E R )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:286:16: R E C O R D W R I T E R
             {
             mR(); 
             mE(); 
@@ -1224,8 +1226,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = AND;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:279:19: ( A N D )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:279:21: A N D
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:292:19: ( A N D )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:292:21: A N D
             {
             mA(); 
             mN(); 
@@ -1246,8 +1248,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = NOT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:280:19: ( N O T )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:280:21: N O T
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:293:19: ( N O T )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:293:21: N O T
             {
             mN(); 
             mO(); 
@@ -1268,8 +1270,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = OR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:281:19: ( O R )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:281:21: O R
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:294:19: ( O R )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:294:21: O R
             {
             mO(); 
             mR(); 
@@ -1289,8 +1291,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = XOR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:282:19: ( X O R )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:282:21: X O R
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:295:19: ( X O R )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:295:21: X O R
             {
             mX(); 
             mO(); 
@@ -1311,8 +1313,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = ASC;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:284:19: ( A S C )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:284:21: A S C
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:297:19: ( A S C )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:297:21: A S C
             {
             mA(); 
             mS(); 
@@ -1333,8 +1335,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = DESC;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:285:19: ( D E S C )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:285:21: D E S C
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:298:19: ( D E S C )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:298:21: D E S C
             {
             mD(); 
             mE(); 
@@ -1356,10 +1358,10 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = NUMBER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:287:11: ( ( '0' .. '9' )+ )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:287:13: ( '0' .. '9' )+
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:300:11: ( ( '0' .. '9' )+ )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:300:13: ( '0' .. '9' )+
             {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:287:13: ( '0' .. '9' )+
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:300:13: ( '0' .. '9' )+
             int cnt1=0;
             loop1:
             do {
@@ -1384,7 +1386,7 @@ public class WindowingLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:287:14: '0' .. '9'
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:300:14: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -1416,8 +1418,8 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:289:7: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:289:10: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:302:7: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:302:10: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -1428,7 +1430,7 @@ public class WindowingLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:289:34: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:302:34: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             loop2:
             do {
                 int alt2=2;
@@ -1541,11 +1543,11 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = GROOVYEXPRESSION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:292:18: ( '<' ( GroovyEscapeSequence | ~ ( '>' ) )* '>' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:292:20: '<' ( GroovyEscapeSequence | ~ ( '>' ) )* '>'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:305:18: ( '<' ( GroovyEscapeSequence | ~ ( '>' ) )* '>' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:305:20: '<' ( GroovyEscapeSequence | ~ ( '>' ) )* '>'
             {
             match('<'); 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:293:3: ( GroovyEscapeSequence | ~ ( '>' ) )*
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:306:3: ( GroovyEscapeSequence | ~ ( '>' ) )*
             loop3:
             do {
                 int alt3=3;
@@ -1579,14 +1581,14 @@ public class WindowingLexer extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:293:4: GroovyEscapeSequence
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:306:4: GroovyEscapeSequence
             	    {
             	    mGroovyEscapeSequence(); 
 
             	    }
             	    break;
             	case 2 :
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:293:27: ~ ( '>' )
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:306:27: ~ ( '>' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='=')||(input.LA(1)>='?' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -1622,8 +1624,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "GroovyEscapeSequence"
     public final void mGroovyEscapeSequence() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:298:22: ( '\\\\' '>' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:299:3: '\\\\' '>'
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:311:22: ( '\\\\' '>' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:312:3: '\\\\' '>'
             {
             match('\\'); 
             match('>'); 
@@ -1641,11 +1643,11 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:303:5: ( '\\'' ( EscapeSequence | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) )* '\\'' )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:303:9: '\\'' ( EscapeSequence | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) )* '\\''
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:316:5: ( '\\'' ( EscapeSequence | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) )* '\\'' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:316:9: '\\'' ( EscapeSequence | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) )* '\\''
             {
             match('\''); 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:304:9: ( EscapeSequence | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) )*
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:317:9: ( EscapeSequence | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) )*
             loop4:
             do {
                 int alt4=3;
@@ -1661,14 +1663,14 @@ public class WindowingLexer extends Lexer {
 
                 switch (alt4) {
             	case 1 :
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:304:13: EscapeSequence
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:317:13: EscapeSequence
             	    {
             	    mEscapeSequence(); 
 
             	    }
             	    break;
             	case 2 :
-            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:305:13: ~ ( '\\\\' | '\\'' | '\\r' | '\\n' )
+            	    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:318:13: ~ ( '\\\\' | '\\'' | '\\r' | '\\n' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -1704,89 +1706,89 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "EscapeSequence"
     public final void mEscapeSequence() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:312:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:312:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:325:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:325:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )
             {
             match('\\'); 
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:312:14: ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:325:14: ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )
             int alt5=11;
             alt5 = dfa5.predict(input);
             switch (alt5) {
                 case 1 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:313:18: 'b'
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:326:18: 'b'
                     {
                     match('b'); 
 
                     }
                     break;
                 case 2 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:314:18: 't'
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:327:18: 't'
                     {
                     match('t'); 
 
                     }
                     break;
                 case 3 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:315:18: 'n'
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:328:18: 'n'
                     {
                     match('n'); 
 
                     }
                     break;
                 case 4 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:316:18: 'f'
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:329:18: 'f'
                     {
                     match('f'); 
 
                     }
                     break;
                 case 5 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:317:18: 'r'
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:330:18: 'r'
                     {
                     match('r'); 
 
                     }
                     break;
                 case 6 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:318:18: '\\\"'
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:331:18: '\\\"'
                     {
                     match('\"'); 
 
                     }
                     break;
                 case 7 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:319:18: '\\''
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:332:18: '\\''
                     {
                     match('\''); 
 
                     }
                     break;
                 case 8 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:320:18: '\\\\'
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:333:18: '\\\\'
                     {
                     match('\\'); 
 
                     }
                     break;
                 case 9 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:322:18: ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:335:18: ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
                     {
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:322:18: ( '0' .. '3' )
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:322:19: '0' .. '3'
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:335:18: ( '0' .. '3' )
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:335:19: '0' .. '3'
                     {
                     matchRange('0','3'); 
 
                     }
 
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:322:29: ( '0' .. '7' )
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:322:30: '0' .. '7'
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:335:29: ( '0' .. '7' )
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:335:30: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
                     }
 
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:322:40: ( '0' .. '7' )
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:322:41: '0' .. '7'
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:335:40: ( '0' .. '7' )
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:335:41: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
@@ -1796,17 +1798,17 @@ public class WindowingLexer extends Lexer {
                     }
                     break;
                 case 10 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:324:18: ( '0' .. '7' ) ( '0' .. '7' )
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:337:18: ( '0' .. '7' ) ( '0' .. '7' )
                     {
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:324:18: ( '0' .. '7' )
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:324:19: '0' .. '7'
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:337:18: ( '0' .. '7' )
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:337:19: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
                     }
 
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:324:29: ( '0' .. '7' )
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:324:30: '0' .. '7'
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:337:29: ( '0' .. '7' )
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:337:30: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
@@ -1816,10 +1818,10 @@ public class WindowingLexer extends Lexer {
                     }
                     break;
                 case 11 :
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:326:18: ( '0' .. '7' )
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:339:18: ( '0' .. '7' )
                     {
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:326:18: ( '0' .. '7' )
-                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:326:19: '0' .. '7'
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:339:18: ( '0' .. '7' )
+                    // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:339:19: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
@@ -1845,10 +1847,10 @@ public class WindowingLexer extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:330:5: ( ( ' ' | '\\t' | '\\r' | '\\f' | '\\n' )+ )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:330:9: ( ' ' | '\\t' | '\\r' | '\\f' | '\\n' )+
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:343:5: ( ( ' ' | '\\t' | '\\r' | '\\f' | '\\n' )+ )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:343:9: ( ' ' | '\\t' | '\\r' | '\\f' | '\\n' )+
             {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:330:9: ( ' ' | '\\t' | '\\r' | '\\f' | '\\n' )+
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:343:9: ( ' ' | '\\t' | '\\r' | '\\f' | '\\n' )+
             int cnt6=0;
             loop6:
             do {
@@ -1907,8 +1909,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "A"
     public final void mA() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:339:11: ( ( 'a' | 'A' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:339:12: ( 'a' | 'A' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:352:11: ( ( 'a' | 'A' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:352:12: ( 'a' | 'A' )
             {
             if ( input.LA(1)=='A'||input.LA(1)=='a' ) {
                 input.consume();
@@ -1931,8 +1933,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "B"
     public final void mB() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:340:11: ( ( 'b' | 'B' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:340:12: ( 'b' | 'B' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:353:11: ( ( 'b' | 'B' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:353:12: ( 'b' | 'B' )
             {
             if ( input.LA(1)=='B'||input.LA(1)=='b' ) {
                 input.consume();
@@ -1955,8 +1957,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "C"
     public final void mC() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:341:11: ( ( 'c' | 'C' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:341:12: ( 'c' | 'C' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:354:11: ( ( 'c' | 'C' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:354:12: ( 'c' | 'C' )
             {
             if ( input.LA(1)=='C'||input.LA(1)=='c' ) {
                 input.consume();
@@ -1979,8 +1981,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "D"
     public final void mD() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:342:11: ( ( 'd' | 'D' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:342:12: ( 'd' | 'D' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:355:11: ( ( 'd' | 'D' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:355:12: ( 'd' | 'D' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -2003,8 +2005,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "E"
     public final void mE() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:343:11: ( ( 'e' | 'E' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:343:12: ( 'e' | 'E' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:356:11: ( ( 'e' | 'E' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:356:12: ( 'e' | 'E' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -2027,8 +2029,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "F"
     public final void mF() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:344:11: ( ( 'f' | 'F' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:344:12: ( 'f' | 'F' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:357:11: ( ( 'f' | 'F' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:357:12: ( 'f' | 'F' )
             {
             if ( input.LA(1)=='F'||input.LA(1)=='f' ) {
                 input.consume();
@@ -2051,8 +2053,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "G"
     public final void mG() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:345:11: ( ( 'g' | 'G' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:345:12: ( 'g' | 'G' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:358:11: ( ( 'g' | 'G' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:358:12: ( 'g' | 'G' )
             {
             if ( input.LA(1)=='G'||input.LA(1)=='g' ) {
                 input.consume();
@@ -2075,8 +2077,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "H"
     public final void mH() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:346:11: ( ( 'h' | 'H' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:346:12: ( 'h' | 'H' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:359:11: ( ( 'h' | 'H' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:359:12: ( 'h' | 'H' )
             {
             if ( input.LA(1)=='H'||input.LA(1)=='h' ) {
                 input.consume();
@@ -2099,8 +2101,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "I"
     public final void mI() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:347:11: ( ( 'i' | 'I' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:347:12: ( 'i' | 'I' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:360:11: ( ( 'i' | 'I' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:360:12: ( 'i' | 'I' )
             {
             if ( input.LA(1)=='I'||input.LA(1)=='i' ) {
                 input.consume();
@@ -2123,8 +2125,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "J"
     public final void mJ() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:348:11: ( ( 'j' | 'J' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:348:12: ( 'j' | 'J' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:361:11: ( ( 'j' | 'J' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:361:12: ( 'j' | 'J' )
             {
             if ( input.LA(1)=='J'||input.LA(1)=='j' ) {
                 input.consume();
@@ -2147,8 +2149,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "K"
     public final void mK() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:349:11: ( ( 'k' | 'K' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:349:12: ( 'k' | 'K' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:362:11: ( ( 'k' | 'K' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:362:12: ( 'k' | 'K' )
             {
             if ( input.LA(1)=='K'||input.LA(1)=='k' ) {
                 input.consume();
@@ -2171,8 +2173,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "L"
     public final void mL() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:350:11: ( ( 'l' | 'L' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:350:12: ( 'l' | 'L' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:363:11: ( ( 'l' | 'L' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:363:12: ( 'l' | 'L' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -2195,8 +2197,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "M"
     public final void mM() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:351:11: ( ( 'm' | 'M' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:351:12: ( 'm' | 'M' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:364:11: ( ( 'm' | 'M' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:364:12: ( 'm' | 'M' )
             {
             if ( input.LA(1)=='M'||input.LA(1)=='m' ) {
                 input.consume();
@@ -2219,8 +2221,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "N"
     public final void mN() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:352:11: ( ( 'n' | 'N' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:352:12: ( 'n' | 'N' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:365:11: ( ( 'n' | 'N' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:365:12: ( 'n' | 'N' )
             {
             if ( input.LA(1)=='N'||input.LA(1)=='n' ) {
                 input.consume();
@@ -2243,8 +2245,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "O"
     public final void mO() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:353:11: ( ( 'o' | 'O' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:353:12: ( 'o' | 'O' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:366:11: ( ( 'o' | 'O' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:366:12: ( 'o' | 'O' )
             {
             if ( input.LA(1)=='O'||input.LA(1)=='o' ) {
                 input.consume();
@@ -2267,8 +2269,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "P"
     public final void mP() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:354:11: ( ( 'p' | 'P' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:354:12: ( 'p' | 'P' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:367:11: ( ( 'p' | 'P' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:367:12: ( 'p' | 'P' )
             {
             if ( input.LA(1)=='P'||input.LA(1)=='p' ) {
                 input.consume();
@@ -2291,8 +2293,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "Q"
     public final void mQ() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:355:11: ( ( 'q' | 'Q' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:355:12: ( 'q' | 'Q' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:368:11: ( ( 'q' | 'Q' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:368:12: ( 'q' | 'Q' )
             {
             if ( input.LA(1)=='Q'||input.LA(1)=='q' ) {
                 input.consume();
@@ -2315,8 +2317,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "R"
     public final void mR() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:356:11: ( ( 'r' | 'R' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:356:12: ( 'r' | 'R' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:369:11: ( ( 'r' | 'R' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:369:12: ( 'r' | 'R' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -2339,8 +2341,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "S"
     public final void mS() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:357:11: ( ( 's' | 'S' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:357:12: ( 's' | 'S' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:370:11: ( ( 's' | 'S' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:370:12: ( 's' | 'S' )
             {
             if ( input.LA(1)=='S'||input.LA(1)=='s' ) {
                 input.consume();
@@ -2363,8 +2365,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "T"
     public final void mT() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:358:11: ( ( 't' | 'T' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:358:12: ( 't' | 'T' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:371:11: ( ( 't' | 'T' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:371:12: ( 't' | 'T' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -2387,8 +2389,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "U"
     public final void mU() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:359:11: ( ( 'u' | 'U' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:359:12: ( 'u' | 'U' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:372:11: ( ( 'u' | 'U' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:372:12: ( 'u' | 'U' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -2411,8 +2413,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "V"
     public final void mV() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:360:11: ( ( 'v' | 'V' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:360:12: ( 'v' | 'V' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:373:11: ( ( 'v' | 'V' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:373:12: ( 'v' | 'V' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -2435,8 +2437,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "W"
     public final void mW() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:361:11: ( ( 'w' | 'W' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:361:12: ( 'w' | 'W' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:374:11: ( ( 'w' | 'W' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:374:12: ( 'w' | 'W' )
             {
             if ( input.LA(1)=='W'||input.LA(1)=='w' ) {
                 input.consume();
@@ -2459,8 +2461,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "X"
     public final void mX() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:362:11: ( ( 'x' | 'X' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:362:12: ( 'x' | 'X' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:375:11: ( ( 'x' | 'X' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:375:12: ( 'x' | 'X' )
             {
             if ( input.LA(1)=='X'||input.LA(1)=='x' ) {
                 input.consume();
@@ -2483,8 +2485,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "Y"
     public final void mY() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:363:11: ( ( 'y' | 'Y' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:363:12: ( 'y' | 'Y' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:376:11: ( ( 'y' | 'Y' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:376:12: ( 'y' | 'Y' )
             {
             if ( input.LA(1)=='Y'||input.LA(1)=='y' ) {
                 input.consume();
@@ -2507,8 +2509,8 @@ public class WindowingLexer extends Lexer {
     // $ANTLR start "Z"
     public final void mZ() throws RecognitionException {
         try {
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:364:11: ( ( 'z' | 'Z' ) )
-            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:364:12: ( 'z' | 'Z' )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:377:11: ( ( 'z' | 'Z' ) )
+            // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:377:12: ( 'z' | 'Z' )
             {
             if ( input.LA(1)=='Z'||input.LA(1)=='z' ) {
                 input.consume();
@@ -2529,14 +2531,14 @@ public class WindowingLexer extends Lexer {
     // $ANTLR end "Z"
 
     public void mTokens() throws RecognitionException {
-        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:1:8: ( T__103 | QUOTE | ASTERISK | COLON | SEMICOLON | COMMA | DOT | EQ | GE | GT | LBRACKET | LBRACE | LE | LPAREN | LT | MINUS | NE | PLUS | RBRACE | RBRACKET | RPAREN | SOLIDUS | SELECT | FROM | WHERE | TABLEINPUT | ORDER | BY | PARTITION | WITH | ROWS | RANGE | BETWEEN | CURRENT | ROW | UNBOUNDED | PRECEDING | FOLLOWING | LESS | MORE | AS | OVER | INTO | PATH | FORMAT | SERDE | SERDEPROPERTIES | RECORDWRITER | AND | NOT | OR | XOR | ASC | DESC | NUMBER | ID | GROOVYEXPRESSION | STRING | WS )
+        // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:1:8: ( T__105 | QUOTE | ASTERISK | COLON | SEMICOLON | COMMA | DOT | EQ | GE | GT | LBRACKET | LBRACE | LE | LPAREN | LT | MINUS | NE | PLUS | RBRACE | RBRACKET | RPAREN | SOLIDUS | SELECT | FROM | WHERE | TABLEINPUT | ORDER | BY | PARTITION | WITH | ROWS | RANGE | BETWEEN | CURRENT | ROW | UNBOUNDED | PRECEDING | FOLLOWING | LESS | MORE | AS | OVER | INTO | PATH | FORMAT | SERDE | SERDEPROPERTIES | RECORDWRITER | AND | NOT | OR | XOR | ASC | DESC | NUMBER | ID | GROOVYEXPRESSION | STRING | WS )
         int alt7=59;
         alt7 = dfa7.predict(input);
         switch (alt7) {
             case 1 :
-                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:1:10: T__103
+                // com\\sap\\hadoop\\windowing\\parser\\Windowing.g:1:10: T__105
                 {
-                mT__103(); 
+                mT__105(); 
 
                 }
                 break;
@@ -3015,7 +3017,7 @@ public class WindowingLexer extends Lexer {
             this.transition = DFA5_transition;
         }
         public String getDescription() {
-            return "312:14: ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )";
+            return "325:14: ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )";
         }
     }
     static final String DFA7_eotS =
@@ -3342,7 +3344,7 @@ public class WindowingLexer extends Lexer {
             this.transition = DFA7_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( T__103 | QUOTE | ASTERISK | COLON | SEMICOLON | COMMA | DOT | EQ | GE | GT | LBRACKET | LBRACE | LE | LPAREN | LT | MINUS | NE | PLUS | RBRACE | RBRACKET | RPAREN | SOLIDUS | SELECT | FROM | WHERE | TABLEINPUT | ORDER | BY | PARTITION | WITH | ROWS | RANGE | BETWEEN | CURRENT | ROW | UNBOUNDED | PRECEDING | FOLLOWING | LESS | MORE | AS | OVER | INTO | PATH | FORMAT | SERDE | SERDEPROPERTIES | RECORDWRITER | AND | NOT | OR | XOR | ASC | DESC | NUMBER | ID | GROOVYEXPRESSION | STRING | WS );";
+            return "1:1: Tokens : ( T__105 | QUOTE | ASTERISK | COLON | SEMICOLON | COMMA | DOT | EQ | GE | GT | LBRACKET | LBRACE | LE | LPAREN | LT | MINUS | NE | PLUS | RBRACE | RBRACKET | RPAREN | SOLIDUS | SELECT | FROM | WHERE | TABLEINPUT | ORDER | BY | PARTITION | WITH | ROWS | RANGE | BETWEEN | CURRENT | ROW | UNBOUNDED | PRECEDING | FOLLOWING | LESS | MORE | AS | OVER | INTO | PATH | FORMAT | SERDE | SERDEPROPERTIES | RECORDWRITER | AND | NOT | OR | XOR | ASC | DESC | NUMBER | ID | GROOVYEXPRESSION | STRING | WS );";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;

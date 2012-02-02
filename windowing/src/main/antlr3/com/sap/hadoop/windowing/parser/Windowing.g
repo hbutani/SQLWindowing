@@ -19,6 +19,8 @@ tokens {
   TYPENAME;
   SELECTCOLUMN;
   OUTPUTSPEC;
+  TBLFUNCPARAM;
+  TBLFUNCTION;
 }
 
 @header {
@@ -68,7 +70,14 @@ query :
 tableSpec :
  hivetable |
  ID -> ^(TABLEINPUT ID) |
- LPAREN? h=GROOVYEXPRESSION RPAREN? -> ^(TABLEINPUT $h)
+ h=GROOVYEXPRESSION -> ^(TABLEINPUT $h) |
+ LPAREN h=GROOVYEXPRESSION RPAREN -> ^(TABLEINPUT $h) |
+ tblfunc
+;
+
+tblfunc :
+  name=ID LPAREN tableSpec (COMMA tblfuncparam)* RPAREN (window_expression)? 
+    -> ^(TBLFUNCTION $name tableSpec tblfuncparam* window_expression?)
 ;
 
 hivetable :
@@ -102,6 +111,10 @@ function :
 
 functionparam  :	
  GROOVYEXPRESSION | STRING | ID | NUMBER
+;
+
+tblfuncparam :
+  (i=ID|i=STRING) EQ v=functionparam -> ^(TBLFUNCPARAM $i $v)
 ;
 
 window_expression :

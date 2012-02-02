@@ -18,6 +18,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.Object
 import org.apache.hadoop.hive.serde2.objectinspector.SettableStructObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
+import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 import org.apache.hadoop.hive.serde.Constants as HiveConstants
@@ -228,44 +229,12 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 			}
 		}
 		
-		//2. if col refers to a fn alias use its specified type or the fn's predetermined type or the 1st args type if it is an identifier
-		for(int i in 0..<qry.wnAliases.size())
+		Map<String, TypeInfo> outputShape = qry.tableFunction.getOutputShape()
+		if ( oc.name in outputShape)
 		{
-			if (oc.name ==qry.wnAliases[i])
-			{
-				FuncSpec fSpec = qry.qSpec.funcSpecs[i]
-				if ( fSpec.typeName)
-				{
-					oc.typeInfo = TypeInfoFactory.getPrimitiveTypeInfo(fSpec.typeName)
-					return;
-				}
-				
-				Class<? extends IWindowFunction> fCls = qry.wnFns[i].class
-				FunctionDef fDef = fCls.getAnnotation(FunctionDef.class);
-				if ( fDef.typeName() )
-				{
-					oc.typeInfo = TypeInfoFactory.getPrimitiveTypeInfo(fDef.typeName())
-					return;
-				}
-				
-				if ( fSpec.params.size() > 0)
-				{
-					FuncArg arg1 = fSpec.params[0]
-					if (arg1.argType == ArgType.ID)
-					{
-						for (Column ic in qry.input.columns)
-						{
-							if (arg1.id == ic.name)
-							{
-								oc.typeInfo = ic.typeInfo
-								return;
-							}
-						}
-					}
-				}
-			}
+			oc.typeInfo = outputShape[oc.name]
+			return
 		}
-		
 		//3. for now assume type is 'double'. (revisit: analyze grrovy expressions to infer type)
 		oc.typeInfo = TypeInfoFactory.getPrimitiveTypeInfo('double')
 	}

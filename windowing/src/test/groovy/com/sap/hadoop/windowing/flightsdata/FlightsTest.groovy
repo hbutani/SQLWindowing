@@ -22,7 +22,6 @@ class FlightsTest extends MRBaseTest
              where dest_city_name = 'New York' and dep_time != '' and day_of_week = 1>
 	   partition by origin_city_name, year, month, day_of_month
 	   order by dep_time
-	   with count(<year>) as c
 	   select origin_city_name, year, month, day_of_month, dep_time, <lag('dep_time', 1)> as lastdep[string]
 	   where <((dep_time[0..1] as int) - (lag('dep_time', 1)[0..1] as int)) * 60 + 
 	   			((dep_time[2..3] as int) - (lag('dep_time',1)[2..3] as int)) \\> 60>
@@ -82,7 +81,6 @@ class FlightsTest extends MRBaseTest
       where  origin_city_name = 'New York' and dep_time != '') t>
 	   partition by unique_carrier
 	   order by year, month, day_of_month, t
-	   with count(<1>) as dummy
 	   select unique_carrier, fl_num, year, month, day_of_month, t
 	   where <(flight == 1) && (delay + 30.0 \\> (((lead('t', 1)[0..1] as int) - (t[0..1] as int)) * 60 + 
                             ((lead('t', 1)[2..3] as int) - (t[2..3] as int))

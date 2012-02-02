@@ -58,11 +58,11 @@ query :
  FROM tableSpec
  partitionby
  orderby
- WITH funclist
+ (WITH funclist)?
  select
  where? 
  outputClause? 
- EOF -> ^(QUERY tableSpec partitionby orderby funclist select where? outputClause?)
+ EOF -> ^(QUERY tableSpec partitionby orderby select funclist? where? outputClause?)
 ;
 
 tableSpec :

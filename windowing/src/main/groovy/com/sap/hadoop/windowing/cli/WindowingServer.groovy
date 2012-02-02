@@ -34,20 +34,6 @@ class WindowingServer
 	
 	WindowingServer(int numThreads)
 	{	
-		conf = new Configuration();
-		
-		// apply values from environment
-		for (Map.Entry<String, String> e : System.getenv().entrySet())
-		{
-			conf.set(e.key, e.value)
-		}
-		String wJar = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
-		conf.set(Job.WINDOWING_JAR_FILE, wJar);
-		
-		// turn off console logging.
-		//WindowingHiveCliDriver.initHiveLog4j();
-		Logger.getRootLogger().removeAllAppenders();
-
 		/* setup serverChannel */
 		serverChannel = ServerSocketChannel.open();
 		ServerSocket serverSocket = serverChannel.socket();
@@ -58,12 +44,27 @@ class WindowingServer
 		selector = Selector.open();
 		serverChannel.register(selector, SelectionKey.OP_ACCEPT);
 		
-		/* setup ExecService */
-		execSvc = Executors.newFixedThreadPool(numThreads);
-		
 		// enable invoker to make connection.
 		System.out.println(serverSocket.localPort);
 		System.out.flush();
+
+		/* setup ExecService */
+		execSvc = Executors.newFixedThreadPool(numThreads);
+		
+		conf = new Configuration();
+		
+		// apply values from environment
+		for (Map.Entry<String, String> e : System.getenv().entrySet())
+		{
+			conf.set(e.key, e.value)
+		}
+		String wJar = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+		conf.set(Job.WINDOWING_JAR_FILE, wJar);
+		
+
+		// turn off console logging.
+		WindowingHiveCliDriver.initHiveLog4j();
+		//Logger.getRootLogger().removeAllAppenders();
 	}
 	
 	void start()

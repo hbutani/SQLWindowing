@@ -53,27 +53,33 @@ class WindowingClient
 			throw new WindowingException(e);
 		}
 		
-		switch(resp.type)
+		while(true)
 		{
-			case ResponseType.OK: return;
-			case ResponseType.ERROR: throw new WindowingException(resp.errMsg);
-			case ResponseType.QUERY:
-				// execute hive Query
-				// send Resp.OK
-				// read Resp
-				int rc = hiveDriver.processCmd(resp.query)
-				if ( rc == 0)
-				{
-					resp.type = ResponseType.OK;
-				}
-				else
-				{
-					resp.type = ResponseType.ERROR
-					resp.errMsg = sprintf("Failed to execute query '%s', return = %d", resp.query, rc)
-				}
-				resp.write(socketChannel, intb)
-				break;
-			default: throw new WindowingException(sprintf("Unknown ResponseType %s", resp));
+			switch(resp.type)
+			{
+				case ResponseType.OK: return;
+				case ResponseType.ERROR: throw new WindowingException(resp.errMsg);
+				case ResponseType.QUERY:
+					// execute hive Query
+					// send Resp.OK
+					// read Resp
+					println "Executing Embedded Hive Query..." 
+					int rc = hiveDriver.processCmd(resp.query)
+					if ( rc == 0)
+					{
+						resp.type = ResponseType.OK;
+						println "done executing Embedded Hive Query."
+					}
+					else
+					{
+						resp.type = ResponseType.ERROR
+						resp.errMsg = sprintf("Failed to execute query '%s', return = %d", resp.query, rc)
+					}
+					resp.write(socketChannel, intb)
+					resp.read(socketChannel, intb);
+					break;
+				default: throw new WindowingException(sprintf("Unknown ResponseType %s", resp));
+			}
 		}
 	}
 	
@@ -189,7 +195,6 @@ class ServerStreamThread extends Thread
 {
 	WindowingClient client;
 	InputStream inputStream;
-	StringBuilder errorString = new StringBuilder();
 	
 	ServerStreamThread(WindowingClient client, InputStream inputStream)
 	{
@@ -206,9 +211,9 @@ class ServerStreamThread extends Thread
 			String line = null
 			while( (line = rdr.readLine()) != null)
 			{
-				errorString.append(line);
+				println line
 			}
-			client.serverError = errorString.toString();
+			//client.serverError = errorString.toString();
 		}
 		catch(IOException ioe)
 		{

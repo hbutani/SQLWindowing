@@ -187,11 +187,7 @@ select p_mfgr,p_name, p_size, r
 	{
 		QuerySpec qSpec = wshell.parse("""
 		from npath(<select p_mfgr, p_name, p_size
-				from part_rc>, pattern='')
-		partition by p_mfgr
-		order by p_mfgr, p_name
-		with
-		rank() as r
+				from part_rc> partition by p_mfgr order by p_mfgr, p_name, pattern='')
 select p_mfgr,p_name, p_size, r
 		into path='/tmp/wout'
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
@@ -204,7 +200,7 @@ select p_mfgr,p_name, p_size, r
 				from part_rc>
 		partitionColumns=p_mfgr
 		orderColumns=p_mfgr ASC, p_name ASC)
-	funcSpecs=[rank(alias=r, param=[], type=null, window=null)]
+	funcSpecs=[]
 	select=p_mfgr, p_name, p_size, r
 	whereExpr=null
 	tableOutput=(output(path=/tmp/wout, serde=org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, serDeProps={}, format=org.apache.hadoop.mapred.TextOutputFormat)

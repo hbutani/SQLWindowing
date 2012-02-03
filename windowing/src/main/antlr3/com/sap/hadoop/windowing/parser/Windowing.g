@@ -58,8 +58,6 @@ throw rex;
 
 query :
  FROM tableSpec
- partitionby
- orderby
  (WITH funclist)?
  select
  where? 
@@ -69,19 +67,19 @@ query :
 
 tableSpec :
  hivetable |
- ID -> ^(TABLEINPUT ID) |
- h=GROOVYEXPRESSION -> ^(TABLEINPUT $h) |
- LPAREN h=GROOVYEXPRESSION RPAREN -> ^(TABLEINPUT $h) |
+ ID p=partitionby o=orderby -> ^(TABLEINPUT ID $p $o) |
+ h=GROOVYEXPRESSION p=partitionby o=orderby -> ^(TABLEINPUT $h $p $o) |
+ LPAREN h=GROOVYEXPRESSION p=partitionby o=orderby RPAREN -> ^(TABLEINPUT $h $p $o ) |
  tblfunc
 ;
 
 tblfunc :
-  name=ID LPAREN tableSpec (COMMA tblfuncparam)* RPAREN (window_expression)? 
-    -> ^(TBLFUNCTION $name tableSpec tblfuncparam* window_expression?)
+  name=ID LPAREN tableSpec (window_expression)? (COMMA tblfuncparam)* RPAREN 
+    -> ^(TBLFUNCTION $name tableSpec window_expression? tblfuncparam* )
 ;
 
 hivetable :
- TABLEINPUT LPAREN (namevalue)? (COMMA namevalue)* RPAREN  -> ^(TABLEINPUT namevalue*)
+ TABLEINPUT LPAREN (namevalue)? (COMMA namevalue)* RPAREN  p=partitionby o=orderby -> ^(TABLEINPUT namevalue* $p $o)
 ;
 
 namevalue :

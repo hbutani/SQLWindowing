@@ -34,11 +34,13 @@ static HashMap<String, Class<? extends IWindowFunction>> FUNCTION_MAP = [:]
 		registerClass(Max.class);
 		registerClass(Avg.class);
 		registerClass(StdDev.class);
+		registerClass(Variance.class);
 		registerClass(Count.class);
 		
 		registerClass(FirstValue.class);
 		registerClass(LastValue.class);
 		
-		registerClass(VarPop.class);
+		registerClass(CoVariance.class);
+		
 	}
 }

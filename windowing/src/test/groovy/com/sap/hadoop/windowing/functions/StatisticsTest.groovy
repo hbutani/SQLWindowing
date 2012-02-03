@@ -68,4 +68,69 @@ class StatisticsTest extends BaseTest {
 """
 		assert r == e
 	}
+	
+	@Test
+	void testLinearReg() {
+		wshell.execute("""
+	from tableinput(
+				 recordreaderclass='com.sap.hadoop.windowing.io.TableWindowingInput',
+				 keyClass='org.apache.hadoop.io.Text',
+				 valueClass='org.apache.hadoop.io.Text',
+				 inputPath='$basedir/data/statistics',
+				 inputformatClass='org.apache.hadoop.mapred.TextInputFormat',
+				 serdeClass='org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe',
+				 columns = 'p_partkey,p_name,p_mfgr,val1,val2',
+				 'columns.types' = 'int,string,string,int,int'
+					)
+	partition by p_mfgr
+	order by p_mfgr, p_name
+	with
+		linearRegSlope(val1, val2) as b,
+		linearRegIntercept(val1, val2) as a
+	select a, b""")
+
+		String r = outStream.toString()
+		r = r.replace("\r\n", "\n")
+		String e = """[7.0, -1.0]
+[7.0, -1.0]
+[7.0, -1.0]
+[7.0, -1.0]
+[7.0, -1.0]
+[7.0, -1.0]
+"""
+		assert r == e
+	}
+	
+	@Test
+	void testLinearReg2() {
+		wshell.execute("""
+	from tableinput(
+				 recordreaderclass='com.sap.hadoop.windowing.io.TableWindowingInput',
+				 keyClass='org.apache.hadoop.io.Text',
+				 valueClass='org.apache.hadoop.io.Text',
+				 inputPath='$basedir/data/statistics',
+				 inputformatClass='org.apache.hadoop.mapred.TextInputFormat',
+				 serdeClass='org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe',
+				 columns = 'p_partkey,p_name,p_mfgr,val1,val2',
+				 'columns.types' = 'int,string,string,int,int'
+					)
+	partition by p_mfgr
+	order by p_mfgr, p_name
+	with
+		linearRegSlope(val1, val2) as b,
+		linearRegIntercept(val1, val2) as a,
+		regCount(val1, val2) as c
+	select a, b, c""")
+
+		String r = outStream.toString()
+		r = r.replace("\r\n", "\n")
+		String e = """[7.0, -1.0, 6]
+[7.0, -1.0, 6]
+[7.0, -1.0, 6]
+[7.0, -1.0, 6]
+[7.0, -1.0, 6]
+[7.0, -1.0, 6]
+"""
+		assert r == e
+	}
 }

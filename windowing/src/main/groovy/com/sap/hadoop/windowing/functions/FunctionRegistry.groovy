@@ -41,6 +41,8 @@ static HashMap<String, Class<? extends IWindowFunction>> FUNCTION_MAP = [:]
 		registerClass(LastValue.class);
 		
 		registerClass(CoVariance.class);
-		
+		registerClass(LinearRegSlope.class);
+		registerClass(LinearRegIntercept.class);
+		registerClass(RegCount.class);
 	}
 }

@@ -23,7 +23,7 @@ class FunctionTranslator
 		try
 		{
 			IWindowFunction wFn = fnClass.newInstance();
-			wFn.orderColumns = (OrderColumn[]) qSpec.orderColumns
+			wFn.orderColumns = (OrderColumn[]) qSpec.tableIn.orderColumns
 			wFn.setWindow(funSpec.window)
 			return wFn
 		}

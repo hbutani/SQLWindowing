@@ -104,7 +104,7 @@ abstract class Translator
 		}
 		
 		def pCols = new HashSet()
-		for(String p in qSpec.partitionColumns)
+		for(String p in qSpec.tableIn.partitionColumns)
 		{
 			if ( !(p in fieldMap) )
 				throw new WindowingException(sprintf("Unknown partition column %s", p))
@@ -114,7 +114,7 @@ abstract class Translator
 		
 		def oCols = new HashSet()
 		def tl = []
-		for(OrderColumn o in qSpec.orderColumns)
+		for(OrderColumn o in qSpec.tableIn.orderColumns)
 		{
 			if ( !(o.name in fieldMap) )
 				throw new WindowingException(sprintf("Unknown order column %s", o.name))

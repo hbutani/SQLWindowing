@@ -77,7 +77,7 @@ class QuerySpecBuilder
 		for(int i = 0; i < adaptor.getChildCount(node); i++)
 		{
 			CommonTree child = adaptor.getChild(node, i);
-			qSpec.partitionColumns << child.text
+			qSpec.tableIn.partitionColumns << child.text
 		}
 	}
 	
@@ -86,7 +86,7 @@ class QuerySpecBuilder
 		for(int i = 0; i < adaptor.getChildCount(node); i++)
 		{
 			CommonTree child = adaptor.getChild(node, i);
-			qSpec.orderColumns << orderColumn(child)
+			qSpec.tableIn.orderColumns << orderColumn(child)
 		}
 	}
 	

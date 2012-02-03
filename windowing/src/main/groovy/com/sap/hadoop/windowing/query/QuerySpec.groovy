@@ -8,8 +8,6 @@ class QuerySpec
 	String queryStr
 	TableInput tableIn
 	ArrayList<FuncSpec> funcSpecs
-	ArrayList<String> partitionColumns
-	ArrayList<OrderColumn> orderColumns
 	String whereExpr
 	TableOutput tableOut
 	ArrayList<SelectColumn> selectColumns
@@ -18,8 +16,6 @@ class QuerySpec
 	{
 		tableIn = new TableInput()
 		funcSpecs = []
-		partitionColumns = []
-		orderColumns = []
 		tableOut = new TableOutput()
 		selectColumns = []
 	}
@@ -27,8 +23,8 @@ class QuerySpec
 	public String toString()
 	{
 		return sprintf(
-			"Query:\n\ttableInput=(%s)\n\tpartitionColumns=%s\n\torderColumns=%s\n\tfuncSpecs=[%s]\n\tselect=%s\n\twhereExpr=%s\n\ttableOutput=(%s)\n", 
-			tableIn, partitionColumns.join(", "), orderColumns.join(", "), funcSpecs.join(",\n\t\t"), selectColumns.join(", "), whereExpr, tableOut)
+			"Query:\n\ttableInput=(%s)\n\tfuncSpecs=[%s]\n\tselect=%s\n\twhereExpr=%s\n\ttableOutput=(%s)\n", 
+			tableIn, funcSpecs.join(",\n\t\t"), selectColumns.join(", "), whereExpr, tableOut)
 	}
 	
 }
@@ -52,19 +48,28 @@ class TableInput
 	String inputFormatClass
 	String serDeClass
 	Properties serDeProps = new Properties()
+	ArrayList<String> partitionColumns
+	ArrayList<OrderColumn> orderColumns
+	
+	TableInput()
+	{		
+		partitionColumns = []
+		orderColumns = []
+	}
 	
 	public String toString()
 	{
 		if (tableName != null )
 		{
-			return sprintf('hiveTable=%s', tableName)
+			return sprintf('hiveTable=%s\n\t\tpartitionColumns=%s\n\t\torderColumns=%s', tableName, partitionColumns.join(", "), orderColumns.join(", "))
 		}
 		else if ( hiveQuery != null )
 		{
-			return sprintf('hiveQuery=<%s>', hiveQuery)
+			return sprintf('hiveQuery=<%s>\n\t\tpartitionColumns=%s\n\t\torderColumns=%s', hiveQuery, partitionColumns.join(", "), orderColumns.join(", "))
 		}
-		return sprintf( 'windowInputClass=%s, inputPath=%s, keyClass=%s, valueClass=%s, inputFormatClass=%s, serDeClass=%s, serDeProps=%s', 
-			windowingInputClass, inputPath, keyClass, valueClass, inputFormatClass, serDeClass, serDeProps)
+		return sprintf( 'windowInputClass=%s, inputPath=%s, keyClass=%s, valueClass=%s, inputFormatClass=%s, serDeClass=%s, serDeProps=%s\n\t\tpartitionColumns=%s\n\t\torderColumns=%s', 
+			windowingInputClass, inputPath, keyClass, valueClass, inputFormatClass, serDeClass, serDeProps,
+			partitionColumns.join(", "), orderColumns.join(", "))
 	}
 }
 

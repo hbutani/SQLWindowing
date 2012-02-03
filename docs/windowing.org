@@ -1,4 +1,5 @@
 #+FILETAGS: windowing
+#+SEQ_TODO: TODO ONGOING FOLLOWUP DONE
 * Modes
  | Mode     | Translator      | Executor     |
  |----------+-----------------+--------------|
@@ -97,11 +98,16 @@ digraph G {
   of the Partition object.
 - When a value is requested from it; it gets the value from the
   underlying StandardOI.
-*** TODO deal with the original structure; avoid converting to a StandardObject
+*** DONE deal with the original structure; avoid converting to a StandardObject
+    CLOSED: [2012-01-25 Wed 20:28]
+    CLOCK: [2012-01-25 Wed 15:30]--[2012-01-25 Wed 20:00] =>  4:30
+    CLOCK: [2012-01-24 Tue 17:00]--[2012-01-24 Tue 18:38] =>  1:38
 ** Partitioner
 - is responsible for breaking up a stream of Input rows into a stream of Partitions.
 - it calls on the WindowingInput for the next set of rows and collects them into a Partition object 
-*** TODO optimize comparison in Partition object; Convert first row of Partition only once.
+*** DONE optimize comparison in Partition object; Convert first row of Partition only once.
+    CLOSED: [2012-01-24 Tue 17:00]
+    CLOCK: [2012-01-24 Tue 16:45]--[2012-01-24 Tue 17:00] =>  0:15
 ** The processing of Windowing Functions
 - wrap the input stream in a Partioner. Now process each Partition
 - Maintain a ResultMap( ExpressioName -> List )
@@ -438,6 +444,13 @@ class QueryOutput
 * The Language
 * Parsing and Translation
 * A Windowing Function
+* Execution
+** Object conversions
+*Non MR Executor*
+- qryIn.deserializer converts to Row
+- ObjectInspectorUtils.copyToStandardObject converts to Java Object
+- passed to Partition
+
 * Where Clause handling
 - currently where clause is parsed but not translated
   - where clause is a Groovy expression
@@ -450,7 +463,22 @@ class QueryOutput
   - for tests: connects to HiveServer
   - in WindowingServer asks Client to execute Query
 
-
-* Testing
+* Functions
+* Testing/Use cases
 ** Setup of Census tables
   
+** Eg from Benjamin Poserow
+#+begin_src sql
+from < select symbol, dt, cast(close AS FLOAT) as close 
+       from raw_symbols
+     >
+partition by symbol
+order by dt
+with 
+    avg(<close>) over rows between unbounded preceding an current row as rollingavg
+select symbol, dt, rollingavg
+#+end_src sql
+** RITA data: airline on-time data
+Research and Innovative Technology Administration, Bureau of
+Transportation Statistics
+http://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236&DB_Short_Name=On-Time

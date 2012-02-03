@@ -37,7 +37,7 @@ class ParseErrorTest  extends BaseTest
 	void test2()
 	{
 		expectedEx.expect(WindowingException.class);
-		expectedEx.expectMessage("Parse Error:MismatchedTokenException(61!=-1)");
+		expectedEx.expectMessage("Parse Error:MismatchedTokenException(63!=-1)");
 
 		Query qry = wshell.translate("""
 		from part_rc

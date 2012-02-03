@@ -7,7 +7,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.io.Writable
 import groovy.lang.Binding;
 
-class InputObj extends Binding
+class InputObj extends Row
 {
 	Partition p
 	int idx

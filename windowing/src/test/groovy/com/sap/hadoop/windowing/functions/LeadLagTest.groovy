@@ -125,8 +125,6 @@ class LeadLagTest extends BaseTest {
 					)
 	partition by p_mfgr
 	order by p_mfgr, p_name
-	with
-		rank() as r
 	select p_size, <lag('p_size', 1)> as l1""")
 
 		String r = outStream.toString()
@@ -179,8 +177,6 @@ class LeadLagTest extends BaseTest {
 				   )
    partition by p_mfgr
    order by p_mfgr, p_name
-   with
-	   rank() as r
    select p_mfgr, p_size, <lead('p_size', 1)> as l1""")
 
 	   String r = outStream.toString()

@@ -16,12 +16,17 @@ import com.sap.hadoop.windowing.query.Column;
 import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.QueryInput;
 
+interface IPartitionIterator extends Iterator<IPartition>
+{
+	
+}
+
 /**
  * Given an Iterator of Writables it produces an Iterator of Partitions.
  * @author harish.butani
  *
  */
-class Partitioner implements Iterator<Partition>
+class Partitioner implements IPartitionIterator
 {
 	Query qry
 	QueryInput qryIn
@@ -44,7 +49,7 @@ class Partitioner implements Iterator<Partition>
 		return currElem != null || qryIn.wInput.hasNext() 
 	}
 	
-	def next() 
+	IPartition next() 
 	{
 		if (currElem == null)
 		{

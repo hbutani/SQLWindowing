@@ -21,45 +21,31 @@ class Executor
 	
 	void execute(Query qry)
 	{
-		Configuration conf = qry.cfg
-		QueryOutput qryOut = qry.output
 		boolean applyWhere = (qry.whereExpr != null)
 		
-		def windowFns = qry.wnFns
-		def windowFnAliases = qry.wnAliases
-			
-		OutputObj orow = new OutputObj();
-		for(OutputColumn oc in qry.output.columns)
-		{
-			oc.groovyExpr.binding = orow
-			orow.registerFunctions(oc.groovyExpr)
-		}
+		AbstractTableFunction tFunc = qry.tableFunction;
+		AbstractTableFunction inpTFunc = qry.inputtableFunction
 		
-		if ( applyWhere )
-		{
-			qry.whereExpr.binding = orow
-			orow.registerFunctions(qry.whereExpr)
-		}
+		inpTFunc.input = new Partitioner(qry)
 		
-		orow.resultMap = [:]
-		Partitioner partitions = new Partitioner(qry)
-		while(partitions.hasNext())
+		while(tFunc.hasNext())
 		{
-			Partition p = partitions.next()
-			orow.p = p
-			orow.resultMap.clear()
-			for (i in 0..<windowFns.size())
+			IPartition p = tFunc.next();
+			Row orow = p.getRowObject();
+			for(OutputColumn oc in qry.output.columns)
 			{
-				orow.resultMap[windowFnAliases[i]] = windowFns[i].processPartition(p)
+				orow.bind(oc.groovyExpr)
 			}
 			
-			for(row in p)
+			if ( applyWhere )
 			{
-				orow.iObj = row
+				orow.bind(qry.whereExpr)
+			}
+			for(r in p)
+			{
 				if ( !applyWhere || qry.whereExpr.run() )
-					writeOutputRow(orow, qry)
+					writeOutputRow(r, qry)
 			}
-			
 		}
 		endOutput(qry);
 	}

@@ -181,4 +181,33 @@ select p_mfgr,p_name, p_size, r
 	tableOutput=(output(path=/tmp/wout, serde=org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, serDeProps={}, format=org.apache.hadoop.mapred.TextOutputFormat)
 """
 	}
+	
+	@Test
+	void testTableFunction()
+	{
+		QuerySpec qSpec = wshell.parse("""
+		from npath(<select p_mfgr, p_name, p_size
+				from part_rc>, pattern='')
+		partition by p_mfgr
+		order by p_mfgr, p_name
+		with
+		rank() as r
+select p_mfgr,p_name, p_size, r
+		into path='/tmp/wout'
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+		println qSpec.toString();
+		
+		assert qSpec.toString() == """Query:
+	tableInput=(hiveQuery=<select p_mfgr, p_name, p_size
+				from part_rc>)
+	partitionColumns=p_mfgr
+	orderColumns=p_mfgr ASC, p_name ASC
+	funcSpecs=[rank(alias=r, param=[], type=null, window=null)]
+	select=p_mfgr, p_name, p_size, r
+	whereExpr=null
+	tableOutput=(output(path=/tmp/wout, serde=org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, serDeProps={}, format=org.apache.hadoop.mapred.TextOutputFormat)
+"""
+	}
 }

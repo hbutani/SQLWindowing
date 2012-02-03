@@ -2,11 +2,12 @@ package com.sap.hadoop.windowing.runtime
 
 import groovy.lang.Binding;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import com.sap.hadoop.windowing.WindowingException;
 
-class OutputObj extends Binding
+class OutputObj extends Row
 {
 	InputObj iObj
 	Map resultMap
@@ -70,7 +71,7 @@ class OutputObj extends Binding
 	}
 	
 
-	def registerFunctions(Script sc)
+	void registerFunctions(Script sc)
 	{
 		if ( sc )
 		{

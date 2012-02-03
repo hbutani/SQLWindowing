@@ -50,7 +50,7 @@ class Partitioner implements Iterator<Partition>
 		{
 			currElem = qryIn.wInput.next()
 		}
-		Partition p = new Partition(qryIn.wInput, qryIn.inputOI, qryIn.deserializer, partitionColumnFields, qry.partitionMemSize)
+		Partition p = new Partition(qry, qryIn.wInput, qryIn.inputOI, qryIn.deserializer, partitionColumnFields)
 		while ( p.belongs(currElem) )
 		{
 			p << currElem

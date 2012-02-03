@@ -45,6 +45,7 @@ abstract class Translator
 		setupWhereClause(qry)
 		
 		qry.partitionMemSize = cfg.getInt(Constants.WINDOW_PARTITION_MEM_SIZE, ByteBasedList.MEDIUM_SIZE);
+		qry.partitionClass = cfg.get(Constants.WINDOW_PARTITION_CLASS, Constants.DEFAULT_WINDOW_PARTITION_CLASS);
 		
 		return qry
 	}

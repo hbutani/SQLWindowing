@@ -23,6 +23,7 @@ class LargePartitionTest extends BaseTest
 	{
 		outStream = new ByteArrayOutputStream()
 		Configuration cfg = new Configuration()
+		cfg.set(Constants.WINDOW_PARTITION_CLASS, "com.sap.hadoop.ds.list.PartitionedByteBasedList")
 		cfg.setInt(Constants.WINDOW_PARTITION_MEM_SIZE, ByteBasedList.LARGE_SIZE);
 		wshell = new WindowingShell(cfg, new LocalTranslator(), new TestExecutor(out : new PrintStream(outStream)))
 	}

@@ -14,8 +14,10 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.io.Writable
 
 import com.sap.hadoop.ds.list.ByteBasedList;
+import com.sap.hadoop.ds.list.ListFactory;
 import com.sap.hadoop.ds.list.PartitionedByteBasedList;
 import com.sap.hadoop.windowing.io.WindowingInput;
+import com.sap.hadoop.windowing.query.Query;
 
 /**
  * A Partition is a container of all input rows.
@@ -33,13 +35,13 @@ class Partition
 	ArrayList<StructField> partitionColumnFields
 	private ArrayList partitionFieldVals = []
 	
-	Partition(WindowingInput wInput, ObjectInspector inputOI, Deserializer deserializer, 
-		ArrayList<StructField> partitionColumnFields, int partitionMemSize)
+	Partition(Query qry, WindowingInput wInput, ObjectInspector inputOI, Deserializer deserializer, 
+		ArrayList<StructField> partitionColumnFields)
 	{
 		this.wInput = wInput
 		this.inputOI = inputOI
 		this.deserializer = deserializer
-		this.elems = new PartitionedByteBasedList(partitionMemSize)
+		this.elems = ListFactory.createList(qry.partitionClass, qry.partitionMemSize);
 		this.partitionColumnFields = partitionColumnFields
 		pObj = new InputObj(p: this)
 	}

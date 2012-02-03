@@ -26,6 +26,7 @@ class Query
 	QueryOutput output
 	Script whereExpr
 	int partitionMemSize;
+	String partitionClass;
 }
 
 /**

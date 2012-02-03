@@ -60,6 +60,11 @@ public class ByteBasedList
 		this(0, MEDIUM_SIZE);
 	}
 	
+	public ByteBasedList(int capacity)
+	{
+		this(0, capacity);
+	}
+	
 	/*
 	 * internal api; used by {@link PersistentByteBasedList} to setup BBList from a file.
 	 */
@@ -329,7 +334,7 @@ public class ByteBasedList
 	private static final int INCREMENT_SIZE = (int) Math.pow(2, 16); 
 	
 	static final int SMALL_SIZE =  (int) Math.pow(2, 6 +10);                // 64KB
-	static final int MEDIUM_SIZE = (int) Math.pow(2, (10 + 10));            // 1 MB
+	static final int MEDIUM_SIZE = (int) Math.pow(2, (10 + 10 + 3));            // 8 MB
 	static final int LARGE_SIZE = (int) Math.pow(2, (6 + 10 + 10));         // 64 MB
 
 }

@@ -38,5 +38,7 @@ static HashMap<String, Class<? extends IWindowFunction>> FUNCTION_MAP = [:]
 		
 		registerClass(FirstValue.class);
 		registerClass(LastValue.class);
+		
+		registerClass(VarPop.class);
 	}
 }

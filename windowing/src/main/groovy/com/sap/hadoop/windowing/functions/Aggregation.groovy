@@ -278,6 +278,139 @@ class Count extends Aggregate
 	}
 }
 
+class VPopResult
+{
+	double exprsquare
+	double exp
+	int cnt 
+	
+	VPopResult(double val)
+	{
+		exprsquare = val * val
+		exp = val
+		cnt = 1
+	}
+	
+	//(SUM(expr2) - SUM(expr)2 / COUNT(expr)) / COUNT(expr)
+	double result()
+	{
+		return (exprsquare - (Math.pow(exp, 2.0)/cnt))/cnt
+	}
+	
+	void add(double val)
+	{
+		exprsquare += val * val
+		exp += val
+		cnt += 1
+	}
+}
+@FunctionDef(
+	name = "varpop",
+	typeName="double",
+	supportsWindow = true,
+	description="returns the population variance of a set of numbers after discarding the nulls in this set.",
+	args =
+	[
+		@ArgDef(name="expr", typeName="script", argTypes = [ArgType.STRING, ArgType.SCRIPT, ArgType.ID])
+	]
+)
+class VarPop extends Aggregate
+{
+	def nextValue(val, s)
+	{
+		if ( val )
+		{
+			if (!s.res)
+			{
+				s.res = new VPopResult(val)
+			}
+			else
+			{
+				s.res.add(val)
+			}
+		}
+		return s
+	}
+	
+	def getResult(State s)
+	{
+		if ( !s.res) {
+			return null
+		}
+		return s.res.result();
+	}
+}
+
+class CoVarPopResult
+{
+	double product
+	double expr1
+	double expr2
+	int cnt
+	
+	CoVarPopResult(double e1, double e2)
+	{
+		product = e1 * e2
+		expr1 = e1
+		expr2 = e2
+		cnt = 1
+	}
+	
+	//(SUM(expr1 * expr2) - SUM(expr2) * SUM(expr1) / n) / n
+	double result()
+	{
+		return (product - (expr1 * expr2/cnt))/cnt
+	}
+	
+	void add(double e1, double e2)
+	{
+		product += e1 * e2
+		expr1 += e1
+		expr2 += e2
+		cnt += 1
+	}
+}
+@FunctionDef(
+	name = "covarpop",
+	typeName="double",
+	supportsWindow = true,
+	description="""applies the function to the set of (expr1, expr2) pairs after eliminating all pairs for which either expr1 or expr2 is null.
+Then computes: (SUM(expr1 * expr2) - SUM(expr2) * SUM(expr1) / n) / n
+	where n is the number of (expr1, expr2) pairs where neither expr1 nor expr2 is null.
+	The function returns a double. returns null for an empty set.""",
+	args =
+	[
+		@ArgDef(name="expr1", typeName="script", argTypes = [ArgType.STRING, ArgType.SCRIPT, ArgType.ID]),
+		@ArgDef(name="expr2", typeName="script", argTypes = [ArgType.STRING, ArgType.SCRIPT, ArgType.ID])
+	]
+)
+class CoVarPop extends Aggregate
+{
+	def nextValue(val, s)
+	{
+		if ( val )
+		{
+			if (!s.res)
+			{
+				s.res = new VPopResult(val)
+			}
+			else
+			{
+				s.res.add(val)
+			}
+		}
+		return s
+	}
+	
+	def getResult(State s)
+	{
+		if ( !s.res) {
+			return null
+		}
+		return s.res.result();
+	}
+}
+
 class SameValueList
 {
 	def value

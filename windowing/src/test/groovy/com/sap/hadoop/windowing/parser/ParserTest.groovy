@@ -57,6 +57,7 @@ select p_mfgr,p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, 
 	tableInput=(windowInputClass=com.sap.hadoop.windowing.io.TableWindowingInput, inputPath=$basedir/data/partsmall, keyClass=org.apache.hadoop.io.Text, valueClass=org.apache.hadoop.io.Text, inputFormatClass=org.apache.hadoop.mapred.TextInputFormat, serDeClass=org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, serDeProps={columns=p_partkey,p_name,p_mfgr,p_brand,p_type,p_size,p_container,p_retailprice,p_comment, columns.types=int,string,string,string,string,int,string,double,string}
 		partitionColumns=p_mfgr
 		orderColumns=p_mfgr ASC, p_name ASC)
+	tableFuncSpec=null
 	funcSpecs=[rank(alias=r, param=[], type=null, window=null),
 		sum(alias=s, param=[id=p_size], type=null, window=window(start=range(Unbounded PRECEDING), end=currentRow)),
 		sum(alias=s1, param=[id=p_size], type=null, window=window(start=currentRow, end=range(Unbounded FOLLOWING))),
@@ -121,6 +122,7 @@ select p_mfgr,p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, 
 	tableInput=(hiveTable=part
 		partitionColumns=p_mfgr
 		orderColumns=p_mfgr ASC, p_name ASC)
+	tableFuncSpec=null
 	funcSpecs=[rank(alias=r, param=[], type=null, window=null)]
 	select=p_mfgr, p_name, p_size, r
 	whereExpr=null
@@ -146,6 +148,7 @@ select p_mfgr,p_name, p_size, r, s, s1, m, dr, cud, pr, nt, c, ca, cd, avg, st, 
 	tableInput=(hiveTable=part
 		partitionColumns=p_mfgr
 		orderColumns=p_mfgr ASC, p_name ASC)
+	tableFuncSpec=null
 	funcSpecs=[rank(alias=r, param=[], type=null, window=null)]
 	select=p_mfgr, p_name, p_size, r
 	whereExpr=null
@@ -175,6 +178,7 @@ select p_mfgr,p_name, p_size, r
 				from part_rc>
 		partitionColumns=p_mfgr
 		orderColumns=p_mfgr ASC, p_name ASC)
+	tableFuncSpec=null
 	funcSpecs=[rank(alias=r, param=[], type=null, window=null)]
 	select=p_mfgr, p_name, p_size, r
 	whereExpr=null
@@ -187,7 +191,7 @@ select p_mfgr,p_name, p_size, r
 	{
 		QuerySpec qSpec = wshell.parse("""
 		from npath(<select p_mfgr, p_name, p_size
-				from part_rc> partition by p_mfgr order by p_mfgr, p_name, pattern='')
+				from part_rc> partition by p_mfgr order by p_mfgr, p_name, '')
 select p_mfgr,p_name, p_size, r
 		into path='/tmp/wout'
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
@@ -195,11 +199,38 @@ select p_mfgr,p_name, p_size, r
 		
 		//println qSpec.toString();
 		
-		assert qSpec.toString() == """Query:
+		assert qSpec.toString() =="""Query:
 	tableInput=(hiveQuery=<select p_mfgr, p_name, p_size
 				from part_rc>
 		partitionColumns=p_mfgr
 		orderColumns=p_mfgr ASC, p_name ASC)
+	tableFuncSpec=npath(param=[strVal=], window=null)
+	funcSpecs=[]
+	select=p_mfgr, p_name, p_size, r
+	whereExpr=null
+	tableOutput=(output(path=/tmp/wout, serde=org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, serDeProps={}, format=org.apache.hadoop.mapred.TextOutputFormat)
+"""
+	}
+	
+	@Test
+	void testTableFunction2()
+	{
+		QuerySpec qSpec = wshell.parse("""
+		from dummy(npath(<select p_mfgr, p_name, p_size
+				from part_rc> partition by p_mfgr order by p_mfgr, p_name, ''), 'a', 'b')
+select p_mfgr,p_name, p_size, r
+		into path='/tmp/wout'
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+		//println qSpec.toString();
+		
+		assert qSpec.toString() =="""Query:
+	tableInput=(hiveQuery=<select p_mfgr, p_name, p_size
+				from part_rc>
+		partitionColumns=p_mfgr
+		orderColumns=p_mfgr ASC, p_name ASC)
+	tableFuncSpec=dummy(npath(param=[strVal=], window=null), param=[strVal=a, strVal=b], window=null)
 	funcSpecs=[]
 	select=p_mfgr, p_name, p_size, r
 	whereExpr=null

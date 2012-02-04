@@ -7,6 +7,7 @@ class QuerySpec
 {
 	String queryStr
 	TableInput tableIn
+	TableFuncSpec tblFuncSpec
 	ArrayList<FuncSpec> funcSpecs
 	String whereExpr
 	TableOutput tableOut
@@ -23,8 +24,8 @@ class QuerySpec
 	public String toString()
 	{
 		return sprintf(
-			"Query:\n\ttableInput=(%s)\n\tfuncSpecs=[%s]\n\tselect=%s\n\twhereExpr=%s\n\ttableOutput=(%s)\n", 
-			tableIn, funcSpecs.join(",\n\t\t"), selectColumns.join(", "), whereExpr, tableOut)
+			"Query:\n\ttableInput=(%s)\n\ttableFuncSpec=%s\n\tfuncSpecs=[%s]\n\tselect=%s\n\twhereExpr=%s\n\ttableOutput=(%s)\n", 
+			tableIn, tblFuncSpec, funcSpecs.join(",\n\t\t"), selectColumns.join(", "), whereExpr, tableOut)
 	}
 	
 }
@@ -153,6 +154,25 @@ class FuncArg
 		else if ( iVal )
 			return ArgType.NUMBER;
 		return ArgType.STRING;
+	}
+}
+
+class TableFuncSpec extends FuncSpec
+{
+	TableFuncSpec inputFuncSpec
+	
+	public String toString()
+	{
+		if (!inputFuncSpec )
+		{
+			return sprintf( '%s(param=%s, window=%s)',
+				name, params, window)
+		}
+		else
+		{
+			return sprintf( '%s(%s, param=%s, window=%s)',
+				name, inputFuncSpec, params, window)
+		}
 	}
 }
 

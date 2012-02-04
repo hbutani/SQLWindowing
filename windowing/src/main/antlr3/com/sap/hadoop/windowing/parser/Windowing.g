@@ -19,7 +19,6 @@ tokens {
   TYPENAME;
   SELECTCOLUMN;
   OUTPUTSPEC;
-  TBLFUNCPARAM;
   TBLFUNCTION;
 }
 
@@ -62,7 +61,7 @@ query :
  select
  where? 
  outputClause? 
- EOF -> ^(QUERY tableSpec partitionby orderby select funclist? where? outputClause?)
+ EOF -> ^(QUERY tableSpec select funclist? where? outputClause?)
 ;
 
 tableSpec :
@@ -74,8 +73,8 @@ tableSpec :
 ;
 
 tblfunc :
-  name=ID LPAREN tableSpec (window_expression)? (COMMA tblfuncparam)* RPAREN 
-    -> ^(TBLFUNCTION $name tableSpec window_expression? tblfuncparam* )
+  name=ID LPAREN tableSpec (window_expression)? (COMMA functionparam)* RPAREN 
+    -> ^(TBLFUNCTION $name tableSpec functionparam* window_expression?)
 ;
 
 hivetable :
@@ -109,10 +108,6 @@ function :
 
 functionparam  :	
  GROOVYEXPRESSION | STRING | ID | NUMBER
-;
-
-tblfuncparam :
-  (i=ID|i=STRING) EQ v=functionparam -> ^(TBLFUNCPARAM $i $v)
 ;
 
 window_expression :

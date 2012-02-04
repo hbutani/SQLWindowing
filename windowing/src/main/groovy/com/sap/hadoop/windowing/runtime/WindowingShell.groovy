@@ -42,6 +42,8 @@ class WindowingShell
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
 			WindowingParser parser = new WindowingParser(tokens);
 			CommonTree t = parser.query().getTree()
+			
+			//println t.toStringTree()
 		
 			CommonTreeAdaptor ta = (CommonTreeAdaptor) parser.getTreeAdaptor();
 			QuerySpecBuilder v = new QuerySpecBuilder(adaptor : ta)

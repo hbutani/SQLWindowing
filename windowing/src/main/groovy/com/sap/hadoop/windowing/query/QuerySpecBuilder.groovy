@@ -17,23 +17,30 @@ class QuerySpecBuilder
 	void visit(CommonTree node) throws WindowingException
 	{
 		boolean isNil = adaptor.isNil(node);
-		_preVisit(node);
-		for(int i = 0; i < adaptor.getChildCount(node); i++)
+		boolean visitSubTree = _preVisit(node);
+		if ( visitSubTree )
 		{
-			CommonTree child = adaptor.getChild(node, i);
-			Object visitResult = visit(child);
+			for(int i = 0; i < adaptor.getChildCount(node); i++)
+			{
+				CommonTree child = adaptor.getChild(node, i);
+				Object visitResult = visit(child);
+			}
+			_postVisit(node);
 		}
-		_postVisit(node);
 	}
 	
-	void _preVisit(CommonTree node)
+	boolean _preVisit(CommonTree node)
 	{
 		switch(node.getType())
 		{
 			case WindowingParser.OUTPUTSPEC:
 				processingInput =false
 				break;
+			case WindowingParser.TBLFUNCTION:
+				qSpec.tblFuncSpec = tablefunction(node);
+				return false;
 		}
+		return true;
 	}
 	
 	void _postVisit(CommonTree node) throws WindowingException
@@ -214,6 +221,38 @@ class QuerySpecBuilder
 			case WindowingParser.NUMBER:
 				return new FuncArg(iVal : Integer.parseInt(node.text))
 		}
+	}
+	
+	TableFuncSpec tablefunction(CommonTree node)
+	{
+		TableFuncSpec fSpec = new TableFuncSpec()
+		fSpec.name = node.children[0].text.toLowerCase()
+		
+		CommonTree inputSpecNode = node.children[1]
+		switch(inputSpecNode.getType())
+		{
+			case WindowingParser.TABLEINPUT:
+				visit(inputSpecNode)
+				break;
+			case WindowingParser.TBLFUNCTION:
+				fSpec.inputFuncSpec = tablefunction(inputSpecNode)
+				break;
+		}
+		
+		int idx = 2
+		
+		while ( node.childCount > idx && (node.children[idx].getType() in [WindowingParser.GROOVYEXPRESSION,WindowingParser.STRING, WindowingParser.ID, WindowingParser.NUMBER] ) )
+		{
+			fSpec.params = fSpec.params == null ? [] : fSpec.params
+			fSpec.params << functionArg(node.children[idx])
+			idx++
+		}
+		
+		if ( node.childCount > idx )
+		{
+			fSpec.window = createwindow(node.children[idx])
+		}
+		return fSpec
 	}
 	
 	Window createwindow(CommonTree node)

@@ -51,7 +51,7 @@ class Executor
 		endOutput(qry);
 	}
 	
-	void writeOutputRow(OutputObj orow, Query qry)
+	void writeOutputRow(Row orow, Query qry)
 	{
 		QueryOutput qryOut = qry.output
 		ArrayList o = []
@@ -73,7 +73,7 @@ class TestExecutor extends Executor
 {
 	PrintStream out = System.out
 	
-	void writeOutputRow(OutputObj orow, Query qry)
+	void writeOutputRow(Row orow, Query qry)
 	{
 		QueryOutput qryOut = qry.output
 		ArrayList o = []

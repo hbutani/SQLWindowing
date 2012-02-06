@@ -34,7 +34,7 @@ class FunctionTranslator
 		
 	}
 	
-	IWindowFunction createTableFunction(Class<? extends AbstractTableFunction> fnClass, Query qry, FuncSpec funSpec) throws WindowingException
+	AbstractTableFunction createTableFunction(Class<? extends AbstractTableFunction> fnClass, Query qry, FuncSpec funSpec) throws WindowingException
 	{
 		QuerySpec qSpec = qry.qSpec
 		try

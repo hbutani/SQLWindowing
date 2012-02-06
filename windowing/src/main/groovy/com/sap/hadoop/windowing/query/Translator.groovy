@@ -43,7 +43,7 @@ abstract class Translator
 			cfg : cfg)
 		setupQueryInput(qry, hiveQryExec)
 		setupWindowFunctions(wshell, qry)
-		setupTableFunction(qry)
+		setupTableFunction(wshell, qry)
 		setupOutput(qry)
 		setupWhereClause(qry)
 		
@@ -157,10 +157,39 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		}
 	}
 	
-	void setupTableFunction(Query qry) throws WindowingException
+	void setupTableFunction(GroovyShell wshell, Query qry) throws WindowingException
 	{
-		qry.tableFunction = new WindowingTableFunction(qry)
-		qry.inputtableFunction = qry.tableFunction
+		if ( !qry.qSpec.tblFuncSpec)
+		{
+			qry.tableFunction = new WindowingTableFunction(qry)
+			qry.inputtableFunction = qry.tableFunction
+		}
+		else
+		{
+			if ( ! qry?.wnFns.empty )
+			{
+				throw new WindowingException("With clause not supported with pure table Functions")
+			}
+			TableFuncSpec tSpec = qry.qSpec.tblFuncSpec
+			Stack<TableFuncSpec> stk = new Stack<TableFuncSpec>()
+			while(tSpec != null)
+			{
+				stk.push(tSpec)
+				tSpec = tSpec.inputFuncSpec
+			}
+			
+			tSpec = stk.pop()
+			AbstractTableFunction currFunc = FunctionRegistry.getTranslator(tSpec).translateTableFunction(wshell, qry, tSpec)
+			qry.inputtableFunction = currFunc
+			while(! stk.empty() )
+			{
+				tSpec = stk.pop()
+				AbstractTableFunction tFunc = FunctionRegistry.getTranslator(tSpec).translateTableFunction(wshell, qry, tSpec)
+				tFunc.input = currFunc
+				currFunc = tFunc
+			}
+			qry.tableFunction = currFunc
+		}
 	}
 	
 	void setupOutput(Query qry) throws WindowingException

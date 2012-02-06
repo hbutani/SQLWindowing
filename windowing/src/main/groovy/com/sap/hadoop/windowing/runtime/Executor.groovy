@@ -9,6 +9,7 @@ import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
 import org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordWriter;
 import org.apache.hadoop.hive.serde2.objectinspector.SettableStructObjectInspector;
 
+import com.sap.hadoop.windowing.functions.AbstractTableFunction;
 import com.sap.hadoop.windowing.io.WindowingInput;
 import com.sap.hadoop.windowing.query.OrderColumn;
 import com.sap.hadoop.windowing.query.OutputColumn;

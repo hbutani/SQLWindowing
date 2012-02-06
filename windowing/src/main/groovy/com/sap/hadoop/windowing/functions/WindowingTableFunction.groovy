@@ -11,7 +11,6 @@ import com.sap.hadoop.windowing.query.Column;
 import com.sap.hadoop.windowing.query.FuncArg;
 import com.sap.hadoop.windowing.query.FuncSpec;
 import com.sap.hadoop.windowing.query.Query;
-import com.sap.hadoop.windowing.runtime.AbstractTableFunction;
 import com.sap.hadoop.windowing.runtime.ArgType;
 import com.sap.hadoop.windowing.runtime.IPartitionIterator;
 import com.sap.hadoop.windowing.runtime.OutputObj;

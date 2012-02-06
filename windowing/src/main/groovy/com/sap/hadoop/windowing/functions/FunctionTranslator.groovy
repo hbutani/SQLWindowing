@@ -17,13 +17,29 @@ import com.sap.hadoop.windowing.runtime.Utils;
 
 class FunctionTranslator
 {	
-	IWindowFunction create(Class<IWindowFunction> fnClass, Query qry, FuncSpec funSpec) throws WindowingException
+	IWindowFunction create(Class<? extends IWindowFunction> fnClass, Query qry, FuncSpec funSpec) throws WindowingException
 	{
 		QuerySpec qSpec = qry.qSpec
 		try
 		{
 			IWindowFunction wFn = fnClass.newInstance();
 			wFn.orderColumns = (OrderColumn[]) qSpec.tableIn.orderColumns
+			wFn.setWindow(funSpec.window)
+			return wFn
+		}
+		catch(Exception e)
+		{
+			throw new WindowingException(e);
+		}
+		
+	}
+	
+	IWindowFunction createTableFunction(Class<? extends AbstractTableFunction> fnClass, Query qry, FuncSpec funSpec) throws WindowingException
+	{
+		QuerySpec qSpec = qry.qSpec
+		try
+		{
+			AbstractTableFunction wFn = fnClass.newInstance();
 			wFn.setWindow(funSpec.window)
 			return wFn
 		}
@@ -57,6 +73,46 @@ class FunctionTranslator
 		}
 
 		IWindowFunction wFn = create(cls, qry, funcSpec);
+		ArgDef[] args = fDef.args();
+		
+		for(int i=0; i < args.size(); i++)
+		{
+			if ( !args[i].optional() && i >= funcSpec.params.size())
+			{
+				throw new WindowingException(sprintf("Function %s missing required arg %s", funcSpec, args[i].name()));
+			}
+			if ( !args[i].optional() || i < funcSpec.params.size())
+			{
+				applyArg(wshell, qry, funcSpec, funcSpec.params[i], args[i], wFn)
+			}
+		}
+		
+		return wFn;
+	}
+	
+	AbstractTableFunction translateTableFunction(GroovyShell wshell, Query qry, FuncSpec funcSpec) throws WindowingException
+	{
+		Class<? extends AbstractTableFunction> cls = FunctionRegistry.TABLEFUNCTION_MAP[funcSpec.name];
+		if (!cls)
+		{
+			throw new WindowingException(sprintf("Unknown function %s", funcSpec.name))
+		}
+		FunctionDef fDef = cls.getAnnotation(FunctionDef.class);
+
+		//Check window spec
+		if ( !fDef.supportsWindow() && funcSpec.window)
+		{
+			throw new WindowingException(sprintf("Function %s doesn't support Windowing specification", funcSpec.name));
+		}
+		if ( funcSpec.window) {
+			funcSpec.window.parse(wshell)
+			int cmp = funcSpec.window.start.compare(funcSpec.window.end);
+			if ( cmp > 0 ) {
+				throw new WindowingException(sprintf("Window range invalid: %s", funcSpec));
+			}
+		}
+
+		AbstractTableFunction wFn = createTableFunction(cls, qry, funcSpec);
 		ArgDef[] args = fDef.args();
 		
 		for(int i=0; i < args.size(); i++)

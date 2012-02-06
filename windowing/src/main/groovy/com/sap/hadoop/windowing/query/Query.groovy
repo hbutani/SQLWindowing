@@ -11,10 +11,10 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 
+import com.sap.hadoop.windowing.functions.AbstractTableFunction;
 import com.sap.hadoop.windowing.functions.IWindowFunction;
 import com.sap.hadoop.windowing.io.WindowingInput;
 import com.sap.hadoop.windowing.query.Order;
-import com.sap.hadoop.windowing.runtime.AbstractTableFunction;
 
 class Query
 {

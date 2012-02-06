@@ -12,7 +12,7 @@ class FunctionRegistry
 		return fT;
 	}
 	
-static HashMap<String, Class<? extends IWindowFunction>> FUNCTION_MAP = [:]
+	static HashMap<String, Class<? extends IWindowFunction>> FUNCTION_MAP = [:]
 	
 	private static void registerClass(Class<? extends IWindowFunction> cls)
 	{
@@ -45,4 +45,17 @@ static HashMap<String, Class<? extends IWindowFunction>> FUNCTION_MAP = [:]
 		registerClass(LinearRegIntercept.class);
 		registerClass(RegCount.class);
 	}
-}
+	
+	static HashMap<String, Class<? extends AbstractTableFunction>> TABLEFUNCTION_MAP = [:]
+	
+	private static void registerTableClass(Class<? extends AbstractTableFunction> cls)
+	{
+		FunctionDef fDef = cls.getAnnotation(FunctionDef.class);
+		TABLEFUNCTION_MAP[fDef.name().toLowerCase()] = cls;
+	}
+	
+	static
+	{
+		registerTableClass(Noop.class)
+	}
+}	

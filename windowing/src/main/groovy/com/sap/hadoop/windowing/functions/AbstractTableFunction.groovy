@@ -1,9 +1,13 @@
 package com.sap.hadoop.windowing.functions
 
+import groovy.lang.GroovyShell;
+
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.annotations.FunctionDef;
+import com.sap.hadoop.windowing.query.FuncSpec;
+import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.Window;
 import com.sap.hadoop.windowing.runtime.IPartition;
 import com.sap.hadoop.windowing.runtime.IPartitionIterator;
@@ -35,6 +39,10 @@ abstract class AbstractTableFunction implements IPartitionIterator
 	}
 	
 	void remove() { input.remove(); }
+	
+	protected void completeTranslation(GroovyShell wshell, Query qry, FuncSpec funcSpec) throws WindowingException
+	{
+	}
 	
 	abstract protected IPartition execute(IPartition inpPart) throws WindowingException;
 	

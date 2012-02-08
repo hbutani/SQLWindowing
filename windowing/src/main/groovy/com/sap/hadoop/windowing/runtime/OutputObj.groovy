@@ -13,6 +13,12 @@ class OutputObj extends Row
 	Map resultMap
 	Partition p
 	
+	public OutputObj()
+	{
+		setVariable('lag', this.&lag)
+		setVariable('lead', this.&lead)
+	}
+	
 	def getVariable(String name)
 	{
 		switch(name)
@@ -71,13 +77,13 @@ class OutputObj extends Row
 	}
 	
 
-	void registerFunctions(Script sc)
+	/*void registerFunctions(Script sc)
 	{
 		if ( sc )
 		{
 			sc.lag = this.&lag
 			sc.lead = this.&lead
 		}
-	}
+	}*/
 }
 

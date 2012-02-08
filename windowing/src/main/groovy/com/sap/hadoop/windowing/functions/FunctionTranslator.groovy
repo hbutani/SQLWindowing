@@ -1,6 +1,8 @@
 package com.sap.hadoop.windowing.functions
 
 import groovy.lang.Script;
+
+import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.annotations.ArgDef;
 import com.sap.hadoop.windowing.functions.annotations.FunctionDef;
@@ -123,7 +125,7 @@ class FunctionTranslator
 			}
 			if ( !args[i].optional() || i < funcSpec.params.size())
 			{
-				applyArg(wshell, qry, funcSpec, funcSpec.params[i], args[i], wFn)
+				applyTableFnArg(wshell, qry, funcSpec, funcSpec.params[i], args[i], wFn)
 			}
 		}
 		
@@ -141,12 +143,24 @@ class FunctionTranslator
 		wFn."$fName" = v
 	}
 	
+	void applyTableFnArg(GroovyShell wshell, Query qry, FuncSpec funSpec, FuncArg arg, 
+		ArgDef argDef, AbstractTableFunction wFn) throws WindowingException
+	{
+		if ( !(arg.argType in argDef.argTypes()) )
+		{
+			throw new WindowingException(sprintf("Function %s: arg error(%s) argType not supported for arg", funSpec.name, arg))
+		}
+		def v = evaluateArg(wshell, qry, arg, argDef)
+		def fName = argDef.name()
+		wFn."$fName" = v
+	}
+	
 	Object evaluateArg(GroovyShell wshell, Query qry, FuncArg arg, ArgDef argDef) throws WindowingException
 	{
 		String typeName = argDef.typeName()
 		switch(typeName)
 		{
-			case "script":
+			case Constants.GROOVYSCRIPT_TYPE:
 			switch(arg.argType)
 			{
 				case ArgType.STRING:
@@ -158,6 +172,19 @@ class FunctionTranslator
 					return wshell.parse(arg.id)
 				case ArgType.NUMBER:
 					return wshell.parse(arg.iVal.toString())
+			}
+			case Constants.GROOVYEXPRESSION_TYPE:
+			switch(arg.argType)
+			{
+				case ArgType.STRING:
+					return wshell.parse(arg.str).run()
+				case ArgType.SCRIPT:
+					return wshell.parse(arg.expr).run()
+				case ArgType.ID:
+					validateIdentifier(qry, arg.id)
+					return wshell.parse(arg.id).run()
+				case ArgType.NUMBER:
+					return wshell.parse(arg.iVal.toString()).run()
 			}
 			default:
 			switch(arg.argType)

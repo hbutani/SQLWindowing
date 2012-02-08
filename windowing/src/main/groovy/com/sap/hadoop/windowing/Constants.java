@@ -22,4 +22,11 @@ public class Constants
 	public static final String WINDOW_PARTITION_CLASS = "com.sap.hadoop.windowing.partition.class";
 	public static final String DEFAULT_WINDOW_PARTITION_CLASS = "com.sap.hadoop.ds.list.ByteBasedList";
 	
+	/*
+	 * the difference between script & expression is that script is only parsed during translation,
+	 * and the parsed script is provided to the function, whereas expression is evaluated and the
+	 * result of evaluation is passed to the function.
+	 */
+	public static final String GROOVYSCRIPT_TYPE = "script";
+	public static final String GROOVYEXPRESSION_TYPE = "expression";		
 }

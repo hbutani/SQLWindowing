@@ -181,12 +181,14 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 			tSpec = stk.pop()
 			AbstractTableFunction currFunc = FunctionRegistry.getTranslator(tSpec).translateTableFunction(wshell, qry, tSpec)
 			qry.inputtableFunction = currFunc
+			currFunc.completeTranslation(wshell, qry, tSpec)
 			while(! stk.empty() )
 			{
 				tSpec = stk.pop()
 				AbstractTableFunction tFunc = FunctionRegistry.getTranslator(tSpec).translateTableFunction(wshell, qry, tSpec)
 				tFunc.input = currFunc
 				currFunc = tFunc
+				currFunc.completeTranslation(wshell, qry, tSpec)
 			}
 			qry.tableFunction = currFunc
 		}

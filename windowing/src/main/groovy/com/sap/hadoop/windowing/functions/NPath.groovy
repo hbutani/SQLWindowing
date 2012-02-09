@@ -16,7 +16,7 @@ import com.sap.hadoop.windowing.query.OutputColumn;
 import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.runtime.ArgType;
 import com.sap.hadoop.windowing.runtime.IPartition;
-import com.sap.hadoop.windowing.runtime.OutputObj;
+import com.sap.hadoop.windowing.runtime.InputObj;
 import com.sap.hadoop.windowing.runtime.Partition;
 import com.sap.hadoop.windowing.runtime.Row;
 
@@ -63,6 +63,7 @@ class NPath extends AbstractTableFunction
 	List<Object> results
 	NRowContext rowContext
 	ArrayList<NResColumn> outCols
+	HashMap<String, TypeInfo> outputShape
 
 	@Override
 	protected IPartition execute(IPartition inpPart) throws WindowingException
@@ -70,7 +71,7 @@ class NPath extends AbstractTableFunction
 		rowContext.inputP = inpPart
 		ArrayList<Integer> idxList = []
 		NPartition op = new NPartition(idxList, inpPart)
-		OutputObj orow = op.getRowObject();
+		NOutObj orow = op.getRowObject();
 		outCols.each {NResColumn oc ->
 			orow.resultMap[oc.name] = []
 		}
@@ -79,7 +80,7 @@ class NPath extends AbstractTableFunction
 		return op;
 	}
 	
-	private void evaluate(NRow row, ArrayList<Integer> idxList, IPartition inpPart, OutputObj orow)
+	private void evaluate(NRow row, ArrayList<Integer> idxList, IPartition inpPart, NOutObj orow)
 	{
 		while(row)
 		{
@@ -100,11 +101,27 @@ class NPath extends AbstractTableFunction
 	@Override
 	public Map<String, TypeInfo> getOutputShape()
 	{
-		HashMap<String, TypeInfo> m = new HashMap<String, TypeInfo>()
+		return outputShape
+	}
+	
+	private void setupOutputShape(Query qry)
+	{
+		outputShape = new HashMap<String, TypeInfo>()
 		outCols.each { NResColumn rc ->
-			m.put(rc.name, rc.typeInfo)
+			outputShape.put(rc.name, rc.typeInfo)
 		}
-		return m;
+		if ( input instanceof AbstractTableFunction )
+		{
+			input.getOutputShape().each { entry ->
+				outputShape.put(entry.key, entry.value)
+			}
+		}
+		else
+		{
+			 qry.input.columns.each { Column col ->
+				 outputShape.put(col.name, col.typeInfo)
+			 }
+		}
 	}
 	
 	protected void completeTranslation(GroovyShell wshell, Query qry, FuncSpec funcSpec) throws WindowingException
@@ -122,14 +139,14 @@ class NPath extends AbstractTableFunction
 		    {
 		    case ~/.*\*/: 
 				node = node[0..-2]
-		        n = new NNode(expr : wshell.parse("nstar(\"${node}\")"))
+		        n = new NNode(expr : wshell.parse("nstar(\"${node}\")"), optional : true)
 		        break;
 		    case ~/.+\+/: 
 				node = node[0..-2]
-				n = new NNode(expr : wshell.parse("nplus(\"${node}\")"))
+				n = new NNode(expr : wshell.parse("nplus(\"${node}\")"), optional : false)
 		        break;
 		    default:
-				n = new NNode(expr : wshell.parse(node))
+				n = new NNode(expr : wshell.parse(node), optional : false)
 		    }
 			if (currNode)
 			{
@@ -175,14 +192,15 @@ class NPath extends AbstractTableFunction
 			}
 			outCols << rc
 		}
+		setupOutputShape(qry)
 	}
 	
 	TypeInfo getInputTypeInfo(Query qry, String name) throws WindowingException
 	{
 		if ( input instanceof AbstractTableFunction )
 		{
-			input.outCols.each { NResColumn oCol ->
-				if ( oCol.name == name) return oCol.typeInfo
+			input.getOutputShape().each { entry ->
+				if ( entry.key == name) return entry.value
 			}
 		}
 		else
@@ -200,6 +218,7 @@ class NNode
 {
 	Script expr
 	NNode next
+	boolean optional
 }
 
 class NSymbol
@@ -225,6 +244,7 @@ class NRow extends Row
 	ArrayList<NRow> path
 	
 	private static ArrayList<String> pathVariables = ["path", "count", "first", "last"] ;
+	private static ArrayList<String> patternfunctions = ["nstar", "nplus"] ;
 	
 	NRow(int idx, NRowContext ctx)
 	{
@@ -232,6 +252,8 @@ class NRow extends Row
 		this.ctx = ctx
 		irow = ctx.inputP[idx]
 		setVariable("symbol", this.&symbol)
+		setVariable('nstar', this.&nstar)
+		setVariable('nplus', this.&nplus)
 		setupSymbols()
 	}
 	
@@ -242,7 +264,9 @@ class NRow extends Row
 			case ctx.symbols.name:
 				return super.getVariable(name)
 			case pathVariables:
-			return super.getVariable(name)
+				return super.getVariable(name)
+			case patternfunctions:
+				return super.getVariable(name)
 			default:
 				irow.idx = idx
 				return irow.getVariable(name)
@@ -273,7 +297,12 @@ class NRow extends Row
 		if (nn == null ) return true
 		
 		NRow nr = lastExprReach.next()
-		if ( nr == null ) return false
+		if ( nr == null ) 
+		{
+			// skip all optional(star) nodes at the end
+			while (nn != null && nn.isOptional() ) nn = nn.next
+			return nn == null
+		}
 		
 		r = nr.evaluate(nn)
 		lastExprReach = nr.lastExprReach
@@ -302,7 +331,7 @@ class NRow extends Row
 	
 	boolean nstar(String name)
 	{
-		boolean res = "$name"
+		boolean res = this."$name"
 		
 		NRow prev = this
 		NRow nr = this
@@ -319,7 +348,7 @@ class NRow extends Row
 	
 	boolean nplus(String name)
 	{
-		boolean res = "$name"
+		boolean res = this."$name"
 		if ( !res )
 		{
 			return false
@@ -364,13 +393,13 @@ class NPartition extends IPartition
 {
 	ArrayList<Integer> idxList
 	Partition inputPartition
-	OutputObj outObj
+	NOutObj outObj
 	
 	NPartition(ArrayList<Integer> idxList, Partition p)
 	{
 		this.idxList = idxList
 		inputPartition = p
-		outObj = new OutputObj();
+		outObj = new NOutObj();
 		outObj.p = p
 		outObj.resultMap = [:]
 	}
@@ -378,8 +407,34 @@ class NPartition extends IPartition
 	Row getAt(i)
 	{
 		outObj.iObj = inputPartition[idxList[i]];
+		outObj.idx = i
 		return outObj;
 	}
 	int size() { return idxList.size();}
 	Row getRowObject() { return outObj; }
+}
+
+class NOutObj extends Row
+{
+	InputObj iObj
+	Map resultMap
+	int idx
+	Partition p
+	
+	public NOutObj()
+	{
+	}
+	
+	def getVariable(String name)
+	{
+		switch(name)
+		{
+			case resultMap:
+				return resultMap[name][idx]
+			default:
+				return iObj.getVariable(name)
+		}
+	}
+	
+	
 }

@@ -91,5 +91,31 @@ class FlightsTest extends MRBaseTest
 	   with serdeproperties('field.delim'=',')
 	   format 'org.apache.hadoop.mapred.TextOutputFormat'""")
    }
+   
+   /*
+   * list incidents where a Flight(to NY) has been more than 15 minutes late 5 or more times in a row.
+   */
+  @Test
+  void testNPath()
+  {
+	  wshell.execute("""
+	  from npath(<select origin_city_name, year, month, day_of_month, arr_delay, fl_num
+			from flightsdata
+			where dest_city_name = 'New York' and dep_time != ''>
+	  		partition by fl_num
+	  		order by year, month, day_of_month,
+	  	'LATE.LATE.LATE.LATE.LATE+',
+		<[LATE : "arr_delay \\> 15"]>,
+		<["origin_city_name", "fl_num", "year", "month", "day_of_month",
+				["(path.sum() { it.arr_delay})/((double)count)", "double", "avgDelay"],
+				["count", "int", "numOfDelays"]
+		]>)
+	  select origin_city_name, fl_num, year, month, day_of_month, avgDelay, numOfDelays
+	  into path='/tmp/wout'
+	  serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+	  with serdeproperties('field.delim'=',')
+	  format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+  }
+
 }
 

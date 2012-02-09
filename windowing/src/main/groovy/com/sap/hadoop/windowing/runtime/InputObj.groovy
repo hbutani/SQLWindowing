@@ -40,9 +40,12 @@ class InputObj extends Row
 	
 	def setIdx(int i)
 	{
-		idx = i
-		wObj = p.wInput.createRow()
-		p.elems.get(i, wObj)
+		if ( i != idx || wObj == null)
+		{
+			idx = i
+			wObj = p.wInput.createRow()
+			p.elems.get(i, wObj)
+		}
 	}
 	
 }

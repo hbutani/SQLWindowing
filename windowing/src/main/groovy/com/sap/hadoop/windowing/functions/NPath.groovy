@@ -17,11 +17,14 @@ import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.runtime.ArgType;
 import com.sap.hadoop.windowing.runtime.IPartition;
 import com.sap.hadoop.windowing.runtime.OutputObj;
+import com.sap.hadoop.windowing.runtime.Partition;
 import com.sap.hadoop.windowing.runtime.Row;
 
 @FunctionDef(
 	name = "npath",
-	description="return rows that meet the specified pattern",
+	description="""return rows that meet a specified pattern. Use symbols to specify a list of expressions to match. Pattern is used to specify a Path.
+The results list can contain expressions based on the input columns and also the matched Path.
+""",
 	supportsWindow = false,
 	args = [
 		@ArgDef(name="pattern", typeName="string", argTypes = [ArgType.STRING], 
@@ -43,13 +46,13 @@ The names for symbols don't need to be quoted as long as they are valid groovy n
 """),
 		@ArgDef(name="results", typeName="expression", argTypes = [ArgType.SCRIPT], 
 			description="""specified as a list. Each entry can be just a string, or a list of 3 elems: [expr, type, name].
-If an element is just a string, it is interpreted as a reference to a column in the input to this function. 
+If an element is just a string, it is interpreted as a reference to a column in the input to this function or as a Symbol. 
 When specified as a list the first element is interepreted as a groovy expression; the second is interpreted as a typename, and the 
 third is the expression's alias. For eg <["weight", ["2*weight", "double", 'doubleWeight"]>.
 As in results the outer brackets are optional, will be added if not specified.
-The expressions are evaluated in the context where all the input columns are available, plus the attribute 'next'and 'previous'. 
-Next and previous can be used to navigate the matching path. Each node in the path exposes all the attributes of the corresponding input
-row plus the attributes next and previous. So valid expressions are: next.name, next.next.weight. 
+The expressions are evaluated in the context where all the input columns are available, plus the attributes "path", "count", "first", and "last" are available. 
+Path is a collection of nodes that represents the matching Path, count, first, last are convenience fns about the Path. 
+Each node in the path exposes all the attributes of the corresponding input row.
 """)
 	]
 )
@@ -65,17 +68,18 @@ class NPath extends AbstractTableFunction
 	protected IPartition execute(IPartition inpPart) throws WindowingException
 	{
 		rowContext.inputP = inpPart
-		OutputPartition op = new OutputPartition(inpPart)
-		OutputObj orow = op.getRowObject();
-		Map resultMap = orow.resultMap
 		ArrayList<Integer> idxList = []
+		NPartition op = new NPartition(idxList, inpPart)
+		OutputObj orow = op.getRowObject();
+		outCols.each {NResColumn oc ->
+			orow.resultMap[oc.name] = []
+		}
 		NRow row = new NRow(0, rowContext)
-		evaluate(row, idxList)
-		println idxList
+		evaluate(row, idxList, inpPart, orow)
 		return op;
 	}
 	
-	private void evaluate(NRow row, ArrayList<Integer> idxList)
+	private void evaluate(NRow row, ArrayList<Integer> idxList, IPartition inpPart, OutputObj orow)
 	{
 		while(row)
 		{
@@ -83,9 +87,13 @@ class NPath extends AbstractTableFunction
 			if (res)
 			{
 				idxList << row.idx
+				row.computePath()
+				outCols.each {NResColumn oc ->
+					row.bind(oc.expr)
+					orow.resultMap[oc.name] << oc.expr.run()
+				}
 			}
 			row = row.next()
-			println row?.idx
 		}
 	}
 
@@ -97,16 +105,6 @@ class NPath extends AbstractTableFunction
 			m.put(rc.name, rc.typeInfo)
 		}
 		return m;
-	}
-	
-	private boolean match(Row row)
-	{
-		return false
-	}
-	
-	private void evaluateOutput(Row row, Map resultMap)
-	{
-		
 	}
 	
 	protected void completeTranslation(GroovyShell wshell, Query qry, FuncSpec funcSpec) throws WindowingException
@@ -156,7 +154,12 @@ class NPath extends AbstractTableFunction
 			if ( r instanceof String )
 			{
 				rc.name = r
-				rc.typeInfo = getInputTypeInfo(qry, r)
+				if ( r in rowContext.symbols.name )
+				{
+					rc.typeInfo = TypeInfoFactory.getPrimitiveTypeInfo("boolean")
+				}
+				else
+					rc.typeInfo = getInputTypeInfo(qry, r)
 				rc.expr = wshell.parse(r)
 			}
 			else
@@ -212,18 +215,16 @@ class NRowContext
 	NNode rootNode
 }
 
-class EvalResult
-{
-	NRow row
-	boolean result
-}
-
 class NRow extends Row
 {
 	int idx
 	NRowContext ctx
 	Row irow
-	Row nRow
+	NRow nRow
+	NRow lastExprReach
+	ArrayList<NRow> path
+	
+	private static ArrayList<String> pathVariables = ["path", "count", "first", "last"] ;
 	
 	NRow(int idx, NRowContext ctx)
 	{
@@ -240,7 +241,10 @@ class NRow extends Row
 		{
 			case ctx.symbols.name:
 				return super.getVariable(name)
+			case pathVariables:
+			return super.getVariable(name)
 			default:
+				irow.idx = idx
 				return irow.getVariable(name)
 		}
 	}
@@ -260,20 +264,19 @@ class NRow extends Row
 	
 	boolean evaluate(NNode node)
 	{
+		lastExprReach = this
 		bind(node.expr)
 		boolean r = node.expr.run()
-		/*
-		 * current node consumed rows upto the end of the path. So start at the last row in the chain.
-		 */
-		NRow nr = last()
-		NNode nn = node.next
-
-		if ( r && nn && nr)
-		{
-			return nr.evaluate(nn)
-		}
 		
-		if ( nn ) return false
+		if ( !r ) return false
+		NNode nn = node.next
+		if (nn == null ) return true
+		
+		NRow nr = lastExprReach.next()
+		if ( nr == null ) return false
+		
+		r = nr.evaluate(nn)
+		lastExprReach = nr.lastExprReach
 		return r
 	}
 	
@@ -297,29 +300,19 @@ class NRow extends Row
 		return nRow
 	}
 	
-	NRow last()
-	{
-		NRow prev = this
-		/* force the move to the next row */
-		NRow nr = next()
-		while ( nr )
-		{
-			prev = nr
-			/* now only move if row already traversed */
-			nr = nr.nRow
-		}
-		return prev
-	}
-	
 	boolean nstar(String name)
 	{
 		boolean res = "$name"
-		NRow nr = next()
 		
-		if ( res && nr )
+		NRow prev = this
+		NRow nr = this
+		while ( res  )
 		{
-			nr.nstar(name, node)
+			prev = nr
+			nr = nr.next()
+			res = nr != null && nr."$name"
 		}
+		lastExprReach = prev
 		
 		return true
 	}
@@ -333,10 +326,31 @@ class NRow extends Row
 		}
 		NRow nr = next()
 		if ( nr )
-			return nr.nstar(name)
+		{
+			nr.nstar(name)
+			lastExprReach = nr.lastExprReach
+			return true
+		}
 		return true
 	}
 	
+	void computePath()
+	{
+		path = []
+		NRow r = this
+		NRow e = lastExprReach
+		while( r != e)
+		{
+			path << r
+			r = r.next()
+		}
+		path << r
+		
+		setVariable("path", path)
+		setVariable("count", path.size())
+		setVariable("first", this)
+		setVariable("lasy", lastExprReach)
+	}
 }
 
 class NResColumn
@@ -344,4 +358,28 @@ class NResColumn
 	String name
 	TypeInfo typeInfo
 	Script expr
+}
+
+class NPartition extends IPartition
+{
+	ArrayList<Integer> idxList
+	Partition inputPartition
+	OutputObj outObj
+	
+	NPartition(ArrayList<Integer> idxList, Partition p)
+	{
+		this.idxList = idxList
+		inputPartition = p
+		outObj = new OutputObj();
+		outObj.p = p
+		outObj.resultMap = [:]
+	}
+	
+	Row getAt(i)
+	{
+		outObj.iObj = inputPartition[idxList[i]];
+		return outObj;
+	}
+	int size() { return idxList.size();}
+	Row getRowObject() { return outObj; }
 }

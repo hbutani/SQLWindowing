@@ -31,12 +31,16 @@ class NPathTest extends BaseTest
 			order by p_mfgr, p_name,
 					'BIG.BIG.BIG',
 					<[BIG : "p_size \\> 5"]>,
-					<["p_mfgr", "p_name", "p_size"]>
+					<["p_mfgr", "p_name", "p_size", 
+						["(path.sum() { it.p_size})/((double)count)", "int", "avgSize"],
+						["path.collect {it.p_size}", "string", "sizes"]
+					]>
 							)
-			select p_mfgr, p_name, p_size""")
+			select p_mfgr, p_name, p_size, avgSize, sizes""")
 	
 		String r = outStream.toString()
 		r = r.replace("\r\n", "\n")
+		println r
 	}
 	
 }

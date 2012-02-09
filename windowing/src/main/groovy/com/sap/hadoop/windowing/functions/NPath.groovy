@@ -39,8 +39,6 @@ flights, followed by a ONTIME or EARLY flight.
 		@ArgDef(name="symbols", typeName="expression", argTypes = [ArgType.SCRIPT], 
 			description="""specify a map from names to expresssions. For e.g.
 <[LATE: "arrival_delay > 0", EARLY: "arrival_delay < 0" , ONTIME : "arrival_delay == 0"]>
-The outer brackets are are optional, will be added if not specified. So this is valid:
-<LATE: "arrival_delay > 0", EARLY: "arrival_delay < 0" , ONTIME : "arrival_delay == 0">
 The names for symbols don't need to be quoted as long as they are valid groovy names. When in doubt add quotes, for eg:
 <LATE: "arrival_delay > 0 and arrival_delay < 60", "LATE*2": "arrival_delay >= 60" >
 """),
@@ -49,7 +47,6 @@ The names for symbols don't need to be quoted as long as they are valid groovy n
 If an element is just a string, it is interpreted as a reference to a column in the input to this function or as a Symbol. 
 When specified as a list the first element is interepreted as a groovy expression; the second is interpreted as a typename, and the 
 third is the expression's alias. For eg <["weight", ["2*weight", "double", 'doubleWeight"]>.
-As in results the outer brackets are optional, will be added if not specified.
 The expressions are evaluated in the context where all the input columns are available, plus the attributes "path", "count", "first", and "last" are available. 
 Path is a collection of nodes that represents the matching Path, count, first, last are convenience fns about the Path. 
 Each node in the path exposes all the attributes of the corresponding input row.

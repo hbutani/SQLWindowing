@@ -9,9 +9,12 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import com.sap.hadoop.windowing.runtime.Mode;
+import com.sap.hadoop.windowing.runtime.Utils;
 import org.apache.hadoop.conf.Configuration;
-//import com.sap.hadoop.windowing.cli.WindowingClient;
-//import com.sap.hadoop.windowing.cli.WindowingClient2;
+import com.sap.hadoop.windowing.cli.WindowingClient;
+import com.sap.hadoop.windowing.query.Translator;
+import com.sap.hadoop.windowing.runtime.Executor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -39,8 +42,6 @@ import org.apache.hadoop.hive.shims.ShimLoader;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
 
-import com.sap.hadoop.windowing.cli.WindowingClassLoader;
-
 /*
  * 
  * Notes:
@@ -52,27 +53,15 @@ class WindowingHiveCliDriver extends CliDriver {
 	
 	CliDriver hiveDriver;
 	boolean windowingMode = false;
-	def wClient;
-	WindowingClassLoader wcl
+	WindowingClient wClient;
 	
 	public WindowingHiveCliDriver(CliDriver hiveDriver) {
 		this.hiveDriver = hiveDriver
 	  }
 	
-	void setupClient(HiveConf hConf, String windowingJar) throws Throwable
+	void setupClient(HiveConf hConf, String windowingJar) throws WindowingException
 	{
-		ClassLoader cl = Thread.currentThread().getContextClassLoader()
-		wcl = WindowingClassLoader.create(Thread.currentThread().getContextClassLoader(), windowingJar)
-		try
-		{
-			Thread.currentThread().setContextClassLoader(wcl)
-			Class<?> wCls = wcl.loadClass("com.sap.hadoop.windowing.cli.WindowingClient2")
-			wClient = wCls.newInstance(hConf, windowingJar, hiveDriver)
-		}
-		finally
-		{
-			Thread.currentThread().setContextClassLoader(cl)
-		}
+		wClient = new WindowingClient(hConf, windowingJar, hiveDriver)
 	}
 	
 	public LogHelper getConsole() { return hiveDriver.console; }
@@ -139,17 +128,8 @@ class WindowingHiveCliDriver extends CliDriver {
 		{
 			try
 			{
-				String query = unescapeQueryString(cmd);
-				ClassLoader cl = Thread.currentThread().getContextClassLoader()
-				try
-				{
-					Thread.currentThread().setContextClassLoader(wcl)
-					wClient.executeQuery(query);
-				}
-				finally
-				{
-					Thread.currentThread().setContextClassLoader(cl)
-				}
+				String query = Utils.unescapeQueryString(cmd);
+				wClient.executeQuery(query);
 				return 0;
 			}
 			catch(Exception e)
@@ -163,16 +143,7 @@ class WindowingHiveCliDriver extends CliDriver {
 		{
 			if (cmd_trimmed.toLowerCase().equals("quit") || cmd_trimmed.toLowerCase().equals("exit"))
 			{
-				ClassLoader cl = Thread.currentThread().getContextClassLoader()
-				try
-				{
-					Thread.currentThread().setContextClassLoader(wcl)
-					wClient.killServer();
-				}
-				finally
-				{
-					Thread.currentThread().setContextClassLoader(cl)
-				}
+				wClient.killServer();
 			}
 			return hiveDriver.processCmd(cmd);
 		}
@@ -295,14 +266,6 @@ class WindowingHiveCliDriver extends CliDriver {
 
 		System.exit(ret);
 	}
-	
-	static String unescapeQueryString(String qry)
-	{
-		qry = qry.replace("\\\"", "\"");
-		qry = qry.replace("\\'", "'");
-		return qry
-	}
-	
 /* Copied from SessionState*/
 /* Why is this done?
  *  because have beem testing with versions: hive-0.7.1-cdh3u1 and  hive-0.9.0-SNAPSHOT

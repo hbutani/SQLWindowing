@@ -154,19 +154,19 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 		<groupId>org.apache.hadoop</groupId>
 		<artifactId>hadoop-core</artifactId>
 		<version>0.20.2-cdh3u1</version>
-	    <scope>provided</scope>
+	    <!-- <scope>provided</scope>-->
 	</dependency>
 	<dependency>
 		<groupId>org.slf4j</groupId>
 		<artifactId>slf4j-api</artifactId>
 		<version>1.6.4</version>
-	    <scope>provided</scope>
+	    <!--<scope>provided</scope>-->
 	</dependency>
 	<dependency>
 		<groupId>org.apache.hadoop.hive</groupId>
 		<artifactId>hive-cli</artifactId>
 		<version>0.7.1-cdh3u1</version>
-	    <scope>provided</scope>
+	    <!-- <scope>provided</scope>-->
 	</dependency>
   </dependencies>
   <repositories>

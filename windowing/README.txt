@@ -16,8 +16,8 @@ Getting Started
 
 MR Mode:
 =======
-- download SQLWindowing jar & the jar-with-dependencies
-- copy jar to $HIVE_HOME/lib
+- download com.sap.hadoop.windowing-0.0.1-SNAPSHOT.jar & com.sap.hadoop.windowing-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+- copy com.sap.hadoop.windowing-0.0.1-SNAPSHOT.jar to $HIVE_HOME/lib
 - cp $HIVE_HOME/bin/ext/cli.sh $HIVE_HOME/bin/ext/windowCli.sh
 - edit windowCli.sh; change to
 THISSERVICE=windowingCli
@@ -28,7 +28,7 @@ windowingCli () {
   if $cygwin; then
     HIVE_LIB=`cygpath -w "$HIVE_LIB"`
   fi
-  JAR=${HIVE_LIB}/com.sap.hadoop.windowing-*.jar
+  JAR=${HIVE_LIB}/com.sap.hadoop.windowing-0.0.1-SNAPSHOT.jar
   exec $HADOOP jar $JAR $CLASS "$@"
 }
 
@@ -36,7 +36,14 @@ windowingCli_help () {
   windowingCli "--help"
 } 
 
-- to run pass -w <jar-with-dependencies> option.
+- to run pass -w <jar-with-dependencies> option. for e.g.
+hive --service windowingCli -w /tmp/com.sap.hadoop.windowing-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+
+- in session use wmode to switch between hive & windowing mode. For e.g.:
+wmode windowing;
+from census_q1 partition by county order by county, arealand desc with rank() as r select county, tract, arealand, r into path='/tmp/wout';
+wmode hive;
+exit;
 
 Hive Mode:
 =========

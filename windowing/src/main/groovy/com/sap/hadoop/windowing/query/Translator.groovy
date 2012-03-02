@@ -247,7 +247,8 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		//0. if type specified explicitly specified in sCol, use it.
 		if ( sCol.typeName)
 		{
-			oc.typeInfo = TypeInfoFactory.getPrimitiveTypeInfo(sCol.typeName)
+			//oc.typeInfo = TypeInfoFactory.getPrimitiveTypeInfo(sCol.typeName)
+			oc.typeInfo = TypeInfoUtils.getTypeInfoFromTypeString(sCol.typeName)
 			return;
 		}
 		

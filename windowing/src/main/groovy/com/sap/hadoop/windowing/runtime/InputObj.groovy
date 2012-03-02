@@ -1,7 +1,11 @@
 package com.sap.hadoop.windowing.runtime
 
+import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.MapObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.io.Writable
@@ -23,11 +27,18 @@ class InputObj extends Row
 			{
 				Object val = p.inputOI.getStructFieldData(o, fRef)
 				ObjectInspector oi = fRef.getFieldObjectInspector()
-				if (oi.getCategory() == Category.PRIMITIVE )
+				switch (oi.category)
 				{
-					return ((PrimitiveObjectInspector)oi).getPrimitiveJavaObject(val)
+					case Category.PRIMITIVE:
+						return ((PrimitiveObjectInspector)oi).getPrimitiveJavaObject(val);
+					case Category.LIST:
+						//return ((ListObjectInspector)oi).getList(val);
+						return ObjectInspectorUtils.copyToStandardObject(val, oi, ObjectInspectorCopyOption.JAVA);
+					case Category.MAP:
+						return ObjectInspectorUtils.copyToStandardObject(val, oi, ObjectInspectorCopyOption.JAVA);
+					default:
+						return val;
 				}
-				return val
 			}
 			else
 				return super.getVariable(name)

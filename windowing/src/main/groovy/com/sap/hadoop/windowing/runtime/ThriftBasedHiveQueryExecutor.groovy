@@ -52,4 +52,10 @@ class ThriftBasedHiveQueryExecutor implements HiveQueryExecutor
 		executeHiveQuery(hQry)
 		return tableName
 	}
+	
+	public void dropTable(String tableName) throws WindowingException
+	{
+		String hQry = "drop table ${tableName}"
+		executeHiveQuery(hQry);
+	}
 }

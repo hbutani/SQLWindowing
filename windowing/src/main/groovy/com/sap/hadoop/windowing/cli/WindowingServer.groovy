@@ -197,7 +197,6 @@ class SlaveConnection
 		{
 			wshell.hiveQryExec = new WClientBasedHiveQueryExecutor(socketChannel, resp, szb)
 			wshell.execute(qry);
-			// todo: drop the temptable
 			resp.type = ResponseType.OK;
 		}
 		catch(Throwable e)
@@ -262,6 +261,12 @@ class WClientBasedHiveQueryExecutor implements HiveQueryExecutor
 		hQry = "Create table ${tableName} as ${hQry}"
 		executeHiveQuery(hQry)
 		return tableName
+	}
+	
+	public void dropTable(String tableName) throws WindowingException
+	{
+		String hQry = "drop table ${tableName}"
+		executeHiveQuery(hQry);
 	}
 }
 

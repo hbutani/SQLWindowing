@@ -61,6 +61,12 @@ class WindowingClient2 implements HiveQueryExecutor
 		return tableName
 	}
 	
+	public void dropTable(String tableName) throws WindowingException
+	{
+		String hQry = "drop table ${tableName}"
+		executeHiveQuery(hQry);
+	}
+	
 	void killServer() {}
 	
 	private ClassLoader setClassLoader()

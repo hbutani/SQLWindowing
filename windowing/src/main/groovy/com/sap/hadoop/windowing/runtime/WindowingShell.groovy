@@ -72,7 +72,18 @@ class WindowingShell
 	{
 		QuerySpec qSpec = parse(query)
 		Query q = translator.translate(wshell, qSpec, cfg, hiveQryExec);
-		executor.execute(q)
+		try
+		{
+			executor.execute(q)
+		}
+		finally
+		{
+			/* delete the temporary table created */
+			if ( qSpec.tableIn.hiveQuery != null && qSpec.tableIn.tableName != null )
+			{
+				hiveQryExec.dropTable(qSpec.tableIn.tableName)
+			}
+		}
 	}
 	
 	public void executeHiveQuery(String hQry) throws WindowingException
@@ -88,5 +99,6 @@ interface HiveQueryExecutor
 {
 	void executeHiveQuery(String hQry) throws WindowingException;
 	String createTableAsQuery(String hQry) throws WindowingException;
+	void dropTable(String tableName) throws WindowingException;
 }
 

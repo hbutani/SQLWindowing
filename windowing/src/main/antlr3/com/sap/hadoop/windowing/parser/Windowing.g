@@ -20,6 +20,7 @@ tokens {
   SELECTCOLUMN;
   OUTPUTSPEC;
   TBLFUNCTION;
+  LOADSPEC;
 }
 
 @header {
@@ -155,7 +156,7 @@ where :
 ;
 
 outputClause :
- INTO PATH EQ p=STRING s=outputSerDe? -> ^(OUTPUTSPEC $p $s?)
+ INTO PATH EQ p=STRING s=outputSerDe? lc=loadClause? -> ^(OUTPUTSPEC $p $s? $lc?)
 ;
 
 outputSerDe :
@@ -171,6 +172,11 @@ outputFormatOrWriter :
   RECORDWRITER STRING -> ^(RECORDWRITER STRING) |
   FORMAT STRING -> ^(FORMAT STRING)
 ;
+
+loadClause:
+  LOAD ov=OVERWRITE? INTO TABLE t=ID (PARTITION l=STRING)? -> ^(LOADSPEC $t $l? $ov?)
+;
+
 value_expression :
   numeric_expression |
   STRING
@@ -281,6 +287,9 @@ FORMAT  : F O R M A T;
 SERDE   : S E R D E;
 SERDEPROPERTIES : S E R D E P R O P E R T I E S;
 RECORDWRITER : R E C O R D W R I T E R;
+LOAD         : L O A D;
+TABLE        : T A B L E;
+OVERWRITE        : O V E R W R I T E;
 
 /*
 /*

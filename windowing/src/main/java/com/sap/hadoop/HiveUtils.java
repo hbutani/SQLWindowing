@@ -180,6 +180,13 @@ public class HiveUtils
 		}
 	}
 	
+	public static Table getTable(String db, String tableName, Configuration conf) throws WindowingException
+	{
+		HiveMetaStoreClient client = getClient(conf);
+		db = validateDB(client, db);
+		return getTable(client, db, tableName);
+	}
+	
 	/**
 	 * copied from hive.ql.exec.Utilities: keep dependency on exec jar to minimum
 	 * @param cloader

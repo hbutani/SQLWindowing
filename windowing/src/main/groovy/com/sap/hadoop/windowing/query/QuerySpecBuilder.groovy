@@ -167,16 +167,43 @@ class QuerySpecBuilder
 		tableOut.outputPath = node.children[0].text
 		if ( cCnt > 1 )
 		{
-			CommonTree serDe = node.children[1]
-			tableOut.serDeClass = serDe.children[0].text
-			CommonTree rWrtrOrFmt = serDe.children[1]
-			if ( rWrtrOrFmt.getType() == WindowingParser.RECORDWRITER)
+			CommonTree child1 = node.children[1]
+			if ( child1.getType() == WindowingParser.SERDE)
 			{
-				tableOut.recordwriterClass = rWrtrOrFmt.children[0].text
+				tableOut.serDeClass = child1.children[0].text
+				CommonTree rWrtrOrFmt = child1.children[1]
+				if ( rWrtrOrFmt.getType() == WindowingParser.RECORDWRITER)
+				{
+					tableOut.recordwriterClass = rWrtrOrFmt.children[0].text
+				}
+				else
+				{
+					tableOut.outputFormat = rWrtrOrFmt.children[0].text
+				}
 			}
-			else
+			
+			if ( child1.getType() == WindowingParser.LOADSPEC || cCnt > 2)
 			{
-				tableOut.outputFormat = rWrtrOrFmt.children[0].text
+				CommonTree loadSpec = child1.getType() == WindowingParser.LOADSPEC ? child1 : node.children[2]
+				tableOut.tableName = loadSpec.children[0].text
+				if ( loadSpec.children.size() > 1 )
+				{
+					CommonTree gChild1 = loadSpec.children[1]
+					if ( gChild1.getType() == WindowingParser.OVERWRITE)
+					{
+						tableOut.overwrite = true
+					}
+					else
+						tableOut.partitionClause = gChild1.text
+				}
+				if ( loadSpec.children.size() > 2 )
+				{
+					CommonTree gChild2 = loadSpec.children[2]
+					if ( gChild2.getType() == WindowingParser.OVERWRITE)
+					{
+						tableOut.overwrite = true
+					}
+				}
 			}
 		}
 	}

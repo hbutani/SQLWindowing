@@ -203,7 +203,7 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 			qry.output = qryOut
 			setupOutputColumns(qry)
 			
-			validateOutputSpec(tblOut)
+			validateOutputSpec(qry)
 			
 			// 1. setup SerDe
 			setupOutputSerDe(qry)
@@ -345,8 +345,9 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		}
 	}
 	
-	void validateOutputSpec(TableOutput tblOut) throws WindowingException
+	void validateOutputSpec(Query qry) throws WindowingException
 	{
+		TableOutput tblOut = qry.qSpec.tableOut
 		// validate serDeClass
 		tblOut.serDeClass = (tblOut.serDeClass == null ? TableOutput.DEFAULT_SERDE_CLASS : tblOut.serDeClass)
 		try
@@ -375,6 +376,11 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		{
 			throw new WindowingException("Illegal Output Spec: Output Format class only valid in MR mode")
 		} 
+		
+		if ( tblOut.tableName != null )
+		{
+			throw new WindowingException("Illegal Output Spec: Load clause only valid in MR mode")
+		}
 	}
 }
 

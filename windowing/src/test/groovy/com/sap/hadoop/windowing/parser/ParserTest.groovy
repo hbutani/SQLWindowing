@@ -237,4 +237,66 @@ select p_mfgr,p_name, p_size, r
 	tableOutput=(output(path=/tmp/wout, serde=org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, serDeProps={}, format=org.apache.hadoop.mapred.TextOutputFormat)
 """
 	}
+	
+	@Test
+	void testOutputToTable()
+	{
+		QuerySpec qSpec = wshell.parse("""
+		from <select p_mfgr, p_name, p_size 
+				from part_rc>
+		partition by p_mfgr
+		order by p_mfgr, p_name
+		with
+		rank() as r
+select p_mfgr,p_name, p_size, r
+		into path='/tmp/wout' 
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'
+		load overwrite into table part_win""")
+		
+		//println qSpec.toString();
+		
+		assert qSpec.toString() =="""Query:
+	tableInput=(hiveQuery=<select p_mfgr, p_name, p_size 
+				from part_rc>
+		partitionColumns=p_mfgr
+		orderColumns=p_mfgr ASC, p_name ASC)
+	tableFuncSpec=null
+	funcSpecs=[rank(alias=r, param=[], type=null, window=null)]
+	select=p_mfgr, p_name, p_size, r
+	whereExpr=null
+	tableOutput=(output(path=/tmp/wout, serde=org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, serDeProps={}, format=org.apache.hadoop.mapred.TextOutputFormat, tableName=part_win, loadClause=null, overwrite=true)
+"""
+	}
+	
+	@Test
+	void testOutputToTable2()
+	{
+		QuerySpec qSpec = wshell.parse("""
+		from <select p_mfgr, p_name, p_size
+				from part_rc>
+		partition by p_mfgr
+		order by p_mfgr, p_name
+		with
+		rank() as r
+select p_mfgr,p_name, p_size, r
+		into path='/tmp/wout'
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'
+		load into table part_win partition '(p_date=\\'12-15-2010\\')'""")
+		
+		//println qSpec.toString();
+		
+		assert qSpec.toString() == """Query:
+	tableInput=(hiveQuery=<select p_mfgr, p_name, p_size
+				from part_rc>
+		partitionColumns=p_mfgr
+		orderColumns=p_mfgr ASC, p_name ASC)
+	tableFuncSpec=null
+	funcSpecs=[rank(alias=r, param=[], type=null, window=null)]
+	select=p_mfgr, p_name, p_size, r
+	whereExpr=null
+	tableOutput=(output(path=/tmp/wout, serde=org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, serDeProps={}, format=org.apache.hadoop.mapred.TextOutputFormat, tableName=part_win, loadClause=(p_date=\\'12-15-2010\\'), overwrite=false)
+"""
+	}
 }

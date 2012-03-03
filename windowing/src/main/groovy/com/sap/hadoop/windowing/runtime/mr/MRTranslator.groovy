@@ -4,7 +4,9 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde.Constants;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe;
+import org.apache.hadoop.hive.metastore.api.Table;
 
+import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.io.MRWindowingInput;
 import com.sap.hadoop.windowing.io.WindowingInput;
@@ -37,13 +39,38 @@ class MRTranslator extends Translator
 		// writer not used in MR mode
 	}
 	
-	void validateOutputSpec(TableOutput tblOut) throws WindowingException
+	void validateOutputSpec(Query qry) throws WindowingException
 	{
+		TableOutput tblOut = qry.qSpec.tableOut
+		
+		// if tableName is specified; validate it exists
+		Table tbl
+		if ( tblOut.tableName )
+		{
+			tbl = HiveUtils.getTable(null, tblOut.tableName, qry.cfg)
+		}
+		
 		// validate serDeClass
 		if ( tblOut.serDeClass == null )
 		{
-			tblOut.serDeClass = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
-			tblOut.serDeProps.setProperty(Constants.FIELD_DELIM, ',');
+			if ( tbl != null && tbl.sd.serdeInfo.isSetSerializationLib() )
+			{
+				tblOut.serDeClass = tbl.sd.serdeInfo.serializationLib;
+				if ( tbl.sd.serdeInfo.isSetParameters() )
+				{
+					Iterator<Map.Entry<String, String>> props = tbl.sd.serdeInfo.parameters.entrySet().iterator();
+					while(props.hasNext())
+					{
+						Map.Entry<String, String> e = props.next()
+						tblOut.serDeProps.setProperty(e.key, e.value)
+					}
+				}
+			}
+			else
+			{
+				tblOut.serDeClass = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+				tblOut.serDeProps.setProperty(Constants.FIELD_DELIM, ',');
+			}
 		}
 		try
 		{
@@ -55,8 +82,15 @@ class MRTranslator extends Translator
 		}
 		
 		// validate writer
-		tblOut.outputFormat = (tblOut.outputFormat == null ? 
+		if ( tblOut.outputFormat == null )
+		{
+			if ( tbl != null )
+			{
+				tblOut.outputFormat = tbl.sd.outputFormat
+			}
+			tblOut.outputFormat = (tblOut.outputFormat == null ? 
 			TableOutput.DEFAULT_FORMAT_CLASS : tblOut.outputFormat)
+		}
 		try
 		{
 			Class.forName(tblOut.outputFormat)

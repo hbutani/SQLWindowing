@@ -17,6 +17,9 @@ import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.query.QuerySpecBuilder;
 import com.sap.hadoop.windowing.query.Translator;
 
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+
 class WindowingShell
 {
 	private Configuration cfg;
@@ -84,6 +87,47 @@ class WindowingShell
 				hiveQryExec.dropTable(qSpec.tableIn.tableName)
 			}
 		}
+		
+		if ( qSpec.tableOut.tableName )
+		{
+			loadToOutputTable(q);
+		}
+	}
+	
+	protected void loadToOutputTable(Query qry) throws WindowingException
+	{
+		//LOAD DATA [LOCAL] INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)]
+		String loadCmd = "load data inpath '${qry.qSpec.tableOut.outputPath}'"
+		if ( qry.qSpec.tableOut.overwrite)
+		{
+			loadCmd += " OVERWRITE"
+		}
+		loadCmd += " INTO TABLE ${qry.qSpec.tableOut.tableName}"
+		if ( qry.qSpec.tableOut.partitionClause )
+		{
+			loadCmd += " PARTITION ${qry.qSpec.tableOut.partitionClause}"
+		}
+		
+		/*
+		 * delete the _SUCCESS file; comes in the way of doing a load for RcFiles.
+		 * also delete _logs directory
+		 */
+		if ( true )
+		{
+			FileSystem fs = FileSystem.get(URI.create(qry.qSpec.tableOut.outputPath), qry.cfg);
+			Path p = new Path(qry.qSpec.tableOut.outputPath, "_SUCCESS")
+			if ( fs.exists(p))
+			{
+				fs.delete(p, false)
+			}
+			p = new Path(qry.qSpec.tableOut.outputPath, "_logs")
+			if ( fs.exists(p))
+			{
+				fs.delete(p, true)
+			}
+		}
+		
+		hiveQryExec.executeHiveQuery(loadCmd);
 	}
 	
 	public void executeHiveQuery(String hQry) throws WindowingException

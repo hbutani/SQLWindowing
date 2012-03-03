@@ -85,19 +85,31 @@ class TableOutput
 	Properties serDeProps = new Properties()
 	String outputFormat
 	String recordwriterClass
+	String tableName
+	String partitionClause
+	boolean overwrite
 	
 	public String toString()
 	{
-		if ( outputFormat )
+		if ( recordwriterClass )
 		{
-			return sprintf("output(path=%s, serde=%s, serDeProps=%s, format=%s", 
-				outputPath, serDeClass, serDeProps, outputFormat)
+			return sprintf("output(path=%s, serde=%s, serDeProps=%s, recordwriterClass=%s",
+				outputPath, serDeClass, serDeProps, recordwriterClass)
 		}
 		else
 		{
-			return sprintf("output(path=%s, serde=%s, serDeProps=%s, format=%s",
-				outputPath, serDeClass, serDeProps, outputFormat)
+			if ( tableName )
+			{
+				return sprintf("output(path=%s, serde=%s, serDeProps=%s, format=%s, tableName=%s, loadClause=%s, overwrite=%s",
+					outputPath, serDeClass, serDeProps, outputFormat, tableName, partitionClause, overwrite)
+			}
+			else
+			{
+				return sprintf("output(path=%s, serde=%s, serDeProps=%s, format=%s", 
+					outputPath, serDeClass, serDeProps, outputFormat)
+			}
 		}
+		
 	}
 }
 

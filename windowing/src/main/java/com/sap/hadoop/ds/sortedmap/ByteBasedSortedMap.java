@@ -2,6 +2,7 @@ package com.sap.hadoop.ds.sortedmap;
 
 import static com.sap.hadoop.Utils.sprintf;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -67,6 +68,15 @@ public class ByteBasedSortedMap
 	public ByteBasedSortedMap(int capacity, RawComparator<?> comparator)
 	{
 		this(0, capacity, comparator);
+	}
+	
+	/*
+	 * internal api; used by {@link PersistentByteBasedMap} to setup BBMap from a file.
+	 */
+	protected ByteBasedSortedMap(File file, RawComparator<?> comparator)
+	{
+		lock = new ReentrantReadWriteLock();
+		this.comparator = comparator;
 	}
 	
 	private void ensureCapacity(int wlen, boolean offsetArrays) throws MapFullException

@@ -113,6 +113,16 @@ public class PartitionedByteBasedSortedMapTest
 	}
 	
 	@Test
+	public void testKeyItrRepeat() throws Exception
+	{
+		for(int i=0; i < 100; i++)
+		{
+			bm = new PartitionedByteBasedSortedMap(100, comparator);
+			testKeyItr();
+		}
+	}
+	
+	@Test
 	public void testEntryItr() throws Exception
 	{
 		int i = 0;

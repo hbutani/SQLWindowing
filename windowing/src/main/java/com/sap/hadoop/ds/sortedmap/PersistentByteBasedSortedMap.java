@@ -112,6 +112,12 @@ public class PersistentByteBasedSortedMap extends ByteBasedSortedMap
 		super(file, comparator);
 		this.file = file;
 		memMap = new SoftReference<ByteBasedSortedMap>(m);
+		/* don't need to materialize underlying map to get offset & size information */
+		if ( m != null )
+		{
+			startOffset = m.startOffset;
+			currentSize = m.currentSize;
+		}
 	}
 	
 	protected PersistentByteBasedSortedMap(File file, RawComparator<?> comparator)
@@ -145,6 +151,7 @@ public class PersistentByteBasedSortedMap extends ByteBasedSortedMap
 			lock.readLock().unlock();
 		}
 	}
+	
 	public void put(Writable key, Writable value) throws BaseException
 	{
 		getMemoryMap().put(key, value);

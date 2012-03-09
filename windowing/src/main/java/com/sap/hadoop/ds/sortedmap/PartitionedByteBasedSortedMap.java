@@ -55,7 +55,7 @@ public class PartitionedByteBasedSortedMap extends ByteBasedSortedMap
 		try
 		{
 			ByteBasedSortedMap mp = partitions.get(i);
-			if ( mp instanceof ByteBasedSortedMap )
+			if ( !(mp instanceof PersistentByteBasedSortedMap ) )
 			{
 				File f = File.createTempFile("wdw", null, dir);
 				mp = new PersistentByteBasedSortedMap(f, mp, comparator);
@@ -78,6 +78,14 @@ public class PartitionedByteBasedSortedMap extends ByteBasedSortedMap
 		persist(i);
 	}
 	
+	protected ByteBasedSortedMap bringInMemory(int p) throws BaseException
+	{
+		ByteBasedSortedMap mp = partitions.get(p);
+		mp = mp.getMemoryMap();
+		partitions.set(p, mp);
+		return mp;
+	}
+	
 	public void put(Writable key, Writable value) throws BaseException
 	{
 		LockUtils.lock(lock.writeLock());
@@ -89,9 +97,7 @@ public class PartitionedByteBasedSortedMap extends ByteBasedSortedMap
 			bos.reset();
 			key.write(dos);
 			int p = splitList.getPartition(bos.bytearray(), 0, bos.len());
-			ByteBasedSortedMap mp = partitions.get(p);
-			mp = mp.getMemoryMap();
-			partitions.set(p, mp);
+			ByteBasedSortedMap mp = bringInMemory(p);
 			
 			try
 			{
@@ -237,12 +243,16 @@ public class PartitionedByteBasedSortedMap extends ByteBasedSortedMap
 				for(int i=0; i < partitions.size(); i++)
 				{
 					ByteBasedSortedMap m = partitions.get(i);
+					if ( m.startOffset != cumSz )
+					{
+						m = bringInMemory(i);
+					}
 					m.startOffset = cumSz;
 					m = persist(i);
 					cumSz += m.size();
 				}
+				fixStartPositions = false;
 			}
-			fixStartPositions = false;
 		}
 		finally
 		{
@@ -260,6 +270,26 @@ public class PartitionedByteBasedSortedMap extends ByteBasedSortedMap
 	{
 		fixStartPositions();
 		return new EntryIterator(wObj, startOffset); 
+	}
+	
+	public String toString()
+	{
+		try
+		{
+			fixStartPositions();
+		}
+		catch(BaseException be)
+		{
+			return "<Failed to create String representation of Map>";
+		}
+		StringBuilder buf = new StringBuilder();
+		buf.append("[\n");
+		for(ByteBasedSortedMap bm : partitions)
+		{
+			buf.append(bm).append("\n");
+		}
+		buf.append("]\n");
+		return buf.toString();
 	}
 	
 	class SplitList

@@ -13,6 +13,7 @@ import java.util.Iterator;
 import org.apache.hadoop.io.RawComparator;
 import org.apache.hadoop.io.Writable;
 
+import com.sap.hadoop.Utils;
 import com.sap.hadoop.ds.BaseException;
 import com.sap.hadoop.ds.LockUtils;
 
@@ -118,7 +119,7 @@ public class PersistentByteBasedSortedMap extends ByteBasedSortedMap
 		this(file, null, comparator);
 	}
 
-	private ByteBasedSortedMap getMap() throws BaseException
+	protected ByteBasedSortedMap getMemoryMap() throws BaseException
 	{ 
 		LockUtils.lock(lock.readLock());
 		try
@@ -146,40 +147,54 @@ public class PersistentByteBasedSortedMap extends ByteBasedSortedMap
 	}
 	public void put(Writable key, Writable value) throws BaseException
 	{
-		getMap().put(key, value);
+		getMemoryMap().put(key, value);
 	}
 	public void put(Writable key) throws BaseException
 	{
-		getMap().put(key);
+		getMemoryMap().put(key);
 	}
 	public void getKey(int i, Writable wObj) throws BaseException
 	{
-		getMap().getKey(i, wObj);
+		getMemoryMap().getKey(i, wObj);
 	}
 	public void getEntry(int i, WritableEntry entry) throws BaseException
 	{
-		getMap().getEntry(i, entry);
+		getMemoryMap().getEntry(i, entry);
 	}
 	public int getIndex(Writable w) throws BaseException
 	{
-		return getMap().getIndex(w);
+		return getMemoryMap().getIndex(w);
 	}
 	public int getValue(Writable key, Writable value) throws BaseException
 	{
-		return getMap().getValue(key, value);
+		return getMemoryMap().getValue(key, value);
 	}
 	public int size() throws BaseException
 	{
-		return getMap().size();
+		return getMemoryMap().size();
 	}
 	public Iterator<Writable> keyIterator(Writable wObj) throws BaseException
 	{
-		return getMap().keyIterator(wObj);
+		return getMemoryMap().keyIterator(wObj);
 	}
 	public void dump(StringBuilder bldr, WritableEntry wObj)
 			throws IOException, BaseException
 	{
-		getMap().dump(bldr, wObj);
+		getMemoryMap().dump(bldr, wObj);
 	}
-
+	public ByteBasedSortedMap[] split() throws BaseException
+	{
+		return getMemoryMap().split();
+	}
+	protected byte[] getLastKey() throws BaseException { return getMemoryMap().getLastKey(); }
+	
+	public String toString()
+	{
+		ByteBasedSortedMap map = memMap.get();
+		if ( map != null )
+		{
+			return map.toString();
+		}
+		return Utils.sprintf("(<not in memory>)");
+	}
 }

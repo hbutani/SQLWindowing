@@ -79,10 +79,12 @@ public class ByteBasedSortedMap
 		this.comparator = comparator;
 	}
 	
-	private void ensureCapacity(int wlen, boolean offsetArrays) throws MapFullException
+	private void ensureCapacity(int wlen, boolean offsetArrays) throws BaseException
 	{
 		if ( bytesUsed + wlen > bytes.length)
 		{
+			if (currentSize == 0 )
+				throw new MapToSmallException();
 			throw new MapFullException();
 		}
 		
@@ -137,6 +139,31 @@ public class ByteBasedSortedMap
 		offsetsArray[pos*2 + 1] = esz;
 	}
 	
+	/*
+	 * add the ith entry from the src Map to this map
+	 */
+	private void add(ByteBasedSortedMap src, int i)
+	{
+		i = i * 2;
+		int keyOffset = src.keyOffsetsArray[i];
+		int keySz = src.keyOffsetsArray[i+1];
+		int valueOffset = src.valueOffsetsArray[i];
+		int valueSz = src.valueOffsetsArray[i+1];
+		
+		int j = currentSize * 2;
+		keyOffsetsArray[j] = bytesUsed;
+		keyOffsetsArray[j+1] = keySz;
+		System.arraycopy(src.bytes, keyOffset, bytes, bytesUsed, keySz);
+		bytesUsed += keySz;
+		
+		valueOffsetsArray[j] = bytesUsed;
+		valueOffsetsArray[j+1] = valueSz;
+		System.arraycopy(src.bytes, valueOffset, bytes, bytesUsed, valueSz);
+		bytesUsed += valueSz;
+		
+		currentSize += 1;
+	}
+	
 	private int writeKey(Writable w) throws BaseException, IOException
 	{
 		DataOStream dos = Streams.dos.get();
@@ -181,6 +208,8 @@ public class ByteBasedSortedMap
 		valueOffsetsArray[i+1] = bos.len();
 		bytesUsed += bos.len();
 	}
+	
+	protected ByteBasedSortedMap getMemoryMap() throws BaseException { return this; }
 	
 	public void put(Writable key, Writable value) throws BaseException
 	{
@@ -227,6 +256,17 @@ public class ByteBasedSortedMap
 		}
 	}
 	
+	protected byte[] getLastKey() throws BaseException
+	{
+		int i = currentSize - 1;
+		
+		int offset = keyOffsetsArray[i * 2];
+		int sz = keyOffsetsArray[i * 2 + 1];
+		byte[] b = new byte[sz];
+		System.arraycopy(bytes, offset, b, 0, sz);
+		return b;
+	}
+	
 	public void getEntry(int i, WritableEntry entry) throws BaseException
 	{
 		LockUtils.lock(lock.readLock());
@@ -262,7 +302,7 @@ public class ByteBasedSortedMap
 			TempEntryPosition te = new TempEntryPosition(bos.bytearray(), bos.len());
 			int posRet[] = position(te);
 			int pos = posRet[1];
-			return (posRet[0] == 1) ? pos : -1;
+			return (posRet[0] == 1) ? startOffset + pos : -1;
 		}
 		catch(IOException ie)
 		{
@@ -279,7 +319,7 @@ public class ByteBasedSortedMap
 		LockUtils.lock(lock.readLock());
 		try
 		{
-			int pos = getIndex(key);
+			int pos = getIndex(key) - startOffset;
 			if ( pos != -1 )
 			{
 				int i = pos * 2;
@@ -313,6 +353,40 @@ public class ByteBasedSortedMap
 		}
 	}
 	
+	public ByteBasedSortedMap[] split() throws BaseException
+	{
+		LockUtils.lock(lock.writeLock());
+		
+		try
+		{
+			int splitIdx = currentSize/2;
+			// first subMap must contain at least 1 element.
+			// also increase space in the subMap, otherwise split will be called recursively until OutOfMem
+			int firstCapacity = bytes.length;
+			if ( splitIdx == 0)
+			{
+				splitIdx = 1;
+				firstCapacity = firstCapacity << 1;
+				
+			}
+			
+			ByteBasedSortedMap[] subMaps = new ByteBasedSortedMap[] {
+					new ByteBasedSortedMap(startOffset, firstCapacity, comparator),
+					new ByteBasedSortedMap(startOffset + splitIdx, bytes.length, comparator),
+			};
+			
+			int i;
+			for(i=0; i<splitIdx; i++) { subMaps[0].add(this, i); }
+			for(; i<currentSize; i++) { subMaps[1].add(this, i); }
+			
+			return subMaps;
+		}
+		finally
+		{
+			lock.writeLock().unlock();
+		}
+	}
+	
 	public Iterator<Writable> keyIterator(Writable wObj)  throws BaseException
 	{
 		return new KeyIterator(wObj, startOffset); 
@@ -332,6 +406,11 @@ public class ByteBasedSortedMap
 			bldr.append(oi.next()).append(", ");
 		}
 		bldr.append("]\n");
+	}
+	
+	public String toString()
+	{
+		return Utils.sprintf("(startOffset=%d, currentSize=%d, bytesUsed=%d", startOffset, currentSize, bytesUsed);
 	}
 	
 	private int index(int i) throws BaseException
@@ -515,6 +594,32 @@ public class ByteBasedSortedMap
 		}
 
 		public MapFullException(Throwable cause)
+		{
+			super(cause);
+		}
+		
+	}
+	
+	public static class MapToSmallException extends BaseException
+	{
+		private static final long serialVersionUID = 4309680640300410885L;
+
+		public MapToSmallException()
+		{
+			super();
+		}
+
+		public MapToSmallException(String message, Throwable cause)
+		{
+			super(message, cause);
+		}
+
+		public MapToSmallException(String message)
+		{
+			super(message);
+		}
+
+		public MapToSmallException(Throwable cause)
 		{
 			super(cause);
 		}

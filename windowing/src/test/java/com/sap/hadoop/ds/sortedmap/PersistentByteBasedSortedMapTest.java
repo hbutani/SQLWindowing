@@ -20,7 +20,7 @@ import com.sap.hadoop.Utils;
 import com.sap.hadoop.ds.BaseException;
 import static com.sap.hadoop.ds.sortedmap.ByteBasedSortedMapTest.*;
 
-public class PersistentBytebasedSortedMapTest
+public class PersistentByteBasedSortedMapTest
 {
 	static LazySimpleSerDe sd;
 	RawComparator<?> comparator;

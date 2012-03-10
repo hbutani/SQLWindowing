@@ -28,32 +28,11 @@ import com.sap.hadoop.windowing.runtime.WindowingShell;
 
 public class Reduce extends MapReduceBase implements Reducer<Writable, Writable, Writable, Writable>
 {
-	WindowingShell wshell
-	Query qry
-	ArrayList<StructField> partitionColumnFields = []
+	ReduceBase base = new ReduceBase();
 	
 	public void configure(JobConf job) 
 	{
-		String qryStr = job.get(Job.WINDOWING_QUERY_STRING);
-		wshell = new WindowingShell(job, new MRTranslator(), new MRExecutor())
-		
-		QuerySpec qSpec = wshell.parse(qryStr);
-		
-		if ( qSpec.tableIn.hiveQuery != null )
-		{
-			String tt = job.get(Job.WINDOWING_TEMP_TABLE);
-			qSpec.tableIn.tableName = tt;
-		}
-		
-		qry = wshell.translate(qSpec)
-		
-		ArrayList<StructField> partitionColumnFields = []
-		for(Column c in qry.input.partitionColumns)
-		{
-			partitionColumnFields << c.field
-		}
-
-		println qry.qSpec.toString()
+		base.configure(job)
 	}
 
 	@Override
@@ -61,82 +40,13 @@ public class Reduce extends MapReduceBase implements Reducer<Writable, Writable,
 			OutputCollector<Writable, Writable> output, Reporter reporter)
 			throws IOException
 	{		
-		boolean applyWhere = (qry.whereExpr != null)
-		
-		AbstractTableFunction tFunc = qry.tableFunction;
-		AbstractTableFunction inpTFunc = qry.inputtableFunction
-		
-		inpTFunc.input = new MRPartitioner(qry, values, partitionColumnFields)
-		
-		while(tFunc.hasNext())
-		{
-			IPartition p = tFunc.next();
-			Row orow = p.getRowObject();
-			for(OutputColumn oc in qry.output.columns)
+		ReduceOutput rOut = new ReduceOutput() {
+			public void collect(Writable okey, Writable ovalue)
 			{
-				orow.bind(oc.groovyExpr)
-			}
-			
-			if ( applyWhere )
-			{
-				orow.bind(qry.whereExpr)
-			}
-			for(r in p)
-			{
-				if ( !applyWhere || qry.whereExpr.run() )
-					writeOutputRow(r, qry, output)
+				output.collect(okey, ovalue);
 			}
 		}
-	}
-	
-	void writeOutputRow(Row orow, Query qry, OutputCollector<Writable, Writable> output)
-	{
-		QueryOutput qryOut = qry.output
-		ArrayList o = []
-		for(OutputColumn oc in qry.output.columns)
-		{
-			o << oc.groovyExpr.run()
-		}
-		Writable outWritable = qryOut.serDe.serialize(o, qryOut.processingOI)
-		output.collect(NullWritable.get(), outWritable);
-	}
-	
+		base.reduce(key, values, rOut);
+	}	
 }
-
-
-class MRPartitioner implements IPartitionIterator
-{
-	Iterator<Writable> values
-	boolean returnedPart
-	Query qry
-	ArrayList<StructField> partitionColumnFields
-	
-	MRPartitioner(Query qry, Iterator<Writable> values, ArrayList<StructField> partitionColumnFields)
-	{
-		this.qry = qry
-		this.values = values
-		this.returnedPart = false
-		this.partitionColumnFields = partitionColumnFields
-	}
-	
-	boolean hasNext()
-	{
-		return !returnedPart
-	}
-	
-	IPartition next()
-	{
-		QueryInput qryIn = qry.input
-		com.sap.hadoop.windowing.runtime.Partition p = new com.sap.hadoop.windowing.runtime.Partition(qry, qryIn.wInput,
-			qryIn.inputOI, qryIn.deserializer, partitionColumnFields)
-		while(values.hasNext())
-		{
-			p << values.next()
-		}
-		returnedPart = true
-		return p
-	}
-	void remove() { throw new UnsupportedOperationException() }
-}
-
 

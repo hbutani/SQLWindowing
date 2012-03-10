@@ -24,7 +24,7 @@ import com.sap.hadoop.windowing.runtime.WindowingShell;
 
 interface ReduceOutput
 {
-	void collect(Writable key, Writable value);
+	void collectOutput(Writable key, Writable value);
 }
 
 public class ReduceBase
@@ -98,7 +98,7 @@ public class ReduceBase
 			o << oc.groovyExpr.run()
 		}
 		Writable outWritable = qryOut.serDe.serialize(o, qryOut.processingOI)
-		reduceOut.collect(NullWritable.get(), outWritable);
+		reduceOut.collectOutput(NullWritable.get(), outWritable);
 	}
 	
 }

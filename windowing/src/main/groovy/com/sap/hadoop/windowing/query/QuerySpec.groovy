@@ -1,9 +1,13 @@
 package com.sap.hadoop.windowing.query
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import com.sap.hadoop.windowing.runtime.ArgType;
+import org.apache.hadoop.io.Writable;
 
-
-class QuerySpec
+class QuerySpec implements Writable
 {
 	String queryStr
 	TableInput tableIn
@@ -28,6 +32,70 @@ class QuerySpec
 			tableIn, tblFuncSpec, funcSpecs.join(",\n\t\t"), selectColumns.join(", "), whereExpr, tableOut)
 	}
 	
+	@Override
+	public void write(DataOutput out) throws IOException
+	{
+		int nullFlags = 0
+		if ( whereExpr != null )             nullFlags |= 0x01
+		if ( tblFuncSpec )           nullFlags |= 0x02
+		out.writeInt(nullFlags)
+		if ( (nullFlags & 0x01) ) org.apache.hadoop.io.Text.writeString(out, whereExpr);
+		if ( (nullFlags & 0x02) ) tblFuncSpec.write(out)
+		
+		org.apache.hadoop.io.Text.writeString(out, queryStr)
+		tableIn.write(out)
+		int fSz = funcSpecs.size()
+		out.writeInt(fSz)
+		for(FuncSpec f : funcSpecs)
+		{
+			f.write(out)
+		}
+		tableOut.write(out)
+		int cSz = selectColumns.size()
+		out.writeInt(cSz)
+		for(SelectColumn sc : selectColumns)
+		{
+			sc.write(out)
+		}
+	}
+
+	@Override
+	public void readFields(DataInput din) throws IOException
+	{
+		int nullFlags = din.readInt();
+		if ( nullFlags & 0x01 )  whereExpr = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x02 )
+		{
+			tblFuncSpec = new TableFuncSpec()
+			tblFuncSpec.readFields(din)
+		}
+		
+		queryStr = org.apache.hadoop.io.Text.readString(din);
+		
+		tableIn = new TableInput()
+		tableIn.readFields(din)
+		
+		int i
+		int fSz = din.readInt()
+		for(i=0; i < fSz; i++)
+		{
+			FuncSpec f = new FuncSpec()
+			f.readFields(din)
+			funcSpecs << f
+		}
+		
+		tableOut = new TableOutput()
+		tableOut.readFields(din)
+		
+		int cSz = din.readInt()
+		for(i=0; i < cSz; i++)
+		{
+			SelectColumn sc = new SelectColumn()
+			sc.readFields(din)
+			selectColumns << sc
+		}
+	}
+	
 }
 
 /**
@@ -38,7 +106,7 @@ class QuerySpec
  * @author "Harish Butani"
  *
  */
-class TableInput
+class TableInput implements Writable
 {
 	String tableName
 	String hiveQuery
@@ -72,9 +140,89 @@ class TableInput
 			windowingInputClass, inputPath, keyClass, valueClass, inputFormatClass, serDeClass, serDeProps,
 			partitionColumns.join(", "), orderColumns.join(", "))
 	}
+
+	@Override
+	public void write(DataOutput out) throws IOException
+	{
+		int nullFlags = 0
+		if ( tableName != null )           nullFlags |= 0x01 
+		if ( hiveQuery != null )           nullFlags |= 0x02
+		if ( windowingInputClass != null ) nullFlags |= 0x04
+		if ( inputPath != null )           nullFlags |= 0x08
+		if ( keyClass != null )            nullFlags |= 0x10
+		if ( valueClass != null )          nullFlags |= 0x20
+		if ( inputFormatClass != null )    nullFlags |= 0x40
+		if ( serDeClass != null )          nullFlags |= 0x80
+		out.writeInt(nullFlags)
+		if ( (nullFlags & 0x01) ) org.apache.hadoop.io.Text.writeString(out, tableName);
+		if ( (nullFlags & 0x02) ) org.apache.hadoop.io.Text.writeString(out, hiveQuery);
+		if ( (nullFlags & 0x04) ) org.apache.hadoop.io.Text.writeString(out, windowingInputClass);
+		if ( (nullFlags & 0x08) ) org.apache.hadoop.io.Text.writeString(out, inputPath);
+		if ( (nullFlags & 0x10) ) org.apache.hadoop.io.Text.writeString(out, keyClass);
+		if ( (nullFlags & 0x20) ) org.apache.hadoop.io.Text.writeString(out, valueClass);
+		if ( (nullFlags & 0x40) ) org.apache.hadoop.io.Text.writeString(out, inputFormatClass);
+		if ( (nullFlags & 0x80) ) org.apache.hadoop.io.Text.writeString(out, serDeClass);
+		
+		int serDePropssz = serDeProps.size();
+		out.writeInt(serDePropssz)
+		for(Map.Entry<?, ?> entry : serDeProps)
+		{
+			org.apache.hadoop.io.Text.writeString(out, (String) entry.key);
+			org.apache.hadoop.io.Text.writeString(out, (String) entry.value);
+		}
+		
+		int pColssz = partitionColumns.size()
+		out.writeInt(pColssz)
+		for(String s : partitionColumns)
+		{
+			org.apache.hadoop.io.Text.writeString(out, s);
+		}
+		
+		int oColsz = orderColumns.size()
+		out.writeInt(oColsz)
+		for(OrderColumn oc : orderColumns)
+		{
+			oc.write(out)
+		}
+	}
+
+	@Override
+	public void readFields(DataInput din) throws IOException 
+	{
+		int nullFlags = din.readInt();
+		if ( nullFlags & 0x01 ) tableName = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x02 )  hiveQuery = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x04 )  windowingInputClass = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x08 )  inputPath = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x10 )  keyClass = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x20 )  valueClass = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x40 )  inputFormatClass = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x80 )  serDeClass = org.apache.hadoop.io.Text.readString(din);
+		
+		int i;
+		int serDePropssz = din.readInt();
+		for(i=0; i < serDePropssz; i++)
+		{
+			serDeProps.put(org.apache.hadoop.io.Text.readString(din), org.apache.hadoop.io.Text.readString(din))
+		}
+		
+		int pColssz = din.readInt();
+		for(i=0; i < pColssz; i++)
+		{
+			partitionColumns << org.apache.hadoop.io.Text.readString(din)
+		}
+		
+		int oColsz = din.readInt();
+		for(i=0; i < oColsz; i++)
+		{
+			OrderColumn oc = new OrderColumn()
+			oc.readFields(din)
+			orderColumns << oc
+		}
+	}
 }
 
-class TableOutput
+class TableOutput implements Writable
 {
 	static final String DEFAULT_SERDE_CLASS = "org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe"
 	static final String DEFAULT_FORMAT_CLASS = 'org.apache.hadoop.mapred.TextOutputFormat'
@@ -111,9 +259,59 @@ class TableOutput
 		}
 		
 	}
+	
+	@Override
+	public void write(DataOutput out) throws IOException
+	{
+		int nullFlags = 0
+		if ( outputPath != null )           nullFlags |= 0x01
+		if ( serDeClass != null )           nullFlags |= 0x02
+		if ( outputFormat != null )         nullFlags |= 0x04
+		if ( recordwriterClass != null )    nullFlags |= 0x08
+		if ( tableName != null )            nullFlags |= 0x10
+		if ( partitionClause != null )      nullFlags |= 0x20
+		out.writeInt(nullFlags)
+		if ( (nullFlags & 0x01) ) org.apache.hadoop.io.Text.writeString(out, outputPath);
+		if ( (nullFlags & 0x02) ) org.apache.hadoop.io.Text.writeString(out, serDeClass);
+		if ( (nullFlags & 0x04) ) org.apache.hadoop.io.Text.writeString(out, outputFormat);
+		if ( (nullFlags & 0x08) ) org.apache.hadoop.io.Text.writeString(out, recordwriterClass);
+		if ( (nullFlags & 0x10) ) org.apache.hadoop.io.Text.writeString(out, tableName);
+		if ( (nullFlags & 0x20) ) org.apache.hadoop.io.Text.writeString(out, partitionClause);
+		
+		int serDePropssz = serDeProps.size();
+		out.writeInt(serDePropssz)
+		for(Map.Entry<?, ?> entry : serDeProps)
+		{
+			org.apache.hadoop.io.Text.writeString(out, (String) entry.key);
+			org.apache.hadoop.io.Text.writeString(out, (String) entry.value);
+		}
+		
+		out.writeBoolean(overwrite)
+	}
+
+	@Override
+	public void readFields(DataInput din) throws IOException
+	{
+		int nullFlags = din.readInt();
+		if ( nullFlags & 0x01 )  outputPath = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x02 )  serDeClass = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x04 )  outputFormat = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x08 )  recordwriterClass = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x10 )  tableName = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x20 )  partitionClause = org.apache.hadoop.io.Text.readString(din);
+		
+		int i;
+		int serDePropssz = din.readInt();
+		for(i=0; i < serDePropssz; i++)
+		{
+			serDeProps.put(org.apache.hadoop.io.Text.readString(din), org.apache.hadoop.io.Text.readString(din))
+		}
+		
+		overwrite = din.readBoolean()
+	}
 }
 
-class FuncSpec
+class FuncSpec implements Writable
 {
 	String name
 	String alias
@@ -131,9 +329,51 @@ class FuncSpec
 		return sprintf( '%s(alias=%s, param=%s, type=%s, window=%s)', 
 			name, alias, params, typeName, window)
 	}
+	
+	@Override
+	public void write(DataOutput out) throws IOException
+	{
+		int nullFlags = 0
+		if ( name != null )         nullFlags |= 0x01
+		if ( alias != null )        nullFlags |= 0x02
+		if ( typeName != null )     nullFlags |= 0x04
+		if ( window )       nullFlags |= 0x08
+		out.writeInt(nullFlags)
+		if ( (nullFlags & 0x01) ) org.apache.hadoop.io.Text.writeString(out, name);
+		if ( (nullFlags & 0x02) ) org.apache.hadoop.io.Text.writeString(out, alias);
+		if ( (nullFlags & 0x04) ) org.apache.hadoop.io.Text.writeString(out, typeName);
+		if ( (nullFlags & 0x08) ) window.write(out)
+		int psz = params.size()
+		out.writeInt(psz)
+		for(FuncArg p : params)
+		{
+			p.write(out)
+		}
+	}
+
+	@Override
+	public void readFields(DataInput din) throws IOException
+	{
+		int nullFlags = din.readInt();
+		if ( nullFlags & 0x01 ) name = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x02 ) alias = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x04 ) typeName = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x08 )
+		{
+			window = new Window()
+			window.readFields(din)
+		}
+		int psz = din.readInt()
+		for(int i=0; i < psz; i++)
+		{
+			FuncArg p = new FuncArg()
+			p.readFields(din)
+			params << p
+		}
+	}
 }
 
-class FuncArg
+class FuncArg implements Writable
 {
 	String str
 	String expr
@@ -167,6 +407,30 @@ class FuncArg
 			return ArgType.NUMBER;
 		return ArgType.STRING;
 	}
+	
+	@Override
+	public void write(DataOutput out) throws IOException
+	{
+		int nullFlags = 0
+		if ( str != null )         nullFlags |= 0x01
+		if ( expr != null )        nullFlags |= 0x02
+		if ( id != null )          nullFlags |= 0x04
+		out.writeInt(nullFlags)
+		if ( (nullFlags & 0x01) ) org.apache.hadoop.io.Text.writeString(out, str);
+		if ( (nullFlags & 0x02) ) org.apache.hadoop.io.Text.writeString(out, expr);
+		if ( (nullFlags & 0x04) ) org.apache.hadoop.io.Text.writeString(out, id);
+		out.writeInt(iVal)
+	}
+
+	@Override
+	public void readFields(DataInput din) throws IOException
+	{
+		int nullFlags = din.readInt();
+		if ( nullFlags & 0x01 ) str = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x02 ) expr = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x04 ) id = org.apache.hadoop.io.Text.readString(din);
+		iVal = din.readInt()
+	}
 }
 
 class TableFuncSpec extends FuncSpec
@@ -186,6 +450,28 @@ class TableFuncSpec extends FuncSpec
 				name, inputFuncSpec, params, window)
 		}
 	}
+	
+	@Override
+	public void write(DataOutput out) throws IOException
+	{
+		super.write(out)
+		int nullFlags = 0
+		if ( inputFuncSpec )         nullFlags |= 0x01
+		out.writeInt(nullFlags)
+		if ( (nullFlags & 0x01) ) inputFuncSpec.write(out)
+	}
+
+	@Override
+	public void readFields(DataInput din) throws IOException
+	{
+		super.readFields(din)
+		int nullFlags = din.readInt();
+		if ( nullFlags & 0x01 ) 
+		{
+			inputFuncSpec = new TableFuncSpec()
+			inputFuncSpec.readFields(din)
+		}
+	}
 }
 
 enum Order
@@ -194,7 +480,7 @@ enum Order
 	DESC;
 }
 
-class OrderColumn
+class OrderColumn implements Writable
 {
 	String name
 	Order order
@@ -203,9 +489,23 @@ class OrderColumn
 	{
 		return sprintf( '%s %s', name, order)
 	}
+
+	@Override
+	public void write(DataOutput out) throws IOException
+	{
+		org.apache.hadoop.io.Text.writeString(out, name);
+		org.apache.hadoop.io.Text.writeString(out, order.name());
+	}
+
+	@Override
+	public void readFields(DataInput din) throws IOException
+	{
+		name = org.apache.hadoop.io.Text.readString(din);
+		order = Enum.valueOf(Order, org.apache.hadoop.io.Text.readString(din))
+	}
 }
 
-class SelectColumn
+class SelectColumn implements Writable
 {
 	String alias
 	String expr
@@ -217,5 +517,27 @@ class SelectColumn
 			return sprintf( '%s as %s%s', expr, alias, (typeName ? "[" + typeName + "]" : ""))
 		else
 			return sprintf( '%s%s', alias, (typeName ? "[" + typeName + "]" : ""))
+	}
+	
+	@Override
+	public void write(DataOutput out) throws IOException
+	{
+		int nullFlags = 0
+		if ( alias != null )         nullFlags |= 0x01
+		if ( expr != null )          nullFlags |= 0x02
+		if ( typeName != null )      nullFlags |= 0x04
+		out.writeInt(nullFlags)
+		if ( (nullFlags & 0x01) ) org.apache.hadoop.io.Text.writeString(out, alias);
+		if ( (nullFlags & 0x02) ) org.apache.hadoop.io.Text.writeString(out, expr);
+		if ( (nullFlags & 0x04) ) org.apache.hadoop.io.Text.writeString(out, typeName);
+	}
+
+	@Override
+	public void readFields(DataInput din) throws IOException
+	{
+		int nullFlags = din.readInt();
+		if ( nullFlags & 0x01 ) alias = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x02 )  expr = org.apache.hadoop.io.Text.readString(din);
+		if ( nullFlags & 0x04 )  typeName = org.apache.hadoop.io.Text.readString(din);
 	}
 }

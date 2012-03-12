@@ -1,8 +1,13 @@
 package com.sap.hadoop.windowing.query
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import org.apache.hadoop.io.Writable;
+
 import com.sap.hadoop.windowing.runtime.Partition;
 
-class Window
+class Window implements Writable
 {
 	Boundary start
 	Boundary end
@@ -24,9 +29,49 @@ class Window
 		start.parse(wshell)
 		end.parse(wshell)
 	}
+	
+	static def BOUNDARYTOTYPEMAP = [(RangeBoundary.class): 0,(CurrentRow.class):1,(ValueBoundary.class):2]
+	static def BOUNDARYTYPES = [RangeBoundary.class,CurrentRow.class,ValueBoundary.class]
+	
+	@Override
+	public void write(DataOutput out) throws IOException
+	{
+		int nullFlags = 0
+		if ( start )      nullFlags |= 0x01
+		if ( end )        nullFlags |= 0x02
+		out.writeInt(nullFlags)
+		if ( (nullFlags & 0x01) )
+		{
+			out.writeInt(BOUNDARYTOTYPEMAP[start.class])
+			start.write(out)
+		}
+		if ( (nullFlags & 0x02) )
+		{
+			out.writeInt(BOUNDARYTOTYPEMAP[end.class])
+			end.write(out)
+		}
+	}
+
+	@Override
+	public void readFields(DataInput din) throws IOException
+	{
+		int nullFlags = din.readInt();
+		if ( (nullFlags & 0x01) )
+		{
+			Class<?> stype = BOUNDARYTYPES[din.readInt()]
+			start = stype.newInstance()
+			start.readFields(din)
+		}
+		if ( (nullFlags & 0x02) )
+		{
+			Class<?> etype = BOUNDARYTYPES[din.readInt()]
+			end = etype.newInstance()
+			end.readFields(din)
+		}
+	}
 }
 
-abstract class Boundary
+abstract class Boundary implements Writable
 {
 	static def UNBOUNDED_AMOUNT = new Object()
 	abstract int getIndex(Partition p, int row)
@@ -75,6 +120,27 @@ class RangeBoundary extends Boundary
 		if ( c != 0) return c;
 		return amt <=> other.amt;
 	}
+	
+	@Override
+	public void write(DataOutput out) throws IOException
+	{
+		org.apache.hadoop.io.Text.writeString(out, direction.name());
+		boolean isUnBounded = amt == UNBOUNDED_AMOUNT
+		out.writeBoolean(isUnBounded)
+		if ( !isUnBounded )
+			out.writeInt((int) amt);
+	}
+
+	@Override
+	public void readFields(DataInput din) throws IOException
+	{
+		direction = Enum.valueOf(Direction, org.apache.hadoop.io.Text.readString(din))
+		boolean isUnBounded = din.readBoolean()
+		if ( !isUnBounded )
+			amt = din.readInt()
+		else
+			amt = UNBOUNDED_AMOUNT
+	}
 }
 
 class CurrentRow extends Boundary
@@ -94,9 +160,19 @@ class CurrentRow extends Boundary
 	{
 		return direction <=> other.direction;
 	}
+	
+	@Override
+	public void write(DataOutput out) throws IOException
+	{
+	}
+
+	@Override
+	public void readFields(DataInput din) throws IOException
+	{
+	}
 }
 
-class ValueBoundary extends Boundary
+class ValueBoundary extends Boundary 
 {
 	Direction direction
 	Script expression
@@ -155,5 +231,30 @@ class ValueBoundary extends Boundary
 		int c = direction <=> other.direction;
 		if ( c != 0) return c;
 		return amt <=> other.amt;
+	}
+	
+	@Override
+	public void write(DataOutput out) throws IOException
+	{
+		org.apache.hadoop.io.Text.writeString(out, direction.name());
+		org.apache.hadoop.io.Text.writeString(out, exprString);
+		// todo: handle non ints
+		boolean isUnBounded = amt == UNBOUNDED_AMOUNT
+		out.writeBoolean(isUnBounded)
+		if ( !isUnBounded )
+			out.writeInt((int) amt);
+	}
+
+	@Override
+	public void readFields(DataInput din) throws IOException
+	{
+		direction = Enum.valueOf(Direction, org.apache.hadoop.io.Text.readString(din))
+		exprString = org.apache.hadoop.io.Text.readString(din)
+		// todo: handle non ints
+		boolean isUnBounded = din.readBoolean()
+		if ( !isUnBounded )
+			amt = din.readInt()
+		else
+			amt = UNBOUNDED_AMOUNT
 	}
 }

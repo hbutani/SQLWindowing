@@ -1,4 +1,10 @@
-package com.sap.hadoop.windowing.runtime.mr
+package com.sap.hadoop.windowing.runtime.mr;
+
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.hadoop.util.StringUtils;
 
 import java.io.IOException;
 import java.net.URI;
@@ -10,8 +16,13 @@ import java.util.Properties;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.filecache.DistributedCache;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hive.common.FileUtils;
+import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
@@ -30,6 +41,7 @@ import com.sap.hadoop.metadata.CompositeWritable;
 import com.sap.hadoop.metadata.WindowingKey;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query.Query;
+import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.query.TableInput;
 import com.sap.hadoop.windowing.query.TableOutput;
 
@@ -45,6 +57,10 @@ class JobBase extends Configured
 	public static final String WINDOWING_NUM_PARTION_COLUMNS = "windowing.number.of.partition.columns";
 	public static final String WINDOWING_QUERY_STRING = "windowing.query.string";
 	public static final String WINDOWING_TEMP_TABLE = "windowing.hivequery.temptable";
+	public static final String WINDOWING_JOB_WORKING_DIR = "windowing.job.working.dir";
+	public static final String WINDOWING_JOB_QUERY_FILE = "windowing.job.query.file";
+	
+	private static final Log LOG = LogFactory.getLog("com.sap.hadoop.windowing.runtime.mr");
 
 	public JobBase()
 	{
@@ -119,6 +135,124 @@ class JobBase extends Configured
 				throw new RuntimeException("Unknown column " + sCol);
 			}
 			j++;
+		}
+	}
+	
+	/* 
+	 * copied from org.apache.hadoop.hive.ql.Context
+	 */
+	public static boolean isLocalOnlyExecutionMode(Configuration conf) 
+	{
+		return HiveConf.getVar(conf, HiveConf.ConfVars.HADOOPJT).equals("local");
+	  }
+	
+	public static String getJobWorkingDir(Configuration conf, int jobId)
+	{
+		try 
+		{
+			Path p
+			FileSystem fs
+			String jobDir = "windowingJob-${jobId}"
+			if(isLocalOnlyExecutionMode(conf))
+			{
+				fs = FileSystem.getLocal(conf);
+				String dirName = System.getProperty("java.io.tmpdir")+ Path.SEPARATOR + System.getProperty("user.name") + Path.SEPARATOR + jobDir;
+				p = new Path(dirName)
+			}
+			else
+			{
+				fs = FileSystem.get(conf)
+				p = new Path(HiveConf.getVar(conf, HiveConf.ConfVars.SCRATCHDIR) + "/windowing", jobDir)
+				p = FileUtils.makeQualified(p, conf);
+			}
+			
+			fs.mkdirs(p);
+			conf.set(JobBase.WINDOWING_JOB_WORKING_DIR, p.toString())
+			return p.toString()
+		} 
+		catch (Exception e) 
+		{
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static void deleteJobWorkingDir(Configuration conf)
+	{
+		String dir = conf.get(JobBase.WINDOWING_JOB_WORKING_DIR)
+		try 
+		{
+			Path p = new Path(dir)
+			p.getFileSystem(conf).delete(p, true);
+		} 
+		catch (Exception e) 
+		{
+			LOG.warn("Error Removing job working dir: " + StringUtils.stringifyException(e));
+		}
+	}
+	
+	public static void addQuerySpecToJob(Configuration conf, String jobWorkingDir, QuerySpec qSpec) throws WindowingException
+	{
+		try
+		{
+			Path p = new Path(jobWorkingDir, "querySpec")
+			FileSystem fs
+			if(isLocalOnlyExecutionMode(conf))
+			{
+				fs = FileSystem.getLocal(conf);
+			}
+			else
+			{
+				fs = FileSystem.get(conf)
+			}
+			FSDataOutputStream out = fs.create(p);
+			qSpec.write(out)
+			out.close()
+			
+			if (!isLocalOnlyExecutionMode(conf) ) {
+				// Set up distributed cache
+				DistributedCache.createSymlink(conf);
+				String uriWithLink = p.toUri().toString() + "#WINDOWING_QUERY";
+				DistributedCache.addCacheFile(new URI(uriWithLink), conf);
+
+				// set replication of the plan file to a high number. we use the same
+				// replication factor as used by the hadoop jobclient for job.xml etc.
+				short replication = (short) conf.getInt("mapred.submit.replication", 10);
+				fs.setReplication(p, replication);
+			}
+			
+			conf.set(WINDOWING_JOB_QUERY_FILE, p.toString())
+			
+		}
+		catch(Exception e)
+		{
+			throw new WindowingException(e)
+		}
+	}
+	
+	public static QuerySpec getQuerySpec(Configuration conf) throws WindowingException
+	{
+		try
+		{
+			String pName = conf.get(WINDOWING_JOB_QUERY_FILE)
+			Path p = new Path(pName)
+			FileSystem fs
+			if(isLocalOnlyExecutionMode(conf))
+			{
+				fs = FileSystem.getLocal(conf);
+			}
+			else
+			{
+				fs = FileSystem.get(conf)
+			}
+			FSDataInputStream din = fs.open(p);
+			QuerySpec qSpec = new QuerySpec()
+			qSpec.readFields(din)
+			return qSpec
+			
+		}
+		catch(Exception e)
+		{
+			throw new WindowingException(e)
 		}
 	}
 

@@ -38,13 +38,14 @@ public class ReduceBase
 		String qryStr = job.get(Job.WINDOWING_QUERY_STRING);
 		wshell = new WindowingShell(job, new MRTranslator(), new MRExecutor())
 		
-		QuerySpec qSpec = wshell.parse(qryStr);
+		//QuerySpec qSpec = wshell.parse(qryStr);
+		QuerySpec qSpec = JobBase.getQuerySpec(job)
 		
-		if ( qSpec.tableIn.hiveQuery != null )
-		{
-			String tt = job.get(Job.WINDOWING_TEMP_TABLE);
-			qSpec.tableIn.tableName = tt;
-		}
+//		if ( qSpec.tableIn.hiveQuery != null )
+//		{
+//			String tt = job.get(Job.WINDOWING_TEMP_TABLE);
+//			qSpec.tableIn.tableName = tt;
+//		}
 		
 		qry = wshell.translate(qSpec)
 		

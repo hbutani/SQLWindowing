@@ -5,6 +5,7 @@ import org.apache.hadoop.hive.conf.HiveConf;
 
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.query.Query;
+import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.runtime.Executor;
 
 class MRExecutor extends Executor
@@ -24,6 +25,21 @@ class MRExecutor extends Executor
 		}
 
 		j.setConf(hConf);
-		int eCode = j.run(qry);
+		
+		/*
+		 * create a temp directory for the Job
+		 */
+		int jobId = System.currentTimeMillis()
+		String jobWorkingDir = JobBase.getJobWorkingDir(hConf, jobId)
+		JobBase.addQuerySpecToJob(hConf, jobWorkingDir, qry.qSpec)
+		
+		try
+		{
+			int eCode = j.run(qry);
+		}
+		finally
+		{
+			JobBase.deleteJobWorkingDir(hConf)
+		}
 	}
 }

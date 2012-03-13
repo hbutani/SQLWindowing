@@ -166,10 +166,10 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		}
 		else
 		{
-			if ( ! qry?.wnFns.empty )
-			{
-				throw new WindowingException("With clause not supported with pure table Functions")
-			}
+//			if ( ! qry?.wnFns.empty )
+//			{
+//				throw new WindowingException("With clause not supported with pure table Functions")
+//			}
 			TableFuncSpec tSpec = qry.qSpec.tblFuncSpec
 			Stack<TableFuncSpec> stk = new Stack<TableFuncSpec>()
 			while(tSpec != null)
@@ -190,7 +190,16 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 				currFunc = tFunc
 				currFunc.completeTranslation(wshell, qry, tSpec)
 			}
-			qry.tableFunction = currFunc
+			
+			if ( ! qry?.wnFns.empty )
+			{
+				qry.tableFunction = new WindowingTableFunction(qry)
+				qry.tableFunction.input = currFunc
+			}
+			else
+			{
+				qry.tableFunction = currFunc
+			}
 		}
 	}
 	

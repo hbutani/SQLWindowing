@@ -1,5 +1,7 @@
 package com.sap.hadoop.windowing.query
 
+import java.util.Map;
+
 import groovy.lang.GroovyShell;
 
 import com.sap.hadoop.ds.list.ByteBasedList;
@@ -12,7 +14,9 @@ import org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordWriter;
 import org.apache.hadoop.hive.ql.exec.RecordWriter;
 import org.apache.hadoop.hive.ql.io.RCFile;
 import org.apache.hadoop.hive.serde2.SerDe;
+import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe;
+import org.apache.hadoop.hive.serde2.lazybinary.LazyBinarySerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
 import org.apache.hadoop.hive.serde2.objectinspector.SettableStructObjectInspector;
@@ -44,6 +48,7 @@ abstract class Translator
 		setupQueryInput(qry, hiveQryExec)
 		setupWindowFunctions(wshell, qry)
 		setupTableFunction(wshell, qry)
+		setupMapPhase(qry)
 		setupOutput(qry)
 		setupWhereClause(qry)
 		
@@ -201,6 +206,45 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 				qry.tableFunction = currFunc
 			}
 		}
+	}
+	
+	void setupMapPhase(Query qry) throws WindowingException
+	{
+		if ( !qry.tableFunction.hasMapPhase() )
+		{
+			return
+		}
+		
+		Map<String, TypeInfo> mapShape = qry.tableFunction.getMapPhaseOutputShape()
+		ArrayList<String> columnNames = []
+		ArrayList<String> columnTypes = []
+		mapShape.collect { k, v ->
+			columnNames << k
+			columnTypes << t
+		}
+		String cNames = columnNames.join(", ")
+		String cTypes = columnTypes.join(", ")
+		
+		qry.mapPhase = new QueryMapPhase()
+		qry.mapPhase.inputOI = qry.input.inputOI
+		qry.mapPhase.inputDeserializer = qry.input.deserializer
+		
+		qry.mapPhase.outputSerDe = new LazyBinarySerDe()
+		Properties p = new Properties()
+		p.setProperty(HiveConstants.LIST_COLUMNS, cNames)
+		p.setProperty(HiveConstants.LIST_COLUMN_TYPES, cTypes)
+		try
+		{
+			qry.mapPhase.outputSerDe.initialize(qry.cfg, p)
+		}
+		catch(SerDeException se)
+		{
+			throw new WindowingException(se)
+		}
+		qry.mapPhase.outputOI = qry.mapPhase.outputSerDe.getObjectInspector()
+		
+		qry.input.inputOI = qry.mapPhase.outputOI
+		qry.input.deserializer = qry.mapPhase.outputSerDe
 	}
 	
 	void setupOutput(Query qry) throws WindowingException

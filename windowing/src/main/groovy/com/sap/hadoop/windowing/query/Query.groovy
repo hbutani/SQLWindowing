@@ -26,6 +26,7 @@ class Query
 	ArrayList<String> wnAliases
 	AbstractTableFunction tableFunction
 	AbstractTableFunction inputtableFunction
+	QueryMapPhase mapPhase
 	QueryOutput output
 	Script whereExpr
 	int partitionMemSize;
@@ -95,4 +96,12 @@ class OutputColumn extends Column
 	TypeInfo typeInfo
 	
 	String getName() { return alias; }
+}
+
+class QueryMapPhase
+{
+	StructObjectInspector inputOI;
+	Deserializer inputDeserializer
+	StructObjectInspector outputOI
+	SerDe outputSerDe
 }

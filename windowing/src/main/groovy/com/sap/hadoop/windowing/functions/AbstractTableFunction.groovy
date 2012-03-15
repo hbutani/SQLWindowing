@@ -47,6 +47,18 @@ abstract class AbstractTableFunction implements IPartitionIterator
 	abstract protected IPartition execute(IPartition inpPart) throws WindowingException;
 	
 	abstract Map<String, TypeInfo> getOutputShape();
+	
+	public boolean hasMapPhase() { return false; }
+	
+	protected IPartition mapExecute(IPartition inpPart) throws WindowingException
+	{
+		throw new WindowingException("Function's Map Execution not implemented)");
+	}
+	
+	public Map<String, TypeInfo> getMapPhaseOutputShape()
+	{
+		throw new WindowingException("Function's 'getMapPhaseOutputShape' method not implemented)");
+	}
 }
 
 @FunctionDef(

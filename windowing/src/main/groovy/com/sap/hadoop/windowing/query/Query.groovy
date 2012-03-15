@@ -11,6 +11,8 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 
+import com.sap.hadoop.ds.list.ByteBasedList;
+import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.functions.AbstractTableFunction;
 import com.sap.hadoop.windowing.functions.IWindowFunction;
 import com.sap.hadoop.windowing.io.WindowingInput;
@@ -29,8 +31,18 @@ class Query
 	QueryMapPhase mapPhase
 	QueryOutput output
 	Script whereExpr
-	int partitionMemSize;
-	String partitionClass;
+//	int partitionMemSize;
+//	String partitionClass;
+	
+	public String getPartitionClass()
+	{
+		return cfg.get(Constants.WINDOW_PARTITION_CLASS, Constants.DEFAULT_WINDOW_PARTITION_CLASS);
+	}
+	
+	public int getPartitionMemSize()
+	{
+		return cfg.getInt(Constants.WINDOW_PARTITION_MEM_SIZE, ByteBasedList.MEDIUM_SIZE);
+	}
 }
 
 /**

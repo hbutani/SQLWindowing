@@ -1,5 +1,7 @@
 package com.sap.hadoop.windowing.query
 
+import java.util.ArrayList;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
 import org.antlr.runtime.tree.TreeAdaptor;
@@ -68,10 +70,10 @@ class QuerySpecBuilder
 				qSpec.whereExpr = node.children[0].text
 				break;
 			case WindowingParser.PARTITION:
-				partition(node)
+				partition(node, qSpec.tableIn.partitionColumns)
 				break;
 			case WindowingParser.ORDER:
-				order(node)
+				order(node, qSpec.tableIn.orderColumns)
 				break;
 			case WindowingParser.OUTPUTSPEC:
 				ouputSpec(node, qSpec.tableOut);
@@ -79,21 +81,21 @@ class QuerySpecBuilder
 		}
 	}
 	
-	void partition(CommonTree node)
+	void partition(CommonTree node, ArrayList<String> partitionCols)
 	{
 		for(int i = 0; i < adaptor.getChildCount(node); i++)
 		{
 			CommonTree child = adaptor.getChild(node, i);
-			qSpec.tableIn.partitionColumns << child.text
+			partitionCols << child.text
 		}
 	}
 	
-	void order(CommonTree node)
+	void order(CommonTree node, ArrayList<OrderColumn> orderColumns)
 	{
 		for(int i = 0; i < adaptor.getChildCount(node); i++)
 		{
 			CommonTree child = adaptor.getChild(node, i);
-			qSpec.tableIn.orderColumns << orderColumn(child)
+			orderColumns << orderColumn(child)
 		}
 	}
 	
@@ -250,16 +252,18 @@ class QuerySpecBuilder
 		}
 	}
 	
-	TableFuncSpec tablefunction(CommonTree node)
+	TableFuncSpec tablefunction(CommonTree node) throws WindowingException
 	{
 		TableFuncSpec fSpec = new TableFuncSpec()
 		fSpec.name = node.children[0].text.toLowerCase()
 		
+		boolean inputIsTable = false
 		CommonTree inputSpecNode = node.children[1]
 		switch(inputSpecNode.getType())
 		{
 			case WindowingParser.TABLEINPUT:
 				visit(inputSpecNode)
+				inputIsTable = true
 				break;
 			case WindowingParser.TBLFUNCTION:
 				fSpec.inputFuncSpec = tablefunction(inputSpecNode)
@@ -275,9 +279,41 @@ class QuerySpecBuilder
 			idx++
 		}
 		
-		if ( node.childCount > idx )
+		CommonTree partitionCols
+		CommonTree orderCols
+		CommonTree window
+		
+		for (; idx < node.childCount; idx++)
 		{
-			fSpec.window = createwindow(node.children[idx])
+			CommonTree nextChild = node.children[idx]
+			if (nextChild.getType() == WindowingParser.PARTITION) 
+				partitionCols = nextChild
+			else if (nextChild.getType() == WindowingParser.ORDER) 
+				orderCols = nextChild
+			else
+				window =  nextChild
+		}
+		
+		if ( partitionCols != null && inputIsTable)
+		{
+			throw new WindowingException(sprintf("Function '%s' cannot have a partition clause, its input is a 'tableinput'", fSpec.name))
+		}
+		
+		if ( partitionCols )
+		{
+			fSpec.partitionColumns = []
+			partition(partitionCols, fSpec.partitionColumns)
+		}
+		
+		if ( orderCols )
+		{
+			fSpec.orderColumns = []
+			order(orderCols, fSpec.orderColumns)
+		}
+		
+		if ( window )
+		{
+			fSpec.window = createwindow(window)
 		}
 		return fSpec
 	}

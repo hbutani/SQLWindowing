@@ -9,6 +9,7 @@ import org.junit.rules.ExpectedException;
 import com.sap.hadoop.windowing.BaseTest;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query.Query;
+import com.sap.hadoop.windowing.query.QuerySpec;
 
 class ParseErrorTest  extends BaseTest
 {
@@ -49,4 +50,21 @@ class ParseErrorTest  extends BaseTest
 		select p_mfgr,p_name, p_size, r, s
 		into path='/tmp/wout''""")
 	}
+
+	@Test
+	void testTableFunction4()
+	{
+		expectedEx.expect(WindowingException.class);
+		expectedEx.expectMessage("Function 'npath' cannot have a partition clause, its input is a 'tableinput'");
+		
+		QuerySpec qSpec = wshell.parse("""
+		from dummy(npath(<select p_mfgr, p_name, p_size
+				from part_rc> partition by p_mfgr order by p_mfgr, p_name, '') partition by p_mfgr order by p_mfgr, p_name,
+			  'a', 'b') partition by a order by a
+select p_mfgr,p_name, p_size, r
+		into path='/tmp/wout'
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+	}
+	
 }

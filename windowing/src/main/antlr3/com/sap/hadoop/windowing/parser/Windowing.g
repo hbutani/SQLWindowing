@@ -74,8 +74,8 @@ tableSpec :
 ;
 
 tblfunc :
-  name=ID LPAREN tableSpec (window_expression)? (COMMA functionparam)* RPAREN 
-    -> ^(TBLFUNCTION $name tableSpec functionparam* window_expression?)
+  name=ID LPAREN tableSpec (COMMA functionparam)* RPAREN (p=partitionby o=orderby)? (window_expression)?
+    -> ^(TBLFUNCTION $name tableSpec functionparam* $p? $o? window_expression?)
 ;
 
 hivetable :

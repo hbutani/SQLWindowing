@@ -433,21 +433,31 @@ class FuncArg implements Writable
 	}
 }
 
+/**
+ * <ul>
+ * <li> A tableFunction may specify how its input be partitioned and an ordering within each partition.
+ * <li> If partitioning is not specified then the function operates on the partitions of the input.
+ * <li> It is illegal to specify a partition for a function whose input is the 
+ * Query Input ( a hive Qry or table or an hdfs table) because the input clause has a partition specification.
+ * </ul>
+ */
 class TableFuncSpec extends FuncSpec
 {
 	TableFuncSpec inputFuncSpec
+	ArrayList<String> partitionColumns
+	ArrayList<OrderColumn> orderColumns
 	
 	public String toString()
 	{
 		if (!inputFuncSpec )
 		{
-			return sprintf( '%s(param=%s, window=%s)',
-				name, params, window)
+			return sprintf( '%s(param=%s, partitionColumns=[%s], orderColumns=[%s], window=%s)',
+				name, params, partitionColumns?.join(", "), orderColumns?.join(", "), window)
 		}
 		else
 		{
-			return sprintf( '%s(%s, param=%s, window=%s)',
-				name, inputFuncSpec, params, window)
+			return sprintf( '%s(%s, param=%s, partitionColumns=[%s], orderColumns=[%s], window=%s)',
+				name, inputFuncSpec, params, partitionColumns?.join(", "), orderColumns?.join(", "), window)
 		}
 	}
 	
@@ -456,9 +466,31 @@ class TableFuncSpec extends FuncSpec
 	{
 		super.write(out)
 		int nullFlags = 0
-		if ( inputFuncSpec )         nullFlags |= 0x01
+		if ( inputFuncSpec )             nullFlags |= 0x01
+		if ( partitionColumns != null )  nullFlags |= 0x02
+		if ( orderColumns != null )      nullFlags |= 0x04
 		out.writeInt(nullFlags)
 		if ( (nullFlags & 0x01) ) inputFuncSpec.write(out)
+		
+		if ( nullFlags & 0x02 )
+		{
+			int pColssz = partitionColumns.size()
+			out.writeInt(pColssz)
+			for(String s : partitionColumns)
+			{
+				org.apache.hadoop.io.Text.writeString(out, s);
+			}
+		}
+		
+		if ( nullFlags & 0x04 )
+		{
+			int oColsz = orderColumns.size()
+			out.writeInt(oColsz)
+			for(OrderColumn oc : orderColumns)
+			{
+				oc.write(out)
+			}
+		}
 	}
 
 	@Override
@@ -470,6 +502,28 @@ class TableFuncSpec extends FuncSpec
 		{
 			inputFuncSpec = new TableFuncSpec()
 			inputFuncSpec.readFields(din)
+		}
+		
+		if ( nullFlags & 0x02 )
+		{
+			int pColssz = din.readInt();
+			partitionColumns = []
+			for(i=0; i < pColssz; i++)
+			{
+				partitionColumns << org.apache.hadoop.io.Text.readString(din)
+			}
+		}
+		
+		if ( nullFlags & 0x04 )
+		{
+			int oColsz = din.readInt();
+			orderColumns = []
+			for(i=0; i < oColsz; i++)
+			{
+				OrderColumn oc = new OrderColumn()
+				oc.readFields(din)
+				orderColumns << oc
+			}
 		}
 	}
 }

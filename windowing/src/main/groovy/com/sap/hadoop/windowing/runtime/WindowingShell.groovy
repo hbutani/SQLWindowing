@@ -46,6 +46,12 @@ class WindowingShell
 			WindowingParser parser = new WindowingParser(tokens);
 			CommonTree t = parser.query().getTree()
 			
+			String err = parser.getWindowingParseErrors()
+			if ( err != null )
+			{
+				throw new WindowingException(err)
+			}
+			
 			//println t.toStringTree()
 		
 			CommonTreeAdaptor ta = (CommonTreeAdaptor) parser.getTreeAdaptor();

@@ -35,7 +35,9 @@ package com.sap.hadoop.windowing.parser;
 }
 
 @members {
-	protected void mismatch(IntStream input, int ttype, BitSet follow) throws RecognitionException
+  protected StringBuilder buf = new StringBuilder();
+  
+	/*protected void mismatch(IntStream input, int ttype, BitSet follow) throws RecognitionException
 	{
 		throw new MismatchedTokenException(ttype, input);
 	}
@@ -48,14 +50,27 @@ package com.sap.hadoop.windowing.parser;
   {
   throw new MismatchedTokenException(ttype, input);
   }
+  */
+  public void emitErrorMessage(String msg) {
+    buf.append(msg).append("\n");
+  }
+  
+  public String getWindowingParseErrors()
+  {
+    String b = buf.toString().trim();
+    if (b.equals("") ) return null;
+    return b;
+  }
+  
 }
 
+/*
 @rulecatch {
 catch (RecognitionException rex) {
 throw rex;
 }
 }
-
+*/
 query :
  FROM tableSpec
  (WITH funclist)?

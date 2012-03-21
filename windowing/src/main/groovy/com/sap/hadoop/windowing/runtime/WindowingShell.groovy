@@ -7,9 +7,11 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.apache.hadoop.conf.Configuration;
 
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.parser.QSpecBuilder;
 import com.sap.hadoop.windowing.parser.WindowingLexer;
 import com.sap.hadoop.windowing.parser.WindowingParser;
 import com.sap.hadoop.windowing.query.Query;
@@ -54,15 +56,31 @@ class WindowingShell
 			
 			//println t.toStringTree()
 		
-			CommonTreeAdaptor ta = (CommonTreeAdaptor) parser.getTreeAdaptor();
-			QuerySpecBuilder v = new QuerySpecBuilder(adaptor : ta)
-			v.visit(t)
-			v.qSpec.queryStr = query
-			return v.qSpec
+//			CommonTreeAdaptor ta = (CommonTreeAdaptor) parser.getTreeAdaptor();
+//			QuerySpecBuilder qSpecBldr = new QuerySpecBuilder(adaptor : ta)
+//			qSpecBldr.visit(t)
+			
+			CommonTreeNodeStream nodes = new CommonTreeNodeStream(t);
+			nodes.setTokenStream(tokens)
+			QSpecBuilder qSpecBldr = new QSpecBuilder(nodes);
+			qSpecBldr.query()
+	
+			err = qSpecBldr.getWindowingParseErrors()
+			if ( err != null )
+			{
+				throw new WindowingException(err)
+			}
+			
+			qSpecBldr.qSpec.queryStr = query
+			return qSpecBldr.qSpec
 		}
 		catch(RecognitionException re)
 		{
 			throw new WindowingException("Parse Error:" + re.toString(), re)
+		}
+		catch(RuntimeException re1)
+		{
+			throw new WindowingException("Parse Error:" + re1.toString(), re1)
 		}
 	}
 	

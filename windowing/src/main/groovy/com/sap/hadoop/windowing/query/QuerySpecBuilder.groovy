@@ -301,14 +301,20 @@ class QuerySpecBuilder
 		
 		if ( partitionCols )
 		{
-			fSpec.partitionColumns = []
 			partition(partitionCols, fSpec.partitionColumns)
+		}
+		else
+		{
+			fSpec.partitionColumns = null
 		}
 		
 		if ( orderCols )
 		{
-			fSpec.orderColumns = []
 			order(orderCols, fSpec.orderColumns)
+		}
+		else
+		{
+			fSpec.orderColumns = null
 		}
 		
 		if ( window )

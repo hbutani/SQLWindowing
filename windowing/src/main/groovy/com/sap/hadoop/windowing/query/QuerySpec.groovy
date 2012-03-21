@@ -447,6 +447,12 @@ class TableFuncSpec extends FuncSpec
 	ArrayList<String> partitionColumns
 	ArrayList<OrderColumn> orderColumns
 	
+	TableFuncSpec()
+	{
+		partitionColumns = []
+		orderColumns = []
+	}
+	
 	public String toString()
 	{
 		if (!inputFuncSpec )
@@ -507,23 +513,29 @@ class TableFuncSpec extends FuncSpec
 		if ( nullFlags & 0x02 )
 		{
 			int pColssz = din.readInt();
-			partitionColumns = []
 			for(i=0; i < pColssz; i++)
 			{
 				partitionColumns << org.apache.hadoop.io.Text.readString(din)
 			}
 		}
+		else
+		{
+			partitionColumns = null
+		}
 		
 		if ( nullFlags & 0x04 )
 		{
 			int oColsz = din.readInt();
-			orderColumns = []
 			for(i=0; i < oColsz; i++)
 			{
 				OrderColumn oc = new OrderColumn()
 				oc.readFields(din)
 				orderColumns << oc
 			}
+		}
+		else
+		{
+			orderColumns = null
 		}
 	}
 }

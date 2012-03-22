@@ -12,6 +12,19 @@ import com.sap.hadoop.windowing.query.Window;
 import com.sap.hadoop.windowing.runtime.IPartition;
 import com.sap.hadoop.windowing.runtime.IPartitionIterator;
 
+/**
+ * A Table Function instance is associated with information on how input data should be partitioned and ordered.
+ * Each ordered partition is provided to an instance of this Function,  instance is responsible for outputting 
+ * a {@link IPartition} given an input Partition. 
+ * <p>
+ * A Function may also specify that it wants to operate on(map) the raw input data (before it is partitioned and ordered).
+ * The Function is free to reshape the data in any way, hence it is responsible for providing the Output Shape 
+ * (as a name -> TypeInfo map). If the function operates on raw data, again it is free to alter it in any fashion; 
+ * but it is responsible for providing the Output Shape of the Map operation.
+ * 
+ * @author harish.butani
+ *
+ */
 abstract class AbstractTableFunction implements IPartitionIterator
 {
 	IPartitionIterator input;
@@ -46,6 +59,10 @@ abstract class AbstractTableFunction implements IPartitionIterator
 	
 	abstract protected IPartition execute(IPartition inpPart) throws WindowingException;
 	
+	/**
+	 * callback used by translation mechanics to introspect on function's output.
+	 * @return
+	 */
 	abstract Map<String, TypeInfo> getOutputShape();
 	
 	public boolean hasMapPhase() { return false; }
@@ -55,6 +72,10 @@ abstract class AbstractTableFunction implements IPartitionIterator
 		throw new WindowingException("Function's Map Execution not implemented)");
 	}
 	
+	/**
+	 * callback used by translation mechanics to introspect on function's output at Map Stage.
+	 * @return
+	 */
 	public Map<String, TypeInfo> getMapPhaseOutputShape()
 	{
 		throw new WindowingException("Function's 'getMapPhaseOutputShape' method not implemented)");

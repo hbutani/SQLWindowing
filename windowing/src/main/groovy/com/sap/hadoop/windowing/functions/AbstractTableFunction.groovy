@@ -3,9 +3,11 @@ package com.sap.hadoop.windowing.functions
 import groovy.lang.GroovyShell;
 
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
+import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.annotations.FunctionDef;
+import com.sap.hadoop.windowing.query.Column;
 import com.sap.hadoop.windowing.query.FuncSpec;
 import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.Window;
@@ -90,6 +92,8 @@ abstract class AbstractTableFunction implements IPartitionIterator
 )
 class Noop extends AbstractTableFunction
 {
+	Map<String, TypeInfo> typemap;
+	
 	protected IPartition execute(IPartition inpPart) throws WindowingException
 	{
 		return inpPart;
@@ -97,10 +101,21 @@ class Noop extends AbstractTableFunction
 	
 	Map<String, TypeInfo> getOutputShape()
 	{
+		return typemap;
+	}
+	
+	protected void completeTranslation(GroovyShell wshell, Query qry, FuncSpec funcSpec) throws WindowingException
+	{
 		if ( input == null || ! (input instanceof AbstractTableFunction))
 		{
-			return null;
+			typemap = [:]
+			qry.input.columns.each { Column c ->
+				typemap[c.field.fieldName] = TypeInfoUtils.getTypeInfoFromObjectInspector(c.field.fieldObjectInspector)
+			}
 		}
-		return ((AbstractTableFunction)input).getOutputShape();
+		else
+		{
+			typemap = ((AbstractTableFunction)input).getOutputShape();
+		}
 	}
 }

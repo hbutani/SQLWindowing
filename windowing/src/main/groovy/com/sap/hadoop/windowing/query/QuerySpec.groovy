@@ -125,6 +125,18 @@ class QuerySpec implements Writable, Cloneable
 		}
 	}
 	
+	public int getFunctionChainLength()
+	{
+		int len = 0;
+		TableFuncSpec tFunc = tblFuncSpec
+		while(tFunc != null)
+		{
+			len++;
+			tFunc = tFunc.inputFuncSpec
+		}
+		return len
+	}
+
 }
 
 /**
@@ -542,7 +554,7 @@ class TableFuncSpec extends FuncSpec
 		if ( nullFlags & 0x02 )
 		{
 			int pColssz = din.readInt();
-			for(i=0; i < pColssz; i++)
+			for(int i=0; i < pColssz; i++)
 			{
 				partitionColumns << org.apache.hadoop.io.Text.readString(din)
 			}
@@ -555,7 +567,7 @@ class TableFuncSpec extends FuncSpec
 		if ( nullFlags & 0x04 )
 		{
 			int oColsz = din.readInt();
-			for(i=0; i < oColsz; i++)
+			for(int i=0; i < oColsz; i++)
 			{
 				OrderColumn oc = new OrderColumn()
 				oc.readFields(din)
@@ -566,6 +578,11 @@ class TableFuncSpec extends FuncSpec
 		{
 			orderColumns = null
 		}
+	}
+	
+	public boolean hasParitionSpec()
+	{
+		return partitionColumns?.size() > 0
 	}
 }
 

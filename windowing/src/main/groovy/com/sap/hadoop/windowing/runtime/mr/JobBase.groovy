@@ -39,6 +39,7 @@ import com.sap.hadoop.metadata.CompositeDataType;
 import com.sap.hadoop.metadata.CompositeSerialization;
 import com.sap.hadoop.metadata.CompositeWritable;
 import com.sap.hadoop.metadata.WindowingKey;
+import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.QuerySpec;
@@ -47,18 +48,18 @@ import com.sap.hadoop.windowing.query.TableOutput;
 
 class JobBase extends Configured
 {
-	public static final String WINDOWING_JAR_FILE = "windowing.jar.file";
-	public static final String WINDOWING_PARTITION_COLS = "windowing.partition.cols";
-	public static final String WINDOWING_SORT_COLS = "windowing.sort.cols";
-	public static final String WINDOWING_SORT_COLS_ORDER = "windowing.sort.order";
-	public static final String WINDOWING_INPUT_DATABASE = "windowing.input.database";
-	public static final String WINDOWING_INPUT_TABLE = "windowing.input.table";
-	public static final String WINDOWING_KEY_TYPE = CompositeDataType.COMPOSITE_DATA_TYPE;
-	public static final String WINDOWING_NUM_PARTION_COLUMNS = "windowing.number.of.partition.columns";
-	public static final String WINDOWING_QUERY_STRING = "windowing.query.string";
-	public static final String WINDOWING_TEMP_TABLE = "windowing.hivequery.temptable";
-	public static final String WINDOWING_JOB_WORKING_DIR = "windowing.job.working.dir";
-	public static final String WINDOWING_JOB_QUERY_FILE = "windowing.job.query.file";
+	public static final String WINDOWING_JAR_FILE = Constants.WINDOWING_JAR_FILE;
+	public static final String WINDOWING_PARTITION_COLS = Constants.WINDOWING_PARTITION_COLS;
+	public static final String WINDOWING_SORT_COLS = Constants.WINDOWING_SORT_COLS;
+	public static final String WINDOWING_SORT_COLS_ORDER = Constants.WINDOWING_SORT_COLS_ORDER;
+	public static final String WINDOWING_INPUT_DATABASE = Constants.WINDOWING_INPUT_DATABASE;
+	public static final String WINDOWING_INPUT_TABLE = Constants.WINDOWING_INPUT_TABLE;
+	public static final String WINDOWING_KEY_TYPE = Constants.WINDOWING_KEY_TYPE;
+	public static final String WINDOWING_NUM_PARTION_COLUMNS = Constants.WINDOWING_NUM_PARTION_COLUMNS;
+	public static final String WINDOWING_QUERY_STRING = Constants.WINDOWING_QUERY_STRING;
+	public static final String WINDOWING_TEMP_TABLE = Constants.WINDOWING_TEMP_TABLE;
+	public static final String WINDOWING_JOB_WORKING_DIR = Constants.WINDOWING_JOB_WORKING_DIR;
+	public static final String WINDOWING_JOB_QUERY_FILE = Constants.WINDOWING_JOB_QUERY_FILE;
 	
 	private static final Log LOG = LogFactory.getLog("com.sap.hadoop.windowing.runtime.mr");
 

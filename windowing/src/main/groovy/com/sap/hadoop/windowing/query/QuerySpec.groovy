@@ -136,6 +136,16 @@ class QuerySpec implements Writable, Cloneable
 		}
 		return len
 	}
+	
+	public TableFuncSpec getFirstFunction()
+	{
+		TableFuncSpec tFunc = tblFuncSpec
+		while(tFunc.inputFuncSpec != null)
+		{
+			tFunc = tFunc.inputFuncSpec
+		}
+		return tFunc
+	}
 
 }
 

@@ -77,7 +77,7 @@ class QueryComponentizer
 			componentQSpecs << qSpecs[0]
 			currentQSpec = qSpecs[1]
 		}
-		
+		componentQSpecs << currentQSpec
 		return componentQSpecs;
 	}
 	
@@ -165,6 +165,7 @@ class QueryComponentizer
 		String currentOutputPath = sprintf("%s/componentquery-%d/", jobDir, splitPos)
 
 		String currrentQueryTableName = createComponentQueryOutputTable(current, splitPos)
+		current.tableOut = new TableOutput()
 		current.tableOut.outputPath = currentOutputPath
 		current.tableOut.serDeClass = 'org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe'
 		current.tableOut.outputFormat = 'org.apache.hadoop.hive.ql.io.RCFileOutputFormat'
@@ -186,10 +187,19 @@ class QueryComponentizer
 		* The QuerySpec's tableInput is changed to point the table created above. Hive Query is set to a non null String to trigger
 		* deletion of the table at the end of this job. QuerySpec's inputSerDe, format is set based on ColumnarSerDe.
 		*/
+		rest.tableIn = new TableInput()
+		rest.tableIn.tableName = current.tableOut.tableName
+		rest.tableIn.hiveQuery = "<set to non-null, to trigger deleteing of tableIn at end of Query execution"
+		
 		
 		/*
 		* set Query's partition & order clause based on function's partition & order spec.
 		*/
+		TableFuncSpec tFunc = rest.getFirstFunction()
+		rest.tableIn.partitionColumns = tFunc.partitionColumns
+		tFunc.partitionColumns = []
+		rest.tableIn.orderColumns = tFunc.orderColumns
+		tFunc.orderColumns = []
 		
 		/*
 		* end Setup rest

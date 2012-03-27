@@ -12,6 +12,7 @@ import com.sap.hadoop.windowing.functions.FunctionRegistry;
 import com.sap.hadoop.windowing.functions.Noop;
 import com.sap.hadoop.windowing.functions.annotations.FunctionDef;
 import com.sap.hadoop.windowing.runtime.mr.JobBase;
+import com.sap.hadoop.windowing.runtime.mr.JobSpec;
 
 class QueryComponentizerTest extends MRBaseTest
 {
@@ -44,7 +45,9 @@ select p_mfgr,p_name, p_size, r
 		
 		QueryComponentizer qC = new QueryComponentizer(qry, wshell.hiveQryExec);
 		ArrayList<QuerySpec> components = qC.componentize();
-		println components
+		//println components
+		JobSpec jSpec = new JobSpec(components)
+		println jSpec
 	}
 	
 	@Test
@@ -66,7 +69,10 @@ select p_mfgr,p_name, p_size, r
 		
 		QueryComponentizer qC = new QueryComponentizer(qry, wshell.hiveQryExec);
 		ArrayList<QuerySpec> components = qC.componentize();
-		println components
+		//println components
+		
+		JobSpec jSpec = new JobSpec(components)
+		println jSpec
 	}
 }
 
@@ -96,6 +102,7 @@ class Noop3 extends Noop
 	name = "mapnoop4",
 	supportsWindow = true,
 	args = [],
+	hasMapPhase = true,
 	description = "test function3"
 )
 class MapNoop4 extends Noop

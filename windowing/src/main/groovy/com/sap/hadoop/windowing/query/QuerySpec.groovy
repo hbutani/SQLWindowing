@@ -8,6 +8,8 @@ import java.io.DataOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+import com.sap.hadoop.windowing.functions.FunctionRegistry;
+import com.sap.hadoop.windowing.parser.WindowingParser.tblfunc_return;
 import com.sap.hadoop.windowing.runtime.ArgType;
 import org.apache.hadoop.io.Writable;
 
@@ -145,6 +147,32 @@ class QuerySpec implements Writable, Cloneable
 			tFunc = tFunc.inputFuncSpec
 		}
 		return tFunc
+	}
+	
+	public String getFunctionChainStr()
+	{
+		StringBuilder buf = new StringBuilder()
+		Stack<TableFuncSpec> stack = new Stack<TableFuncSpec>();
+		TableFuncSpec tFunc = tblFuncSpec
+		TableFuncSpec fFunc = getFirstFunction()
+
+		while(tFunc)
+		{
+			stack.push(tFunc);
+			tFunc = tFunc.inputFuncSpec
+		}
+		boolean first = true;
+		while(!stack.isEmpty())
+		{
+			if ( first ) first = false; else buf.append(" -> ");
+			tFunc = stack.pop();
+			if ( tFunc != fFunc && FunctionRegistry.hasMapPhase(tFunc.name)  )
+			{
+				buf.append(tFunc.name + " map phase -> ")
+			}
+			buf.append(tFunc.name)
+		}
+		return buf.toString()
 	}
 
 }

@@ -25,5 +25,6 @@ public @interface FunctionDef
 	String description() default "";
 	String typeName() default "";
 	ArgDef[] args() default {};
+	boolean hasMapPhase() default false;
 	boolean supportsWindow();
 }

@@ -12,6 +12,22 @@ class FunctionRegistry
 		return fT;
 	}
 	
+	public static boolean hasMapPhase(String fnName) throws WindowingException
+	{
+		Class<? extends AbstractTableFunction> cls = FunctionRegistry.TABLEFUNCTION_MAP[fnName];
+		if (!cls)
+		{
+			throw new WindowingException(sprintf("Unknown table function %s", fnName))
+		}
+		return hasMapPhase(cls);
+	}
+	
+	public static boolean hasMapPhase(Class<? extends AbstractTableFunction> cls) throws WindowingException
+	{
+		FunctionDef fDef = cls.getAnnotation(FunctionDef.class);
+		return fDef.hasMapPhase();
+	}
+	
 	static HashMap<String, Class<? extends IWindowFunction>> FUNCTION_MAP = [:]
 	
 	public static void registerClass(Class<? extends IWindowFunction> cls)

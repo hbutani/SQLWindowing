@@ -205,7 +205,7 @@ class JobBase extends Configured
 			{
 				fs = FileSystem.get(conf)
 			}
-			FSDataOutputStream out = fs.create(p);
+			FSDataOutputStream out = fs.create(p, true);
 			qSpec.write(out)
 			out.close()
 			

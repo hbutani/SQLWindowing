@@ -4,14 +4,16 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.conf.HiveConf;
 
 import com.sap.hadoop.HiveUtils;
+import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.FunctionRegistry;
 import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.runtime.Executor;
+import com.sap.hadoop.windowing.runtime.WindowingShell;
 
 class MRExecutor extends Executor
 {
-	void execute(Query qry)
+	void execute(Query qry, WindowingShell wShell) throws WindowingException
 	{
 		Job j = new Job();
 		Configuration conf = qry.cfg
@@ -27,22 +29,40 @@ class MRExecutor extends Executor
 
 		j.setConf(hConf);
 		
-		/*
-		 * create a temp directory for the Job
-		 */
-		int jobId = System.currentTimeMillis()
-		String jobWorkingDir = JobBase.getJobWorkingDir(hConf, jobId)
+		String jobWorkingDir = hConf.get(Job.WINDOWING_JOB_WORKING_DIR);
 		JobBase.addQuerySpecToJob(hConf, jobWorkingDir, qry.qSpec)
 		
-		try
-		{
-			int eCode = j.run(qry);
-		}
-		finally
-		{
-			JobBase.deleteJobWorkingDir(hConf)
-		}
+		int eCode = j.run(qry);
 	}
+	
+	/*
+	 * Marker method to let WShell if Executor can componentize the User Query.
+	 * Componentization only supported in MR mode.
+	 */
+	boolean allowQueryComponentization()
+	{
+		return true;
+	}
+	
+	/*
+	 * hook to allow Executor to setup execution for 1 or more component Queries.
+	 */
+	void beforeExecute(Query qry, WindowingShell wShell)
+	{
+		/*
+		* create a temp directory for the Job
+		*/
+	   int jobId = System.currentTimeMillis()
+	   JobBase.getJobWorkingDir(qry.cfg, jobId)
+	}
+	
+	/*
+	* hook to allow Executor to cleanup execution after 1 or more component Query executions.
+	*/
+   void afterExecute(Query qry, WindowingShell wShell)
+   {
+	   JobBase.deleteJobWorkingDir(qry.cfg)
+   }
 }
 
 /**
@@ -54,12 +74,12 @@ class JobSpec
 {
 	ArrayList<JobComponentSpec> componentJobs
 	
-	public JobSpec(ArrayList<QuerySpec> componentQueries)
+	public JobSpec(ArrayList<Query> componentQueries)
 	{
 		componentJobs = []
 		JobComponentSpec jCSpec = null
-		componentQueries.eachWithIndex { QuerySpec q, int idx ->
-			jCSpec = new JobComponentSpec(num : idx, qSpec : q, previousJob : jCSpec);
+		componentQueries.eachWithIndex { Query q, int idx ->
+			jCSpec = new JobComponentSpec(num : idx, qry : q, previousJob : jCSpec);
 			componentJobs << jCSpec
 		}
 	}
@@ -80,15 +100,16 @@ class JobSpec
 class JobComponentSpec
 {
 	int num
-	QuerySpec qSpec;
+	Query qry;
 	JobComponentSpec previousJob;
 	
 	public String toString()
 	{
+		QuerySpec qSpec = qry.qSpec
 		sprintf("Job %d[input=%s, map=%s, partition,order=([%s], [%s]), reduceChain=%s]",
 				num, 
 				previousJob == null ? qSpec.tableIn : "Job ${previousJob.num}",
-				FunctionRegistry.hasMapPhase(qSpec.getFirstFunction().name) ? qSpec.getFirstFunction().name : "identity",
+				qSpec.tblFuncSpec != null && FunctionRegistry.hasMapPhase(qSpec.getFirstFunction().name) ? qSpec.getFirstFunction().name : "identity",
 				qSpec.tableIn.partitionColumns.join(", "),  
 				qSpec.tableIn.orderColumns.join(", "),
 				qSpec.getFunctionChainStr())

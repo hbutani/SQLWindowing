@@ -15,6 +15,7 @@ import com.sap.hadoop.windowing.parser.QSpecBuilder;
 import com.sap.hadoop.windowing.parser.WindowingLexer;
 import com.sap.hadoop.windowing.parser.WindowingParser;
 import com.sap.hadoop.windowing.query.Query;
+import com.sap.hadoop.windowing.query.QueryComponentizer;
 import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.query.QuerySpecBuilder;
 import com.sap.hadoop.windowing.query.Translator;
@@ -99,9 +100,37 @@ class WindowingShell
 	{
 		QuerySpec qSpec = parse(query)
 		Query q = translator.translate(wshell, qSpec, cfg, hiveQryExec);
+		ArrayList<Query> componentQueries;
+		
+		if ( executor.allowQueryComponentization() )
+		{
+			QueryComponentizer qC = new QueryComponentizer(q, this);
+			componentQueries = qC.componentize();
+		}
+		else
+		{
+			componentQueries = [q]
+		}
+		
+		executor.beforeExecute(q, this);
 		try
 		{
-			executor.execute(q)
+			componentQueries.each { Query cq ->
+				execute(cq);
+			}
+		}
+		finally
+		{
+			executor.afterExecute(q, this)
+		}
+	}
+	
+	protected void execute(Query q) throws WindowingException
+	{
+		QuerySpec qSpec = q.qSpec
+		try
+		{
+			executor.execute(q, this)
 		}
 		finally
 		{

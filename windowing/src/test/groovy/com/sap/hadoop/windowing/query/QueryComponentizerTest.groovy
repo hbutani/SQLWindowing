@@ -43,8 +43,8 @@ select p_mfgr,p_name, p_size, r
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
-		QueryComponentizer qC = new QueryComponentizer(qry, wshell.hiveQryExec);
-		ArrayList<QuerySpec> components = qC.componentize();
+		QueryComponentizer qC = new QueryComponentizer(qry, wshell);
+		ArrayList<Query> components = qC.componentize();
 		//println components
 		JobSpec jSpec = new JobSpec(components)
 		println jSpec
@@ -69,8 +69,8 @@ select p_mfgr,p_name, p_size, r
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
-		QueryComponentizer qC = new QueryComponentizer(qry, wshell.hiveQryExec);
-		ArrayList<QuerySpec> components = qC.componentize();
+		QueryComponentizer qC = new QueryComponentizer(qry, wshell);
+		ArrayList<Query> components = qC.componentize();
 		//println components
 		
 		JobSpec jSpec = new JobSpec(components)
@@ -92,8 +92,8 @@ select p_mfgr,p_name, p_size, r
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
-		QueryComponentizer qC = new QueryComponentizer(qry, wshell.hiveQryExec);
-		ArrayList<QuerySpec> components = qC.componentize();
+		QueryComponentizer qC = new QueryComponentizer(qry, wshell);
+		ArrayList<Query> components = qC.componentize();
 		//println components
 		JobSpec jSpec = new JobSpec(components)
 		println jSpec

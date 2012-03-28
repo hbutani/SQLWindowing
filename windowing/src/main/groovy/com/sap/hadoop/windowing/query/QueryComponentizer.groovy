@@ -8,7 +8,7 @@ import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.AbstractTableFunction;
 import com.sap.hadoop.windowing.functions.WindowingTableFunction;
 import com.sap.hadoop.windowing.parser.QSpecBuilder.typeName_return;
-import com.sap.hadoop.windowing.runtime.HiveQueryExecutor;
+import com.sap.hadoop.windowing.runtime.WindowingShell;
 
 /**
  * Responsible for converting the input {@link Query} into a list of component {@link QuerySpec}.
@@ -48,14 +48,14 @@ class QueryComponentizer
 	Query qry
 	QuerySpec qSpec
 	AbstractTableFunction startFunc
-	HiveQueryExecutor hiveQryExec
+	WindowingShell wshell
 	
-	QueryComponentizer(Query qry, HiveQueryExecutor hiveQryExec)
+	QueryComponentizer(Query qry, WindowingShell wshell)
 	{
 		this.qry = qry
 		qSpec = qry.qSpec
 		startFunc = qry.tableFunction
-		this.hiveQryExec = hiveQryExec
+		this.wshell = wshell
 		
 		/*
 		* skip over final Windowing Table Function.
@@ -66,13 +66,24 @@ class QueryComponentizer
 	   }
 	}
 	
-	ArrayList<QuerySpec> componentize()
+	ArrayList<Query> componentize() throws WindowingException
 	{
 		if ( startFunc == null )
 		{
-			return [qSpec]
+			return [qry]
 		}
 		
+		ArrayList<QuerySpec> qSpecs = _componentize();
+		ArrayList<Query> qrys = []
+		
+		qSpecs.each { QuerySpec cqSpec ->
+			qrys << wshell.translate(cqSpec)
+		}
+		return qrys;
+	}
+	
+	private ArrayList<QuerySpec> _componentize() throws WindowingException
+	{
 		ArrayList<QuerySpec> componentQSpecs = []
 		ArrayList<Integer> splitPositions = computeSplitPositions();
 		QuerySpec currentQSpec = qry.qSpec
@@ -133,7 +144,7 @@ class QueryComponentizer
 	 * @param splitPos position in function chain where QuerySpec needs to be split.
 	 * @return
 	 */
-	protected ArrayList<QuerySpec> split(QuerySpec qSpec, int splitPos)
+	protected ArrayList<QuerySpec> split(QuerySpec qSpec, int splitPos) throws WindowingException
 	{
 		QuerySpec current = (QuerySpec) qSpec.clone();
 		QuerySpec rest = (QuerySpec) qSpec.clone();
@@ -265,7 +276,7 @@ class QueryComponentizer
 		hql += componentQrySpec.selectColumns.collect { sc -> "${sc.alias} ${sc.typeName}"}.join(", ")
 		hql += ") ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe' STORED AS RCFILE "
 		
-		hiveQryExec.executeHiveQuery(hql);
+		wshell.hiveQryExec.executeHiveQuery(hql);
 		return tableName
 	}
 

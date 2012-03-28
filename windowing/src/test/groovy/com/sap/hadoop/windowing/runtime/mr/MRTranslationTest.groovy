@@ -48,5 +48,19 @@ from part
 		   rank() as r
 	   select p_mfgr,p_name, p_size, r""")
    }
+   
+   /**
+   * Prerequite: create table emptytable(id int, dep string, salary float);
+   * 
+   * todo: catch this error and at least disallow queries on empty tables.
+   */
+  @Test
+  void testEmptyTable()
+  {
+	  expectedEx.expect(WindowingException.class);
+	  expectedEx.expectMessage("java.lang.ArrayIndexOutOfBoundsException: 0");
+	  wshell.execute("""
+from emptytable partition by dep order by dep, salary desc with rank() as r select dep, id, salary, r into path = '/tmp/wout'""")
+  }
 
 }

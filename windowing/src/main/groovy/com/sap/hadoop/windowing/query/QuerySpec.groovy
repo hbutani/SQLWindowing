@@ -154,6 +154,12 @@ class QuerySpec implements Writable, Cloneable
 		StringBuilder buf = new StringBuilder()
 		Stack<TableFuncSpec> stack = new Stack<TableFuncSpec>();
 		TableFuncSpec tFunc = tblFuncSpec
+		
+		if ( tFunc == null )
+		{
+			return "WindowingExpressions"
+		}
+		
 		TableFuncSpec fFunc = getFirstFunction()
 
 		while(tFunc)
@@ -172,6 +178,12 @@ class QuerySpec implements Writable, Cloneable
 			}
 			buf.append(tFunc.name)
 		}
+		
+		if ( !funcSpecs.empty )
+		{
+			buf.append(" -> WindowingExpressions");
+		}
+		
 		return buf.toString()
 	}
 

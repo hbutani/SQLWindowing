@@ -62,6 +62,8 @@ select p_mfgr,p_name, p_size, r
 				 noop(part_rc partition by p_mfgr order by p_mfgr, p_name)
 			   )
 			 ) partition by p_mfgr order by p_mfgr, p_name
+with
+  rank() as r
 select p_mfgr,p_name, p_size, r
 		into path='/tmp/wout'
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
@@ -71,6 +73,28 @@ select p_mfgr,p_name, p_size, r
 		ArrayList<QuerySpec> components = qC.componentize();
 		//println components
 		
+		JobSpec jSpec = new JobSpec(components)
+		println jSpec
+	}
+	
+	@Test
+	void test3()
+	{
+		int jobId = System.currentTimeMillis()
+		String jobWorkingDir = JobBase.getJobWorkingDir(wshell.cfg, jobId)
+		
+		Query qry = wshell.translate("""
+		from part_rc partition by p_mfgr order by p_mfgr, p_name
+with
+  rank() as r
+select p_mfgr,p_name, p_size, r
+		into path='/tmp/wout'
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+		QueryComponentizer qC = new QueryComponentizer(qry, wshell.hiveQryExec);
+		ArrayList<QuerySpec> components = qC.componentize();
+		//println components
 		JobSpec jSpec = new JobSpec(components)
 		println jSpec
 	}

@@ -6,6 +6,7 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.AbstractTableFunction;
+import com.sap.hadoop.windowing.functions.WindowingTableFunction;
 import com.sap.hadoop.windowing.parser.QSpecBuilder.typeName_return;
 import com.sap.hadoop.windowing.runtime.HiveQueryExecutor;
 
@@ -24,6 +25,7 @@ import com.sap.hadoop.windowing.runtime.HiveQueryExecutor;
  * <ul>
  * <li> The function chain is set from the input function up to the function previous to the split position.
  * <li> The whereExpr is cleared.
+ * <li> windowing clauses are cleared
  * <li> The selectList is set to Columns based on the previous function's OutputShape.
  * <li> The QuerySpec's tableOutput is changed so that the outputPath is a jobWorking directory; the output
  * SerDe and properties are LazyBinarySerDe. A Temporary table is created based on the OutputShape of the previous
@@ -58,7 +60,7 @@ class QueryComponentizer
 		/*
 		* skip over final Windowing Table Function.
 		*/
-	   if ( ! qry?.wnFns.empty )
+	   if ( startFunc instanceof WindowingTableFunction )
 	   {
 		   startFunc = startFunc.input
 	   }
@@ -66,8 +68,12 @@ class QueryComponentizer
 	
 	ArrayList<QuerySpec> componentize()
 	{
-		ArrayList<QuerySpec> componentQSpecs = []
+		if ( startFunc == null )
+		{
+			return [qSpec]
+		}
 		
+		ArrayList<QuerySpec> componentQSpecs = []
 		ArrayList<Integer> splitPositions = computeSplitPositions();
 		QuerySpec currentQSpec = qry.qSpec
 		
@@ -89,7 +95,7 @@ class QueryComponentizer
 	{
 		ArrayList<Integer> positions = []
 		
-		AbstractTableFunction tFunc = qry.tableFunction
+		AbstractTableFunction tFunc = startFunc
 		TableFuncSpec tFuncSpec = qry.qSpec.tblFuncSpec;
 		
 		
@@ -146,6 +152,11 @@ class QueryComponentizer
 		* The whereExpr is cleared.
 		*/
 		current.whereExpr = null
+		
+		/*
+		 * windowing clauses are cleared
+		 */
+		current.funcSpecs = []
 		
 		/*
 		 * The selectList is set to Columns based on the previous function's OutputShape.

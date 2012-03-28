@@ -31,4 +31,22 @@ select p_mfgr,p_name, p_size, r
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 		recordwriter 'org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordWriter'""")
 	}
+	
+	/**
+	* Issue #13 reproted by Pan Fei
+	*/
+   @Test
+   void testEnsureOutputPath()
+   {
+	   expectedEx.expect(WindowingException.class);
+	   expectedEx.expectMessage("Query doesn't contain an output Path for results");
+	   wshell.execute("""
+from part
+	   partition by p_mfgr
+	   order by p_mfgr, p_name
+	   with
+		   rank() as r
+	   select p_mfgr,p_name, p_size, r""")
+   }
+
 }

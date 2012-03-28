@@ -43,6 +43,12 @@ class MRTranslator extends Translator
 	{
 		TableOutput tblOut = qry.qSpec.tableOut
 		
+		// ensure outputPath is specified. It is optional in grammar because it is not required in Hive mode.
+		if ( tblOut.outputPath == null )
+		{
+			throw new WindowingException("Query doesn't contain an output Path for results");
+		}
+		
 		// if tableName is specified; validate it exists
 		Table tbl
 		if ( tblOut.tableName )

@@ -52,6 +52,19 @@ class FunctionTranslator
 		
 	}
 	
+	/**
+	 * <ol>
+	 * <li> ensure that the specified function name is in the library.
+	 * <li> Ensure that the Window specification is valid for this function.
+	 * <li> For now the ordering of this function is the same as the Query.
+	 * <li> setup Args of the function.
+	 * </ol>
+	 * @param wshell
+	 * @param qry
+	 * @param funcSpec
+	 * @return
+	 * @throws WindowingException
+	 */
 	IWindowFunction translate(GroovyShell wshell, Query qry, FuncSpec funcSpec) throws WindowingException
 	{
 		Class<IWindowFunction> cls = FunctionRegistry.FUNCTION_MAP[funcSpec.name];
@@ -132,6 +145,17 @@ class FunctionTranslator
 		return wFn;
 	}
 	
+	/**
+	 * The arguments of a function are evaluated during translation, except for Constants.GROOVYSCRIPT_TYPE. 
+	 * Name in {@link ArgDef} ties argument to a field in the Func class.
+	 * @param wshell
+	 * @param qry
+	 * @param funSpec
+	 * @param arg
+	 * @param argDef
+	 * @param wFn
+	 * @throws WindowingException
+	 */
 	void applyArg(GroovyShell wshell, Query qry, FuncSpec funSpec, FuncArg arg, ArgDef argDef, IWindowFunction wFn) throws WindowingException
 	{
 		if ( !(arg.argType in argDef.argTypes()) )

@@ -9,6 +9,7 @@ import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
 import org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordWriter;
 import org.apache.hadoop.hive.serde2.objectinspector.SettableStructObjectInspector;
 
+import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.AbstractTableFunction;
 import com.sap.hadoop.windowing.io.WindowingInput;
 import com.sap.hadoop.windowing.query.OrderColumn;
@@ -20,7 +21,32 @@ class Executor
 {
 	Map envProps;
 	
-	void execute(Query qry)
+	/*
+	 * Marker method to let WShell if Executor can componentize the User Query.
+	 * Componentization only supported in MR mode.
+	 */
+	boolean allowQueryComponentization()
+	{
+		return false;
+	}
+	
+	/*
+	 * hook to allow Executor to setup execution for 1 or more component Queries.
+	 */
+	void beforeExecute(Query qry, ArrayList<Query> componentQueries, WindowingShell wShell)
+	{
+		
+	}
+	
+	/*
+	* hook to allow Executor to cleanup execution after 1 or more component Query executions.
+	*/
+   void afterExecute(Query qry, WindowingShell wShell)
+   {
+	   
+   }
+	
+	void execute(Query qry, WindowingShell wShell) throws WindowingException
 	{
 		boolean applyWhere = (qry.whereExpr != null)
 		

@@ -203,4 +203,39 @@ select p_mfgr,p_name, p_size, r
 		
 		checkQuerySpec(qSpec)
 	}
+	
+	@Test
+	void testClone1()
+	{
+		QuerySpec qSpec = wshell.parse("""
+		from <select p_mfgr, p_name, p_size
+				from part_rc>
+		partition by p_mfgr
+		order by p_mfgr, p_name
+		with
+		rank() as r
+select p_mfgr,p_name, p_size, r
+		into path='/tmp/wout'
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'
+		load into table part_win partition '(p_date=\\'12-15-2010\\')'""")
+		
+		QuerySpec qSpec2 = (QuerySpec) qSpec.clone();
+		assert qSpec.toString() == qSpec2.toString()
+	}
+	
+	@Test
+	void testClone2()
+	{
+		QuerySpec qSpec = wshell.parse("""
+		from npath(<select p_mfgr, p_name, p_size
+				from part_rc> partition by p_mfgr order by p_mfgr, p_name, '')
+select p_mfgr,p_name, p_size, r
+		into path='/tmp/wout'
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+		QuerySpec qSpec2 = (QuerySpec) qSpec.clone();
+		assert qSpec.toString() == qSpec2.toString()
+	}
 }

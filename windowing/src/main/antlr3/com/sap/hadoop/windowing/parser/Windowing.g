@@ -81,10 +81,9 @@ query :
 ;
 
 tableSpec :
- hivetable |
- ID p=partitionby o=orderby -> ^(TABLEINPUT ID $p $o) |
- h=GROOVYEXPRESSION p=partitionby o=orderby -> ^(TABLEINPUT $h $p $o) |
- LPAREN h=GROOVYEXPRESSION p=partitionby o=orderby RPAREN -> ^(TABLEINPUT $h $p $o ) |
+ hdfsFile |
+ hiveTable |
+ hiveQuery |
  tblfunc
 ;
 
@@ -93,8 +92,17 @@ tblfunc :
     -> ^(TBLFUNCTION $name tableSpec functionparam* $p? $o? window_expression?)
 ;
 
-hivetable :
+hdfsFile :
  TABLEINPUT LPAREN (namevalue)? (COMMA namevalue)* RPAREN  p=partitionby o=orderby -> ^(TABLEINPUT namevalue* $p $o)
+;
+
+hiveTable :
+  ID p=partitionby o=orderby -> ^(TABLEINPUT ID $p $o) 
+;
+
+hiveQuery :
+  h=GROOVYEXPRESSION p=partitionby o=orderby -> ^(TABLEINPUT $h $p $o) |
+ LPAREN h=GROOVYEXPRESSION p=partitionby o=orderby RPAREN -> ^(TABLEINPUT $h $p $o ) 
 ;
 
 namevalue :
@@ -190,64 +198,6 @@ outputFormatOrWriter :
 
 loadClause:
   LOAD ov=OVERWRITE? INTO TABLE t=ID (PARTITION l=STRING)? -> ^(LOADSPEC $t $l? $ov?)
-;
-
-value_expression :
-  numeric_expression |
-  STRING
-;
-
-numeric_expression :	
-  term ((PLUS | MINUS)=> (PLUS^ | MINUS^) term )*	
-;
-	
-term 	:	
-  numeric_primary_expression ((ASTERISK | SOLIDUS)=> (ASTERISK^ | SOLIDUS^) numeric_primary_expression)*
-;
-
-numeric_primary_expression :	
-  identifier | 
-  signed_numeric_literal | 
-  LPAREN numeric_expression RPAREN
-	;
-
-signed_numeric_literal :
-  (PLUS|MINUS)? unsigned_numeric_literal
-;
-
-/*
-  numbers
-*/
-unsigned_numeric_literal :
-  exact_numeric_literal |
-  approximate_numeric_literal
-;
-
-approximate_numeric_literal :
-  mantissa 'E' exponent
-;
-
-exponent :
-  PLUS NUMBER -> NUMBER |
-  MINUS NUMBER -> ^(UMINUS NUMBER) |
-  NUMBER -> NUMBER
-;
-
-mantissa : 
-  exact_numeric_literal
-;  
-
-exact_numeric_literal :
-
-  n1=NUMBER (DOT n2=NUMBER)?  -> 
-      {
-	      ( $n2 != null ? adaptor.create(NUMERIC, $n1.text + '.' + $n2.text) :  adaptor.create(INTEGER, $n1.text) )
-      }  |
-  DOT n1=NUMBER -> { adaptor.create(NUMERIC, '.' + $n1.text)} 
-;
-
-identifier :
-  ID
 ;
 
 /*

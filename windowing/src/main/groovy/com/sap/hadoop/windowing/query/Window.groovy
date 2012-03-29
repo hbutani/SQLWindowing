@@ -73,7 +73,7 @@ class Window implements Writable
 
 abstract class Boundary implements Writable
 {
-	static def UNBOUNDED_AMOUNT = new Object()
+	public static def UNBOUNDED_AMOUNT = new Object()
 	abstract int getIndex(Partition p, int row)
 	
 	abstract int compare(Boundary other);

@@ -88,6 +88,8 @@ class WindowingTableFunction extends AbstractTableFunction
 		//3. for now assume type is 'double'. (revisit: analyze groovy expressions to infer type)
 		return TypeInfoFactory.getPrimitiveTypeInfo('double')
 	}
+	
+	public boolean hasMapPhase()  throws WindowingException { return false; }
 }
 
 class OutputPartition extends IPartition

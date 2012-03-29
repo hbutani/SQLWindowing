@@ -1,5 +1,7 @@
 package com.sap.hadoop.windowing;
 
+import com.sap.hadoop.metadata.CompositeDataType;
+
 public class Constants
 {
 	public static final String INPUT_PATH = "inputpath";
@@ -29,4 +31,19 @@ public class Constants
 	 */
 	public static final String GROOVYSCRIPT_TYPE = "script";
 	public static final String GROOVYEXPRESSION_TYPE = "expression";		
+	
+	
+	public static final String WINDOWING_JAR_FILE = "windowing.jar.file";
+	public static final String WINDOWING_PARTITION_COLS = "windowing.partition.cols";
+	public static final String WINDOWING_SORT_COLS = "windowing.sort.cols";
+	public static final String WINDOWING_SORT_COLS_ORDER = "windowing.sort.order";
+	public static final String WINDOWING_INPUT_DATABASE = "windowing.input.database";
+	public static final String WINDOWING_INPUT_TABLE = "windowing.input.table";
+	public static final String WINDOWING_KEY_TYPE = CompositeDataType.COMPOSITE_DATA_TYPE;
+	public static final String WINDOWING_NUM_PARTION_COLUMNS = "windowing.number.of.partition.columns";
+	public static final String WINDOWING_QUERY_STRING = "windowing.query.string";
+	public static final String WINDOWING_TEMP_TABLE = "windowing.hivequery.temptable";
+	public static final String WINDOWING_JOB_WORKING_DIR = "windowing.job.working.dir";
+	public static final String WINDOWING_JOB_QUERY_FILE = "windowing.job.query.file";
+
 }

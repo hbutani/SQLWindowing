@@ -39,6 +39,15 @@ class MRTranslator extends Translator
 		// writer not used in MR mode
 	}
 	
+	/**
+	 * <ul>
+	 * <li> If output Table is specified; validate against Hive Metastore. Set SerDe, SerDe properties and
+	 * TableOutputFormat on {@link TableOutput} based on information in MetaStore.
+	 * <li> if user has specified SerDe, SerDe properties and TableOutputFormat then validate classNames and
+	 * set on TableOutput.
+	 * <li> 
+	 * </ul>
+	 */
 	void validateOutputSpec(Query qry) throws WindowingException
 	{
 		TableOutput tblOut = qry.qSpec.tableOut

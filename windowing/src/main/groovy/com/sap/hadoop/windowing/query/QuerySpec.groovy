@@ -1,13 +1,19 @@
 package com.sap.hadoop.windowing.query
 
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.DataOutput;
+import java.io.DataOutputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 
+import com.sap.hadoop.windowing.functions.FunctionRegistry;
+import com.sap.hadoop.windowing.parser.WindowingParser.tblfunc_return;
 import com.sap.hadoop.windowing.runtime.ArgType;
 import org.apache.hadoop.io.Writable;
 
-class QuerySpec implements Writable
+class QuerySpec implements Writable, Cloneable
 {
 	String queryStr
 	TableInput tableIn
@@ -96,6 +102,91 @@ class QuerySpec implements Writable
 		}
 	}
 	
+	public Object clone()
+	{
+		try
+		{
+			ByteArrayOutputStream outStream;
+			DataOutputStream dout;
+			
+			outStream = new ByteArrayOutputStream()
+			dout = new DataOutputStream(outStream)
+			
+			write(dout)
+			ByteArrayInputStream bis = new ByteArrayInputStream(outStream.toByteArray())
+			DataInputStream din = new DataInputStream(bis);
+			
+			QuerySpec qSpec = new QuerySpec()
+			qSpec.readFields(din)
+			
+			return qSpec
+		}
+		catch(Throwable t)
+		{
+			throw new RuntimeException(t);
+		}
+	}
+	
+	public int getFunctionChainLength()
+	{
+		int len = 0;
+		TableFuncSpec tFunc = tblFuncSpec
+		while(tFunc != null)
+		{
+			len++;
+			tFunc = tFunc.inputFuncSpec
+		}
+		return len
+	}
+	
+	public TableFuncSpec getFirstFunction()
+	{
+		TableFuncSpec tFunc = tblFuncSpec
+		while(tFunc.inputFuncSpec != null)
+		{
+			tFunc = tFunc.inputFuncSpec
+		}
+		return tFunc
+	}
+	
+	public String getFunctionChainStr()
+	{
+		StringBuilder buf = new StringBuilder()
+		Stack<TableFuncSpec> stack = new Stack<TableFuncSpec>();
+		TableFuncSpec tFunc = tblFuncSpec
+		
+		if ( tFunc == null )
+		{
+			return "WindowingExpressions"
+		}
+		
+		TableFuncSpec fFunc = getFirstFunction()
+
+		while(tFunc)
+		{
+			stack.push(tFunc);
+			tFunc = tFunc.inputFuncSpec
+		}
+		boolean first = true;
+		while(!stack.isEmpty())
+		{
+			if ( first ) first = false; else buf.append(" -> ");
+			tFunc = stack.pop();
+			if ( tFunc != fFunc && FunctionRegistry.hasMapPhase(tFunc.name)  )
+			{
+				buf.append(tFunc.name + " map phase -> ")
+			}
+			buf.append(tFunc.name)
+		}
+		
+		if ( !funcSpecs.empty )
+		{
+			buf.append(" -> WindowingExpressions");
+		}
+		
+		return buf.toString()
+	}
+
 }
 
 /**
@@ -447,6 +538,12 @@ class TableFuncSpec extends FuncSpec
 	ArrayList<String> partitionColumns
 	ArrayList<OrderColumn> orderColumns
 	
+	TableFuncSpec()
+	{
+		partitionColumns = []
+		orderColumns = []
+	}
+	
 	public String toString()
 	{
 		if (!inputFuncSpec )
@@ -507,24 +604,35 @@ class TableFuncSpec extends FuncSpec
 		if ( nullFlags & 0x02 )
 		{
 			int pColssz = din.readInt();
-			partitionColumns = []
-			for(i=0; i < pColssz; i++)
+			for(int i=0; i < pColssz; i++)
 			{
 				partitionColumns << org.apache.hadoop.io.Text.readString(din)
 			}
+		}
+		else
+		{
+			partitionColumns = null
 		}
 		
 		if ( nullFlags & 0x04 )
 		{
 			int oColsz = din.readInt();
-			orderColumns = []
-			for(i=0; i < oColsz; i++)
+			for(int i=0; i < oColsz; i++)
 			{
 				OrderColumn oc = new OrderColumn()
 				oc.readFields(din)
 				orderColumns << oc
 			}
 		}
+		else
+		{
+			orderColumns = null
+		}
+	}
+	
+	public boolean hasParitionSpec()
+	{
+		return partitionColumns?.size() > 0
 	}
 }
 

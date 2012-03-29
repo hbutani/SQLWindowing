@@ -58,6 +58,20 @@ abstract class Translator
 		return qry
 	}
 	
+	/**
+	 * <ol>
+	 * <li> If the Input to the Query is a <i>hive Query</i> execute it, store result in a Temp. table and change Query 
+	 * input to the Temp. table.
+	 * <li> Setup the WindowingInput for this Query: In MR mode this means extract SerDe information from the Hive metadata.
+	 * <li> setup the Query's input Deserializer, and ObjectInspector from the WindowingInput. 
+	 * <li> setup the Processing ObjectInspector: this is set to a StandardStructOI, which means all function execution 
+	 *   happens on Java Objects.
+	 * <li> setup Input Columns
+	 * </ol>
+	 * @param qry
+	 * @param hiveQryExec
+	 * @throws WindowingException
+	 */
 	void setupQueryInput(Query qry, HiveQueryExecutor hiveQryExec) throws WindowingException 
 	{
 		QueryInput qryIn = new QueryInput()
@@ -151,6 +165,11 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 	
 	abstract WindowingInput setupWindowingInput(Query qry) throws WindowingException;
 	
+	/**
+	 * Setup the Window Functions for the Query. Rely on the {@link FunctionTranslator} to construct a {@link IWindowFunction} object.
+	 * @param wshell
+	 * @param qry
+	 */
 	void setupWindowFunctions(GroovyShell wshell, Query qry)
 	{
 		qry.wnFns = []
@@ -162,6 +181,27 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		}
 	}
 	
+	/**
+	 * Responsible for setting up the Table Function Chain.
+	 * <ol>
+	 * <li> The {@link QuerySpec} has a list of {@link FuncSpec} which is in the order encountered in the Query. The functions
+	 * need to be applied in reverse order.
+	 * <li> If windowing clauses are specified in the Query then the final function will be the {@link WindowingTableFunction}.
+	 * </ol>
+	 * Uses the following logic to setup the chain:
+	 * <ol>
+	 * <li> No Table Function used in Query: setup {@link WindowingTableFunction} as the <i>inputtableFunction</i> and also as the
+	 *  <i>final</i> tableFunction of the Query.
+	 *  <li> scan forward through the Func list in the QuerySpec and push them onto a Stack.
+	 *  <li> now iterate on the Stack, calling on the {@link FunctionTranslator} and the 
+	 *  {@link AbstractTableFunction table Function object} to translate the FuncSpec into a Function object. The Function
+	 *  object are chained so that a FuncObject is linked to the previous FuncObject via its inputtableFunction variable.
+	 *  <li> set the top element in the stack as the inputtableFunction, and the bottom element as the final tableFunction.
+	 * </ol>
+	 * @param wshell
+	 * @param qry
+	 * @throws WindowingException
+	 */
 	void setupTableFunction(GroovyShell wshell, Query qry) throws WindowingException
 	{
 		if ( !qry.qSpec.tblFuncSpec)
@@ -208,14 +248,35 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		}
 	}
 	
+	/**
+	 * If the query's inputtableFunction has a Map Phase then the MR Job has to be setup such that:
+	 * <ol>
+	 * <li> During the Map Phase each Map Task collects the Input rows into a Partition. At the end it calls the
+	 * TableFunction's mapExecute method. 
+	 * <li> The Map Task takes the output of the mapExecute method and serializes it using a LazyBinarySerDe.
+	 * <li> The Reduce phase works as always, except that it uses the LazyBinarySerDe to deserialize objects from the stream.
+	 * </ol>
+	 * In order for the above to work the {@link QueryMapPhase} captures information on the shape & serilization of data as it gets 
+	 * operated on in the Map Phase:
+	 * <ol>
+	 * <li> qry.mapPhase.inputOI is set to the Query's input ObjectInspector
+	 * <li> qry.mapPhase.inputDeserializer is set to the Query's input Deserializer.
+	 * <li> qry.mapPhase.outputSerDe is setup as a LazyBinarySerDe based on the MapOutputShape provide by the TableFunction.
+	 * <li> finally the Query's inputOI & deserializer are set to the mapPhase's outputOI and outputSerDe. The variables 
+	 * inputOI and deserializer are really used during the reduce phase, since there was no map phase before there names
+	 * imply that they represent the Query input.
+	 * </ol>
+	 * @param qry
+	 * @throws WindowingException
+	 */
 	void setupMapPhase(Query qry) throws WindowingException
 	{
-		if ( !qry.tableFunction.hasMapPhase() )
+		if ( !qry.inputtableFunction.hasMapPhase() )
 		{
 			return
 		}
 		
-		Map<String, TypeInfo> mapShape = qry.tableFunction.getMapPhaseOutputShape()
+		Map<String, TypeInfo> mapShape = qry.inputtableFunction.getMapPhaseOutputShape()
 		ArrayList<String> columnNames = []
 		ArrayList<String> columnTypes = []
 		mapShape.collect { k, v ->
@@ -261,14 +322,21 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 			// 1. setup SerDe
 			setupOutputSerDe(qry)
 			
-			// 2. setup internal processing serDe
+			/*
+			 *  2. setup internal processing serDe.
+			 *  The functions output rows as Java arrays. The QueryOutput processingOI is passed along with the array to the QueryOutput
+			 *  serializer.
+			 */
 			qryOut.outputOI = qryOut.serDe.getObjectInspector()
 			qryOut.processingOI = ObjectInspectorUtils.getStandardObjectInspector(qryOut.outputOI, ObjectInspectorCopyOption.JAVA)
 			
 			//3. setup writer
 			setupWriter(qry)
 			
-			//4. fill in fieldRefs to Columns
+			/*
+			 * 4. fill in fieldRefs to Columns
+			 * Link the QueryOutput columns to the Fields in the processing ObjectInspector.
+			 */
 			for(int i in 0..<qryOut.columns.size())
 			{
 				Column c = qryOut.columns[i]
@@ -281,6 +349,12 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		}
 	}
 	
+	/**
+	 * Query currently must have a selectList (todo allow it to be optional if there is TableFunction).
+	 * For each Select List expression setup a {@link SelectColumn}. Infer its type for column based on rules in inferTyp method.
+	 * @param qry
+	 * @throws WindowingException
+	 */
 	void setupOutputColumns(Query qry) throws WindowingException
 	{
 		QueryOutput qryOut = qry.output
@@ -295,6 +369,18 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		}
 	}
 	
+	/**
+	 * <ol>
+	 * <li> if explicitly specified by user, use this.
+	 * <li> if name matches an input column, use type of input column
+	 * <li> if name matches a column from the query's final table function, use its type.
+	 * <li> otherwise assume type is 'double'.
+	 * </ol>
+	 * @param oc
+	 * @param sCol
+	 * @param qry
+	 * @throws WindowingException
+	 */
 	void inferType(OutputColumn oc, SelectColumn sCol, Query qry) throws WindowingException
 	{
 		//0. if type specified explicitly specified in sCol, use it.
@@ -350,6 +436,14 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		return System.out
 	}
 	
+	/**
+	 * <ul>
+	 * <li> Instantiate Query Output SerDe
+	 * <li> initialize SerDe; pass Columns & ColumnTypes in Configuration before calling initialize.
+	 * </ul>
+	 * @param qry
+	 * @throws WindowingException
+	 */
 	void setupOutputSerDe(Query qry) throws WindowingException
 	{
 		QueryOutput qryOut = qry.output
@@ -398,6 +492,14 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		}
 	}
 	
+	/**
+	 * <ul>
+	 * <li> check className specified for OutputSerDe.
+	 * <li> check className specified for RecordWriter.
+	 * </ul>
+	 * @param qry
+	 * @throws WindowingException
+	 */
 	void validateOutputSpec(Query qry) throws WindowingException
 	{
 		TableOutput tblOut = qry.qSpec.tableOut

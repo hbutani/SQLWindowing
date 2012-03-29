@@ -33,7 +33,7 @@ class Executor
 	/*
 	 * hook to allow Executor to setup execution for 1 or more component Queries.
 	 */
-	void beforeExecute(Query qry, WindowingShell wShell)
+	void beforeExecute(Query qry, ArrayList<Query> componentQueries, WindowingShell wShell)
 	{
 		
 	}

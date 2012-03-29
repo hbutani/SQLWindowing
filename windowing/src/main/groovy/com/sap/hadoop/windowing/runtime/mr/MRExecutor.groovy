@@ -1,5 +1,7 @@
 package com.sap.hadoop.windowing.runtime.mr
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.conf.HiveConf;
 
@@ -13,6 +15,8 @@ import com.sap.hadoop.windowing.runtime.WindowingShell;
 
 class MRExecutor extends Executor
 {
+	private static final Log LOG = LogFactory.getLog("com.sap.hadoop.windowing.runtime.mr");
+	
 	void execute(Query qry, WindowingShell wShell) throws WindowingException
 	{
 		Job j = new Job();
@@ -47,13 +51,16 @@ class MRExecutor extends Executor
 	/*
 	 * hook to allow Executor to setup execution for 1 or more component Queries.
 	 */
-	void beforeExecute(Query qry, WindowingShell wShell)
+	void beforeExecute(Query qry, ArrayList<Query> componentQueries, WindowingShell wShell)
 	{
 		/*
 		* create a temp directory for the Job
 		*/
 	   int jobId = System.currentTimeMillis()
 	   JobBase.getJobWorkingDir(qry.cfg, jobId)
+	   
+	   JobSpec jSpec = new JobSpec(componentQueries);
+	   LOG.debug(sprintf("Query executed as following Job chain:\n %s", jSpec.toString()))
 	}
 	
 	/*

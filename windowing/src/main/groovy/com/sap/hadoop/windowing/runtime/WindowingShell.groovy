@@ -112,7 +112,7 @@ class WindowingShell
 			componentQueries = [q]
 		}
 		
-		executor.beforeExecute(q, this);
+		executor.beforeExecute(q, componentQueries, this);
 		try
 		{
 			componentQueries.each { Query cq ->

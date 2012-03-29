@@ -1,6 +1,7 @@
 package com.sap.hadoop.windowing.query
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 
 import com.sap.hadoop.windowing.Constants;
@@ -184,7 +185,8 @@ class QueryComponentizer
 		 * function. The QuerySpec's output tableName is set to this Table.
 		 */
 		String jobDir = qry.cfg.get(Constants.WINDOWING_JOB_WORKING_DIR);
-		String currentOutputPath = sprintf("%s/componentquery-%d/", jobDir, splitPos)
+		Path currentOutputPathObj = new Path(jobDir, "componentquery-${splitPos}");
+		String currentOutputPath = currentOutputPathObj.toUri().getPath();
 
 		String currrentQueryTableName = createComponentQueryOutputTable(current, splitPos)
 		current.tableOut = new TableOutput()

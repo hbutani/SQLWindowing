@@ -63,7 +63,7 @@ class WindowingClient
 					// execute hive Query
 					// send Resp.OK
 					// read Resp
-					println "Executing Embedded Hive Query..." 
+					println "Executing Embedded Hive Query:\n ${resp.query}\n" 
 					int rc = hiveDriver.processCmd(resp.query)
 					if ( rc == 0)
 					{

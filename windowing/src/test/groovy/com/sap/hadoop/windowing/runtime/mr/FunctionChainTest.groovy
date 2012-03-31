@@ -29,4 +29,23 @@ select p_mfgr,p_name, p_size, r
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
+	
+	@Test
+	void test2()
+	{
+		int jobId = System.currentTimeMillis()
+		String jobWorkingDir = JobBase.getJobWorkingDir(wshell.cfg, jobId)
+		wshell.execute("""
+		from noop(
+			   noopwithmap(
+				 noop(part_rc partition by p_mfgr order by p_mfgr, p_name)
+			   )
+			 ) partition by p_mfgr order by p_mfgr, p_name
+with
+  rank() as r
+select p_mfgr,p_name, p_size, r
+		into path='/tmp/wout'
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+	}
 }

@@ -73,6 +73,7 @@ class FunctionRegistry
 	static
 	{
 		registerTableClass(Noop.class)
+		registerTableClass(NoopWithMap.class)
 		registerTableClass(NPath.class)
 	}
 }	

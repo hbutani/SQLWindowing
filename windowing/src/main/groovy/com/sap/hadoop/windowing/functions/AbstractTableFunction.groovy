@@ -32,6 +32,12 @@ abstract class AbstractTableFunction implements IPartitionIterator
 	IPartitionIterator input;
 	Window window
 	
+	/*
+	 * set by execution driving logic ( see {@link Reduce}
+	 * Only the first function in the chain doesn't have its map logic applied. 
+	 */
+	boolean isFirstFunctionInChain = false;
+	
 	AbstractTableFunction()
 	{
 	}
@@ -45,7 +51,12 @@ abstract class AbstractTableFunction implements IPartitionIterator
 	{
 		try
 		{
-			return execute(input.next());
+			IPartition p = input.next()
+			if ( !isFirstFunctionInChain && hasMapPhase() )
+			{
+				p = mapExecute(p)
+			}
+			return execute(p);
 		}
 		catch(WindowingException we)
 		{
@@ -117,5 +128,25 @@ class Noop extends AbstractTableFunction
 		{
 			typemap = ((AbstractTableFunction)input).getOutputShape();
 		}
+	}
+}
+
+@FunctionDef(
+	name = "noopwithmap",
+	supportsWindow = true,
+	args = [],
+	description = "test function",
+	hasMapPhase = true
+)
+class NoopWithMap extends Noop
+{
+	protected IPartition mapExecute(IPartition inpPart) throws WindowingException
+	{
+		return inpPart;
+	}
+	
+	public Map<String, TypeInfo> getMapPhaseOutputShape()
+	{
+		return typemap;
 	}
 }

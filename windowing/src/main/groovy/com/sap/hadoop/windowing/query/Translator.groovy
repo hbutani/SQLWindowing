@@ -281,10 +281,10 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		ArrayList<String> columnTypes = []
 		mapShape.collect { k, v ->
 			columnNames << k
-			columnTypes << t
+			columnTypes << v
 		}
-		String cNames = columnNames.join(", ")
-		String cTypes = columnTypes.join(", ")
+		String cNames = columnNames.join(",")
+		String cTypes = columnTypes.join(",")
 		
 		qry.mapPhase = new QueryMapPhase()
 		qry.mapPhase.inputOI = qry.input.inputOI

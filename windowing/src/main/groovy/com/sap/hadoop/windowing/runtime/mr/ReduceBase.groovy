@@ -68,6 +68,7 @@ public class ReduceBase
 		AbstractTableFunction inpTFunc = qry.inputtableFunction
 		
 		inpTFunc.input = new MRPartitioner(qry, values, partitionColumnFields)
+		inpTFunc.isFirstFunctionInChain = true
 		
 		while(tFunc.hasNext())
 		{

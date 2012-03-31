@@ -86,7 +86,8 @@ class Job extends JobBase
 	@Override
 	public int run(String jobName, boolean localMode, String db, String tableName,
 		String partitionCols, String sortColumns, String sortOrder, String windowingJarFile,
-		String outputURI, Class<? extends OutputFormat> outputFormatClass) throws Exception
+		String outputURI, Class<? extends OutputFormat> outputFormatClass,
+		boolean hasMapSideProcessing) throws Exception
 	{
 	    FileSystem fs = FileSystem.get(URI.create(outputURI), getConf());
 		Path outputPath = new Path(outputURI)
@@ -127,7 +128,10 @@ class Job extends JobBase
 					
 	    conf.setJobName(jobName);
 	    //getConf().setBoolean("mapred.compress.map.output", true);
-	    conf.setMapperClass(Map.class);
+		if ( !hasMapSideProcessing )
+	    	conf.setMapperClass(Map.class);
+		else
+			conf.setMapperClass(TableFuncMap.class)
 	    conf.setReducerClass(Reduce.class);
 	    conf.setOutputFormat(outputFormatClass);
 	    conf.setOutputKeyClass(NullWritable.class);
@@ -165,7 +169,9 @@ class Job extends JobBase
 			String outputFormatClassName = tblOut.outputFormat;
 			Class<? extends OutputFormat> outputFormatClass = (outputFormatClassName != null) ?
 						(Class<? extends OutputFormat>) Class.forName(outputFormatClassName) : SequenceFileOutputFormat.class;
-			return run(jobName, false, db, tableName, partitionCols, sortCols, sortOrder, windowingJar, outputURI, outputFormatClass)
+			boolean hasMapSideProcessing = query.mapPhase != null
+			return run(jobName, false, db, tableName, partitionCols, sortCols, sortOrder, 
+				windowingJar, outputURI, outputFormatClass, hasMapSideProcessing)
 		}
 		catch(Throwable t)
 		{

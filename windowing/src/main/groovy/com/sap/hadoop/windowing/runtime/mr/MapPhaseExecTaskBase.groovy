@@ -41,6 +41,7 @@ class MapPhaseExecTaskBase extends MapBase
 		
 		QuerySpec qSpec = JobBase.getQuerySpec(job)
 		qry = wshell.translate(qSpec)
+		partition = new MapPhasePartition(qry)
 	}
 	
 	public void map(Writable key, Writable value,
@@ -53,28 +54,20 @@ class MapPhaseExecTaskBase extends MapBase
 		
 	public void close() throws IOException 
 	{
-		AbstractTableFunction tFunc = qry.tableFunction;
 		AbstractTableFunction inpTFunc = qry.inputtableFunction
 		
-		inpTFunc.input = partition
-		
-		while(tFunc.hasNext())
+		IPartition p = inpTFunc.mapExecute(partition);
+		Row orow = p.getRowObject();
+		ArrayList o = []
+		for(r in p)
 		{
-			IPartition p = tFunc.next();
-			Row orow = p.getRowObject();
-			
-			
-			ArrayList o = []
-			for(r in p)
-			{
-				o.clear()
-				tFunc.getMapPhaseOutputShape() { name, type ->
-					o << orow[name]
-				}
-				Writable mOutWritable = qry.mapPhase.outputSerDe.serialize(o, qry.mapPhase.outputOI)
-				map(null, mOutWritable)
-				output.collect(wkey, mOutWritable);
+			o.clear()
+			inpTFunc.getMapPhaseOutputShape() { name, type ->
+				o << orow[name]
 			}
+			Writable mOutWritable = qry.mapPhase.outputSerDe.serialize(o, qry.mapPhase.outputOI)
+			map(null, mOutWritable)
+			output.collect(wkey, mOutWritable);
 		}
 	}
 }

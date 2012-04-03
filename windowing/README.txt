@@ -18,6 +18,7 @@ MR Mode:
 =======
 - download com.sap.hadoop.windowing-0.0.1-SNAPSHOT.jar & com.sap.hadoop.windowing-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 - copy com.sap.hadoop.windowing-0.0.1-SNAPSHOT.jar to $HIVE_HOME/lib
+- download groovy-all-1.8.0.jar and copy it to $HIVE_HOME/lib. If you want a more recent version of groovy, download from http://groovy.codehaus.org/Download
 - cp $HIVE_HOME/bin/ext/cli.sh $HIVE_HOME/bin/ext/windowCli.sh
 - edit windowCli.sh; change to
 THISSERVICE=windowingCli

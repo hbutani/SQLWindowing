@@ -1,5 +1,7 @@
 package com.sap.hadoop.windowing.runtime.mr
 
+import org.apache.hadoop.conf.Configuration;
+import com.sap.hadoop.windowing.WindowingException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -37,7 +39,7 @@ class MapPhaseExecTaskBase extends MapBase
 	{
 		super.configure(job);
 		String qryStr = job.get(Job.WINDOWING_QUERY_STRING);
-		wshell = new WindowingShell(job, new MRTranslator(), new MRExecutor())
+		wshell = new WindowingShell(job, new MRTaskTranslator(), new MRExecutor())
 		
 		QuerySpec qSpec = JobBase.getQuerySpec(job)
 		qry = wshell.translate(qSpec)

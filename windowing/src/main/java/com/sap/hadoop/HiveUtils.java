@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -32,9 +34,12 @@ import com.sap.hadoop.windowing.WindowingException;
 
 public class HiveUtils
 {
+	private static final Log LOG = LogFactory.getLog("com.sap.hadoop");
+	
 	@SuppressWarnings("unchecked")
 	public static List<FieldSchema> addTableasJobInput(String db, String table, JobConf job, FileSystem fs) throws WindowingException
 	{
+		LOG.info("HiveUtils::addTableasJobInput invoked");
 		try
 		{
 			HiveMetaStoreClient client = getClient(job);
@@ -83,6 +88,7 @@ public class HiveUtils
 	
 	public static List<FieldSchema> getFields(String db, String table, JobConf job) throws WindowingException
 	{
+		LOG.info("HiveUtils::getFields invoked");
 		try
 		{
 			HiveMetaStoreClient client = getClient(job);
@@ -102,6 +108,7 @@ public class HiveUtils
 	
 	public static Deserializer getDeserializer(String db, String table, Configuration conf) throws WindowingException
 	{
+		LOG.info("HiveUtils::getDeserializer invoked");
 		try
 		{
 			HiveMetaStoreClient client = getClient(conf);
@@ -122,6 +129,7 @@ public class HiveUtils
 	
 	public static HiveMetaStoreClient getClient(Configuration conf) throws WindowingException
 	{
+		LOG.info("HiveUtils::getClient invoked");
 		try
 		{
 			HiveConf hConf = new HiveConf(conf, conf.getClass());
@@ -135,6 +143,7 @@ public class HiveUtils
 	
 	public static HiveConf getHiveConf(Configuration conf) throws WindowingException
 	{
+		LOG.info("HiveUtils::getHiveConf invoked");
 		try
 		{
 			return new HiveConf(conf, conf.getClass());
@@ -147,6 +156,7 @@ public class HiveUtils
 	
 	public static String validateDB(HiveMetaStoreClient client, String db) throws WindowingException
 	{
+		LOG.info("HiveUtils::validateDB invoked");
 		try
 		{
 			List<String> dbs = client.getAllDatabases();
@@ -170,6 +180,7 @@ public class HiveUtils
 	
 	public static Table getTable(HiveMetaStoreClient client, String db, String tableName) throws WindowingException
 	{
+		LOG.info("HiveUtils::getTable invoked on " + tableName);
 		try
 		{
 			return client.getTable(db, tableName);
@@ -197,6 +208,7 @@ public class HiveUtils
 	public static ClassLoader addToClassPath(ClassLoader cloader,
 			String[] newPaths) throws Exception
 	{
+		LOG.info("HiveUtils::addToClassPath invoked");
 		URLClassLoader loader = (URLClassLoader) cloader;
 		List<URL> curPath = Arrays.asList(loader.getURLs());
 		ArrayList<URL> newPath = new ArrayList<URL>();

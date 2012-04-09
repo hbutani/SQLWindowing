@@ -15,6 +15,9 @@ import com.sap.hadoop.windowing.query.TableInput;
 import com.sap.hadoop.windowing.query.TableOutput;
 import com.sap.hadoop.windowing.query.Translator;
 
+import org.apache.hadoop.hive.metastore.MetaStoreUtils;
+import org.apache.hadoop.hive.metastore.api.Table;
+
 class MRTranslator extends Translator
 {
 	WindowingInput setupWindowingInput(Query qry) throws WindowingException
@@ -23,9 +26,18 @@ class MRTranslator extends Translator
 		try
 		{
 			Configuration cfg = qry.cfg
-			WindowingInput rdr = new MRWindowingInput();
-			cfg.set(Job.WINDOWING_INPUT_TABLE, tableIn.tableName)
-			rdr.initialize(null, cfg, tableIn.serDeProps);
+			MRWindowingInput rdr = new MRWindowingInput();
+			
+//			cfg.set(Job.WINDOWING_INPUT_TABLE, tableIn.tableName)
+//			rdr.initialize(null, cfg, tableIn.serDeProps);
+
+			String db = cfg.get(Job.WINDOWING_INPUT_DATABASE) // fixme
+			Table t = HiveUtils.getTable(db, tableIn.tableName, cfg)
+			tableIn.serDeClass = t.getSd().getSerdeInfo().getSerializationLib();
+			tableIn.serDeProps = MetaStoreUtils.getSchema(t)
+			
+			rdr.initialize(cfg, tableIn.serDeClass, tableIn.serDeProps)
+			
 			return rdr;
 		}
 		catch(Exception e)
@@ -62,7 +74,8 @@ class MRTranslator extends Translator
 		Table tbl
 		if ( tblOut.tableName )
 		{
-			tbl = HiveUtils.getTable(null, tblOut.tableName, qry.cfg)
+			//tbl = HiveUtils.getTable(null, tblOut.tableName, qry.cfg)
+			tbl = getHiveTableDetails(qry.cfg, tblOut)
 		}
 		
 		// validate serDeClass
@@ -121,5 +134,29 @@ class MRTranslator extends Translator
 		{
 			throw new WindowingException("Illegal Output Spec: RecordWriter class not valid in MR mode")
 		}
+	}
+	
+	Table getHiveTableDetails(Configuration cfg, TableOutput tblOut)
+	{
+		return HiveUtils.getTable(null, tblOut.tableName, cfg)
+	}
+}
+
+/*
+ * translator used in Map-Reduce tasks.
+ * - return null from getHiveTableDetails, because Table serDe and props already available on QuerySpec.
+ * - use serDeClass and props set on querySpec.
+ */
+class MRTaskTranslator extends MRTranslator
+{
+	Table getHiveTableDetails(Configuration cfg, TableOutput tblOut) { return null; }
+	
+	WindowingInput setupWindowingInput(Query qry) throws WindowingException
+	{
+		Configuration cfg = qry.cfg
+		TableInput tableIn = qry.qSpec.tableIn
+		MRWindowingInput rdr = new MRWindowingInput();
+		rdr.initialize(cfg, tableIn.serDeClass, tableIn.serDeProps)
+		return rdr;
 	}
 }

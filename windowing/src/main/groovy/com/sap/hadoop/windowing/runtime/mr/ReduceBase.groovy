@@ -36,7 +36,7 @@ public class ReduceBase
 	public void configure(Configuration job) 
 	{
 		String qryStr = job.get(Job.WINDOWING_QUERY_STRING);
-		wshell = new WindowingShell(job, new MRTranslator(), new MRExecutor())
+		wshell = new WindowingShell(job, new MRTaskTranslator(), new MRExecutor())
 		
 		//QuerySpec qSpec = wshell.parse(qryStr);
 		QuerySpec qSpec = JobBase.getQuerySpec(job)

@@ -121,7 +121,10 @@ class Job extends JobBase
 		{
 			fields = HiveUtils.addTableasJobInput(db, tableName, conf, fs);
 			conf.setOutputValueClass(Text.class);
-			conf.setJar(windowingJarFile);
+			if ( windowingJarFile != null )
+			{
+				conf.setJar(windowingJarFile);
+			}
 		}
 
 		FileOutputFormat.setOutputPath(conf, outputPath);

@@ -20,7 +20,8 @@ class ParseErrorTest  extends BaseTest
 	void test1()
 	{
 		expectedEx.expect(WindowingException.class);
-		expectedEx.expectMessage("line 10:63 no viable alternative at input '<EOF>'");
+		//expectedEx.expectMessage("line 10:63 no viable alternative at input '<EOF>'");
+		expectedEx.expectMessage("line 0:-1 no viable alternative at input '<EOF>'");
 
 		Query qry = wshell.translate("""
 		from part_rc
@@ -38,7 +39,8 @@ class ParseErrorTest  extends BaseTest
 	void test2()
 	{
 		expectedEx.expect(WindowingException.class);
-		expectedEx.expectMessage("line 9:23 extraneous input ''' expecting EOF");
+		//expectedEx.expectMessage("line 9:23 extraneous input ''' expecting EOF");
+		expectedEx.expectMessage("line 9:23 mismatched input ''' expecting EOF");
 
 		Query qry = wshell.translate("""
 		from part_rc

@@ -42,28 +42,48 @@ class WindowingShell
 	
 	public QuerySpec parse(String query) throws WindowingException
 	{
+		WindowingLexer lexer;
+		CommonTokenStream tokens;
+		WindowingParser parser;
+		CommonTree t;
+		CommonTreeNodeStream nodes;
+		QSpecBuilder qSpecBldr;
+		String err;
+		
 		try
 		{
-			WindowingLexer lexer = new WindowingLexer(new ANTLRStringStream(query));
-			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			WindowingParser parser = new WindowingParser(tokens);
-			CommonTree t = parser.query().getTree()
+			lexer = new WindowingLexer(new ANTLRStringStream(query));
+			tokens = new CommonTokenStream(lexer);
+			parser = new WindowingParser(tokens);
+			t = parser.query().getTree()
 			
-			String err = parser.getWindowingParseErrors()
+			err = parser.getWindowingParseErrors()
 			if ( err != null )
 			{
 				throw new WindowingException(err)
 			}
-			
+		}
+		catch(Throwable te)
+		{
+			err = parser.getWindowingParseErrors()
+			if ( err != null )
+			{
+				throw new WindowingException(err)
+			}
+			throw new WindowingException("Parse Error:" + te.toString(), te)
+		}
+		
+		try
+		{
 			//println t.toStringTree()
 		
 //			CommonTreeAdaptor ta = (CommonTreeAdaptor) parser.getTreeAdaptor();
 //			QuerySpecBuilder qSpecBldr = new QuerySpecBuilder(adaptor : ta)
 //			qSpecBldr.visit(t)
 			
-			CommonTreeNodeStream nodes = new CommonTreeNodeStream(t);
+			nodes = new CommonTreeNodeStream(t);
 			nodes.setTokenStream(tokens)
-			QSpecBuilder qSpecBldr = new QSpecBuilder(nodes);
+			qSpecBldr = new QSpecBuilder(nodes);
 			qSpecBldr.query()
 	
 			err = qSpecBldr.getWindowingParseErrors()
@@ -75,13 +95,14 @@ class WindowingShell
 			qSpecBldr.qSpec.queryStr = query
 			return qSpecBldr.qSpec
 		}
-		catch(RecognitionException re)
+		catch(Throwable te)
 		{
-			throw new WindowingException("Parse Error:" + re.toString(), re)
-		}
-		catch(RuntimeException re1)
-		{
-			throw new WindowingException("Parse Error:" + re1.toString(), re1)
+			err = qSpecBldr.getWindowingParseErrors()
+			if ( err != null )
+			{
+				throw new WindowingException(err)
+			}
+			throw new WindowingException("Parse Error:" + te.toString(), te)
 		}
 	}
 	

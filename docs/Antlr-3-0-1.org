@@ -1,0 +1,66 @@
+#+TITLE: Switch to Antlr 3.0.1
+#+OPTIONS: toc:nil
+
+* Why
+because Hive uses antlr 3.0.1. Using another version of antlr causes
+Hive to stop working if we add the antlr lib to $HIVE_HOME/lib. So the
+version 0.1 solution was to spawn a windowingServer process that used
+the newer antlr version. But this raises a slew of issues:
+- configuration values from cli process not flowing to windowingServer
+- spawned process works only in 'connect to Hive metastore server'
+  mode. This is because spawned process doesn't know of $HIVE_HOME and
+  libraries that need to be added.
+
+* What do we loose when moving back to version 3.0.1
+- maven plugin support not there. Hence antlr Tool must be called
+  manually. Instructions documeneted here. If this gets too cumbersome
+  will automate by integrating maven with an ant build script.
+
+* Steps taken to downgrade
+1. Commented out Antlr Maven plugin in pom.xml
+#+BEGIN_EXAMPLE
+    <!-- 
+	<plugin>
+		<groupId>org.antlr</groupId>
+		<artifactId>antlr3-maven-plugin</artifactId>
+		<version>3.3</version>
+		<executions>
+		    <execution>
+				<configuration>
+				    <outputDirectory>src/main/java</outputDirectory>
+				</configuration>
+			<goals>
+			    <goal>antlr</goal>
+			</goals>
+		    </execution>
+		</executions>
+
+	</plugin>
+	-->
+
+#+END_EXAMPLE
+
+2. Changed Antlr runtime jar version to 3.0.1
+#+BEGIN_EXAMPLE
+	<dependency>
+	    <groupId>org.antlr</groupId>
+	    <artifactId>antlr-runtime</artifactId>
+	    <version>3.0.1</version>
+	    <scope>compile</scope>
+	</dependency>
+#+END_EXAMPLE
+
+3. removed use of '%s' in java code in QSpecBuilder.g
+#+BEGIN_EXAMPLE
+      throw new RuntimeException(Utils.sprintf("Function '" + $tf.getName() + "' cannot have a partition clause, its input is a 'tableinput'"));
+#+END_EXAMPLE
+
+* To generate Antlr java classes
+#+begin_src sh
+java -cp
+"e:/java-tools/antlr-3.0.1-src/lib/antlr-3.0.1.jar;e:/java-tools/antlr-3.0.1-src/lib/stringtemplate-3.1b1.jar;e:/java-tools/antlr-3.0.1-src/lib/antlr-runtime-3.0.1.jar;e:/java-tools/antlr-3.0.1-src/lib/antlr-2.7.7.jar" \
+ org.antlr.Tool-fo e:/windowing/windowing/src/main/java/com/sap/hadoop/windowing/parserWindowing.g
+cp /cygdrive/e/windowing/windowing/src/main/java/com/sap/hadoop/windowing /parser/Windowing.tokens .
+java -cp "e:/java-tools/antlr-3.0.1-src/lib/antlr-3.0.1.jar;e:/java-tools/antlr-3.0.1-src/lib/stringtemplate-3.1b1.jar;e:/java-tools/antlr-3.0.1-src/lib/antlr-runtime-3.0.1.jar;e:/java-tools/antlr-3.0.1-src/lib/antlr-2.7.7.jar" \
+ org.antlr.Tool -fo e:/windowing/windowing/src/main/java/com/sap/hadoop/windowing/parser  QSpecBuilder.g
+#+end_src sh

@@ -25,7 +25,7 @@ abstract class MRBaseTest
 	{
 		outStream = new ByteArrayOutputStream()
 		
-		Configuration conf = WORK();
+		Configuration conf = HOME();
 		
 		wshell = new WindowingShell(conf, new MRTranslator(), 
 			new MRExecutor())
@@ -65,11 +65,13 @@ abstract class MRBaseTest
 		conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		//conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
-		conf.set("windowing.jar.file", "/media/MyPassport/windowing/windowing/target/com.sap.hadoop.windowing-0.0.1-SNAPSHOT-jar-with-dependencies.jar");
+		conf.set("windowing.jar.file", "/media/MyPassport/windowing/windowing/target/com.sap.hadoop.windowing-0.0.1-SNAPSHOT.jar");
 		conf.set(" mapred.reduce.tasks", "4");
 		
 		conf.set(Constants.HIVE_THRIFTSERVER, "localhost")
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
+		
+		conf.set("HIVE_HOME", "/media/MyPassport/hadoop/hive2/hive/build/dist")
 		
 		return conf;
 	}

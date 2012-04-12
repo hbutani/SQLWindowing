@@ -93,7 +93,7 @@ class Job extends JobBase
 		Path outputPath = new Path(outputURI)
 	    fs.delete(outputPath, true);
 	    
-		JobConf conf = new JobConf(getConf());
+		JobConf conf = new JobConf(getConf(), this.getClass());
 		if ( db != null )
 			conf.set(WINDOWING_INPUT_DATABASE, db);
 		conf.set(WINDOWING_INPUT_TABLE, tableName);
@@ -147,6 +147,8 @@ class Job extends JobBase
 		
 		configureSortingDataType(fields, conf);
 	    
+		JobBase.addJars(conf);
+		
 	    JobClient.runJob(conf);
 		
 		return 0;

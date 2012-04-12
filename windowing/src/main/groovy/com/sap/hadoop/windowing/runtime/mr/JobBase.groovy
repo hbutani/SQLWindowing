@@ -19,7 +19,9 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.LocalFileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.common.FileUtils;
 import org.apache.hadoop.hive.conf.HiveConf;
@@ -27,10 +29,12 @@ import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
+import org.apache.hadoop.hive.shims.ShimLoader;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.serializer.Serialization;
+import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
@@ -45,6 +49,8 @@ import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.query.TableInput;
 import com.sap.hadoop.windowing.query.TableOutput;
+
+import org.apache.commons.lang.StringUtils as CStringUtils;
 
 class JobBase extends Configured
 {
@@ -255,6 +261,96 @@ class JobBase extends Configured
 		{
 			throw new WindowingException(e)
 		}
+	}
+	
+	/*
+	 * Copied from org.apache.hadoop.hive.ql.exec.ExecDriver
+	 */
+	public static void addJars(JobConf job)
+	{
+		
+		String s = HiveConf.getVar(job, HiveConf.ConfVars.HIVEJAR);
+		
+		// Transfer HIVEAUXJARS and HIVEADDEDJARS to "tmpjars" so hadoop understands
+		// it
+		String auxJars = HiveConf.getVar(job, HiveConf.ConfVars.HIVEAUXJARS);
+		String addedJars = HiveConf.getVar(job, HiveConf.ConfVars.HIVEADDEDJARS);
+		
+		String hiveJars = getHiveJars(job)
+		
+		String allJars = [auxJars, addedJars, hiveJars].findAll{ e -> CStringUtils.isNotBlank(e) }.join(",")
+		
+		if (allJars) 
+		{
+		  LOG.info("adding libjars: " + allJars);
+		  initializeFiles(job, "tmpjars", allJars);
+		}
+	
+		// Transfer HIVEADDEDFILES to "tmpfiles" so hadoop understands it
+		String addedFiles = HiveConf.getVar(job, HiveConf.ConfVars.HIVEADDEDFILES);
+		if (CStringUtils.isNotBlank(addedFiles)) 
+		{
+		  initializeFiles(job, "tmpfiles", addedFiles);
+		}
+		
+		boolean noName = CStringUtils.isEmpty(HiveConf.getVar(job, HiveConf.ConfVars.HADOOPJOBNAME));
+	
+		String addedArchives = HiveConf.getVar(job, HiveConf.ConfVars.HIVEADDEDARCHIVES);
+		// Transfer HIVEADDEDARCHIVES to "tmparchives" so hadoop understands it
+		if (CStringUtils.isNotBlank(addedArchives)) {
+		  initializeFiles(job, "tmparchives", addedArchives);
+		}
+	}
+	
+	private static void initializeFiles(JobConf job, String prop, String files) 
+	{
+		if (files != null && files.length() > 0) 
+		{
+		  job.set(prop, files);
+		  ShimLoader.getHadoopShims().setTmpFiles(prop, files);
+		}
+	}
+	
+	public static String getHiveJars(Configuration job) throws WindowingException
+	{
+		LocalFileSystem fs = FileSystem.getLocal(job)
+		
+		String hiveHome = System.getenv("HIVE_HOME")
+		
+		// for testing purposes
+		hiveHome = hiveHome == null ? job.get("HIVE_HOME") : hiveHome
+		
+		if ( !hiveHome )
+		{
+			throw new WindowingException("Environment variable HIVE_HOME must be set.")
+		}
+		
+		hiveHome = hiveHome.endsWith(File.separator) ? hiveHome : hiveHome + File.separator
+		
+		String hiveLib = hiveHome + "lib/"
+		
+		ArrayList<String> hiveJars = [
+			"hive-exec-*.jar",
+			"hive-contrib-*.jar",
+			"groovy-all-*.jar",
+			"hive-metastore-*.jar"]
+		
+		return hiveJars.collect { j -> resolveJar(fs, hiveLib, j) }.join(",")
+		
+	}
+	
+	private static String resolveJar(LocalFileSystem fs, String hivelib, String pattern)
+	{
+		Path p = new Path(hivelib + pattern)
+		FileStatus[] files = fs.globStatus(p);
+		 
+		if (!files)
+		{
+			throw new WindowingException(sprintf("Failed to find jar %s", pattern))
+		}
+		
+		return files.collect{ f -> f.path.toString() }.join(",")
+		
 	}
 
 }

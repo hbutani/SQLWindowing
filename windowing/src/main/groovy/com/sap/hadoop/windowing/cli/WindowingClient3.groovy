@@ -40,6 +40,11 @@ class WindowingClient3 implements HiveQueryExecutor
 		{
 			throw new WindowingException(sprintf("Error while executing hive query '%s'", hQry), t);
 		}
+		finally
+		{
+			println "Finished Executing Embedded Hive Query\n"
+		}
+		
 		if ( rc != 0)
 		{
 			throw new WindowingException(sprintf("Failed to execute query '%s', return = %d", hQry, rc));

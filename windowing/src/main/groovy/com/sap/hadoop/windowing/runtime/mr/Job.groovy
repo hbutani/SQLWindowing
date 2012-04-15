@@ -28,6 +28,7 @@ import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.MapReduceBase;
 import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.Reporter;
+import org.apache.hadoop.mapred.RunningJob;
 import org.apache.hadoop.mapred.SequenceFileOutputFormat;
 import org.apache.hadoop.mapred.TextInputFormat;
 import org.apache.hadoop.mapred.TextOutputFormat;
@@ -149,9 +150,14 @@ class Job extends JobBase
 	    
 		JobBase.addJars(conf);
 		
-	    JobClient.runJob(conf);
+	    //JobClient.runJob(conf);
 		
-		return 0;
+		JobClient jC = new JobClient(conf);
+		RunningJob rj = jC.submitJob(conf);
+		
+		WindowingJobTracker jT = new WindowingJobTracker(conf)
+		return jT.progress(rj, jC)
+
 	}
 	
 	public int run(Query query) throws WindowingException

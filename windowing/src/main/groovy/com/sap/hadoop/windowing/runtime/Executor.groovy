@@ -31,6 +31,14 @@ class Executor
 	}
 	
 	/*
+	* hook to allow Executor to setup before input Query is converted to a list of component Queries.
+	*/
+   void beforeComponentization(Query qry, WindowingShell wShell)
+   {
+	   
+   }
+	
+	/*
 	 * hook to allow Executor to setup execution for 1 or more component Queries.
 	 */
 	void beforeExecute(Query qry, ArrayList<Query> componentQueries, WindowingShell wShell)

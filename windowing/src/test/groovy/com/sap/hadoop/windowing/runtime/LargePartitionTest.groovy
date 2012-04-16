@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.conf.HiveConf;
 
 import com.sap.hadoop.ds.list.ByteBasedList;
 import com.sap.hadoop.windowing.query.LocalTranslator;
@@ -23,9 +24,10 @@ class LargePartitionTest extends BaseTest
 	{
 		outStream = new ByteArrayOutputStream()
 		Configuration cfg = new Configuration()
-		cfg.set(Constants.WINDOW_PARTITION_CLASS, "com.sap.hadoop.ds.list.PartitionedByteBasedList")
-		cfg.setInt(Constants.WINDOW_PARTITION_MEM_SIZE, ByteBasedList.LARGE_SIZE);
-		wshell = new WindowingShell(cfg, new LocalTranslator(), new TestExecutor(out : new PrintStream(outStream)))
+		HiveConf hConf = new HiveConf(cfg, cfg.getClass())
+		hConf.set(Constants.WINDOW_PARTITION_CLASS, "com.sap.hadoop.ds.list.PartitionedByteBasedList")
+		hConf.setInt(Constants.WINDOW_PARTITION_MEM_SIZE, ByteBasedList.LARGE_SIZE);
+		wshell = new WindowingShell(hConf, new LocalTranslator(), new TestExecutor(out : new PrintStream(outStream)))
 	}
 
 	@Test

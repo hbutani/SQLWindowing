@@ -13,8 +13,8 @@ class FunctionChainTest extends MRBaseTest
 	@Test
 	void test1()
 	{
-		int jobId = System.currentTimeMillis()
-		String jobWorkingDir = JobBase.getJobWorkingDir(wshell.cfg, jobId)
+//		int jobId = System.currentTimeMillis()
+//		String jobWorkingDir = JobBase.getJobWorkingDir(wshell.cfg, jobId)
 		
 		wshell.execute("""
 		from noop(
@@ -33,8 +33,8 @@ select p_mfgr,p_name, p_size, r
 	@Test
 	void test2()
 	{
-		int jobId = System.currentTimeMillis()
-		String jobWorkingDir = JobBase.getJobWorkingDir(wshell.cfg, jobId)
+//		int jobId = System.currentTimeMillis()
+//		String jobWorkingDir = JobBase.getJobWorkingDir(wshell.cfg, jobId)
 		wshell.execute("""
 		from noop(
 			   noopwithmap(

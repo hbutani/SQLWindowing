@@ -5,6 +5,7 @@ import com.sap.hadoop.windowing.WindowingException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
@@ -39,10 +40,11 @@ class MapPhaseExecTaskBase extends MapBase
 	{
 		super.configure(job);
 		String qryStr = job.get(Job.WINDOWING_QUERY_STRING);
-		wshell = new WindowingShell(job, new MRTaskTranslator(), new MRExecutor())
+		HiveConf hConf = new HiveConf(job, job.getClass())
+		wshell = new WindowingShell(hConf, new MRTaskTranslator(), new MRExecutor())
 		
 		QuerySpec qSpec = JobBase.getQuerySpec(job)
-		qry = wshell.translate(qSpec)
+		qry = wshell.translate(qSpec, hConf)
 		partition = new MapPhasePartition(qry)
 	}
 	

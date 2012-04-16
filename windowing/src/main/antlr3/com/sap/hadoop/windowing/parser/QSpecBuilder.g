@@ -121,7 +121,7 @@ scope PartOrderScope;
   
   if ( $tf.getPartitionColumns() != null && $tf.getInputFuncSpec() == null )
     {
-      throw new RuntimeException(Utils.sprintf("Function '%s' cannot have a partition clause, its input is a 'tableinput'", $tf.getName()));
+      throw new RuntimeException(Utils.sprintf("Function '" + $tf.getName() + "' cannot have a partition clause, its input is a 'tableinput'"));
     }  
 }
 :

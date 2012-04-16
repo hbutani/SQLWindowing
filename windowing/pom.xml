@@ -28,6 +28,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
               </descriptorRefs>
             </configuration>
     </plugin>
+    <!-- 
 	<plugin>
 		<groupId>org.antlr</groupId>
 		<artifactId>antlr3-maven-plugin</artifactId>
@@ -44,6 +45,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 		</executions>
 
 	</plugin>
+	-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -123,7 +125,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 	<dependency>
 	    <groupId>org.antlr</groupId>
 	    <artifactId>antlr-runtime</artifactId>
-	    <version>3.3</version>
+	    <version>3.0.1</version>
 	    <scope>compile</scope>
 	</dependency>
 	<dependency>

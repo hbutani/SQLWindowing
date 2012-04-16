@@ -12,13 +12,14 @@ import java.io.IOException;
 import com.sap.hadoop.windowing.runtime.Mode;
 import com.sap.hadoop.windowing.runtime.Utils;
 import org.apache.hadoop.conf.Configuration;
-import com.sap.hadoop.windowing.cli.WindowingClient;
+import com.sap.hadoop.windowing.cli.WindowingClient3;
 import com.sap.hadoop.windowing.query.Translator;
 import com.sap.hadoop.windowing.runtime.Executor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Map;
@@ -51,52 +52,36 @@ import org.apache.log4j.PropertyConfigurator;
 
 class WindowingHiveCliDriver extends CliDriver {
 	
-	CliDriver hiveDriver;
 	boolean windowingMode = false;
-	WindowingClient wClient;
+	WindowingClient3 wClient;
+	Configuration cfg;
+	LogHelper hiveConsole;
 	
-	public WindowingHiveCliDriver(CliDriver hiveDriver) {
-		this.hiveDriver = hiveDriver
-	  }
-	
-	void setupClient(HiveConf hConf, String windowingJar) throws WindowingException
+	public void setupWindowing() throws WindowingException
 	{
-		wClient = new WindowingClient(hConf, windowingJar, hiveDriver)
+		// not nice, but ...
+		try
+		{
+			Field f = CliDriver.class.getDeclaredField("conf"); //NoSuchFieldException
+			f.setAccessible(true);
+			cfg = (Configuration) f.get(this); //IllegalAccessException
+			
+			f = CliDriver.class.getDeclaredField("console"); //NoSuchFieldException
+			f.setAccessible(true);
+			hiveConsole = (LogHelper) f.get(this); //IllegalAccessException
+		}
+		catch(Throwable t)
+		{
+			throw new WindowingException("Failed to access conf and console members from HiveCliDriver", t)
+		}
+
+		// initialize windowing client
+		wClient = new WindowingClient3(this)
+		
 	}
 	
-	public LogHelper getConsole() { return hiveDriver.console; }
-	public  Configuration getConf() { return hiveDriver.conf; }
-  public int processLine(String line) {
-    int lastRet = 0, ret = 0;
-
-    String command = "";
-    for (String oneCmd : line.split(";")) {
-
-      if (StringUtils.endsWith(oneCmd, "\\")) {
-        command += StringUtils.chop(oneCmd) + ";";
-        continue;
-      } else {
-        command += oneCmd;
-      }
-      if (StringUtils.isBlank(command)) {
-        continue;
-      }
-
-      ret = processCmd(command);
-      command = "";
-      lastRet = ret;
-      boolean ignoreErrors = HiveConf.getBoolVar(conf, HiveConf.ConfVars.CLIIGNOREERRORS);
-      if (ret != 0 && !ignoreErrors) {
-        CommandProcessorFactory.clean((HiveConf)conf);
-        return ret;
-      }
-    }
-    CommandProcessorFactory.clean((HiveConf)conf);
-    return lastRet;
-  }
-	public int processReader(BufferedReader r) throws IOException { return hiveDriver.processReader(r); }
-	public int processFile(String fileName) throws IOException { return hiveDriver.processFile(fileName); }
-	public void processInitFiles(CliSessionState ss) throws IOException { hiveDriver.processInitFiles(ss); }
+//	public LogHelper getConsole() { return console; }
+//	public  Configuration getConfiguration() { return this.conf; }
 	
 	public int processCmd(String cmd) {
 		
@@ -118,10 +103,10 @@ class WindowingHiveCliDriver extends CliDriver {
 					windowingMode = false;
 					return 0;
 				}
-				console.printError("wmode windowing|hive");
+				hiveConsole.printError("wmode windowing|hive");
 				return 1;
 			}
-			console.printInfo("windowing mode is " + (windowingMode ?  "on" : "off"));
+			hiveConsole.printInfo("windowing mode is " + (windowingMode ?  "on" : "off"));
 			return 0;
 		}
 		else if (windowingMode)
@@ -134,30 +119,25 @@ class WindowingHiveCliDriver extends CliDriver {
 			}
 			catch(Exception e)
 			{
-				console.printError("Failed windowing query "+ cmd +" "+ e.getLocalizedMessage(),
+				e.printStackTrace()
+				hiveConsole.printError("Failed windowing query "+ cmd +" "+ e.getLocalizedMessage(),
 					org.apache.hadoop.util.StringUtils.stringifyException(e));
 				  return 1;
 			}
 		}
 		else
 		{
-			if (cmd_trimmed.toLowerCase().equals("quit") || cmd_trimmed.toLowerCase().equals("exit"))
-			{
-				wClient.killServer();
-			}
-			return hiveDriver.processCmd(cmd);
+			return super.processCmd(cmd);
 		}
+	}
+	
+	public int processEmbeddedQuery(String hQry)
+	{
+		return super.processCmd(hQry);
 	}
 
 	public static void main(String[] args) throws Exception {
 		OptionsProcessor oproc = new OptionsProcessor();
-		
-		oproc.@options.addOption(OptionBuilder
-        .hasArg()
-        .withArgName("jar")
-        .withDescription("windowing jar")
-		.isRequired()
-        .create('w'));
 		
 		if (!oproc.process_stage1(args)) {
 			System.exit(1);
@@ -214,11 +194,11 @@ class WindowingHiveCliDriver extends CliDriver {
 			}
 		}
 
-		WindowingHiveCliDriver cli = new WindowingHiveCliDriver(new CliDriver());
+		WindowingHiveCliDriver cli = new WindowingHiveCliDriver();
 
 		// Execute -i init files (always in silent mode)
 		cli.processInitFiles(ss);
-		cli.setupClient(cli.conf, oproc.commandLine.getOptionValue('w'));
+		cli.setupWindowing()
 
 		if (ss.execString != null) {
 			System.exit(cli.processLine(ss.execString));
@@ -232,7 +212,7 @@ class WindowingHiveCliDriver extends CliDriver {
 			System.err.println("Could not open input file for reading. (" + e.getMessage() + ")");
 			System.exit(3);
 		}
-
+		
 		ConsoleReader reader = new ConsoleReader();
 		reader.setBellEnabled(false);
 		// reader.setDebug(new PrintWriter(new FileWriter("writer.debug", true)));

@@ -7,6 +7,8 @@ import java.io.ByteArrayOutputStream;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.conf.HiveConf;
+
 import com.sap.hadoop.windowing.runtime.mr.MRTranslator;
 import com.sap.hadoop.windowing.runtime.mr.MRExecutor;
 import com.sap.hadoop.windowing.runtime.Mode;
@@ -25,9 +27,10 @@ abstract class MRBaseTest
 	{
 		outStream = new ByteArrayOutputStream()
 		
-		Configuration conf = HOME_LOCALMR();
+		Configuration conf = HOME();
+		HiveConf hCfg = new HiveConf(conf, conf.getClass())
 		
-		wshell = new WindowingShell(conf, new MRTranslator(), 
+		wshell = new WindowingShell(hCfg, new MRTranslator(), 
 			new MRExecutor())
 		wshell.hiveQryExec = new ThriftBasedHiveQueryExecutor(conf)
 	}
@@ -47,7 +50,7 @@ abstract class MRBaseTest
 		conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
 		//conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
-		conf.set("windowing.jar.file", "e:/windowing/windowing.jar");
+		conf.set("windowing.jar.file", "e:/windowing/windowing/target/com.sap.hadoop.windowing-0.0.1-SNAPSHOT-jar-with-dependencies.jar");
 		conf.set(" mapred.reduce.tasks", "8");
 		
 		conf.set(Constants.HIVE_THRIFTSERVER, "hbserver7.dhcp.pal.sap.corp")
@@ -65,11 +68,13 @@ abstract class MRBaseTest
 		conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		//conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
-		conf.set("windowing.jar.file", "/media/MyPassport/windowing/windowing.jar");
+		conf.set("windowing.jar.file", "/media/MyPassport/windowing/windowing/target/com.sap.hadoop.windowing-0.0.1-SNAPSHOT.jar");
 		conf.set(" mapred.reduce.tasks", "4");
 		
 		conf.set(Constants.HIVE_THRIFTSERVER, "localhost")
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
+		
+		conf.set("HIVE_HOME", "/media/MyPassport/hadoop/hive2/hive/build/dist")
 		
 		return conf;
 	}

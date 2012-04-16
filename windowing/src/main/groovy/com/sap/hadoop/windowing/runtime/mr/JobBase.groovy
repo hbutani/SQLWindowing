@@ -1,5 +1,6 @@
 package com.sap.hadoop.windowing.runtime.mr;
 
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -19,7 +20,9 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.LocalFileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.common.FileUtils;
 import org.apache.hadoop.hive.conf.HiveConf;
@@ -27,10 +30,19 @@ import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
+import org.apache.hadoop.hive.shims.ShimLoader;
+import org.apache.hadoop.hive.ql.session.SessionState;
+import org.apache.hadoop.hive.ql.session.SessionState.LogHelper
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.serializer.Serialization;
+import org.apache.hadoop.mapred.Counters;
+import org.apache.hadoop.mapred.Counters.Counter;
+import org.apache.hadoop.mapred.JobClient;
+import org.apache.hadoop.mapred.JobConf;
+import org.apache.hadoop.mapred.RunningJob;
+import org.apache.hadoop.mapred.TaskReport;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
@@ -45,6 +57,8 @@ import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.query.TableInput;
 import com.sap.hadoop.windowing.query.TableOutput;
+
+import org.apache.commons.lang.StringUtils as CStringUtils;
 
 class JobBase extends Configured
 {
@@ -256,5 +270,335 @@ class JobBase extends Configured
 			throw new WindowingException(e)
 		}
 	}
+	
+	/*
+	 * Copied from org.apache.hadoop.hive.ql.exec.ExecDriver
+	 */
+	public static void addJars(JobConf job)
+	{
+		
+		String s = HiveConf.getVar(job, HiveConf.ConfVars.HIVEJAR);
+		
+		// Transfer HIVEAUXJARS and HIVEADDEDJARS to "tmpjars" so hadoop understands
+		// it
+		String auxJars = HiveConf.getVar(job, HiveConf.ConfVars.HIVEAUXJARS);
+		String addedJars = HiveConf.getVar(job, HiveConf.ConfVars.HIVEADDEDJARS);
+		
+		String hiveJars = getHiveJars(job)
+		
+		String allJars = [auxJars, addedJars, hiveJars].findAll{ e -> CStringUtils.isNotBlank(e) }.join(",")
+		
+		if (allJars) 
+		{
+		  LOG.info("adding libjars: " + allJars);
+		  initializeFiles(job, "tmpjars", allJars);
+		}
+	
+		// Transfer HIVEADDEDFILES to "tmpfiles" so hadoop understands it
+		String addedFiles = HiveConf.getVar(job, HiveConf.ConfVars.HIVEADDEDFILES);
+		if (CStringUtils.isNotBlank(addedFiles)) 
+		{
+		  initializeFiles(job, "tmpfiles", addedFiles);
+		}
+		
+		boolean noName = CStringUtils.isEmpty(HiveConf.getVar(job, HiveConf.ConfVars.HADOOPJOBNAME));
+	
+		String addedArchives = HiveConf.getVar(job, HiveConf.ConfVars.HIVEADDEDARCHIVES);
+		// Transfer HIVEADDEDARCHIVES to "tmparchives" so hadoop understands it
+		if (CStringUtils.isNotBlank(addedArchives)) {
+		  initializeFiles(job, "tmparchives", addedArchives);
+		}
+	}
+	
+	private static void initializeFiles(JobConf job, String prop, String files) 
+	{
+		if (files != null && files.length() > 0) 
+		{
+		  job.set(prop, files);
+		  ShimLoader.getHadoopShims().setTmpFiles(prop, files);
+		}
+	}
+	
+	public static String getHiveJars(Configuration job) throws WindowingException
+	{
+		LocalFileSystem fs = FileSystem.getLocal(job)
+		
+		String hiveHome = System.getenv("HIVE_HOME")
+		
+		// for testing purposes
+		hiveHome = hiveHome == null ? job.get("HIVE_HOME") : hiveHome
+		
+		if ( !hiveHome )
+		{
+			throw new WindowingException("Environment variable HIVE_HOME must be set.")
+		}
+		
+		hiveHome = hiveHome.endsWith(File.separator) ? hiveHome : hiveHome + File.separator
+		
+		String hiveLib = hiveHome + "lib/"
+		
+		ArrayList<String> hiveJars = [
+			"hive-exec-*.jar",
+			"hive-contrib-*.jar",
+			"groovy-all-*.jar",
+			"hive-metastore-*.jar"]
+		
+		return hiveJars.collect { j -> resolveJar(fs, hiveLib, j) }.join(",")
+		
+	}
+	
+	private static String resolveJar(LocalFileSystem fs, String hivelib, String pattern)
+	{
+		Path p = new Path(hivelib + pattern)
+		FileStatus[] files = fs.globStatus(p);
+		 
+		if (!files)
+		{
+			throw new WindowingException(sprintf("Failed to find jar %s", pattern))
+		}
+		
+		return files.collect{ f -> f.path.toString() }.join(",")
+		
+	}
 
+}
+
+/*
+ * copied from org.apache.hadoop.hive.ql.exec.HadoopJobExecHelper
+ */
+class WindowingJobTracker
+{
+	static final private Log LOG = LogFactory.getLog(WindowingJobTracker.class.getName());
+
+	protected transient JobConf job;
+	private LogHelper console;
+	public String jobId;
+
+	WindowingJobTracker(JobConf job)
+	{
+		this.job = job
+		console = new LogHelper(LOG)
+	}
+
+	public int progress(RunningJob rj, JobClient jc) throws IOException
+	{
+		jobId = rj.getJobID();
+
+		int returnVal = 0;
+
+		// remove the pwd from conf file so that job tracker doesn't show this
+		// logs
+		String pwd = HiveConf.getVar(job, HiveConf.ConfVars.METASTOREPWD);
+		if (pwd != null) {
+			HiveConf.setVar(job, HiveConf.ConfVars.METASTOREPWD, "HIVE");
+		}
+
+		// replace it back
+		if (pwd != null) {
+			HiveConf.setVar(job, HiveConf.ConfVars.METASTOREPWD, pwd);
+		}
+
+		jobInfo(rj);
+		boolean success = _progress(rj, jc);
+		String statusMesg = getJobEndMsg(rj.getJobID());
+		if (!success) {
+			statusMesg += " with errors";
+			returnVal = 2;
+			console.printError(statusMesg);
+		} else {
+			console.printInfo(statusMesg);
+		}
+
+		return returnVal;
+	}
+
+	boolean _progress(RunningJob rj, JobClient jc) throws IOException
+	{
+		String lastReport = "";
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS");
+		//DecimalFormat longFormatter = new DecimalFormat("###,###");
+		long reportTime = System.currentTimeMillis();
+		long maxReportInterval = 60 * 1000; // One minute
+		boolean fatal = false;
+		StringBuilder errMsg = new StringBuilder();
+		long pullInterval = HiveConf.getLongVar(job, HiveConf.ConfVars.HIVECOUNTERSPULLINTERVAL);
+		boolean initializing = true;
+		boolean initOutputPrinted = false;
+		long cpuMsec = -1;
+		int numMap = -1;
+		int numReduce = -1;
+		int mapProgress = 0;
+		int reduceProgress = 0;
+
+		while (!rj.isComplete()) {
+			try {
+				Thread.sleep(pullInterval);
+			} catch (InterruptedException e) {
+			}
+
+			if (initializing && ShimLoader.getHadoopShims().isJobPreparing(rj)) {
+				// No reason to poll untill the job is initialized
+				continue;
+			} else {
+				// By now the job is initialized so no reason to do
+				// rj.getJobState() again and we do not want to do an extra RPC call
+				initializing = false;
+			}
+
+			if (!initOutputPrinted) {
+				String logMapper;
+				String logReducer;
+
+				TaskReport[] mappers = jc.getMapTaskReports(rj.getJobID());
+				if (mappers == null) {
+					logMapper = "no information for number of mappers; ";
+				} else {
+					numMap = mappers.length;
+					logMapper = "number of mappers: " + numMap + "; ";
+				}
+
+				TaskReport[] reducers = jc.getReduceTaskReports(rj.getJobID());
+				if (reducers == null) {
+					logReducer = "no information for number of reducers. ";
+				} else {
+					numReduce = reducers.length;
+					logReducer = "number of reducers: " + numReduce;
+				}
+
+				console.printInfo("Hadoop job information for " + ": " + logMapper + logReducer);
+				initOutputPrinted = true;
+			}
+
+			RunningJob newRj = jc.getJob(rj.getJobID());
+			if (newRj == null) {
+				// under exceptional load, hadoop may not be able to look up status
+				// of finished jobs (because it has purged them from memory). From
+				// hive's perspective - it's equivalent to the job having failed.
+				// So raise a meaningful exception
+				throw new IOException("Could not find status of job:" + rj.getJobID());
+			} else {
+				rj = newRj;
+			}
+
+			// If fatal errors happen we should kill the job immediately rather than
+			// let the job retry several times, which eventually lead to failure.
+			if (fatal) {
+				continue; // wait until rj.isComplete
+			}
+
+			Counters ctrs = rj.getCounters();
+
+			errMsg.setLength(0);
+			mapProgress = Math.round(rj.mapProgress() * 100);
+			reduceProgress = Math.round(rj.reduceProgress() * 100);
+
+			String report = " " + " map = " + mapProgress + "%,  reduce = " + reduceProgress + "%";
+
+
+			if (!report.equals(lastReport) || System.currentTimeMillis() >= reportTime + maxReportInterval) {
+				// find out CPU msecs
+				// In the case that we can't find out this number, we just skip the step to print
+				// it out.
+				if (ctrs != null) {
+					Counter counterCpuMsec = ctrs.findCounter("org.apache.hadoop.mapred.Task$Counter",
+							"CPU_MILLISECONDS");
+					if (counterCpuMsec != null) {
+						long newCpuMSec = counterCpuMsec.getValue();
+						if (newCpuMSec > 0) {
+							cpuMsec = newCpuMSec;
+							report += ", Cumulative CPU "
+							+ (cpuMsec / 1000D) + " sec";
+						}
+					}
+				}
+
+				// write out serialized plan with counters to log file
+				// LOG.info(queryPlan);
+				String output = dateFormat.format(Calendar.getInstance().getTime()) + report;
+				console.printInfo(output);
+				lastReport = report;
+				reportTime = System.currentTimeMillis();
+			}
+		}
+
+		if (cpuMsec > 0) {
+			console.printInfo("MapReduce Total cumulative CPU time: " + cpuMsec + " mSecs");
+		}
+
+		boolean success = true;
+
+		Counters ctrs = rj.getCounters();
+		if (fatal) {
+			success = false;
+		}
+
+		if (ctrs != null) {
+			Counter counterCpuMsec = ctrs.findCounter("org.apache.hadoop.mapred.Task$Counter",
+					"CPU_MILLISECONDS");
+			if (counterCpuMsec != null) {
+				long newCpuMSec = counterCpuMsec.getValue();
+				if (newCpuMSec > cpuMsec) {
+					cpuMsec = newCpuMSec;
+				}
+			}
+		}
+
+
+		StringBuilder sb = new StringBuilder();
+		if (numMap > 0) {
+			sb.append("Map: " + numMap + "  ");
+		}
+
+		if (numReduce > 0) {
+			sb.append("Reduce: " + numReduce + "  ");
+		}
+
+		if (cpuMsec > 0) {
+			sb.append(" Cumulative CPU: " + (cpuMsec / 1000D) + " sec  ");
+		}
+
+		if (ctrs != null) {
+			Counter hdfsReadCntr = ctrs.findCounter("FileSystemCounters",
+					"HDFS_BYTES_READ");
+			long hdfsRead;
+			if (hdfsReadCntr != null && (hdfsRead = hdfsReadCntr.getValue()) >= 0) {
+				sb.append(" HDFS Read: " + hdfsRead);
+			}
+
+			Counter hdfsWrittenCntr = ctrs.findCounter("FileSystemCounters",
+					"HDFS_BYTES_WRITTEN");
+			long hdfsWritten;
+			if (hdfsWrittenCntr != null && (hdfsWritten = hdfsWrittenCntr.getValue()) >= 0) {
+				sb.append(" HDFS Write: " + hdfsWritten);
+			}
+		}
+
+		sb.append(" " + (success ? "SUCCESS" : "FAIL"));
+
+		console.printInfo(sb.toString());
+
+		return success;
+	}
+	/**
+	 * from StreamJob.java.
+	 */
+	public void jobInfo(RunningJob rj) {
+		if (job.get("mapred.job.tracker", "local").equals("local")) {
+			console.printInfo("Job running in-process (local Hadoop)");
+		} else {
+			String hp = job.get("mapred.job.tracker");
+			console.printInfo(getJobStartMsg(rj.getJobID()) + ", Tracking URL = "
+					+ rj.getTrackingURL());
+			console.printInfo("Kill Command = " + HiveConf.getVar(job, HiveConf.ConfVars.HADOOPBIN)
+					+ " job  -Dmapred.job.tracker=" + hp + " -kill " + rj.getJobID());
+		}
+	}
+
+	private static String getJobStartMsg(String jobId) {
+		return "Starting Job = " + jobId;
+	}
+
+	public static String getJobEndMsg(String jobId) {
+		return "Ended Job = " + jobId;
+	}
 }

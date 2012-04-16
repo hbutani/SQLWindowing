@@ -28,6 +28,7 @@ import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.MapReduceBase;
 import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.Reporter;
+import org.apache.hadoop.mapred.RunningJob;
 import org.apache.hadoop.mapred.SequenceFileOutputFormat;
 import org.apache.hadoop.mapred.TextInputFormat;
 import org.apache.hadoop.mapred.TextOutputFormat;
@@ -93,7 +94,7 @@ class Job extends JobBase
 		Path outputPath = new Path(outputURI)
 	    fs.delete(outputPath, true);
 	    
-		JobConf conf = new JobConf(getConf());
+		JobConf conf = new JobConf(getConf(), this.getClass());
 		if ( db != null )
 			conf.set(WINDOWING_INPUT_DATABASE, db);
 		conf.set(WINDOWING_INPUT_TABLE, tableName);
@@ -121,7 +122,10 @@ class Job extends JobBase
 		{
 			fields = HiveUtils.addTableasJobInput(db, tableName, conf, fs);
 			conf.setOutputValueClass(Text.class);
-			conf.setJar(windowingJarFile);
+			if ( windowingJarFile != null )
+			{
+				conf.setJar(windowingJarFile);
+			}
 		}
 
 		FileOutputFormat.setOutputPath(conf, outputPath);
@@ -144,9 +148,16 @@ class Job extends JobBase
 		
 		configureSortingDataType(fields, conf);
 	    
-	    JobClient.runJob(conf);
+		JobBase.addJars(conf);
 		
-		return 0;
+	    //JobClient.runJob(conf);
+		
+		JobClient jC = new JobClient(conf);
+		RunningJob rj = jC.submitJob(conf);
+		
+		WindowingJobTracker jT = new WindowingJobTracker(conf)
+		return jT.progress(rj, jC)
+
 	}
 	
 	public int run(Query query) throws WindowingException

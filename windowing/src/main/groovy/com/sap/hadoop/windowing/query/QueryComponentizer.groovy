@@ -78,7 +78,7 @@ class QueryComponentizer
 		ArrayList<Query> qrys = []
 		
 		qSpecs.each { QuerySpec cqSpec ->
-			qrys << wshell.translate(cqSpec)
+			qrys << wshell.translate(cqSpec, qry.cfg)
 		}
 		return qrys;
 	}

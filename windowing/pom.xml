@@ -3,7 +3,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sap.hadoop</groupId>
   <artifactId>com.sap.hadoop.windowing</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
   <name>com.sap.hadoop.windowing Groovy Eclipse Maven Java App</name>
   <build>
     <plugins>

@@ -22,17 +22,18 @@ import com.sap.hadoop.windowing.query.Translator;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hive.conf.HiveConf;
 
 class WindowingShell
 {
-	private Configuration cfg;
+	private HiveConf cfg;
 	Executor executor
 	Translator translator
 	private GroovyShell wshell
 	HiveQueryExecutor hiveQryExec
 	
 	
-	WindowingShell(Configuration cfg, Translator translator, Executor executor)
+	WindowingShell(HiveConf cfg, Translator translator, Executor executor)
 	{
 		this.cfg = cfg
 		this.executor = executor
@@ -112,19 +113,23 @@ class WindowingShell
 		return translator.translate(wshell, qSpec, cfg, hiveQryExec);
 	}
 	
-	public Query translate(QuerySpec qSpec) throws WindowingException
+	public Query translate(QuerySpec qSpec, HiveConf hCfg) throws WindowingException
 	{
-		return translator.translate(wshell, qSpec, cfg, hiveQryExec);
+		return translator.translate(wshell, qSpec, hCfg, hiveQryExec);
 	}
 
 	public void execute(String query) throws WindowingException
 	{
+		// clone the cfg
+		HiveConf qCfg = new HiveConf(cfg)
+		
 		QuerySpec qSpec = parse(query)
-		Query q = translator.translate(wshell, qSpec, cfg, hiveQryExec);
+		Query q = translator.translate(wshell, qSpec, qCfg, hiveQryExec);
 		ArrayList<Query> componentQueries;
 		
 		if ( executor.allowQueryComponentization() )
 		{
+			executor.beforeComponentization(q, this)
 			QueryComponentizer qC = new QueryComponentizer(q, this);
 			componentQueries = qC.componentize();
 		}

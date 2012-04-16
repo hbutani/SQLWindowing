@@ -7,6 +7,8 @@ import java.io.ByteArrayOutputStream;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.conf.HiveConf;
+
 import com.sap.hadoop.windowing.runtime.mr.MRTranslator;
 import com.sap.hadoop.windowing.runtime.mr.MRExecutor;
 import com.sap.hadoop.windowing.runtime.Mode;
@@ -26,8 +28,9 @@ abstract class MRBaseTest
 		outStream = new ByteArrayOutputStream()
 		
 		Configuration conf = HOME();
+		HiveConf hCfg = new HiveConf(conf, conf.getClass())
 		
-		wshell = new WindowingShell(conf, new MRTranslator(), 
+		wshell = new WindowingShell(hCfg, new MRTranslator(), 
 			new MRExecutor())
 		wshell.hiveQryExec = new ThriftBasedHiveQueryExecutor(conf)
 	}

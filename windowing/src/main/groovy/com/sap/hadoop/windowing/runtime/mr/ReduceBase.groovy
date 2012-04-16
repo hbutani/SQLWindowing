@@ -3,6 +3,7 @@ package com.sap.hadoop.windowing.runtime.mr
 import java.util.ArrayList;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
@@ -36,7 +37,8 @@ public class ReduceBase
 	public void configure(Configuration job) 
 	{
 		String qryStr = job.get(Job.WINDOWING_QUERY_STRING);
-		wshell = new WindowingShell(job, new MRTaskTranslator(), new MRExecutor())
+		HiveConf hConf = new HiveConf(job, job.getClass()) 
+		wshell = new WindowingShell(hConf, new MRTaskTranslator(), new MRExecutor())
 		
 		//QuerySpec qSpec = wshell.parse(qryStr);
 		QuerySpec qSpec = JobBase.getQuerySpec(job)
@@ -47,7 +49,7 @@ public class ReduceBase
 //			qSpec.tableIn.tableName = tt;
 //		}
 		
-		qry = wshell.translate(qSpec)
+		qry = wshell.translate(qSpec, hConf)
 		
 		ArrayList<StructField> partitionColumnFields = []
 		for(Column c in qry.input.partitionColumns)

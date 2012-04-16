@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.conf.HiveConf;
 
 import com.sap.hadoop.windowing.query.LocalTranslator;
 import com.sap.hadoop.windowing.runtime.Mode;
@@ -21,7 +22,8 @@ abstract class BaseTest
 	public static void setupClass()
 	{
 		outStream = new ByteArrayOutputStream()
-		wshell = new WindowingShell(new Configuration(), new LocalTranslator(), new TestExecutor(out : new PrintStream(outStream)))
+		Configuration cfg = new Configuration()
+		wshell = new WindowingShell(new HiveConf(cfg, cfg.getClass()), new LocalTranslator(), new TestExecutor(out : new PrintStream(outStream)))
 	}
 	
 	@Before

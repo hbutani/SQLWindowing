@@ -3,6 +3,7 @@ package com.sap.hadoop.windowing.query
 import java.util.ArrayList;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.exec.RecordWriter;
 import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDe;
@@ -22,7 +23,7 @@ class Query
 {
 	QuerySpec qSpec;
 	GroovyShell wshell
-	Configuration cfg
+	HiveConf cfg
 	QueryInput input
 	ArrayList<IWindowFunction> wnFns
 	ArrayList<String> wnAliases

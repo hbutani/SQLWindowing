@@ -20,8 +20,8 @@ class MRExecutor extends Executor
 	void execute(Query qry, WindowingShell wShell) throws WindowingException
 	{
 		Job j = new Job();
-		Configuration conf = qry.cfg
-		HiveConf hConf = HiveUtils.getHiveConf(conf);
+//		Configuration conf = qry.cfg
+		HiveConf hConf = new HiveConf(qry.cfg);
 		hConf.set("keep.failed.task.files", "true");
 		hConf.set("mapred.map.max.attempts", "2");
 		hConf.set("mapred.child.java.opts", "-Xmx2048m")
@@ -49,16 +49,22 @@ class MRExecutor extends Executor
 	}
 	
 	/*
-	 * hook to allow Executor to setup execution for 1 or more component Queries.
-	 */
-	void beforeExecute(Query qry, ArrayList<Query> componentQueries, WindowingShell wShell)
-	{
+	* hook to allow Executor to setup before input Query is converted to a list of component Queries.
+	*/
+   void beforeComponentization(Query qry, WindowingShell wShell)
+   {
 		/*
 		* create a temp directory for the Job
 		*/
 	   int jobId = System.currentTimeMillis()
 	   JobBase.getJobWorkingDir(qry.cfg, jobId)
-	   
+   }
+	
+	/*
+	 * hook to allow Executor to setup execution for 1 or more component Queries.
+	 */
+	void beforeExecute(Query qry, ArrayList<Query> componentQueries, WindowingShell wShell)
+	{
 	   JobSpec jSpec = new JobSpec(componentQueries);
 	   LOG.debug(sprintf("Query executed as following Job chain:\n %s", jSpec.toString()))
 	}

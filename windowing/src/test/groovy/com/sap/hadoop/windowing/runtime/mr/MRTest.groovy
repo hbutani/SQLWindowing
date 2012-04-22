@@ -62,6 +62,7 @@ select p_mfgr,p_name, p_size, r, dr, cud, pr, nt, c, ca, cd, avg, st, fv,lv, fv2
 select p_mfgr,p_name, p_size, r, dr, cud, pr, nt, c, ca, cd, avg, st, fv,lv, fv2
 		into path='/tmp/wout2'
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		with serdeproperties('field.delim'=',')
 		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
 

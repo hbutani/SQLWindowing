@@ -1,0 +1,316 @@
+** Setup Mysql
+#+begin_src sql
+create database if not exists hivems;
+use hivems;
+grant all on *.* to 'hiveuser'@localhost identified by 'hive';
+grant all on *.* to 'hiveuser'@'127.0.0.1' identified by 'hive';
+#+end_src sql
+
+** Change Config
+#+begin_src xml
+<property>
+  <name>hive.metastore.local</name>
+  <!--<value>false</value>-->
+  <value>true</value>
+  <description>controls whether to connect to remove metastore server or open a new metastore server in Hive Client JVM</description>
+</property>
+<property>
+  <name>javax.jdo.option.ConnectionURL</name>
+  <!--<value>jdbc:derby:;databaseName=metastore_db;create=true</value>-->
+  <value>jdbc:mysql://localhost/hivems?createDatabaseIfNotExist=true</value>
+  <description>JDBC connect string for a JDBC metastore</description>
+</property>
+
+<property>
+  <name>javax.jdo.option.ConnectionDriverName</name>
+  <!--<value>org.apache.derby.jdbc.EmbeddedDriver</value>-->
+  <value>com.mysql.jdbc.Driver</value>
+  <description>Driver class name for a JDBC metastore</description>
+</property>
+<property>
+  <name>javax.jdo.option.ConnectionUserName</name>
+  <!--<value>APP</value>-->
+  <value>hiveuser</value>
+  <description>username to use against metastore database</description>
+</property>
+
+<property>
+  <name>javax.jdo.option.ConnectionPassword</name>
+  <!--<value>mine</value>-->
+  <value>hive</value>
+  <description>password to use against metastore database</description>
+</property>
+#+end_src xml
+
+** Recreate tables in metastore
+#+begin_src sql
+/* tpch tables */
+CREATE TABLE part( 
+    p_partkey INT,
+    p_name STRING,
+    p_mfgr STRING,
+    p_brand STRING,
+    p_type STRING,
+    p_size INT,
+    p_container STRING,
+    p_retailprice DOUBLE,
+    p_comment STRING
+);
+create table part_rc (
+    p_partkey INT,
+    p_name STRING,
+    p_mfgr STRING,
+    p_brand STRING,
+    p_type STRING,
+    p_size INT,
+    p_container STRING,
+    p_retailprice DOUBLE,
+    p_comment STRING
+)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe'
+STORED AS RCFILE;
+
+CREATE TABLE part_win( 
+		p_partkey INT,
+    	p_mfgr STRING,
+    	p_name STRING,
+    	p_size INT,
+    	p_rank int
+	);
+	
+CREATE TABLE part_winrc(
+	   p_partkey INT,
+	   p_mfgr STRING,
+	   p_name STRING,
+	   p_size INT,
+	   p_rank int
+   )
+   ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe'
+   STORED AS RCFILE;
+   
+/* census tables */
+create table GEO_HEADER_SF1( 
+	FILEID STRING,
+	STUSAB STRING,
+	SUMLEV STRING,
+	GEOCOMP STRING,
+	CHARITER STRING,
+	CIFSN STRING,
+	LOGRECNO INT,
+	REGION STRING,
+	DIVISION STRING,
+	STATE STRING,
+	COUNTY STRING,
+	COUNTYCC STRING,
+	COUNTYSC STRING,
+	COUSUB STRING,
+	COUSUBCC STRING,
+	COUSUBSC STRING,
+	PLACE STRING,
+	PLACECC STRING,
+	PLACESC STRING,
+	TRACT STRING,
+	BLKGRP STRING,
+	BLOCK STRING,
+	IUC STRING,
+	CONCIT STRING,
+	CONCITCC STRING,
+	CONCITSC STRING,
+	AIANHH STRING,
+	AIANHHFP STRING,
+	AIANHHCC STRING,
+	AIHHTLI STRING,
+	AITSCE STRING,
+	AITS STRING,
+	AITSCC STRING,
+	TTRACT STRING,
+	TBLKGRP STRING,
+	ANRC STRING,
+	ANRCCC STRING,
+	CBSA STRING,
+	CBSASC STRING,
+	METDIV STRING,
+	CSA STRING,
+	NECTA STRING,
+	NECTASC STRING,
+	NECTADIV STRING,
+	CNECTA STRING,
+	CBSAPCI STRING,
+	NECTAPCI STRING,
+	UA STRING,
+	UASC STRING,
+	UATYPE STRING,
+	UR STRING,
+	CD STRING,
+	SLDU STRING,
+	SLDL STRING,
+	VTD STRING,
+	VTDI STRING,
+	RESERVE2 STRING,
+	ZCTA5 STRING,
+	SUBMCD STRING,
+	SUBMCDCC STRING,
+	SDELEM STRING,
+	SDSEC STRING,
+	SDUNI STRING,
+	AREALAND DOUBLE,
+	AREAWATR DOUBLE,
+	NAME STRING,
+	FUNCSTAT STRING,
+	GCUNI STRING,
+	POP100 INT,
+	HU100 INT,
+	INTPTLAT STRING,
+	INTPTLON STRING,
+	LSADC STRING,
+	PARTFLAG STRING,
+	RESERVE3 STRING,
+	UGA STRING,
+	STATENS STRING,
+	COUNTYNS STRING,
+	COUSUBNS STRING,
+	PLACENS STRING,
+	CONCITNS STRING,
+	AIANHHNS STRING,
+	AITSNS STRING,
+	ANRCNS STRING,
+	SUBMCDNS STRING,
+	CD113 STRING,
+	CD114 STRING,
+	CD115 STRING,
+	SLDU2 STRING,
+	SLDU3 STRING,
+	SLDU4 STRING,
+	SLDL2 STRING,
+	SLDL3 STRING,
+	SLDL4 STRING,
+	AIANHHSC STRING,
+	CSASC STRING,
+	CNECTASC STRING,
+	MEMI STRING,
+	NMEMI STRING,
+	PUMA STRING,
+	RESERVED STRING
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+create table census_q1 as select county, tract, arealand from geo_header_sf1 where sumlev = 140 ;
+create table census_q2 as 
+	 select county, cousub, name, POP100 from geo_header_sf1 where sumlev='060';
+	 
+/* TSA data */
+create table flightsdata (
+YEAR int,
+QUARTER int,
+MONTH int,
+DAY_OF_MONTH int,
+DAY_OF_WEEK int,
+FL_DATE string,
+UNIQUE_CARRIER string,
+AIRLINE_ID int,
+CARRIER string,
+TAIL_NUM string,
+FL_NUM string,
+ORIGIN_AIRPORT_ID int,
+ORIGIN_AIRPORT_SEQ_ID int,
+ORIGIN_CITY_MARKET_ID int,
+ORIGIN string,
+ORIGIN_CITY_NAME string,
+ORIGIN_STATE_ABR string,
+ORIGIN_STATE_FIPS string,
+unknown1 string,
+ORIGIN_STATE_NM string,
+ORIGIN_WAC int,
+DEST_AIRPORT_ID int,
+DEST_AIRPORT_SEQ_ID int,
+DEST_CITY_MARKET_ID int,
+DEST string,
+DEST_CITY_NAME string,
+DEST_STATE_ABR string,
+DEST_STATE_FIPS string,
+unknown2 string,
+DEST_STATE_NM string,
+DEST_WAC int,
+CRS_DEP_TIME string,
+DEP_TIME string,
+DEP_DELAY float,
+DEP_DELAY_NEW float,
+DEP_DEL15 float,
+DEP_DELAY_GROUP int,
+DEP_TIME_BLK string,
+TAXI_OUT float,
+WHEELS_OFF string,
+WHEELS_ON string,
+TAXI_IN float,
+CRS_ARR_TIME string,
+ARR_TIME string,
+ARR_DELAY float,
+ARR_DELAY_NEW float,
+ARR_DEL15 float,
+ARR_DELAY_GROUP int,
+ARR_TIME_BLK string,
+CANCELLED float,
+CANCELLATION_CODE string,
+DIVERTED float,
+CRS_ELAPSED_TIME float,
+ACTUAL_ELAPSED_TIME float,
+AIR_TIME float,
+FLIGHTS float,
+DISTANCE float,
+DISTANCE_GROUP int,
+CARRIER_DELAY string,
+WEATHER_DELAY string,
+NAS_DELAY string,
+SECURITY_DELAY string,
+LATE_AIRCRAFT_DELAY string )
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+;
+
+/* composite types */
+CREATE TABLE table1 (
+       a STRING,
+       b ARRAY<STRING>,
+       c ARRAY<MAP<STRING,STRING>>,
+       d MAP<STRING,ARRAY<STRING>>
+       ) STORED AS TEXTFILE;
+
+/* issues data */
+create table emp (employee_id int,
+		first_name string,
+		last_name string,
+		email string,
+		phone_number string,
+		hire_date string,
+		job_id string,
+		salary int,
+		commission_pct double,
+		manager_id int,
+		department_id int
+	)
+	row format delimited
+	fields terminated by ','
+;
+
+create table emptytable(id int, dep string, salary float);	
+#+end_src sql
+
+** Unit Test Config
+*** testing w/o a need for a ThriftServer running
+#+begin_src java
+	public static Configuration HOME()
+	{
+		Configuration conf = new Configuration();
+		conf.addResource(new URL("file:///media/MyPassport/hadoop/home-configuration/hadoop-site.xml"))
+		conf.addResource(new URL("file:///media/MyPassport/hadoop/home-configuration/hdfs-site.xml"))
+		conf.addResource(new URL("file:///media/MyPassport/hadoop/home-configuration/mapred-site.xml"))
+		conf.addResource(new URL("file:///media/MyPassport/hadoop/home-configuration/hive-site.xml"))
+		conf.set("HIVE_HOME", "/media/MyPassport/hadoop/hive2/hive/build/dist")
+		return conf;
+	}
+
+#+end_src java
+
+- but this configuration doesn't work in my env, because used 0.9
+  build to create metastore; whereas project is using 0.71 hive
+  libs. 0.9 uses COLUMNS2 table instead of COLUMNS table. Also needed to
+  comment out DBCP connection pool paramater in hive conf, when
+  attempting to run tests using above configuration.

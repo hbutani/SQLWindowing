@@ -38,7 +38,7 @@ class QueryComponentizerTest extends MRBaseTest
                  noop(part_rc partition by p_mfgr order by p_mfgr, p_name)
 			   ) partition by p_mfgr order by p_mfgr, p_name
              ) partition by p_mfgr order by p_mfgr, p_name
-select p_mfgr,p_name, p_size, r
+select p_mfgr,p_name, p_size
 		into path='/tmp/wout'
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 		format 'org.apache.hadoop.mapred.TextOutputFormat'""")

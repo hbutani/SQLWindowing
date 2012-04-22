@@ -402,7 +402,7 @@ class WindowingJobTracker
 		boolean success = _progress(rj, jc);
 		String statusMesg = getJobEndMsg(rj.getJobID());
 		if (!success) {
-			statusMesg += " with errors";
+			statusMesg += " with errors: " + rj.getFailureInfo();
 			returnVal = 2;
 			console.printError(statusMesg);
 		} else {
@@ -525,7 +525,7 @@ class WindowingJobTracker
 			console.printInfo("MapReduce Total cumulative CPU time: " + cpuMsec + " mSecs");
 		}
 
-		boolean success = true;
+		boolean success = rj.isSuccessful();
 
 		Counters ctrs = rj.getCounters();
 		if (fatal) {

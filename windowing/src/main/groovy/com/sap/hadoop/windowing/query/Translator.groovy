@@ -361,11 +361,36 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		ArrayList<SelectColumn> selectList = qry.qSpec.selectColumns 
 		for(i in 0..<selectList.size())
 		{
+			validateOutputColumn(selectList[i], qry)
 			OutputColumn oc = new OutputColumn(alias : selectList[i].alias,
 						groovyExpr: selectList[i].expr ? qry.wshell.parse(selectList[i].expr) : qry.wshell.parse(selectList[i].alias)
 				)
 			inferType(oc, selectList[i], qry)
 			qryOut.columns << oc
+		}
+	}
+	
+	/*
+	 * if oc has no expression ensure alias is an inputColumn name or a name in the Output of the qry's table function.
+	 */
+	void validateOutputColumn(SelectColumn oc, Query qry) throws WindowingException
+	{
+		if ( oc.expr == null )
+		{
+			for (Column ic in qry.input.columns)
+			{
+				if (oc.alias == ic.name)
+				{
+					return;
+				}
+			}
+			Map<String, TypeInfo> outputShape = qry.tableFunction.getOutputShape()
+			if ( oc.alias in outputShape)
+			{
+				return
+			}
+			
+			throw new WindowingException(sprintf("Unknown name '%s' in select list", oc.alias))
 		}
 	}
 	

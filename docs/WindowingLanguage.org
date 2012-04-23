@@ -1,0 +1,70 @@
+#+TITLE: Changes to Windowing Grammar
+
+* Goals
+- support Query form that is closer to the SQL standard
+  - support 'select from where' form of query
+  - remove seperate partition and order by clauses; associate them with
+    windowing clauses
+  - for table functions push partition/order clauses inside parenthesis
+- support concept of a expression, use of angel brackets for
+  expressions is annoying
+  - support expression concept based on Hive.g
+  - under the covers still parse this as a Groovy Expression. (But do
+    semantic checks like valid variable name)
+- Use parenthesis for Embedded Hive Query instead of angel brackets.
+
+* Relax order of Select and From clauses
+- Support following form:
+#+begin_src sql
+select (expr)+
+from ..
+where ...
+#+end_src
+
+* Remove as many instances of the angle brackets to mark groovy expressions
+- Hive Embedded Query :: use parenthesis
+This is not possible, because the angle brackets used to demarcate a
+token in the grammar. Removing this will require defining expressions
+in the grammar.
+- From select list :: requires defining concept of expression in
+     grammar. Based on Hive.g expression
+  - but angel bracket still needed for more complex expressions.
+- From ValuesBoundary :: same as select list
+- From Where clause :: same as select list
+
+* remove with clause
+- Support following form:
+#+begin_src sql
+select p_mfgr,p_name, p_size, 
+        rank() partition by p_mfgr order by p_mfgr, p_name  as r ,
+        sum(p_size)  partition by p_mfgr order by p_mfgr, p_name over rows between unbounded preceding and current row as s,
+        sum(p_size) over rows between current row and unbounded following as s1,
+	denserank() as dr,
+	cumedist() as cud,
+	percentrank() as pr,
+	ntile(<3>) as nt,
+	count(<p_size>) as c,
+	count(<p_size>, 'all') as ca,
+	count(<p_size>, 'distinct') as cd,
+	avg(<p_size>) as avg, stddev(p_size) as st,
+	first_value(p_size) as fv, last_value(p_size) as lv,
+	first_value(p_size, 'true') over rows between 2 preceding and 2 following as fv2
+from part_rc
+#+end_src
+
+- remove partition & order clauses associated with the from clause
+- each windowing clause can optinally a partition & order clause 
+- for now all must match.
+- if not specified use the one that is specified.
+- How do you know if a function invocation is different from a
+  windowing clause: by function name.
+
+** implication on PTF chains
+- partition and order clauses push inside the function call.
+
+* Thoughts on implementation
+- rewrite windowing.g
+- either introduce a tree grammar between QSpecBldr and windowing.g or
+  rewrite QSpecBldr.g
+- certain things are net new: like validating variable names and type
+  inference in expressions

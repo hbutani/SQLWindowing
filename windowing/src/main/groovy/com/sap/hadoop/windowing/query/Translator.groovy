@@ -125,6 +125,7 @@ abstract class Translator
 		def pCols = new HashSet()
 		for(String p in qSpec.tableIn.partitionColumns)
 		{
+			p = p.toLowerCase()
 			if ( !(p in fieldMap) )
 				throw new WindowingException(sprintf("Unknown partition column %s", p))
 			qryIn.partitionColumns << fieldMap[p]
@@ -135,11 +136,12 @@ abstract class Translator
 		def tl = []
 		for(OrderColumn o in qSpec.tableIn.orderColumns)
 		{
-			if ( !(o.name in fieldMap) )
+			String oNm = o.name.toLowerCase()
+			if ( !(oNm in fieldMap) )
 				throw new WindowingException(sprintf("Unknown order column %s", o.name))
-			tl << fieldMap[o.name]
-			fieldMap[o.name].order = o.order
-			oCols.add(o.name)
+			tl << fieldMap[oNm]
+			fieldMap[oNm].order = o.order
+			oCols.add(oNm)
 		}
 		
 		int numMissing = 0
@@ -303,6 +305,7 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 			throw new WindowingException(se)
 		}
 		qry.mapPhase.outputOI = qry.mapPhase.outputSerDe.getObjectInspector()
+		qry.mapPhase.processingOI = ObjectInspectorUtils.getStandardObjectInspector(qry.mapPhase.outputOI, ObjectInspectorCopyOption.JAVA)
 		
 		qry.input.inputOI = qry.mapPhase.outputOI
 		qry.input.deserializer = qry.mapPhase.outputSerDe
@@ -345,6 +348,7 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		}
 		catch(Exception e)
 		{
+			//e.printStackTrace()
 			throw new WindowingException(e);
 		}
 	}

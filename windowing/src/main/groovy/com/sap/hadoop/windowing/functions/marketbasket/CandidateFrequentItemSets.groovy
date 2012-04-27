@@ -1,20 +1,26 @@
 package com.sap.hadoop.windowing.functions.marketbasket
 
+import groovy.lang.GroovyShell;
+
 import java.util.Map;
 
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
+import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
+import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.AbstractTableFunction;
 import com.sap.hadoop.windowing.functions.annotations.ArgDef;
 import com.sap.hadoop.windowing.functions.annotations.FunctionDef;
+import com.sap.hadoop.windowing.query.FuncSpec;
+import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.runtime.ArgType;
 import com.sap.hadoop.windowing.runtime.IPartition;
+import com.sap.hadoop.windowing.runtime.Row;
+import com.sap.hadoop.windowing.runtime.TableFunctionOutputPartition;
 
-class CandidateFrequentItemSets
-{
-	
-}
+import org.apache.hadoop.conf.Configuration
 
 @FunctionDef(
 	name = "candidateFrequentItemSets",
@@ -43,23 +49,104 @@ candidate itemsets that will be returned.
 	description="""an expression used to check exclusion criteria. No item from the list must appear in
 candidate itemsets that will be returned.
 """)
-	]
+	],
+	hasMapPhase = true
 )
-class CandidateFrequentItemSetsPhase1 extends AbstractTableFunction
+class CandidateFrequentItemSets extends AbstractTableFunction
 {
+	String txnColumn
+	String itemColumn
+	int minCount
+	int maxCount
+	Script includeList
+	Script excludeList
+	TypeInfo txnColType
+	TypeInfo itemColType
+	Map<String, TypeInfo> typeMap
+	Configuration cfg
 
-	@Override
-	protected IPartition execute(IPartition inpPart) throws WindowingException
+	protected void completeTranslation(GroovyShell wshell, Query qry, FuncSpec funcSpec) throws WindowingException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, TypeInfo> iTypeMap = getInputTypeMap(wshell, qry, funcSpec)
+		
+		/* validate txn & item column names */
+		Map.Entry tEntry = iTypeMap.find { String n, t -> n.toLowerCase() == txnColumn.toLowerCase()}
+		if (!tEntry)
+		{
+			throw new WindowingException(sprintf("Unknown column '%s' set as txn Column", txnColumn))
+		}
+		txnColType = tEntry.value
+		
+		Map.Entry iEntry = iTypeMap.find { String n, t -> n.toLowerCase() == itemColumn.toLowerCase()}
+		if (!tEntry)
+		{
+			throw new WindowingException(sprintf("Unknown column '%s' set as item Column", itemColumn))
+		}
+		itemColType = tEntry.value
+		
+		/* item type must be primitive */
+		if (itemColType.getCategory() != Category.PRIMITIVE )
+		{
+			throw new WindowingException(sprintf("Item Column '%s' type must be primitive", itemColumn))
+		}
+		
+		/* set typeMap to (Array<type of item column>) */
+		typeMap = ['itemset' : TypeInfoFactory.getListTypeInfo(itemColType)]
+		
+		cfg = qry.cfg
 	}
 
 	@Override
 	public Map<String, TypeInfo> getOutputShape()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return typeMap
 	}
+	
+	public Map<String, TypeInfo> getMapPhaseOutputShape()
+	{
+		return typeMap
+	}
+	
+	protected IPartition mapExecute(IPartition inpPart) throws WindowingException
+	{
+		/*
+		 * - Create an OutputPartition based on the typeMap
+		 * - for now write each Item as a list to the partition
+		 *   - Struct is [[itemlist]] outer list is for the record, inner list is for the itemset column.
+		 * - return the output partition.
+		 */
+		
+		TableFunctionOutputPartition oPartition = new TableFunctionOutputPartition(tableFunction: this, mapSide : true)
+		oPartition.initialize(cfg)
+		
+		for(Row r : inpPart)
+		{
+			def oRow = [[r[itemColumn]]]
+			oPartition << oRow
+		}
+		
+		return oPartition
+	}
+	
+	@Override
+	protected IPartition execute(IPartition inpPart) throws WindowingException
+	{
+		/*
+		 * Create an OutputPartition based on the typeMap
+		 * Output the first row only to the output.
+		 */
+		TableFunctionOutputPartition oPartition = new TableFunctionOutputPartition(tableFunction: true, mapSide : false)
+		oPartition.initialize(cfg)
+		
+		if ( inpPart.size() > 0 )
+		{
+			Row r = inpPart[0]
+			def oRow = [[r[itemColumn]]]
+			oPartition << oRow
+		}
+		return oPartition
+	}
+	
+
 
 }

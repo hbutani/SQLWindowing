@@ -2,6 +2,7 @@ package com.sap.hadoop.windowing.functions
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.annotations.FunctionDef;
+import com.sap.hadoop.windowing.functions.marketbasket.CandidateFrequentItemSets;
 import com.sap.hadoop.windowing.query.FuncSpec;
 
 class FunctionRegistry
@@ -75,5 +76,6 @@ class FunctionRegistry
 		registerTableClass(Noop.class)
 		registerTableClass(NoopWithMap.class)
 		registerTableClass(NPath.class)
+		registerTableClass(CandidateFrequentItemSets.class)
 	}
 }	

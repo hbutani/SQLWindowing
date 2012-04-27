@@ -116,5 +116,6 @@ class QueryMapPhase
 	StructObjectInspector inputOI;
 	Deserializer inputDeserializer
 	StructObjectInspector outputOI
+	StructObjectInspector processingOI
 	SerDe outputSerDe
 }

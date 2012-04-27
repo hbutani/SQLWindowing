@@ -28,7 +28,7 @@ class TableFuncMap extends MapReduceBase implements Mapper<Writable, Writable, W
 					OutputCollector<Writable, Writable> output, Reporter reporter)
 	throws IOException 
 	{
-		base.map(key, value);
+		base.map(key, value, output, reporter);
 	}
 	
 	public void close() throws IOException 

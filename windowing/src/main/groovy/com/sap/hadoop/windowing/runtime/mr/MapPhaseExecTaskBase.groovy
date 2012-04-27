@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.serde2.Deserializer;
+import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.io.Writable;
@@ -61,17 +62,34 @@ class MapPhaseExecTaskBase extends MapBase
 		AbstractTableFunction inpTFunc = qry.inputtableFunction
 		
 		IPartition p = inpTFunc.mapExecute(partition);
-		Row orow = p.getRowObject();
-		ArrayList o = []
-		for(r in p)
+		
+		/*
+		 * typically this should be true: there is no need for TblFunc Output Partition to use a different SerDe.
+		 * So just drain Writables to collector.
+		 */
+		if ( p.getSerDe().getClass() == qry.mapPhase.outputSerDe.getClass())
 		{
-			o.clear()
-			inpTFunc.getMapPhaseOutputShape() { name, type ->
-				o << orow[name]
+			Iterator<Writable> iW = p.writableIterator()
+			for(Writable w in iW)
+			{
+				map(null, w)
+				output.collect(wkey, w);
 			}
-			Writable mOutWritable = qry.mapPhase.outputSerDe.serialize(o, qry.mapPhase.outputOI)
-			map(null, mOutWritable)
-			output.collect(wkey, mOutWritable);
+		}
+		else
+		{
+			Row orow = p.getRowObject();
+			ArrayList o = []
+			for(r in p)
+			{
+				o.clear()
+				inpTFunc.getMapPhaseOutputShape().each { name, type ->
+					o << orow[name]
+				}
+				Writable mOutWritable = qry.mapPhase.outputSerDe.serialize(o, qry.mapPhase.processingOI)
+				map(null, mOutWritable)
+				output.collect(wkey, mOutWritable);
+			}
 		}
 	}
 }
@@ -86,5 +104,19 @@ class MapPhasePartition extends Partition
 	boolean belongs(Writable o)
 	{
 		return true
+	}
+	
+	Writable createRow() throws IOException
+	{
+		try
+		{
+			// fixme: the casting should be fine; but the type should be explicit in the Partition.
+			// but this requires plumbing the type through the Query datastruct classes also.
+			return ((SerDe)deserializer).getSerializedClass().newInstance();
+		}
+		catch(Throwable t)
+		{
+			throw new IOException(t);
+		}
 	}
 }

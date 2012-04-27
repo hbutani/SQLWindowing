@@ -2,10 +2,13 @@ package com.sap.hadoop.windowing.functions
 
 import groovy.lang.GroovyShell;
 
+import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
+import org.apache.hadoop.io.Writable;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.annotations.ArgDef;
@@ -409,6 +412,16 @@ class NPartition extends IPartition
 	}
 	int size() { return idxList.size();}
 	Row getRowObject() { return outObj; }
+	
+	Iterator<Writable> writableIterator()
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	SerDe getSerDe()
+	{
+		throw new UnsupportedOperationException();
+	}
 }
 
 class NOutObj extends Row

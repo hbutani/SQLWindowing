@@ -54,7 +54,7 @@ class InputObj extends Row
 		if ( i != idx || wObj == null)
 		{
 			idx = i
-			wObj = p.wInput.createRow()
+			wObj = p.createRow()
 			p.elems.get(i, wObj)
 		}
 	}

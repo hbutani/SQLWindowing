@@ -2,6 +2,8 @@ package com.sap.hadoop.windowing.runtime
 
 import groovy.lang.Script;
 import groovy.lang.Binding;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.apache.hadoop.hive.serde2.Deserializer;
@@ -10,6 +12,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
+import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.io.Writable
 
 import com.sap.hadoop.ds.list.ByteBasedList;
@@ -43,6 +46,8 @@ abstract class IPartition implements Iterable<Row>
 	abstract int size();
 	abstract Row getRowObject();
 	Iterator<Row> iterator() { return new PItr(this); }
+	abstract Iterator<Writable> writableIterator();
+	abstract SerDe getSerDe();
 }
 
 class PItr implements Iterator<Row>
@@ -127,6 +132,28 @@ class Partition extends IPartition
 	
 	int size() { return elems.size() }
 	Row getRowObject() { return pObj; }
+	
+	/*
+	 * enable subclasses to override this behavior.
+	 */
+	Writable createRow() throws IOException
+	{
+		return wInput.createRow()
+	}
+	
+	Iterator<Writable> writableIterator()
+	{
+		return elems.iterator(createRow());
+	}
+	
+	SerDe getSerDe()
+	{
+		/*
+		 * fixme: remove this casting; for this need to change type of deserializer to SerDe;
+		 * need to do this through all the Query datastructs.
+		 */
+		return (SerDe)	deserializer;
+	}
 }
 
 class TmpInputObj extends Binding

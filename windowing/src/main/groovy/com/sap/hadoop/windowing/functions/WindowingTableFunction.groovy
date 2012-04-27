@@ -1,8 +1,12 @@
 package com.sap.hadoop.windowing.functions
 
+import java.util.Iterator;
 import java.util.Map;
+
+import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
+import org.apache.hadoop.io.Writable;
 
 import java.util.ArrayList;
 
@@ -112,4 +116,13 @@ class OutputPartition extends IPartition
 	}
 	int size() { return inputPartition.size();}
 	Row getRowObject() { return outObj; }
+	
+	Iterator<Writable> writableIterator()
+	{
+		throw new UnsupportedOperationException()
+	}
+	SerDe getSerDe()
+	{
+		throw new UnsupportedOperationException();
+	}
 }

@@ -93,6 +93,23 @@ abstract class AbstractTableFunction implements IPartitionIterator
 	{
 		throw new WindowingException("Function's 'getMapPhaseOutputShape' method not implemented)");
 	}
+	
+	protected Map<String, TypeInfo> getInputTypeMap(GroovyShell wshell, Query qry, FuncSpec funcSpec) throws WindowingException
+	{
+		Map<String, TypeInfo> typemap
+		if ( input == null || ! (input instanceof AbstractTableFunction))
+		{
+			typemap = [:]
+			qry.input.columns.each { Column c ->
+				typemap[c.field.fieldName] = TypeInfoUtils.getTypeInfoFromObjectInspector(c.field.fieldObjectInspector)
+			}
+		}
+		else
+		{
+			typemap = ((AbstractTableFunction)input).getOutputShape();
+		}
+		return typemap
+	}
 }
 
 @FunctionDef(

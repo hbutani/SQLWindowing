@@ -45,5 +45,7 @@ public class Constants
 	public static final String WINDOWING_TEMP_TABLE = "windowing.hivequery.temptable";
 	public static final String WINDOWING_JOB_WORKING_DIR = "windowing.job.working.dir";
 	public static final String WINDOWING_JOB_QUERY_FILE = "windowing.job.query.file";
+	
+	public static final String WINDOWING_TEST_MODE = "windowing.test.mode";
 
 }

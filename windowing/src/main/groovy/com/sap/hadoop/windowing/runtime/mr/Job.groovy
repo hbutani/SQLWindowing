@@ -88,7 +88,7 @@ class Job extends JobBase
 	public int run(String jobName, boolean localMode, String db, String tableName,
 		String partitionCols, String sortColumns, String sortOrder, String windowingJarFile,
 		String outputURI, Class<? extends OutputFormat> outputFormatClass,
-		boolean hasMapSideProcessing) throws Exception
+		boolean hasMapSideProcessing, Query query) throws Exception
 	{
 	    FileSystem fs = FileSystem.get(URI.create(outputURI), getConf());
 		Path outputPath = new Path(outputURI)
@@ -121,7 +121,13 @@ class Job extends JobBase
 		else
 		{
 			fields = HiveUtils.addTableasJobInput(db, tableName, conf, fs);
-			conf.setOutputValueClass(Text.class);
+			
+			conf.setMapOutputValueClass(query.input.deserializer.getSerializedClass());
+			
+			//conf.setOutputValueClass(Text.class);
+			
+			conf.setOutputValueClass(query.output.serDe.getSerializedClass())
+			
 			if ( windowingJarFile != null )
 			{
 				conf.setJar(windowingJarFile);
@@ -182,7 +188,7 @@ class Job extends JobBase
 						(Class<? extends OutputFormat>) Class.forName(outputFormatClassName) : SequenceFileOutputFormat.class;
 			boolean hasMapSideProcessing = query.mapPhase != null
 			return run(jobName, false, db, tableName, partitionCols, sortCols, sortOrder, 
-				windowingJar, outputURI, outputFormatClass, hasMapSideProcessing)
+				windowingJar, outputURI, outputFormatClass, hasMapSideProcessing, query)
 		}
 		catch(Throwable t)
 		{

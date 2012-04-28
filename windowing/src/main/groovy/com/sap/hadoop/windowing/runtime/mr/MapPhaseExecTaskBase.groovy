@@ -10,6 +10,7 @@ import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
+import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.OutputCollector;
@@ -39,7 +40,6 @@ class MapPhaseExecTaskBase extends MapBase
 	
 	public void configure(JobConf job) 
 	{
-		super.configure(job);
 		String qryStr = job.get(Job.WINDOWING_QUERY_STRING);
 		HiveConf hConf = new HiveConf(job, job.getClass())
 		wshell = new WindowingShell(hConf, new MRTaskTranslator(), new MRExecutor())
@@ -47,7 +47,31 @@ class MapPhaseExecTaskBase extends MapBase
 		QuerySpec qSpec = JobBase.getQuerySpec(job)
 		qry = wshell.translate(qSpec, hConf)
 		partition = new MapPhasePartition(qry)
+		super.configure(job);
 	}
+	
+	/*
+	* initialize input Deserializer and inputOI
+	*/
+   protected void setupInput(Configuration conf) throws WindowingException
+   {
+	   
+	   AbstractTableFunction inpTFunc = qry.inputtableFunction
+  
+	   try
+	   {
+		 de = inpTFunc.getMapOutputPartitionSerDe()
+		 inputOI = (StructObjectInspector) de.getObjectInspector();
+	   }
+	   catch (RuntimeException e)
+	   {
+		 throw e;
+	   }
+	   catch (Exception e)
+	   {
+		 throw new WindowingException(e.getClass().getName() + " " + e.getMessage());
+	   }
+   }
 	
 	public void map(Writable key, Writable value,
 		OutputCollector<Writable, Writable> output, Reporter reporter)

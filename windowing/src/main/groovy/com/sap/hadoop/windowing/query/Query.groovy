@@ -42,7 +42,7 @@ class Query
 	
 	public int getPartitionMemSize()
 	{
-		return cfg.getInt(Constants.WINDOW_PARTITION_MEM_SIZE, ByteBasedList.MEDIUM_SIZE);
+		return cfg.getInt(Constants.WINDOW_PARTITION_MEM_SIZE, ByteBasedList.LARGE_SIZE);
 	}
 }
 

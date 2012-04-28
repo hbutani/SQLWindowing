@@ -159,4 +159,10 @@ class MRTaskTranslator extends MRTranslator
 		rdr.initialize(cfg, tableIn.serDeClass, tableIn.serDeProps)
 		return rdr;
 	}
+	
+	void handleMapSideReshapeInWindowingInput(Query qry) throws WindowingException
+	{
+		qry.input.wInput = new MRWindowingInput();
+		qry.input.wInput.serDe = qry.inputtableFunction.getMapOutputPartitionSerDe()
+	}
 }

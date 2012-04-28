@@ -167,6 +167,14 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 	
 	abstract WindowingInput setupWindowingInput(Query qry) throws WindowingException;
 	
+	/*
+	 * If query input is reshaped based on an Map-Side TableFnc, this hook gives the Translator a chance to fix the WindowingInput
+	 */
+	void handleMapSideReshapeInWindowingInput(Query qry) throws WindowingException
+	{
+		
+	}
+	
 	/**
 	 * Setup the Window Functions for the Query. Rely on the {@link FunctionTranslator} to construct a {@link IWindowFunction} object.
 	 * @param wshell
@@ -288,6 +296,8 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		
 		qry.input.inputOI = qry.mapPhase.outputOI
 		qry.input.deserializer = qry.mapPhase.outputSerDe
+		
+		handleMapSideReshapeInWindowingInput(qry)
 	}
 	
 	void setupOutput(Query qry) throws WindowingException

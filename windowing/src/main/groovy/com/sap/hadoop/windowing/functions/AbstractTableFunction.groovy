@@ -187,7 +187,18 @@ class NoopWithMap extends Noop
 	protected void completeTranslation(GroovyShell wshell, Query qry, FuncSpec funcSpec) throws WindowingException
 	{
 		super.completeTranslation(wshell, qry, funcSpec)
-		mapOutputSerDe = TypeUtils.createLazyBinarySerDe(qry.cfg, typemap)
+		//mapOutputSerDe = TypeUtils.createLazyBinarySerDe(qry.cfg, typemap)
+		
+		
+		if ( input == null || ! (input instanceof AbstractTableFunction))
+		{
+			mapOutputSerDe = qry.input.deserializer
+		}
+		else
+		{
+			mapOutputSerDe = ((AbstractTableFunction)input).getMapOutputPartitionSerDe();
+		}
+		
 	}
 	
 	public SerDe getMapOutputPartitionSerDe()

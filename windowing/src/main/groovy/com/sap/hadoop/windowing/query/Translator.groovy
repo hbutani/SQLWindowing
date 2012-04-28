@@ -255,15 +255,15 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 	 * <ol>
 	 * <li> During the Map Phase each Map Task collects the Input rows into a Partition. At the end it calls the
 	 * TableFunction's mapExecute method. 
-	 * <li> The Map Task takes the output of the mapExecute method and serializes it using a LazyBinarySerDe.
-	 * <li> The Reduce phase works as always, except that it uses the LazyBinarySerDe to deserialize objects from the stream.
+	 * <li> The Map Task takes the output of the mapExecute method and serializes it using the TblFunc's SerDe.
+	 * <li> The Reduce phase works as always, except that it uses the TblFunc's SerDe to deserialize objects from the stream.
 	 * </ol>
 	 * In order for the above to work the {@link QueryMapPhase} captures information on the shape & serilization of data as it gets 
 	 * operated on in the Map Phase:
 	 * <ol>
 	 * <li> qry.mapPhase.inputOI is set to the Query's input ObjectInspector
 	 * <li> qry.mapPhase.inputDeserializer is set to the Query's input Deserializer.
-	 * <li> qry.mapPhase.outputSerDe is setup as a LazyBinarySerDe based on the MapOutputShape provide by the TableFunction.
+	 * <li> qry.mapPhase.outputSerDe is set to the TableFunction's MapOutputSerDe
 	 * <li> finally the Query's inputOI & deserializer are set to the mapPhase's outputOI and outputSerDe. The variables 
 	 * inputOI and deserializer are really used during the reduce phase, since there was no map phase before there names
 	 * imply that they represent the Query input.
@@ -276,34 +276,13 @@ columns(%s) in the order clause(%s) or specify none(these will be added for you)
 		if ( !qry.inputtableFunction.hasMapPhase() )
 		{
 			return
-		}
-		
-		Map<String, TypeInfo> mapShape = qry.inputtableFunction.getMapPhaseOutputShape()
-		ArrayList<String> columnNames = []
-		ArrayList<String> columnTypes = []
-		mapShape.collect { k, v ->
-			columnNames << k
-			columnTypes << v
-		}
-		String cNames = columnNames.join(",")
-		String cTypes = columnTypes.join(",")
-		
+		}		
 		qry.mapPhase = new QueryMapPhase()
 		qry.mapPhase.inputOI = qry.input.inputOI
 		qry.mapPhase.inputDeserializer = qry.input.deserializer
 		
-		qry.mapPhase.outputSerDe = new LazyBinarySerDe()
-		Properties p = new Properties()
-		p.setProperty(HiveConstants.LIST_COLUMNS, cNames)
-		p.setProperty(HiveConstants.LIST_COLUMN_TYPES, cTypes)
-		try
-		{
-			qry.mapPhase.outputSerDe.initialize(qry.cfg, p)
-		}
-		catch(SerDeException se)
-		{
-			throw new WindowingException(se)
-		}
+		qry.mapPhase.outputSerDe = qry.inputtableFunction.getMapOutputPartitionSerDe()
+		
 		qry.mapPhase.outputOI = qry.mapPhase.outputSerDe.getObjectInspector()
 		qry.mapPhase.processingOI = ObjectInspectorUtils.getStandardObjectInspector(qry.mapPhase.outputOI, ObjectInspectorCopyOption.JAVA)
 		

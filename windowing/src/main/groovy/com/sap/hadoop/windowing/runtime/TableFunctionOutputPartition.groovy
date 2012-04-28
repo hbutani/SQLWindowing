@@ -23,6 +23,7 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.AbstractTableFunction;
+import com.sap.hadoop.windowing.query.TypeUtils;
 import com.sap.hadoop.windowing.runtime.Row
 import org.apache.hadoop.hive.serde.Constants as HiveConstants
 import com.sap.hadoop.windowing.Constants
@@ -51,17 +52,13 @@ class TableFunctionOutputPartition extends IPartition
 	
 	protected void initialize(Configuration cfg, Map<String, TypeInfo> typeMap) throws WindowingException
 	{
-		String coltypes = typeMap.values().typeName.join(",")
-		String colnames = typeMap.keySet().join(",")
-		
-		serDe = new LazyBinarySerDe()
-		Properties props = new Properties()
-		props.setProperty(HiveConstants.LIST_COLUMNS, colnames)
-		props.setProperty(HiveConstants.LIST_COLUMN_TYPES, coltypes)
+		if ( serDe == null )
+		{
+			serDe = TypeUtils.createLazyBinarySerDe(cfg, typeMap)
+		}
 		
 		try
 		{
-			serDe.initialize(cfg, props);
 			oI = serDe.getObjectInspector()
 			processingOI = ObjectInspectorUtils.getStandardObjectInspector(oI, ObjectInspectorCopyOption.JAVA)
 		}

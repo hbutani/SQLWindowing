@@ -2,6 +2,7 @@ package com.sap.hadoop.windowing.functions
 
 import groovy.lang.GroovyShell;
 
+import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 
@@ -10,6 +11,7 @@ import com.sap.hadoop.windowing.functions.annotations.FunctionDef;
 import com.sap.hadoop.windowing.query.Column;
 import com.sap.hadoop.windowing.query.FuncSpec;
 import com.sap.hadoop.windowing.query.Query;
+import com.sap.hadoop.windowing.query.TypeUtils;
 import com.sap.hadoop.windowing.query.Window;
 import com.sap.hadoop.windowing.runtime.IPartition;
 import com.sap.hadoop.windowing.runtime.IPartitionIterator;
@@ -94,6 +96,19 @@ abstract class AbstractTableFunction implements IPartitionIterator
 		throw new WindowingException("Function's 'getMapPhaseOutputShape' method not implemented)");
 	}
 	
+	/*
+	 * A TblFunction that reshapes the Input, must also provide a SerDe.
+	 * Why cannot we assume a specific SerDe for all TblFuncs?
+	 * This is an optimization: by working directly with the Writables in the OutputPartition we only need to extract the 
+	 * partition/sort columns to be assembled into a CompositeWritable. This also implies the Value part of the Map record doesn't
+	 * need to go through any transformations (Writable -> Java -> Writable), the Writables from the output partition can be 
+	 * directly given to the Output Collector. 
+	 */
+	public SerDe getMapOutputPartitionSerDe()
+	{
+		throw new WindowingException("Function's 'getMapOutputPartitionSerDe' method not implemented)");
+	}
+	
 	protected Map<String, TypeInfo> getInputTypeMap(GroovyShell wshell, Query qry, FuncSpec funcSpec) throws WindowingException
 	{
 		Map<String, TypeInfo> typemap
@@ -157,6 +172,8 @@ class Noop extends AbstractTableFunction
 )
 class NoopWithMap extends Noop
 {
+	SerDe mapOutputSerDe;
+	
 	protected IPartition mapExecute(IPartition inpPart) throws WindowingException
 	{
 		return inpPart;
@@ -165,5 +182,16 @@ class NoopWithMap extends Noop
 	public Map<String, TypeInfo> getMapPhaseOutputShape()
 	{
 		return typemap;
+	}
+	
+	protected void completeTranslation(GroovyShell wshell, Query qry, FuncSpec funcSpec) throws WindowingException
+	{
+		super.completeTranslation(wshell, qry, funcSpec)
+		mapOutputSerDe = TypeUtils.createLazyBinarySerDe(qry.cfg, typemap)
+	}
+	
+	public SerDe getMapOutputPartitionSerDe()
+	{
+		return mapOutputSerDe
 	}
 }

@@ -64,7 +64,7 @@ class QueryInput
 {
 	WindowingInput wInput;
 	StructObjectInspector inputOI;
-	Deserializer deserializer
+	SerDe deserializer
 	StructObjectInspector processingOI;
 	ArrayList<Column> columns = []
 	ArrayList<Column> partitionColumns = []

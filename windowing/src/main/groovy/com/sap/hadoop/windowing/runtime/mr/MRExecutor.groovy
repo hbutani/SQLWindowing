@@ -6,6 +6,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.conf.HiveConf;
 
 import com.sap.hadoop.HiveUtils;
+import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.FunctionRegistry;
 import com.sap.hadoop.windowing.query.Query;
@@ -37,6 +38,11 @@ class MRExecutor extends Executor
 		JobBase.addQuerySpecToJob(hConf, jobWorkingDir, qry.qSpec)
 		
 		int eCode = j.run(qry);
+		
+		if ( eCode != 0 && qry.cfg.getBoolean(Constants.WINDOWING_TEST_MODE, false))
+		{
+			throw new WindowingException("MR Job failed");
+		}
 	}
 	
 	/*

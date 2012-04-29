@@ -8,6 +8,7 @@ import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.AbstractTableFunction;
 import com.sap.hadoop.windowing.functions.WindowingTableFunction;
+import com.sap.hadoop.windowing.parser.ParseErrorTest;
 import com.sap.hadoop.windowing.parser.QSpecBuilder.typeName_return;
 import com.sap.hadoop.windowing.runtime.WindowingShell;
 
@@ -16,7 +17,19 @@ import com.sap.hadoop.windowing.runtime.WindowingShell;
  * The Function Chain is split at the following positions:
  * <ul>
  * <li> If the {@link TableFuncSpec} has a partition specification.
- * <li> If the {@link TableFuncSpec} has a Map Phase.
+ * </ul>
+ * In order to understand the splitting knowledge one must be aware of the quirk in the language:
+ * <ul>
+ * <li> The partition & order spec specified with a tableFunction applies to its input. For e.g.:
+ * npath(...) partition by col1 order by col2
+ * <li> But if the input to the function is a tableSpec(a hive query or table or hdfs location) then the partition & order by
+ * is specified with the tableSpec. So the above eg would be:
+ * npath(part_rc partition by col1 order by col2)
+ * <li> it is allowed in the language to say this:
+ *  npath(part_rc partition by col1 order by col2) partition by col1 order by col2
+ *  But is checked for and will throw an error. see {@link ParseErrorTest.testTableFunction4}.
+ *  <li> So in a function chain the innermost function will have its partitioning spec specified in the TableSpec whereas all other Functions will 
+ *  have their Partition Specs associated with them.
  * </ul>
  * 
  * The splitting is done in the following way:

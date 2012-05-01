@@ -90,6 +90,9 @@ class MapPhaseExecTaskBase extends MapBase
 		/*
 		 * typically this should be true: there is no need for TblFunc Output Partition to use a different SerDe.
 		 * So just drain Writables to collector.
+		 * But this is allowed. The SerDe returned by TblFunc::getMapOutputPartitionSerDe doesn't not have to be
+		 * the one used during execute, the only guarantee is that the shapes must match.
+		 * See {@link NoopWithMap} for an instance of this behavior.
 		 */
 		if ( p.getSerDe().getClass() == qry.mapPhase.outputSerDe.getClass())
 		{

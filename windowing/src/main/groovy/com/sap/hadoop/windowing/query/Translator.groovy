@@ -49,6 +49,15 @@ abstract class Translator
 		setupWindowFunctions(wshell, qry)
 		setupTableFunction(wshell, qry)
 		setupMapPhase(qry)
+		
+		/* if Query has  table functions setup of Input Partion & Order columns
+		* is deferred to after function chain is setup because setting up the chain may alter the qryInput ObjectInspector.
+		*/
+	    if (qry.qSpec.tblFuncSpec)
+	    {
+		   setupInputPartitionAndOrderColumns(qry)
+	    }
+	   
 		setupOutput(qry)
 		setupWhereClause(qry)
 		
@@ -102,9 +111,7 @@ abstract class Translator
 	/**
 	 * <ul>
 	 * <li> Create a Column object for each Field in processingOI
-	 * <li> validate columns in partition clause are columns of this table
-	 * <li> validate columns in order clause are columns of this table; add ordering info to Column object
-	 * <li> if order columns doesn't include partition columns, add them.
+	 * <li> invoke setupInputPartitionAndOrderColumns to setup Partition & Order columns
 	 * </ul>
 	 * @param qry
 	 * @throws WindowingException
@@ -122,48 +129,85 @@ abstract class Translator
 			qryIn.columns << c
 		}
 		
-		def pCols = new HashSet()
-		for(String p in qSpec.tableIn.partitionColumns)
+		/* if Query has no table functions go ahead and setup Input Partion & Order columns.
+		 * Otherwise this is deferred to after function chain is setup because setting up the chain may alter the qryInput ObjectInspector.
+		 */
+		if (!qry.qSpec.tblFuncSpec)
 		{
-			p = p.toLowerCase()
-			if ( !(p in fieldMap) )
-				throw new WindowingException(sprintf("Unknown partition column %s", p))
-			qryIn.partitionColumns << fieldMap[p]
-			pCols.add(p)
+			setupInputPartitionAndOrderColumns(qry)
 		}
-		
-		def oCols = new HashSet()
-		def tl = []
-		for(OrderColumn o in qSpec.tableIn.orderColumns)
-		{
-			String oNm = o.name.toLowerCase()
-			if ( !(oNm in fieldMap) )
-				throw new WindowingException(sprintf("Unknown order column %s", o.name))
-			tl << fieldMap[oNm]
-			fieldMap[oNm].order = o.order
-			oCols.add(oNm)
-		}
-		
-		int numMissing = 0
-		for(p in pCols)
-		{
-			if ( !(p in oCols)) numMissing++
-		}
-		
-		if ( numMissing != 0 && numMissing != pCols.size())
-		throw new WindowingException(sprintf("""Mismatch in partition & order specification: either specify all partition \
-columns(%s) in the order clause(%s) or specify none(these will be added for you)""", pCols, oCols))
-		
-		if (numMissing > 0)
-		{
-			for(p in qryIn.partitionColumns)
-			{
-				p.order = Order.ASC
-				qryIn.orderColumns << p
-			}
-		}
-		qryIn.orderColumns += tl
 	}
+	
+	/**
+	* <ul>
+	* <li> validate columns in partition clause are columns of this table
+	* <li> validate columns in order clause are columns of this table; add ordering info to Column object
+	* <li> if order columns doesn't include partition columns, add them.
+	* </ul>
+	* 
+	* The columns on the QuerySpec.QueryInput need not match the Partition & Order Columns. This is because the 
+	* first TblFunction may have reshaped the Input in the Map-Side. So the Partition & Order Columns in the QueryInput
+	* may point to Fields in the ObjectInspector returned by the TblFunc.
+	* 
+	* @param qry
+	* @throws WindowingException
+	*/
+   void setupInputPartitionAndOrderColumns(Query qry) throws WindowingException
+   {
+	   QueryInput qryIn = qry.input
+	   QuerySpec qSpec = qry.qSpec
+	   StructObjectInspector inputOI = qryIn.inputOI
+	   Map<String, StructField> fieldMap = [:]
+	   for(StructField f in inputOI.allStructFieldRefs)
+	   {
+		   fieldMap[f.fieldName] = f
+	   }
+	   
+	   def pCols = new HashSet()
+	   for(String p in qSpec.tableIn.partitionColumns)
+	   {
+		   p = p.toLowerCase()
+		   if ( !(p in fieldMap) )
+			   throw new WindowingException(sprintf("Unknown partition column %s", p))
+		   qryIn.partitionColumns << new Column(field: fieldMap[p])
+		   pCols.add(p)
+	   }
+	   
+	   def oCols = new HashSet()
+	   def tl = []
+	   for(OrderColumn o in qSpec.tableIn.orderColumns)
+	   {
+		   String oNm = o.name.toLowerCase()
+		   if ( !(oNm in fieldMap) )
+		   {
+			   throw new WindowingException(sprintf("Unknown order column %s", o.name))
+		   }
+		   Column oC = new Column(field: fieldMap[oNm])
+		   tl << oC
+		   oC.order = o.order
+		   oCols.add(oNm)
+	   }
+	   
+	   int numMissing = 0
+	   for(p in pCols)
+	   {
+		   if ( !(p in oCols)) numMissing++
+	   }
+	   
+	   if ( numMissing != 0 && numMissing != pCols.size())
+	   throw new WindowingException(sprintf("""Mismatch in partition & order specification: either specify all partition \
+columns(%s) in the order clause(%s) or specify none(these will be added for you)""", pCols, oCols))
+	   
+	   if (numMissing > 0)
+	   {
+		   for(p in qryIn.partitionColumns)
+		   {
+			   p.order = Order.ASC
+			   qryIn.orderColumns << p
+		   }
+	   }
+	   qryIn.orderColumns += tl
+   }
 	
 	abstract WindowingInput setupWindowingInput(Query qry) throws WindowingException;
 	

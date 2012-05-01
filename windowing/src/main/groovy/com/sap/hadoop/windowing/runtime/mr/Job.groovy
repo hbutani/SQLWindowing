@@ -152,7 +152,14 @@ class Job extends JobBase
 		
 		conf.setOutputValueGroupingComparator(OutputGroupingComparator.class);
 		
-		configureSortingDataType(fields, conf);
+		if (localMode)
+		{
+			configureSortingDataType(fields, conf);
+		}
+		else
+		{
+			configureSortingDataType(query, conf)
+		}
 	    
 		JobBase.addJars(conf);
 		

@@ -28,6 +28,7 @@ import org.apache.hadoop.hive.common.FileUtils;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
+import org.apache.hadoop.hive.serde2.lazybinary.LazyBinarySerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.hive.shims.ShimLoader;
@@ -54,6 +55,7 @@ import com.sap.hadoop.metadata.WindowingKey;
 import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query.Query;
+import com.sap.hadoop.windowing.query.QueryInput;
 import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.query.TableInput;
 import com.sap.hadoop.windowing.query.TableOutput;
@@ -151,6 +153,49 @@ class JobBase extends Configured
 			}
 			j++;
 		}
+	}
+	
+	public void configureSortingDataType(Query qry, Configuration jobconf) throws WindowingException
+	{
+		try {
+
+			String sortColStr = jobconf.get(Job.WINDOWING_SORT_COLS);
+			String partColStr = jobconf.get(Job.WINDOWING_PARTITION_COLS);
+			String[] partCols = partColStr.split(",");
+			jobconf.setInt(Job.WINDOWING_NUM_PARTION_COLUMNS, partCols.length);
+
+			// setup a OI from the sortColums; get datatypes from hive table Defn
+			String sortColType = getMapOutputKeyTypeString(qry)
+			
+			Properties props = new Properties();
+			props.setProperty(org.apache.hadoop.hive.serde.Constants.LIST_COLUMNS, sortColStr);
+			props.setProperty(org.apache.hadoop.hive.serde.Constants.LIST_COLUMN_TYPES, sortColType.toString());
+			LazyBinarySerDe sortColsSerDe = new LazyBinarySerDe();
+			sortColsSerDe.initialize(jobconf, props);
+			StructObjectInspector sortColsOI = (StructObjectInspector) sortColsSerDe.getObjectInspector();
+			
+			// create a CompositeDataType based on OI; add it to job
+			CompositeDataType sortDataType = CompositeDataType.define(sortColsOI);
+			jobconf.set(WINDOWING_KEY_TYPE, sortDataType.toString())
+			jobconf.setClass("io.serializations", CompositeSerialization.class, Serialization.class);
+		}
+		catch(WindowingException we)
+		{
+			throw we;
+		}
+		catch(Exception me)
+		{
+			throw new WindowingException(me);
+		}
+	}
+	
+	public static String getMapOutputKeyTypeString(Query qry)
+	{
+		QueryInput qryIn = qry.input
+		String sortColType = qryIn.orderColumns.collect { oc ->
+			oc.field.getFieldObjectInspector().getTypeName()
+		}.join(",")
+		return sortColType
 	}
 	
 	/* 

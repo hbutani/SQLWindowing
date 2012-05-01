@@ -4,6 +4,7 @@ import groovy.lang.GroovyShell;
 
 import java.util.Map;
 
+import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
@@ -15,6 +16,7 @@ import com.sap.hadoop.windowing.functions.annotations.ArgDef;
 import com.sap.hadoop.windowing.functions.annotations.FunctionDef;
 import com.sap.hadoop.windowing.query.FuncSpec;
 import com.sap.hadoop.windowing.query.Query;
+import com.sap.hadoop.windowing.query.TypeUtils;
 import com.sap.hadoop.windowing.runtime.ArgType;
 import com.sap.hadoop.windowing.runtime.IPartition;
 import com.sap.hadoop.windowing.runtime.Row;
@@ -64,6 +66,7 @@ class CandidateFrequentItemSets extends AbstractTableFunction
 	TypeInfo itemColType
 	Map<String, TypeInfo> typeMap
 	Configuration cfg
+	SerDe mapOutputSerDe
 
 	protected void completeTranslation(GroovyShell wshell, Query qry, FuncSpec funcSpec) throws WindowingException
 	{
@@ -94,6 +97,9 @@ class CandidateFrequentItemSets extends AbstractTableFunction
 		typeMap = ['itemset' : TypeInfoFactory.getListTypeInfo(itemColType)]
 		
 		cfg = qry.cfg
+		
+		
+		mapOutputSerDe = TypeUtils.createLazyBinarySerDe(qry.cfg, typeMap)
 	}
 
 	@Override
@@ -107,6 +113,11 @@ class CandidateFrequentItemSets extends AbstractTableFunction
 		return typeMap
 	}
 	
+	public SerDe getMapOutputPartitionSerDe()
+	{
+		return mapOutputSerDe
+	}
+	
 	protected IPartition mapExecute(IPartition inpPart) throws WindowingException
 	{
 		/*
@@ -116,7 +127,7 @@ class CandidateFrequentItemSets extends AbstractTableFunction
 		 * - return the output partition.
 		 */
 		
-		TableFunctionOutputPartition oPartition = new TableFunctionOutputPartition(tableFunction: this, mapSide : true)
+		TableFunctionOutputPartition oPartition = new TableFunctionOutputPartition(tableFunction: this, mapSide : true, serDe : mapOutputSerDe)
 		oPartition.initialize(cfg)
 		
 		for(Row r : inpPart)

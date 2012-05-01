@@ -19,7 +19,7 @@ class MarketBasketAnalysisTest extends MRBaseTest
 	@Test
 	void test1() {
 		wshell.execute("""
-			from candidateFrequentItemSets(basketdata partition by basketName order by basketName,
+			from candidateFrequentItemSets(basketdata partition by itemset order by itemset,
 			  'basketName', 'itemName', 1, 5)
 			select itemset
 		into path='/tmp/wout2'

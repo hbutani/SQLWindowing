@@ -28,6 +28,7 @@ abstract class MRBaseTest
 		outStream = new ByteArrayOutputStream()
 		
 		Configuration conf = HOME_LOCALMR();
+		conf.setBoolean(Constants.WINDOWING_TEST_MODE, true)
 		HiveConf hCfg = new HiveConf(conf, conf.getClass())
 		
 		wshell = new WindowingShell(hCfg, new MRTranslator(), 
@@ -50,7 +51,7 @@ abstract class MRBaseTest
 		conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
 		//conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
-		conf.set("windowing.jar.file", "e:/windowing/windowing/target/com.sap.hadoop.windowing-0.0.1-SNAPSHOT.jar");
+		conf.set("windowing.jar.file", "e:/windowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
 		conf.set(" mapred.reduce.tasks", "8");
 		
 		conf.set(Constants.HIVE_THRIFTSERVER, "hbserver7.dhcp.pal.sap.corp")

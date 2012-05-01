@@ -196,7 +196,19 @@ class NoopWithMap extends Noop
 		}
 		else
 		{
-			mapOutputSerDe = ((AbstractTableFunction)input).getMapOutputPartitionSerDe();
+			AbstractTableFunction iFunc = (AbstractTableFunction)input
+			if (iFunc.hasMapPhase())
+			{
+				mapOutputSerDe = iFunc.getMapOutputPartitionSerDe();
+			}
+			else
+			{
+				/*
+				* since the execute call simply returns the input Partition in this case the
+				* SerDe returned here is different from the SerDe returned in the Partition.
+				*/
+				mapOutputSerDe = TypeUtils.createLazyBinarySerDe(qry.cfg, typemap)
+			}
 		}
 		
 	}

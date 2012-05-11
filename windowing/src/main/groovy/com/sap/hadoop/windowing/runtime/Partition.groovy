@@ -193,3 +193,21 @@ class TmpInputObj extends Binding
 	}	
 }
 
+/*
+ * used to setup a Partition to be given to the mapExecute function of a TableFunction.
+ * USed by Partitioner for testing.
+ * In MR mode, see MapPhasePartition class; which provide similar functionality
+ */
+class MapSidePartition extends Partition
+{
+	MapSidePartition(Query qry, WindowingInput wInput)
+	{
+		super(qry, wInput, qry.mapPhase.inputOI, qry.mapPhase.inputDeserializer, null)
+	}
+	
+	boolean belongs(Writable o)
+	{
+		return o != null
+	}
+}
+

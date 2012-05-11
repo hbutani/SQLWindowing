@@ -55,7 +55,9 @@ class Partitioner implements IPartitionIterator
 		{
 			currElem = qryIn.wInput.next()
 		}
-		Partition p = new Partition(qry, qryIn.wInput, qryIn.inputOI, qryIn.deserializer, partitionColumnFields)
+		boolean hasMapSideProcessing = qry.mapPhase != null
+		Partition p = !hasMapSideProcessing ? new Partition(qry, qryIn.wInput, qryIn.inputOI, qryIn.deserializer, partitionColumnFields) :
+						new MapSidePartition(qry, qryIn.wInput)
 		while ( p.belongs(currElem) )
 		{
 			p << currElem

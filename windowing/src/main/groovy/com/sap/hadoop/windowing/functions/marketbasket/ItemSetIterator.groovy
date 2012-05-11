@@ -1,7 +1,7 @@
 package com.sap.hadoop.windowing.functions.marketbasket
 
 import com.sap.hadoop.ds.sortedmap.ByteBasedSortedMap;
-import com.sap.hadoop.windowing.runtime.IPartition;
+import com.sap.hadoop.windowing.runtime.IPartition
 
 class ItemSetIterator implements Iterator<ItemSet>
 {
@@ -85,25 +85,29 @@ class ItemSetIterator implements Iterator<ItemSet>
 					return false
 				}
 				
-				ItemSet suffix = suffixIterator.next() 
-				while (suffix == null && prefix != null)
+				while(true)
 				{
-					prefix = prefixIterator.next()
-					if ( prefix != null )
+					ItemSet suffix = suffixIterator.next() 
+					while (suffix == null && prefix != null)
 					{
-						suffixIterator = createSuffixIterator()
-						suffix = suffixIterator.next()
+						prefix = prefixIterator.next()
+						if ( prefix != null )
+						{
+							suffixIterator = createSuffixIterator()
+							suffix = suffixIterator.next()
+						}
 					}
+					
+					if ( prefix == null )
+					{
+						iSet = null
+						return false
+					}
+					
+					iSet.reset(prefixIterator.iSet, suffixIterator.iSet)
+					if ( candidateItemSets.getIndex(iSet) != -1)
+						return true;
 				}
-				
-				if ( prefix == null )
-				{
-					iSet = null
-					return false
-				}
-				
-				iSet.reset(prefixIterator.iSet, suffixIterator.iSet)
-				return true;
 			}
 		}
 		finally

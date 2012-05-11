@@ -5,9 +5,13 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
 import org.apache.hadoop.io.WritableUtils;
+
+import groovy.json.JsonBuilder
+import groovy.json.JsonSlurper
 
 class ItemSet implements WritableComparable<ItemSet>
 {
@@ -61,10 +65,32 @@ class ItemSet implements WritableComparable<ItemSet>
 	public void readFields(DataInput din) throws IOException
 	{
 		sz = din.readByte()
-		itemIds = new int[sz]
+		if ( !itemIds || itemIds.length < sz)
+		{
+			itemIds = new int[sz]
+		}
 		(0..<sz).each { i ->
 			itemIds[i] = WritableUtils.readVInt(din)
 		}
+	}
+	
+	public void writeJson(JsonBuilder json, Text t)
+	{
+		json( { "items" itemIds 
+			"sz" sz
+		})
+		t.set(json.toString())
+	}
+	
+	public void readJson(JsonSlurper json, Text t)
+	{
+		def o = json.parseText(t.toString())
+		sz = (byte) o.sz
+		if ( !itemIds || itemIds.length < sz)
+		{
+			itemids = new int[sz]
+		}
+		(0..<itemIds.length).each { i -> itemIds[i] = o.items[i] }
 	}
 
 	@Override
@@ -101,11 +127,6 @@ class ItemSet implements WritableComparable<ItemSet>
 	  public int compare(byte[] b1, int s1, int l1,
 						 byte[] b2, int s2, int l2) 
 	  {
-		byte thisValue = b1[s1];
-		byte thatValue = b2[s2];
-		return (thisValue < thatValue ? -1 : (thisValue == thatValue ? 0 : 1));
-		
-		
 		ByteArrayInputStream is1 = new ByteArrayInputStream(b1, s1, l1)
 		DataInputStream din1 = new DataInputStream(is1)
 		ByteArrayInputStream is2 = new ByteArrayInputStream(b2, s2, l2)
@@ -118,10 +139,11 @@ class ItemSet implements WritableComparable<ItemSet>
 		{
 			return sz1 < sz2 ? -1 : 1;
 		}
-		
-		(0..<sz1).each {
-			int i1 = WritableUtils.readVInt(din1)
-			int i2 = WritableUtils.readVInt(din2)
+		int i1, i2
+		for(int i=0; i < sz1; i++)
+		{
+			i1 = WritableUtils.readVInt(din1)
+			i2 = WritableUtils.readVInt(din2)
 			if ( i1 != i2)
 			{
 				return i1 < i2 ? -1 : 1;

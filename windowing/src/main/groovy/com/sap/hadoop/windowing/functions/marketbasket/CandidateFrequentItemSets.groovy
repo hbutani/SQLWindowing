@@ -10,6 +10,8 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 
+import com.sap.hadoop.ds.list.ByteBasedList;
+import com.sap.hadoop.ds.sortedmap.ByteBasedSortedMap;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.AbstractTableFunction;
 import com.sap.hadoop.windowing.functions.annotations.ArgDef;
@@ -139,6 +141,11 @@ class CandidateFrequentItemSets extends AbstractTableFunction
 		return oPartition
 	}
 	
+	private void initialScan()
+	{
+		
+	}
+	
 	@Override
 	protected IPartition execute(IPartition inpPart) throws WindowingException
 	{
@@ -157,7 +164,14 @@ class CandidateFrequentItemSets extends AbstractTableFunction
 		}
 		return oPartition
 	}
-	
 
-
+	static class MapSideInfo
+	{
+		ByteBasedSortedMap itemMap;
+		ByteBasedList basketList;
+		ByteBasedSortedMap candidateItemSets;
+		ByteBasedSortedMap currentItemSets;
+		
+		
+	}
 }

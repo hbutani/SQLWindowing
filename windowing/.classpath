@@ -12,7 +12,7 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" output="target/classes" path="src/test/groovy">
+	<classpathentry kind="src" output="target/test-classes" path="src/test/groovy">
 		<attributes>
 			<attribute name="optional" value="true"/>
 		</attributes>

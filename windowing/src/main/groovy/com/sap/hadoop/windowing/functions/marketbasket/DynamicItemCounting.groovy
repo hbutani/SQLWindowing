@@ -4,6 +4,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector.PrimitiveCategory;
 import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
@@ -146,7 +147,46 @@ class DynamicItemCounting
 								state : ItemSetState.SOLID_SQUARE, 
 								roundIntroduced : -1,
 								basketBatchIndexIntroduced : -1)
+		currentTraversalRound = 0
+		currentBatchIndex = 0
+		for(int i=0; i < numItems; i++)
+		{
+			ItemNode iNode = new ItemNode(itemId : i, 
+								state : ItemSetState.DASHED_CIRCLE, 
+								roundIntroduced : currentTraversalRound,
+								basketBatchIndexIntroduced : currentBatchIndex)
+		}
 
+	}
+	
+	void process()
+	{
+		while(treiHasDashedNodes())
+		{
+			/*
+			 * process next batch
+			 */
+			int startIdx = basketBatches[currentBatchIndex]
+			int endIdx = currentBatchIndex == basketBatches.size() - 1 ? baskets.size() : basketBatches[currentBatchIndex+1]
+			ISet basket = new ISet()
+			for(int i=startIdx; i < endIdx; i++)
+			{
+				baskets.get(i, basket)
+				incrementTrei(rootNode, basket)
+			}
+			
+			processTrei()
+			
+			/*
+			 * increment currentBatchIndex and currentTraversalRound
+			 */
+			currentBatchIndex++
+			if ( currentBatchIndex == basketBatches.size() )
+			{
+				currentBatchIndex = 0
+				currentTraversalRound++
+			}
+		}
 	}
 	
 	/*
@@ -166,7 +206,12 @@ class DynamicItemCounting
 		}
 	}
 	
-	void traverse()
+	/*
+	 * traverse Trei:
+	 * - change state for Nodes whose support is now greater than the threshold
+	 * - introduce new ItemSets where possible
+	 */
+	void processTrei()
 	{
 		ItemNode currNode = rootNode
 		ISet currentItemSet = new ISet(sz : 0, itemIds : itemIdArray)
@@ -279,6 +324,30 @@ class DynamicItemCounting
 			current = child
 		}
 		return true
+	}
+	
+	boolean treiHasDashedNodes()
+	{
+		Queue<ItemNode> queue = new LinkedBlockingQueue<ItemNode>(Integer.MAX_VALUE)
+		queue.add(rootNode)
+		
+		while(queue.size > 0)
+		{
+			ItemNode current = queue.remove()
+			
+			if ( current.state == ItemSetState.DASHED_CIRCLE || current.state == ItemSetState.DASHED_SQUARE )
+			{
+				return true
+			}
+			
+			if ( current.children )
+			{
+				current.children.values() { childIS ->
+					queue.add(childIS)
+				}
+			}
+		}
+		return false
 	}
 }
 

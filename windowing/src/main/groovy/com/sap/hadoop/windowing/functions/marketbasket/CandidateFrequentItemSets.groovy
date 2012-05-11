@@ -127,6 +127,11 @@ class CandidateFrequentItemSets extends AbstractTableFunction
 	
 	protected IPartition mapExecute(IPartition inpPart) throws WindowingException
 	{
+		
+		DynamicItemCounting dic = new DynamicItemCounting(candidateFreqItemSetsRequest : this)
+		dic.initialize(inpPart)
+		dic.process()
+		
 		/*
 		 * - Create an OutputPartition based on the typeMap
 		 * - for now write each Item as a list to the partition

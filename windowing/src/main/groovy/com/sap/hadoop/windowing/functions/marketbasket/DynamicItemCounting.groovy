@@ -1,13 +1,19 @@
 package com.sap.hadoop.windowing.functions.marketbasket
 
+import groovy.json.JsonBuilder;
+import groovy.json.JsonSlurper;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector.PrimitiveCategory;
 import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableUtils;
 import org.codehaus.groovy.antlr.treewalker.TraversalHelper;
@@ -26,6 +32,7 @@ import com.sap.hadoop.windowing.runtime.Row;
  */
 class DynamicItemCounting
 {
+	private static final Log LOG = LogFactory.getLog("com.sap.hadoop.windowing.functions.marketbasket");
 	private static final int BASKET_PARTITION_SZ = 1000;
 	
 	CandidateFrequentItemSets candidateFreqItemSetsRequest
@@ -73,6 +80,9 @@ class DynamicItemCounting
 	 */
 	void initialize(IPartition inpPart) throws WindowingException 
 	{
+		JsonBuilder json = new JsonBuilder()
+		Text iSetText = new Text()
+		
 		/*
 		 * setup TreeSet for item values, based datatype of item value column.
 		 */
@@ -90,6 +100,7 @@ class DynamicItemCounting
 			itemValuesSet.add(row[candidateFreqItemSetsRequest.itemColumn])
 		}
 		numItems = itemValuesSet.size()
+		LOG.info("DIC: itemValuesSet" + itemValuesSet);
 
 		/*
 		 * assign ids to itemValues based on value order.
@@ -100,6 +111,7 @@ class DynamicItemCounting
 			itemValToIdMap[value] = idx++
 		}
 		itemValuesSet = null
+		LOG.info("DIC: itemValToIdMap" + itemValToIdMap);
 		
 		/* Scan input partition again and setup baskets ByteBasedList */
 		itemIdArray = new int[numItems]
@@ -116,6 +128,11 @@ class DynamicItemCounting
 			{
 				if ( iSet.sz > 0 )
 				{
+					if (true)
+					{
+						iSet.writeJson(json, iSetText)
+						LOG.info("DIC: adding basket" + iSetText);
+					}
 					baskets.append(iSet)
 				}
 				iSet.sz = 0
@@ -331,7 +348,7 @@ class DynamicItemCounting
 		Queue<ItemNode> queue = new LinkedBlockingQueue<ItemNode>(Integer.MAX_VALUE)
 		queue.add(rootNode)
 		
-		while(queue.size > 0)
+		while(queue.size() > 0)
 		{
 			ItemNode current = queue.remove()
 			
@@ -441,6 +458,11 @@ class ISet implements Writable
 	protected int[] itemIds
 	
 	int getAt(i) { return itemIds[i]; }
+	void putAt(int i, int id)
+	{
+		itemIds[i] = id
+	}
+	
 	int size() { return sz; }
 	
 	@Override
@@ -463,6 +485,25 @@ class ISet implements Writable
 		(0..<sz).each { i ->
 			itemIds[i] = WritableUtils.readVInt(din)
 		}
+	}
+	
+	public void writeJson(JsonBuilder json, Text t)
+	{
+		json( { "items" itemIds[0..<sz]
+			"sz" sz
+		})
+		t.set(json.toString())
+	}
+	
+	public void readJson(JsonSlurper json, Text t)
+	{
+		def o = json.parseText(t.toString())
+		sz = (byte) o.sz
+		if ( !itemIds || itemIds.length < sz)
+		{
+			itemIds = new int[sz]
+		}
+		(0..<sz).each { i -> itemIds[i] = o.items[i] }
 	}
 }
 

@@ -95,8 +95,13 @@ class CandidateFrequentItemSets extends AbstractTableFunction
 			throw new WindowingException(sprintf("Item Column '%s' type must be primitive", itemColumn))
 		}
 		
-		/* set typeMap to (Array<type of item column>) */
-		typeMap = ['itemset' : TypeInfoFactory.getListTypeInfo(itemColType)]
+		/* 
+		 * set typeMap to (Array<type of item column>)
+		 * 05/11: use String as the type for now; using Json format to serialize
+		 * using ArrayList requires supporting non primitive types in DataType infrastructure 
+		 */
+		//typeMap = ['itemset' : TypeInfoFactory.getListTypeInfo(itemColType)]
+		typeMap = ['itemset' : TypeInfoFactory.stringTypeInfo]
 		
 		cfg = qry.cfg
 		
@@ -134,7 +139,8 @@ class CandidateFrequentItemSets extends AbstractTableFunction
 		
 		for(Row r : inpPart)
 		{
-			def oRow = [[r[itemColumn]]]
+			//def oRow = [[r[itemColumn]]]
+			def oRow = [r[itemColumn].toString()]
 			oPartition << oRow
 		}
 		
@@ -153,13 +159,13 @@ class CandidateFrequentItemSets extends AbstractTableFunction
 		 * Create an OutputPartition based on the typeMap
 		 * Output the first row only to the output.
 		 */
-		TableFunctionOutputPartition oPartition = new TableFunctionOutputPartition(tableFunction: true, mapSide : false)
+		TableFunctionOutputPartition oPartition = new TableFunctionOutputPartition(tableFunction: this, mapSide : false)
 		oPartition.initialize(cfg)
 		
 		if ( inpPart.size() > 0 )
 		{
 			Row r = inpPart[0]
-			def oRow = [[r[itemColumn]]]
+			def oRow = [r['itemset'].toString()]
 			oPartition << oRow
 		}
 		return oPartition

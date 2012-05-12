@@ -33,7 +33,7 @@ class DynamicItemCountingTest extends BaseTest
 		dic.candidateFreqItemSetsRequest = null
 		dic.rootNode = null
 		dic.basketBatches = null
-		dic.itemList = null
+		dic.itemValueList = null
 		dic.numItems = 20
 		dic.numBaskets = 1008
 		dic.baskets = null

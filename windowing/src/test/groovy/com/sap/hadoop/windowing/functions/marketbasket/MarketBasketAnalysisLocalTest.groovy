@@ -21,7 +21,7 @@ class MarketBasketAnalysisLocalTest  extends BaseTest {
 				 'columns.types' = 'string,string',
 				 'field.delim'=','
 					) partition by itemset order by itemset,
-			  'basketName', 'itemName', <0.05>)
+			  'basketName', 'itemName', <0.1>)
 		select itemset
 		""")
 

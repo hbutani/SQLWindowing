@@ -50,7 +50,7 @@ class DynamicItemCounting
 	/*
 	 * sorted on itemValue.id
 	 */
-	ArrayList<ItemValue> itemList;
+	Object[] itemValueList;
 	
 	int numItems
 	int numBaskets
@@ -71,7 +71,7 @@ class DynamicItemCounting
 	/*
 	 * - convert input Partition into a list of Baskets
 	 * - maintain itemValMap for the duration of initialization
-	 * - at the end of scanning input Partition create itemList 
+	 * - at the end of scanning input Partition create itemValueList 
 	 * - setup basketBatches
 	 * - setup itemIdArray
 	 * - initialize Trei:
@@ -105,7 +105,7 @@ class DynamicItemCounting
 		/*
 		 * assign ids to itemValues based on value order.
 		 */
-		HashMap<ItemValue, Integer> itemValToIdMap = new HashMap<ItemValue, Integer>()
+		HashMap<?, Integer> itemValToIdMap = new HashMap<?, Integer>()
 		int idx = 0
 		for(value in itemValuesSet) {
 			itemValToIdMap[value] = idx++
@@ -160,6 +160,15 @@ class DynamicItemCounting
 		LOG.info("DIC: basketBatches" + basketBatches);
 		
 		/*
+		 * setup itemValueList
+		 */
+		itemValueList = new Object[itemValToIdMap.size()]
+		itemValToIdMap.each { val, i ->
+			itemValueList[i] = val
+		}
+		LOG.info("DIC: sorted item List" + itemValueList);
+		
+		/*
 		 * initialize Trei
 		 */
 		rootNode = new ItemNode(itemId : ItemNode.NULL_ID, 
@@ -210,8 +219,8 @@ class DynamicItemCounting
 				currentTraversalRound++
 			}
 		}
-		LOG.info("DIC: final Trei" + dumpTrei())
-		return new FrequentItemSetIterator(rootNode, itemIdArray)
+//		LOG.info("DIC: final Trei" + dumpTrei())
+		return new FrequentItemSetIterator(rootNode, itemIdArray, itemValueList)
 	}
 	
 	/*
@@ -803,17 +812,21 @@ class FrequentItemSetIterator implements Iterator<String>
 	Stack<ItemNode> traversalStack
 	JsonBuilder json
 	Text iSetText
+	Object[] itemValueList
+	Object[] currentItemValueSet
 	
-	
-	FrequentItemSetIterator(ItemNode rootNode, int[] itemIdArray)
+	FrequentItemSetIterator(ItemNode rootNode, int[] itemIdArray, Object[] itemValueList)
 	{
 		currNode = rootNode
+		this.itemValueList = itemValueList
+		currentItemValueSet = new Object[itemValueList.length]
 		currentItemSet = new ISet(sz : 0, itemIds : itemIdArray)
 		traversalStack = new Stack<ItemNode>()
 		currNode.traversalState = ItemNodeTraversal.DOWN
 		traversalStack.push(currNode)
 		json = new JsonBuilder()
 		iSetText = new Text()
+		moveToNextFrequentItemNode()
 	}
 	
 	private void moveToNextFrequentItemNode()
@@ -837,7 +850,9 @@ class FrequentItemSetIterator implements Iterator<String>
 					}
 					if ( !currNode.isRoot())
 					{
-						currentItemSet.itemIds[currentItemSet.sz++] = currNode.itemId
+						currentItemSet.itemIds[currentItemSet.sz] = currNode.itemId
+						currentItemValueSet[currentItemSet.sz] = itemValueList[currNode.itemId]
+						currentItemSet.sz++
 						return
 					}
 				}
@@ -861,9 +876,10 @@ class FrequentItemSetIterator implements Iterator<String>
 	@Override
 	public String next()
 	{
-		currentItemSet.writeJson(json, iSetText)
-		moveToNextFrequentItemNode()
+//		currentItemSet.writeJson(json, iSetText)
+		writeCurrentItemJson(json, iSetText)
 		LOG.info("Frequent ItemSet" + iSetText.toString())
+		moveToNextFrequentItemNode()
 		return iSetText.toString();
 	}
 
@@ -872,6 +888,14 @@ class FrequentItemSetIterator implements Iterator<String>
 	{
 		throw new UnsupportedOperationException();
 		
+	}
+	
+	public void writeCurrentItemJson(JsonBuilder json, Text t)
+	{
+		json( { "items" currentItemValueSet[0..<(currentItemSet.sz)]
+			"sz" currentItemSet.sz
+		})
+		t.set(json.toString())
 	}
 	
 }

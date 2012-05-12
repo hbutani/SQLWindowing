@@ -53,7 +53,7 @@ class Utils
 	}
 	
 	
-	static int evaluate(GroovyShell wshell, String expr, String typeName, Binding binding= null)  throws WindowingException
+	static Object evaluate(GroovyShell wshell, String expr, String typeName, Binding binding= null)  throws WindowingException
 	{
 		def sc = wshell.parse(expr)
 		if ( binding)

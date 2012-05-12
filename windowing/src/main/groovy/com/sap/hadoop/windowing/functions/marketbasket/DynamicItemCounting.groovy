@@ -185,7 +185,7 @@ class DynamicItemCounting
 		while(treiHasDashedNodes())
 		{
 			LOG.info(sprintf("DIC: processing round %d, batch %d", currentTraversalRound, currentBatchIndex))
-			//LOG.info("DIC: Trei" + dumpTrei())
+			LOG.info("DIC: Trei" + dumpTrei())
 			/*
 			 * process next batch
 			 */
@@ -210,7 +210,7 @@ class DynamicItemCounting
 				currentTraversalRound++
 			}
 		}
-		
+		LOG.info("DIC: final Trei" + dumpTrei())
 		return new FrequentItemSetIterator(rootNode, itemIdArray)
 	}
 	
@@ -220,7 +220,14 @@ class DynamicItemCounting
 	 */
 	void incrementTrei(ItemNode itemNode, ISet itemSet)
 	{
-		itemNode.support++
+		if ( itemNode.state == ItemSetState.SOLID_CIRCLE )
+		{
+			return;
+		}
+		if ( itemNode.state != ItemSetState.SOLID_SQUARE )
+		{
+			itemNode.support++
+		}
 		for(int i=0; i < itemSet.size(); i++)
 		{
 			ItemNode child = itemNode.children ? itemNode.children[itemSet[i]] : null
@@ -241,6 +248,9 @@ class DynamicItemCounting
 		JsonBuilder json = new JsonBuilder()
 		Text iSetText = new Text()
 		ItemNode currNode = rootNode
+		/*
+		 * represents the ItemSet formed by the path from the root to the currNode.
+		 */
 		ISet currentItemSet = new ISet(sz : 0, itemIds : itemIdArray)
 		Stack<ItemNode> traversalStack = new Stack<ItemNode>()
 		
@@ -250,19 +260,27 @@ class DynamicItemCounting
 		while(!traversalStack.empty())
 		{
 			currNode = traversalStack.pop()
+			LOG.info("DIC: pop ${currNode.itemId}")
 			
 			if ( currNode.traversalState == ItemNodeTraversal.DOWN)
 			{
+				if ( !currNode.isRoot())
+				{
+					currentItemSet.itemIds[currentItemSet.sz++] = currNode.itemId
+					if (true)
+					{
+						currentItemSet.writeJson(json, iSetText)
+						LOG.info("DIC: visit on the way down" + iSetText);
+					}
+					currNode.traversalState = ItemNodeTraversal.UP
+					traversalStack.push(currNode)
+					LOG.info("DIC: push ${currNode.itemId}")
+				}
+
 				if ( currNode.state == ItemSetState.DASHED_CIRCLE && currNode.support >= supportThreshold )
 				{
 					currNode.state = ItemSetState.DASHED_SQUARE
 					
-					currNode.traversalState = ItemNodeTraversal.UP
-					if ( !currNode.isRoot())
-					{
-						currentItemSet.itemIds[currentItemSet.sz++] = currNode.itemId
-					}
-					traversalStack.push(currNode)
 
 					if (true)
 					{
@@ -291,7 +309,7 @@ class DynamicItemCounting
 							ImmedSubSetISet subset = subSets.next()
 							if (true)
 							{
-								superSet.writeJson(json, iSetText)
+								subset.writeJson(json, iSetText)
 								LOG.info("DIC: checking subset " + iSetText);
 							}
 							reject = !isSquare(subset)
@@ -327,6 +345,14 @@ class DynamicItemCounting
 						currNode.state = ItemSetState.SOLID_CIRCLE
 						// this is a dead node, so set children to null, let GC reclaim space
 						currNode.children = null
+						
+						assert currNode.support < supportThreshold
+						if (true)
+						{
+							currentItemSet.writeJson(json, iSetText)
+							LOG.info("DIC: itemSet moved to SOLID CIR" + iSetText + " with support " + currNode.support);
+						}
+	
 					}
 					else
 					{
@@ -347,6 +373,7 @@ class DynamicItemCounting
 					currNode.children.each { int id, ItemNode node ->
 						node.traversalState = ItemNodeTraversal.DOWN
 						traversalStack.push(node)
+						LOG.info("DIC: push ${node.itemId}")
 					}
 				}
 			}
@@ -354,6 +381,11 @@ class DynamicItemCounting
 			{
 				if ( !currNode.isRoot())
 				{
+					if (true)
+					{
+						currentItemSet.writeJson(json, iSetText)
+						LOG.info("DIC: visit on the way up" + iSetText);
+					}
 					currentItemSet.sz--
 				}
 			}
@@ -604,7 +636,7 @@ class ImmedSubSetISet extends ISet
 	
 	public void writeJson(JsonBuilder json, Text t)
 	{
-		json( { "items" parentISet[0..<idxToSkip] + parentISet[(idxToSkip+1)..<sz]
+		json( { "items" parentISet[0..<idxToSkip] + parentISet[(idxToSkip+1)..<(size() +1)]
 			"sz" size()
 		})
 		t.set(json.toString())
@@ -627,7 +659,7 @@ class ImmedSuperSetISet extends ISet
    
    int getAt(i)
    {
-	   if ( i ==  sz )
+	   if ( i ==  parentISet.size() )
 	   {
 		   return lastItemId
 	   }
@@ -647,11 +679,11 @@ class ImmedSuperSetISet extends ISet
 	   return r
    }
    
-   int size() { return sz + 1; }
+   int size() { return parentISet.size() + 1; }
    
    public void writeJson(JsonBuilder json, Text t)
    {
-	   json( { "items" parentISet[0..<sz] + [lastItemId]
+	   json( { "items" parentISet[0..<(size() -1)] + [lastItemId]
 		   "sz" size()
 	   })
 	   t.set(json.toString())
@@ -736,22 +768,24 @@ class ImmediateSubSetsIterator implements Iterator<ISet>
 {
 	ImmedSubSetISet itemSet
 	DynamicItemCounting dic
+	int nextIdxToSkip
 	
 	ImmediateSubSetsIterator(ISet itemSet, DynamicItemCounting dic)
 	{
 		this.itemSet = new ImmedSubSetISet(itemSet)
+		nextIdxToSkip = 0
 		this.dic = dic
 		
 	}
 
 	public boolean hasNext()
 	{
-		return itemSet.idxToSkip < itemSet.sz
+		return nextIdxToSkip < (itemSet.size() + 1)
 	}
 	
 	public ISet next()
 	{
-		itemSet.idxToSkip++
+		itemSet.idxToSkip = nextIdxToSkip++
 		return itemSet
 	}
 	public void remove()

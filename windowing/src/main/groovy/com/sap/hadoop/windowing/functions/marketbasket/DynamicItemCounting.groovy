@@ -80,8 +80,8 @@ class DynamicItemCounting
 	 */
 	void initialize(IPartition inpPart) throws WindowingException 
 	{
-		JsonBuilder json = new JsonBuilder()
-		Text iSetText = new Text()
+//		JsonBuilder json = new JsonBuilder()
+//		Text iSetText = new Text()
 		
 		/*
 		 * setup TreeSet for item values, based datatype of item value column.
@@ -128,11 +128,11 @@ class DynamicItemCounting
 			{
 				if ( iSet.sz > 0 )
 				{
-					if (true)
-					{
-						iSet.writeJson(json, iSetText)
-						LOG.info("DIC: adding basket" + iSetText);
-					}
+//					if (true)
+//					{
+//						iSet.writeJson(json, iSetText)
+//						LOG.info("DIC: adding basket" + iSetText);
+//					}
 					baskets.append(iSet)
 				}
 				iSet.sz = 0
@@ -145,6 +145,7 @@ class DynamicItemCounting
 		 *  setup basketBatches
 		*/
 		numBaskets = baskets.size()
+		supportThreshold = numBaskets * candidateFreqItemSetsRequest.supportThresholdFraction
 		int numBatches = numBaskets / BASKET_PARTITION_SZ + 1
 		if ( numBaskets % BASKET_PARTITION_SZ  < (BASKET_PARTITION_SZ/2) )
 		{
@@ -156,6 +157,7 @@ class DynamicItemCounting
 		{
 			basketBatches[i] = BASKET_PARTITION_SZ * i
 		}
+		LOG.info("DIC: basketBatches" + basketBatches);
 		
 		/*
 		 * initialize Trei
@@ -164,6 +166,7 @@ class DynamicItemCounting
 								state : ItemSetState.SOLID_SQUARE, 
 								roundIntroduced : -1,
 								basketBatchIndexIntroduced : -1)
+		rootNode.children = new TreeMap<Integer, ItemNode>()
 		currentTraversalRound = 0
 		currentBatchIndex = 0
 		for(int i=0; i < numItems; i++)
@@ -172,14 +175,17 @@ class DynamicItemCounting
 								state : ItemSetState.DASHED_CIRCLE, 
 								roundIntroduced : currentTraversalRound,
 								basketBatchIndexIntroduced : currentBatchIndex)
+			rootNode.children[i] = iNode
 		}
-
+//		LOG.info("DIC: initialTrei" + dumpTrei())
 	}
 	
-	void process()
+	Iterator<String> process()
 	{
 		while(treiHasDashedNodes())
 		{
+			LOG.info(sprintf("DIC: processing round %d, batch %d", currentTraversalRound, currentBatchIndex))
+			//LOG.info("DIC: Trei" + dumpTrei())
 			/*
 			 * process next batch
 			 */
@@ -204,6 +210,8 @@ class DynamicItemCounting
 				currentTraversalRound++
 			}
 		}
+		
+		return new FrequentItemSetIterator(rootNode, itemIdArray)
 	}
 	
 	/*
@@ -230,11 +238,13 @@ class DynamicItemCounting
 	 */
 	void processTrei()
 	{
+		JsonBuilder json = new JsonBuilder()
+		Text iSetText = new Text()
 		ItemNode currNode = rootNode
 		ISet currentItemSet = new ISet(sz : 0, itemIds : itemIdArray)
-		Stack<ItemNode> traversalStack
+		Stack<ItemNode> traversalStack = new Stack<ItemNode>()
 		
-		currNode.traversalState = ItemNodeTraversal.UP
+		currNode.traversalState = ItemNodeTraversal.DOWN
 		traversalStack.push(currNode)
 		
 		while(!traversalStack.empty())
@@ -245,7 +255,20 @@ class DynamicItemCounting
 			{
 				if ( currNode.state == ItemSetState.DASHED_CIRCLE && currNode.support >= supportThreshold )
 				{
-					currNode.state == ItemSetState.DASHED_SQUARE
+					currNode.state = ItemSetState.DASHED_SQUARE
+					
+					currNode.traversalState = ItemNodeTraversal.UP
+					if ( !currNode.isRoot())
+					{
+						currentItemSet.itemIds[currentItemSet.sz++] = currNode.itemId
+					}
+					traversalStack.push(currNode)
+
+					if (true)
+					{
+						currentItemSet.writeJson(json, iSetText)
+						LOG.info("DIC: itemSet moved to DASHED SQ" + iSetText);
+					}
 					
 					/*
 					 * for each immediate superset ItemSet
@@ -256,17 +279,31 @@ class DynamicItemCounting
 					while(superSets.hasNext()) 
 					{ 
 						ISet superSet = superSets.next()
+						if (true)
+						{
+							superSet.writeJson(json, iSetText)
+							LOG.info("DIC: checking superSet " + iSetText);
+						}
 						ImmediateSubSetsIterator subSets = new ImmediateSubSetsIterator(superSet, this)
-						boolean reject = false
+						boolean reject = !subSets.hasNext()
 						while(!reject && subSets.hasNext())
 						{
 							ImmedSubSetISet subset = subSets.next()
+							if (true)
+							{
+								superSet.writeJson(json, iSetText)
+								LOG.info("DIC: checking subset " + iSetText);
+							}
 							reject = !isSquare(subset)
 						}
 						
 						if ( !reject )
 						{
 							int newId = superSet[superSet.size() - 1]
+							if (true)
+							{
+								LOG.info("DIC: adding subset with id" + newId);
+							}
 							ItemNode newNode = new ItemNode(itemId : newId, 
 								state : ItemSetState.DASHED_CIRCLE, 
 								roundIntroduced : currentTraversalRound,
@@ -281,7 +318,7 @@ class DynamicItemCounting
 				 * If a DOTTED item has been counted through all baskets then make it solid.
 				 */
 				if ( (currNode.roundIntroduced < currentTraversalRound)  &&
-					(currNode.basketBatchIndexIntroduced < currentBatchIndex) &&
+					(currNode.basketBatchIndexIntroduced <= currentBatchIndex) &&
 					(currNode.state == ItemSetState.DASHED_CIRCLE || currNode.state == ItemSetState.DASHED_SQUARE) 
 					)
 				{
@@ -307,12 +344,6 @@ class DynamicItemCounting
 					currNode.children 
 					)
 				{
-					currNode.traversalState = ItemNodeTraversal.UP
-					if ( !currNode.isRoot())
-					{
-						currentItemSet.itemIds[currentItemSet.sz++] = currNode.itemId
-					}
-					traversalStack.push(currNode)
 					currNode.children.each { int id, ItemNode node ->
 						node.traversalState = ItemNodeTraversal.DOWN
 						traversalStack.push(node)
@@ -359,12 +390,35 @@ class DynamicItemCounting
 			
 			if ( current.children )
 			{
-				current.children.values() { childIS ->
+				current.children.values().each { childIS ->
 					queue.add(childIS)
 				}
 			}
 		}
 		return false
+	}
+	
+	private String dumpTrei(StringBuilder buf = null, int tab = 0)
+	{
+		buf = buf == null ? new StringBuilder() : buf
+		Stack<?> traversalStack = new Stack<Object>()
+		traversalStack.push([rootNode, tab])
+		while(!traversalStack.empty())
+		{
+			Object o = traversalStack.pop()
+			ItemNode iNode = o[0]
+			tab = o[1]
+			buf.append(" " * tab).append(iNode.itemId).append(", ").
+				append(iNode.state).append(", ").
+				append(iNode.support).append("\n")
+			if (iNode.children )
+			{
+				iNode.children.values().each { it ->
+					traversalStack.push([it, tab + 3]) 
+				}
+			}
+		}
+		return buf.toString() 
 	}
 }
 
@@ -458,6 +512,9 @@ class ISet implements Writable
 	protected int[] itemIds
 	
 	int getAt(i) { return itemIds[i]; }
+	
+	def getAt(Range rng) { return itemIds[rng] }
+	
 	void putAt(int i, int id)
 	{
 		itemIds[i] = id
@@ -513,11 +570,11 @@ class ISet implements Writable
 class ImmedSubSetISet extends ISet
 {
 	int idxToSkip
+	ISet parentISet
 	
 	ImmedSubSetISet(ISet iSet, idxToSkip = -1)
 	{
-		sz = iSet.sz
-		itemIds = iSet.itemIds
+		parentISet = iSet
 		this.idxToSkip = idxToSkip
 	}
 	
@@ -525,15 +582,33 @@ class ImmedSubSetISet extends ISet
 	{ 
 		if ( i < idxToSkip )
 		{
-			return itemIds[i]
+			return parentISet[i]
 		}
 		else
 		{
-			return itemIds[i+1]
+			return parentISet[i+1]
 		}
 	}
 	
-	int size() { return sz - 1; }
+	def getAt(Range rng) 
+	{
+		def r = []
+		for(i in rng)
+		{
+			r << getAt(i)
+		}
+		return r
+	}
+	
+	int size() { return parentISet.size() - 1; }
+	
+	public void writeJson(JsonBuilder json, Text t)
+	{
+		json( { "items" parentISet[0..<idxToSkip] + parentISet[(idxToSkip+1)..<sz]
+			"sz" size()
+		})
+		t.set(json.toString())
+	}
 }
 
 /*
@@ -542,11 +617,11 @@ class ImmedSubSetISet extends ISet
 class ImmedSuperSetISet extends ISet
 {
    int lastItemId
+   ISet parentISet
    
    ImmedSuperSetISet(ISet iSet, int lastItemId)
    {
-	   sz = iSet.sz
-	   itemIds = iSet.itemIds
+	   parentISet = iSet
 	   this.lastItemId = lastItemId
    }
    
@@ -558,11 +633,29 @@ class ImmedSuperSetISet extends ISet
 	   }
 	   else
 	   {
-		   return itemIds[i]
+		   return parentISet[i]
 	   }
    }
    
+   def getAt(Range rng)
+   {
+	   def r = []
+	   for(i in rng)
+	   {
+		   r << getAt(i)
+	   }
+	   return r
+   }
+   
    int size() { return sz + 1; }
+   
+   public void writeJson(JsonBuilder json, Text t)
+   {
+	   json( { "items" parentISet[0..<sz] + [lastItemId]
+		   "sz" size()
+	   })
+	   t.set(json.toString())
+   }
 }
 
 class SuffixISet extends ISet
@@ -599,7 +692,7 @@ class ImmediateSuperSetsIterator implements Iterator<ImmedSuperSetISet>
 	
 	ImmediateSuperSetsIterator(ISet itemSet, DynamicItemCounting dic)
 	{
-		this.itemSet = new ImmedSuperSetISet(itemSet)
+		this.itemSet = new ImmedSuperSetISet(itemSet, -1)
 		this.dic = dic
 		
 		/*
@@ -665,4 +758,86 @@ class ImmediateSubSetsIterator implements Iterator<ISet>
 	{
 		throw new UnsupportedOperationException()
 	}
+}
+
+class FrequentItemSetIterator implements Iterator<String>
+{
+	private static final Log LOG = LogFactory.getLog("com.sap.hadoop.windowing.functions.marketbasket");
+	
+	ItemNode currNode
+	ISet currentItemSet
+	Stack<ItemNode> traversalStack
+	JsonBuilder json
+	Text iSetText
+	
+	
+	FrequentItemSetIterator(ItemNode rootNode, int[] itemIdArray)
+	{
+		currNode = rootNode
+		currentItemSet = new ISet(sz : 0, itemIds : itemIdArray)
+		traversalStack = new Stack<ItemNode>()
+		currNode.traversalState = ItemNodeTraversal.DOWN
+		traversalStack.push(currNode)
+		json = new JsonBuilder()
+		iSetText = new Text()
+	}
+	
+	private void moveToNextFrequentItemNode()
+	{
+		while (!traversalStack.empty())
+		{
+			currNode = traversalStack.pop()
+			
+			if ( currNode.traversalState == ItemNodeTraversal.DOWN)
+			{
+				if ( currNode.state == ItemSetState.SOLID_SQUARE )
+				{
+					currNode.traversalState = ItemNodeTraversal.UP
+					traversalStack.push(currNode)
+					if ( currNode.children )
+					{
+						currNode.children.each { int id, ItemNode node ->
+							node.traversalState = ItemNodeTraversal.DOWN
+							traversalStack.push(node)
+						}
+					}
+					if ( !currNode.isRoot())
+					{
+						currentItemSet.itemIds[currentItemSet.sz++] = currNode.itemId
+						return
+					}
+				}
+			}
+			else
+			{
+				if ( !currNode.isRoot())
+				{
+					currentItemSet.sz--
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean hasNext()
+	{
+		return !traversalStack.empty();
+	}
+
+	@Override
+	public String next()
+	{
+		currentItemSet.writeJson(json, iSetText)
+		moveToNextFrequentItemNode()
+		LOG.info("Frequent ItemSet" + iSetText.toString())
+		return iSetText.toString();
+	}
+
+	@Override
+	public void remove()
+	{
+		throw new UnsupportedOperationException();
+		
+	}
+	
 }

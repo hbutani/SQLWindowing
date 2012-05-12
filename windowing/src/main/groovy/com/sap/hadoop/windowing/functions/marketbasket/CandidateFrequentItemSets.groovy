@@ -39,10 +39,13 @@ import org.apache.hadoop.conf.Configuration
 		@ArgDef(name="itemColumn", typeName="string", argTypes = [ArgType.STRING],
 			description="""The column that represents the item name/id.
 """),
-		@ArgDef(name="minCount", typeName="int", argTypes = [ArgType.NUMBER],
+		@ArgDef(name="supportThresholdFraction", typeName="float", argTypes = [ArgType.SCRIPT],
+			description="""the support threshold as a fraction.
+"""),
+		@ArgDef(name="minCount", typeName="int", argTypes = [ArgType.NUMBER], optional=true,
 			description="""minimum number of items in the candidate itemsets output
 """),
-	@ArgDef(name="maxCount", typeName="int", argTypes = [ArgType.NUMBER],
+	@ArgDef(name="maxCount", typeName="int", argTypes = [ArgType.NUMBER], optional=true,
 	description="""maximum number of items in the candidate itemsets output
 """),
 @ArgDef(name="includeList", typeName="expression", argTypes = [ArgType.SCRIPT], optional=true,
@@ -60,6 +63,7 @@ class CandidateFrequentItemSets extends AbstractTableFunction
 {
 	String txnColumn
 	String itemColumn
+	float supportThresholdFraction
 	int minCount
 	int maxCount
 	Script includeList
@@ -128,10 +132,6 @@ class CandidateFrequentItemSets extends AbstractTableFunction
 	protected IPartition mapExecute(IPartition inpPart) throws WindowingException
 	{
 		
-		DynamicItemCounting dic = new DynamicItemCounting(candidateFreqItemSetsRequest : this)
-		dic.initialize(inpPart)
-		dic.process()
-		
 		/*
 		 * - Create an OutputPartition based on the typeMap
 		 * - for now write each Item as a list to the partition
@@ -142,10 +142,15 @@ class CandidateFrequentItemSets extends AbstractTableFunction
 		TableFunctionOutputPartition oPartition = new TableFunctionOutputPartition(tableFunction: this, mapSide : true, serDe : mapOutputSerDe)
 		oPartition.initialize(cfg)
 		
-		for(Row r : inpPart)
+		DynamicItemCounting dic = new DynamicItemCounting(candidateFreqItemSetsRequest : this)
+		dic.initialize(inpPart)
+		Iterator<String> freqItemSets = dic.process()
+		
+
+		for(String fis : freqItemSets)
 		{
 			//def oRow = [[r[itemColumn]]]
-			def oRow = [r[itemColumn].toString()]
+			def oRow = [fis]
 			oPartition << oRow
 		}
 		

@@ -1,6 +1,7 @@
 package com.sap.hadoop.windowing.runtime.mr
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.serde.Constants;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe;
@@ -31,7 +32,8 @@ class MRTranslator extends Translator
 //			cfg.set(Job.WINDOWING_INPUT_TABLE, tableIn.tableName)
 //			rdr.initialize(null, cfg, tableIn.serDeProps);
 
-			String db = cfg.get(Job.WINDOWING_INPUT_DATABASE) // fixme
+//			String db = cfg.get(Job.WINDOWING_INPUT_DATABASE) // fixme
+			String db = Hive.get(cfg).getCurrentDatabase()
 			Table t = HiveUtils.getTable(db, tableIn.tableName, cfg)
 			tableIn.serDeClass = t.getSd().getSerdeInfo().getSerializationLib();
 			tableIn.serDeProps = MetaStoreUtils.getSchema(t)
@@ -138,7 +140,8 @@ class MRTranslator extends Translator
 	
 	Table getHiveTableDetails(Configuration cfg, TableOutput tblOut)
 	{
-		return HiveUtils.getTable(null, tblOut.tableName, cfg)
+		String db = Hive.get(cfg).getCurrentDatabase()
+		return HiveUtils.getTable(db, tblOut.tableName, cfg)
 	}
 }
 

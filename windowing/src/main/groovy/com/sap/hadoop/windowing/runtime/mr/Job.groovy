@@ -14,6 +14,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.contrib.serde2.TypedBytesSerDe;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
+import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.io.NullWritable;
@@ -182,7 +183,7 @@ class Job extends JobBase
 			
 			String jobName = "Windowing Query: " + query.qSpec.toString()
 			
-			String db = null
+			String db = Hive.get(query.cfg).getCurrentDatabase()
 			String tableName = tblIn.tableName
 			
 			String partitionCols = query.input.partitionColumns*.name.join(",")

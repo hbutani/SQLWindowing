@@ -843,7 +843,7 @@ class FrequentItemSetIterator implements Iterator<String>
 					traversalStack.push(currNode)
 					if ( currNode.children )
 					{
-						currNode.children.each { int id, ItemNode node ->
+						currNode.children.descendingMap().each { int id, ItemNode node ->
 							node.traversalState = ItemNodeTraversal.DOWN
 							traversalStack.push(node)
 						}
@@ -893,7 +893,6 @@ class FrequentItemSetIterator implements Iterator<String>
 	public void writeCurrentItemJson(JsonBuilder json, Text t)
 	{
 		json( { "items" currentItemValueSet[0..<(currentItemSet.sz)]
-			"sz" currentItemSet.sz
 		})
 		t.set(json.toString())
 	}

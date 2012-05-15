@@ -20,7 +20,7 @@ class MarketBasketAnalysisTest extends MRBaseTest
 	void test1() {
 		wshell.execute("""
 			from candidateFrequentItemSets(basketdata partition by itemset order by itemset,
-			  'basketName', 'itemName', 1, 5)
+			  'basketName', 'itemName', <0.05>)
 			select itemset
 		into path='/tmp/wout2'
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'

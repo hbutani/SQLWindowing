@@ -22,7 +22,7 @@ public class Constants
 	public static final String WINDOW_PARTITION_MEM_SIZE = "com.sap.hadoop.windowing.partition.memory.size";
 	
 	public static final String WINDOW_PARTITION_CLASS = "com.sap.hadoop.windowing.partition.class";
-	public static final String DEFAULT_WINDOW_PARTITION_CLASS = "com.sap.hadoop.ds.list.PartitionedByteBasedList";
+	public static final String DEFAULT_WINDOW_PARTITION_CLASS = "com.sap.hadoop.ds.list.ByteBasedList";
 	
 	/*
 	 * the difference between script & expression is that script is only parsed during translation,

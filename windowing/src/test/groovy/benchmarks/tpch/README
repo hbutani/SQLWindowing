@@ -1,0 +1,27 @@
+1. Data generated and loaded into hdfs using:
+http://www.cs.duke.edu/starfish/mr-apps/tpch.tar.gz
+
+unzip and run:
+perl gen_data.pl 5 10 0 $HADOOP_HOME/conf/slaves /media/MyPassport/tpch/datascale5/  /benchmarks/tpch/datascale5
+
+where args are:
+    scale_factor = TPCH Scale factor (GB of data to generate)
+    num_files    = The number of files to generate for each table
+    zipf_factor  = Zipfian distribution factor (0-4, 0 means uniform)
+    host_list    = File containing a list of host machines
+    local_dir    = Local directory to use in the host machines
+    hdfs_dir     = HDFS directory to store the generated data
+
+
+2. run setup.sql to create database & tables.
+
+3. Datascale 5 data sizes:
+
+Region			5
+Nation			25
+Customer		750k
+Orders			7.5 million
+Part 			1 million
+Supplier		50k
+PartSupp		4 million
+LineItem		~30 million

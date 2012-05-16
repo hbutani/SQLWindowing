@@ -1,0 +1,58 @@
+Hive Query 0:
+
+INSERT OVERWRITE DIRECTORY '/tmp/tpch-hive-qry1'
+select l_partkey, l_suppkey, sum(l_extendedprice)
+from lineitem
+group by l_partkey, l_suppkey;
+
+Performance:
+
+Home: 
+3998050 Rows loaded to /tmp/tpch-hive-qry1
+MapReduce Jobs Launched: 
+Job 0: Map: 60  Reduce: 4   HDFS Read: 3833399794 HDFS Write: 102252412 SUCCESS
+Total MapReduce CPU Time Spent: 0 msec
+OK
+Time taken: 241.629 seconds
+
+Hive Query 1:
+INSERT OVERWRITE DIRECTORY '/tmp/tpch-hive-qry1'
+SELECT l_partkey, l_suppkey, l_extendedprice
+FROM lineitem 
+DISTRIBUTE BY l_partkey, l_suppkey
+SORT BY l_partkey, l_suppkey, l_extendedprice;
+
+Performance:
+
+Home: 
+3998050 Rows loaded to /tmp/tpch-hive-qry1
+MapReduce Jobs Launched: 
+Job 0: Map: 60  Reduce: 4   HDFS Read: 3833399794 HDFS Write: 102252412 SUCCESS
+Total MapReduce CPU Time Spent: 0 msec
+OK
+Time taken: 241.629 seconds
+
+Windowing Query 1:
+
+from lineitem
+partition by l_partkey, l_suppkey
+order by l_partkey, l_suppkey, l_extendedprice
+with 
+  rank() as r
+select l_partkey, l_suppkey, l_extendedprice, r
+into path='/tmp/tpch-sqw-qry1'
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		with serdeproperties('field.delim'=',')
+		format 'org.apache.hadoop.mapred.TextOutputFormat';
+
+
+Set mapred.output.compression:
+set mapred.compress.map.output=true;
+set mapred.map.output.compression.codec=org.apache.hadoop.io.compress.GzipCodec;
+
+
+Shuffle tuning:
+
+set io.sort.mb=400;
+set io.sort.factor=20;
+

@@ -75,7 +75,7 @@ public class HiveUtils
 			//job.setMapOutputValueClass(rdr.createValue().getClass());
 		    
 		    // 5. set num reducers to number of input splits
-			job.setNumReduceTasks(iSplits.length);
+//			job.setNumReduceTasks(iSplits.length);
 			
 			return client.getFields(db, table);
 		}

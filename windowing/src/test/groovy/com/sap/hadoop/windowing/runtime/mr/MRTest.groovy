@@ -65,5 +65,21 @@ select p_mfgr,p_name, p_size, r, dr, cud, pr, nt, c, ca, cd, avg, st, fv,lv, fv2
 		with serdeproperties('field.delim'=',')
 		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
+	
+	@Test
+	void testSortNumeric()
+	{
+		wshell.execute("""
+		from  <select * from part limit 1000>
+		partition by p_mfgr
+		order by p_mfgr, p_retailprice desc
+		with
+		rank() as r
+select p_mfgr,p_name, p_retailprice, r
+		into path='/tmp/wout2'
+		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+		with serdeproperties('field.delim'=',')
+		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+	}
 
 }

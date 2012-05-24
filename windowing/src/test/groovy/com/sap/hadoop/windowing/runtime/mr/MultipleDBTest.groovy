@@ -30,15 +30,23 @@ class MultipleDBTest extends MRBaseTest
 	@Test
 	void test1()
 	{
+		String currDB = Hive.get(wshell.cfg).getCurrentDatabase()
 		Hive.get(wshell.cfg).setCurrentDatabase("test")
-		wshell.execute("""
-		from p
-		partition by p_mfgr
-		order by p_mfgr, p_name desc
-		with
-		rank() as r
-select p_partkey, p_mfgr,p_name, p_size, r
-		into path='/tmp/wout2'""")
+		try
+		{
+			wshell.execute("""
+			from p
+			partition by p_mfgr
+			order by p_mfgr, p_name desc
+			with
+			rank() as r
+	select p_partkey, p_mfgr,p_name, p_size, r
+			into path='/tmp/wout2'""")
+		}
+		finally
+		{
+			Hive.get(wshell.cfg).setCurrentDatabase(currDB)
+		}
 	}
 	
 

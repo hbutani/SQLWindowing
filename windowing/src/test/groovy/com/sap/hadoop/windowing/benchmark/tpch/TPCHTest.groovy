@@ -10,7 +10,7 @@ import com.sap.hadoop.windowing.MRBaseTest;
 class TPCHTest  extends MRBaseTest
 {
 
-	@Test
+//	@Test
 	void test1()
 	{
 		Hive.get(wshell.cfg).setCurrentDatabase("benchmark")

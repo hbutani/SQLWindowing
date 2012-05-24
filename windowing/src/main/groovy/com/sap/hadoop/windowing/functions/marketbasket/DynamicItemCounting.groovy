@@ -134,6 +134,7 @@ class DynamicItemCounting
 //						LOG.info("DIC: adding basket" + iSetText);
 //					}
 					baskets.append(iSet)
+					LOG.info("adding basket ${currBasket}  ${iSet}");
 				}
 				iSet.sz = 0
 				currBasket = basket
@@ -147,7 +148,7 @@ class DynamicItemCounting
 		numBaskets = baskets.size()
 		supportThreshold = numBaskets * candidateFreqItemSetsRequest.supportThresholdFraction
 		int numBatches = numBaskets / BASKET_PARTITION_SZ + 1
-		if ( numBaskets % BASKET_PARTITION_SZ  < (BASKET_PARTITION_SZ/2) )
+		if ( (numBatches > 1) && numBaskets % BASKET_PARTITION_SZ  < (BASKET_PARTITION_SZ/2) )
 		{
 			numBatches--
 		}
@@ -158,6 +159,8 @@ class DynamicItemCounting
 			basketBatches[i] = BASKET_PARTITION_SZ * i
 		}
 		LOG.info("DIC: basketBatches" + basketBatches);
+		LOG.info("DIC: numBaskets " + numBaskets);
+		LOG.info("DIC: numBatches " + numBatches);
 		
 		/*
 		 * setup itemValueList

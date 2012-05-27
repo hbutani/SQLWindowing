@@ -134,7 +134,7 @@ class DynamicItemCounting
 //						LOG.info("DIC: adding basket" + iSetText);
 //					}
 					baskets.append(iSet)
-					LOG.info("adding basket ${currBasket}  ${iSet}");
+//					LOG.info("adding basket ${currBasket}  ${iSet}");
 				}
 				iSet.sz = 0
 				currBasket = basket
@@ -161,6 +161,7 @@ class DynamicItemCounting
 		LOG.info("DIC: basketBatches" + basketBatches);
 		LOG.info("DIC: numBaskets " + numBaskets);
 		LOG.info("DIC: numBatches " + numBatches);
+		LOG.info("DIC: supportThreshold " + supportThreshold);
 		
 		/*
 		 * setup itemValueList
@@ -174,13 +175,13 @@ class DynamicItemCounting
 		/*
 		 * initialize Trei
 		 */
+		currentTraversalRound = 0
+		currentBatchIndex = basketBatches.size() - 1
 		rootNode = new ItemNode(itemId : ItemNode.NULL_ID, 
 								state : ItemSetState.SOLID_SQUARE, 
-								roundIntroduced : -1,
-								basketBatchIndexIntroduced : -1)
+								roundIntroduced : currentTraversalRound,
+								basketBatchIndexIntroduced : currentBatchIndex)
 		rootNode.children = new TreeMap<Integer, ItemNode>()
-		currentTraversalRound = 0
-		currentBatchIndex = 0
 		for(int i=0; i < numItems; i++)
 		{
 			ItemNode iNode = new ItemNode(itemId : i, 
@@ -189,15 +190,39 @@ class DynamicItemCounting
 								basketBatchIndexIntroduced : currentBatchIndex)
 			rootNode.children[i] = iNode
 		}
+		currentTraversalRound = 1
+		currentBatchIndex = 0
 //		LOG.info("DIC: initialTrei" + dumpTrei())
 	}
 	
 	Iterator<String> process()
 	{
+		
+		if ( false )
+		{
+			supportThreshold = 1
+			ISet iT = new ISet(sz : 0, itemIds : itemIdArray)
+			[0,1,2,3,4].each { v -> iT.itemIds[iT.sz++] = v}
+			incrementTrei(rootNode, iT)
+			incrementTrei(rootNode, iT)
+			processTrei()
+			LOG.info("DIC: Trei" + dumpTrei())
+			
+			currentBatchIndex++
+			incrementTrei(rootNode, iT)
+			incrementTrei(rootNode, iT)
+			processTrei()
+			
+			LOG.info("DIC: Trei" + dumpTrei())
+			return null
+			
+		}
+		
+		
 		while(treiHasDashedNodes())
 		{
 			LOG.info(sprintf("DIC: processing round %d, batch %d", currentTraversalRound, currentBatchIndex))
-			LOG.info("DIC: Trei" + dumpTrei())
+//			LOG.info("DIC: Trei" + dumpTrei())
 			/*
 			 * process next batch
 			 */
@@ -211,6 +236,7 @@ class DynamicItemCounting
 			}
 			
 			processTrei()
+			LOG.info("DIC: Trei" + dumpTrei())
 			
 			/*
 			 * increment currentBatchIndex and currentTraversalRound
@@ -222,7 +248,7 @@ class DynamicItemCounting
 				currentTraversalRound++
 			}
 		}
-//		LOG.info("DIC: final Trei" + dumpTrei())
+		LOG.info("DIC: final Trei" + dumpTrei())
 		return new FrequentItemSetIterator(rootNode, itemIdArray, itemValueList)
 	}
 	
@@ -245,7 +271,7 @@ class DynamicItemCounting
 			ItemNode child = itemNode.children ? itemNode.children[itemSet[i]] : null
 			if ( child )
 			{
-				incrementTrei(child, new SuffixISet(itemSet))
+				incrementTrei(child, new SuffixISet(itemSet, i+1))
 			}	
 		}
 	}
@@ -272,7 +298,7 @@ class DynamicItemCounting
 		while(!traversalStack.empty())
 		{
 			currNode = traversalStack.pop()
-			LOG.info("DIC: pop ${currNode.itemId}")
+//			LOG.info("DIC: pop ${currNode.itemId}")
 			
 			if ( currNode.traversalState == ItemNodeTraversal.DOWN)
 			{
@@ -282,11 +308,11 @@ class DynamicItemCounting
 					if (true)
 					{
 						currentItemSet.writeJson(json, iSetText)
-						LOG.info("DIC: visit on the way down" + iSetText);
+//						LOG.info("DIC: visit on the way down" + iSetText);
 					}
 					currNode.traversalState = ItemNodeTraversal.UP
 					traversalStack.push(currNode)
-					LOG.info("DIC: push ${currNode.itemId}")
+//					LOG.info("DIC: push ${currNode.itemId}")
 				}
 
 				if ( currNode.state == ItemSetState.DASHED_CIRCLE && currNode.support >= supportThreshold )
@@ -297,9 +323,12 @@ class DynamicItemCounting
 					if (true)
 					{
 						currentItemSet.writeJson(json, iSetText)
-						LOG.info("DIC: itemSet moved to DASHED SQ" + iSetText);
+						LOG.info("DIC: itemSet moved to DASHED SQ" + iSetText + " with support " + currNode.support);
 					}
-					
+				}
+				
+				if ( currNode.support >= supportThreshold  )
+				{
 					/*
 					 * for each immediate superset ItemSet
 					 *   check that all its subsets are a SQUARE (ie frequent)
@@ -309,10 +338,15 @@ class DynamicItemCounting
 					while(superSets.hasNext()) 
 					{ 
 						ISet superSet = superSets.next()
+						int newId = superSet[superSet.size() - 1]
+						if ( currNode.children != null && currNode.children[newId] != null )
+						{
+							continue;
+						}
 						if (true)
 						{
 							superSet.writeJson(json, iSetText)
-							LOG.info("DIC: checking superSet " + iSetText);
+//							LOG.info("DIC: checking superSet " + iSetText);
 						}
 						ImmediateSubSetsIterator subSets = new ImmediateSubSetsIterator(superSet, this)
 						boolean reject = !subSets.hasNext()
@@ -322,17 +356,16 @@ class DynamicItemCounting
 							if (true)
 							{
 								subset.writeJson(json, iSetText)
-								LOG.info("DIC: checking subset " + iSetText);
+//								LOG.info("DIC: checking subset " + iSetText);
 							}
 							reject = !isSquare(subset)
 						}
 						
 						if ( !reject )
 						{
-							int newId = superSet[superSet.size() - 1]
 							if (true)
 							{
-								LOG.info("DIC: adding subset with id" + newId);
+//								LOG.info("DIC: adding subset with id" + newId);
 							}
 							ItemNode newNode = new ItemNode(itemId : newId, 
 								state : ItemSetState.DASHED_CIRCLE, 
@@ -347,8 +380,10 @@ class DynamicItemCounting
 				/*
 				 * If a DOTTED item has been counted through all baskets then make it solid.
 				 */
-				if ( (currNode.roundIntroduced < currentTraversalRound)  &&
-					(currNode.basketBatchIndexIntroduced <= currentBatchIndex) &&
+				int currOrdinal = (currentTraversalRound * basketBatches.size()) + currentBatchIndex
+				int nodeOrdinal = (currNode.roundIntroduced * basketBatches.size()) + currNode.basketBatchIndexIntroduced
+				if ( 					
+					( (currOrdinal - nodeOrdinal)  == (basketBatches.size() ) )   &&
 					(currNode.state == ItemSetState.DASHED_CIRCLE || currNode.state == ItemSetState.DASHED_SQUARE) 
 					)
 				{
@@ -385,7 +420,7 @@ class DynamicItemCounting
 					currNode.children.each { int id, ItemNode node ->
 						node.traversalState = ItemNodeTraversal.DOWN
 						traversalStack.push(node)
-						LOG.info("DIC: push ${node.itemId}")
+//						LOG.info("DIC: push ${node.itemId}")
 					}
 				}
 			}
@@ -396,7 +431,7 @@ class DynamicItemCounting
 					if (true)
 					{
 						currentItemSet.writeJson(json, iSetText)
-						LOG.info("DIC: visit on the way up" + iSetText);
+//						LOG.info("DIC: visit on the way up" + iSetText);
 					}
 					currentItemSet.sz--
 				}
@@ -454,7 +489,9 @@ class DynamicItemCounting
 			tab = o[1]
 			buf.append(" " * tab).append(iNode.itemId).append(", ").
 				append(iNode.state).append(", ").
-				append(iNode.support).append("\n")
+				append(iNode.support).append(", ").
+				append(iNode.roundIntroduced).append(", ").
+				append(iNode.basketBatchIndexIntroduced).append("\n")
 			if (iNode.children )
 			{
 				iNode.children.values().each { it ->
@@ -706,25 +743,25 @@ class SuffixISet extends ISet
 {
 	int startIdx
 	
-	SuffixISet(ISet iSet)
+	SuffixISet(ISet iSet, int startIdx = 1)
 	{
 		sz = iSet.sz
 		itemIds = iSet.itemIds
-		startIdx = 1
+		this.startIdx = startIdx
 	}
 	
-	SuffixISet(SuffixISet iSet)
+	SuffixISet(SuffixISet iSet, int startIdx = 1)
 	{
 		sz = iSet.sz
 		itemIds = iSet.itemIds
-		startIdx = iSet.startIdx + 1
+		this.startIdx = iSet.startIdx + startIdx
 	}
 	
 	int size() { return sz - startIdx; }
 	
 	int getAt(i)
 	{
-		return itemIds[i - startIdx]
+		return itemIds[i + startIdx]
 	}
 }
 

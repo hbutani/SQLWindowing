@@ -27,7 +27,7 @@ abstract class MRBaseTest
 	{
 		outStream = new ByteArrayOutputStream()
 		
-		Configuration conf = HOME_LOCALMR();
+		Configuration conf = HOME();
 		conf.setBoolean(Constants.WINDOWING_TEST_MODE, true)
 		HiveConf hCfg = new HiveConf(conf, conf.getClass())
 		
@@ -84,7 +84,7 @@ abstract class MRBaseTest
 		conf.set(Constants.HIVE_THRIFTSERVER, "localhost")
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
 		
-		conf.set("HIVE_HOME", "/media/MyPassport/hadoop/hive2/hive/build/dist")
+		conf.set("HIVE_HOME", "/media/MyPassport/hadoop/hive-0.9.0-bin")
 		
 		return conf;
 	}
@@ -109,7 +109,7 @@ abstract class MRBaseTest
 		
 		conf.set(Constants.HIVE_THRIFTSERVER, "localhost")
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
-		conf.set("HIVE_HOME", "/media/MyPassport/hadoop/hive2/hive/build/dist")
+		conf.set("HIVE_HOME", "/media/MyPassport/hadoop/hive-0.9.0-bin")
 		
 		return conf;
 	}

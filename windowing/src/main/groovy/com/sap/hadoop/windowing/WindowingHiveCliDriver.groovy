@@ -43,6 +43,9 @@ import org.apache.hadoop.hive.shims.ShimLoader;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.sap.hadoop.windowing.query.QuerySpec;
+
+
 /*
  * 
  * Notes:
@@ -52,7 +55,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 class WindowingHiveCliDriver extends CliDriver {
 	
-	boolean windowingMode = false;
+	boolean windowingMode = true;
 	WindowingClient3 wClient;
 	Configuration cfg;
 	LogHelper hiveConsole;
@@ -109,7 +112,39 @@ class WindowingHiveCliDriver extends CliDriver {
 			hiveConsole.printInfo("windowing mode is " + (windowingMode ?  "on" : "off"));
 			return 0;
 		}
-		else if (windowingMode)
+		
+		/*
+		 * treat a command as a windowing Query if:
+		 * - we are in wmode=windowing & command starts with from. 
+		 * - if this is true, try to parse it as a windowing Query; if parse succeeds treat Query as a Windowing Query.
+		 */
+		boolean execWQry = false
+		
+		if (windowingMode )
+		{
+			String query = Utils.unescapeQueryString(cmd);
+			query = query.trim()
+			if ( query.startsWith("from"))
+			{
+				/*
+				 * try to parse it
+				 */
+				try
+				{
+					wClient.checkQuery(query)
+					execWQry = true
+				}
+				catch(WindowingException we)
+				{
+					hiveConsole.printInfo("Failed to parse query as a windowing query "+ cmd +" "+ we.getLocalizedMessage(),
+						org.apache.hadoop.util.StringUtils.stringifyException(we));
+					hiveConsole.printInfo("treating query as hive query");
+				}
+			}
+		}
+		
+		
+		if (execWQry)
 		{
 			try
 			{

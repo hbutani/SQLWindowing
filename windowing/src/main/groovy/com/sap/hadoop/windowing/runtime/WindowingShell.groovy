@@ -41,6 +41,40 @@ class WindowingShell
 		wshell = new GroovyShell()
 	}
 	
+	public void checkQuery(String query) throws WindowingException
+	{
+		WindowingLexer lexer;
+		CommonTokenStream tokens;
+		WindowingParser parser;
+		CommonTree t;
+		CommonTreeNodeStream nodes;
+		String err;
+		
+		try
+		{
+			lexer = new WindowingLexer(new ANTLRStringStream(query));
+			tokens = new CommonTokenStream(lexer);
+			parser = new WindowingParser(tokens);
+			t = parser.query().getTree()
+			
+			err = parser.getWindowingParseErrors()
+			if ( err != null )
+			{
+				throw new WindowingException(err)
+			}
+		}
+		catch(Throwable te)
+		{
+			err = parser.getWindowingParseErrors()
+			if ( err != null )
+			{
+				throw new WindowingException(err)
+			}
+			throw new WindowingException("Parse Error:" + te.toString(), te)
+		}
+		
+	}
+	
 	public QuerySpec parse(String query) throws WindowingException
 	{
 		WindowingLexer lexer;

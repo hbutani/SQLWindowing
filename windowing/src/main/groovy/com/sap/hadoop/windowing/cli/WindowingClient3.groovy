@@ -28,6 +28,11 @@ class WindowingClient3 implements HiveQueryExecutor
 		wshell.execute(query);
 	}
 	
+	void checkQuery(String query) throws WindowingException
+	{
+		wshell.checkQuery(query)
+	}
+	
 	public void executeHiveQuery(String hQry) throws WindowingException
 	{
 		println "Executing Embedded Hive Query:\n ${hQry}\n" 

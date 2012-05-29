@@ -41,6 +41,8 @@ import org.apache.hadoop.mapred.OutputFormat;
 
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.metadata.CompositeWritable;
+import com.sap.hadoop.metadata.OutputGroupingComparator;
+import com.sap.hadoop.metadata.OutputKeyComparator;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.TableInput;

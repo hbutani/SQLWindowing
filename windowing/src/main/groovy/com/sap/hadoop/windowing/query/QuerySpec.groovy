@@ -8,6 +8,7 @@ import java.io.DataOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+import com.sap.hadoop.metadata.Order;
 import com.sap.hadoop.windowing.functions.FunctionRegistry;
 import com.sap.hadoop.windowing.parser.WindowingParser.tblfunc_return;
 import com.sap.hadoop.windowing.runtime.ArgType;
@@ -634,12 +635,6 @@ class TableFuncSpec extends FuncSpec
 	{
 		return partitionColumns?.size() > 0
 	}
-}
-
-enum Order
-{
-	ASC,
-	DESC;
 }
 
 class OrderColumn implements Writable

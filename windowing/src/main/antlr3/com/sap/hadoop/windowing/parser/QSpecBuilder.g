@@ -17,7 +17,7 @@ package com.sap.hadoop.windowing.parser;
 import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.query.SelectColumn;
 import com.sap.hadoop.windowing.query.OrderColumn;
-import com.sap.hadoop.windowing.query.Order;
+import com.sap.hadoop.metadata.Order;
 
 import com.sap.hadoop.windowing.query.RangeBoundary;
 import com.sap.hadoop.windowing.query.ValueBoundary;

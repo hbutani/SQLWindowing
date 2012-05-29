@@ -1,11 +1,11 @@
-// $ANTLR 3.0.1 QSpecBuilder.g 2012-04-09 15:32:15
+// $ANTLR 3.0.1 QSpecBuilder.g 2012-05-29 09:50:27
 
 package com.sap.hadoop.windowing.parser;
 
 import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.query.SelectColumn;
 import com.sap.hadoop.windowing.query.OrderColumn;
-import com.sap.hadoop.windowing.query.Order;
+import com.sap.hadoop.metadata.Order;
 
 import com.sap.hadoop.windowing.query.RangeBoundary;
 import com.sap.hadoop.windowing.query.ValueBoundary;

@@ -7,7 +7,7 @@ import org.apache.hadoop.mapred.JobConfigurable;
 
 import com.sap.hadoop.metadata.CompositeDataType;
 import com.sap.hadoop.metadata.CompositeWritable;
-import com.sap.hadoop.windowing.query.Order;
+import com.sap.hadoop.metadata.Order;
 
 
 class OutputKeyComparator implements RawComparator, JobConfigurable 

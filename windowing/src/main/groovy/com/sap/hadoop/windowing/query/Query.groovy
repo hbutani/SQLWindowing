@@ -17,7 +17,7 @@ import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.functions.AbstractTableFunction;
 import com.sap.hadoop.windowing.functions.IWindowFunction;
 import com.sap.hadoop.windowing.io.WindowingInput;
-import com.sap.hadoop.windowing.query.Order;
+import com.sap.hadoop.metadata.Order;
 
 class Query
 {

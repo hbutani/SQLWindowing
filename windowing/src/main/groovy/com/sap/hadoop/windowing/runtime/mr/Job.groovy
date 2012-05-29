@@ -21,6 +21,7 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.serializer.Serialization;
+import org.apache.hadoop.mapred.ClusterStatus;
 import org.apache.hadoop.mapred.FileInputFormat;
 import org.apache.hadoop.mapred.FileOutputFormat;
 import org.apache.hadoop.mapred.InputSplit;
@@ -167,6 +168,19 @@ class Job extends JobBase
 	    //JobClient.runJob(conf);
 		
 		JobClient jC = new JobClient(conf);
+		
+		/*
+		 * if num reducers is set to -1; then set it to (number of free slots in cluster)/2
+		 */
+		int numReducers = conf.getNumReduceTasks()
+		if ( numReducers == -1)
+		{
+			ClusterStatus cs = jC.getClusterStatus()
+			numReducers = (cs.getMaxReduceTasks() - cs.getReduceTasks()) / 2
+			numReducers = numReducers <= 0 ? 1 : numReducers
+			conf.setNumReduceTasks(numReducers)
+		}
+		
 		RunningJob rj = jC.submitJob(conf);
 		
 		WindowingJobTracker jT = new WindowingJobTracker(conf)

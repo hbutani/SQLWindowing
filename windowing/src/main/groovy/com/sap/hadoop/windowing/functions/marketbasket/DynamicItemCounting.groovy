@@ -27,8 +27,33 @@ import com.sap.hadoop.windowing.functions.marketbasket.ItemValue.ValueComparator
 import com.sap.hadoop.windowing.runtime.IPartition;
 import com.sap.hadoop.windowing.runtime.Row;
 
-/*
+/**
  * Based on the Algorithm by Sergey Brin et. al; see http://www-db.stanford.edu/~sergey/dic.ps
+ * To find the Frequent ItemSets at each Mapper. Dynamic Item Counting (DIC) reduces
+ * the number of passes made for the data while keeping the number of
+ * ItemSets which are counted in each pass relatively low compared to
+ * other methods. 
+ * <p>
+ * The intuition behind DIC is that it works like a train
+ * with stops at intervals 'M' transactions apart. (M is a parameter;
+ * which the authors showed to be optimally set to 1000.) When the train
+ * reaches the end of the input, it has made pass over the data and it
+ * starts at the beginning in the next pass. The "passengers" on the
+ * train are itemsets; when an itemset is on the train, its occurrences
+ * in the transactions are counted. So for Apriori in this model means:
+ * all itemsets get on at the start of a pass and get off at the end;
+ * 1-itemsets take the first pass, 2-itemsets the second pass and so
+ * on. In DIC itemsets are allowed to get on at any stop as long as they
+ * get off at the same stop the next time the train goes around. This
+ * ensures that an itemset is counted on all transactions in the
+ * file. This ensures that an itemset is counted as soon as it becomes
+ * apparent that it maybe a candidate itemset.
+ * See algorithm and implementation details at: https://github.com/hbutani/SQLWindowing/wiki/DynamicItemCounting
+ * <p>
+ * This is invoked during the map phase of the {@link CandidateFrequentItemSets} PTF execution. The PTF instantiates it, passing itself as a parameter; 
+ * Parameters of the algorithm like txnColumn, itemColumn, supportThresholdFraction are read from the CandidateFrequentItemSets object. 
+ * Then the initialize method is invoked to  initialize the internal data structures.  
+ * Finall a call to process return an Iterator<String>; each String is a Candidate Frequent ItemSet represented as JSON String.
  */
 class DynamicItemCounting
 {
@@ -68,15 +93,15 @@ class DynamicItemCounting
 	/* used during trei traversal */
 	int[] itemIdArray
 	
-	/*
-	 * - convert input Partition into a list of Baskets
-	 * - maintain itemValMap for the duration of initialization
-	 * - at the end of scanning input Partition create itemValueList 
-	 * - setup basketBatches
-	 * - setup itemIdArray
-	 * - initialize Trei:
-	 *   - add root node for empty ItemSet
-	 *   - add a child node for each ItemId
+	/**
+	 * <ol>
+	 * <li> Scan the input partition and populate itemValuesSet a sorted Set of item values.
+	 * <li> assign internal ids to items, based on their order in itemValuesSet. Maintain itemValToIdMap to enable mapping from value to id.
+	 * <li> Rescan input partition, create ISets for each basket; add ISet to baskets persistent List.
+	 * <li> setup the basketBatches array, these represent the position of the 'stops' that the train will make.
+	 * <li> setup itemValueList, this provides a mapping from id to item value. 
+	 * </li> Initialize the Trei:  add root node for empty ISet; add a child node for each itemId
+	 * </ol>
 	 */
 	void initialize(IPartition inpPart) throws WindowingException 
 	{
@@ -440,7 +465,7 @@ class DynamicItemCounting
 	}
 }
 
-/*
+/**
  * DASHED => ItemSet is still being counted
  * SOLID => ItemSet has been fully counted
  * CIRCLE => ItemSet's support is less than the threshold
@@ -460,7 +485,7 @@ enum ItemNodeTraversal
 	UP
 }
 
-/*
+/**
  * Represents a Node in the Trei.
  */
 class ItemNode
@@ -487,7 +512,7 @@ class ItemNode
 	final boolean isRoot() { itemId == NULL_ID }
 }
 
-/*
+/**
  * represents a mapping from an Item's name to an internal Id
  */
 class ItemValue
@@ -524,6 +549,10 @@ class ItemValue
 	}
 }
 
+/**
+ * Represents an ItemSet. Its is Writable, and can be read and written from a Json representation.
+ * Behaves like a Groovy list with getAt and putAt methods provided.
+ */
 class ISet implements Writable
 {
 	protected int sz
@@ -582,7 +611,7 @@ class ISet implements Writable
 	}
 }
 
-/*
+/**
  * An ISet that is an immediate subset (meaning with 1 less item) of another ISet.
  */
 class ImmedSubSetISet extends ISet
@@ -629,7 +658,7 @@ class ImmedSubSetISet extends ISet
 	}
 }
 
-/*
+/**
 * An ISet that is an immediate superset (meaning with 1 extra item) of another ISet.
 */
 class ImmedSuperSetISet extends ISet

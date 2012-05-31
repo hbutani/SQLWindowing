@@ -4,132 +4,183 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import org.apache.hadoop.io.BytesWritable;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.hadoop.hive.ql.io.HiveKey;
+
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
 
 
-/**
- * 
- * This one will not work because Text columns embed the size at the beginning of their byte representation. So comparing bytes causes 
- * longer Strings to sort later than shorter strings.
- * @author I821656
- *
- */
 public class WindowingKey implements WritableComparable<WindowingKey>
 {
-	BytesWritable partitionValue;
-	BytesWritable sortValue;
-	
+	private static final Log LOG = LogFactory.getLog(WindowingKey.class);
+	protected static final int LENGTH_BYTES = 8;
+	private static final byte[] EMPTY_BYTES = {};
+
+	private int size;
+	private int grpSize;
+	private byte[] bytes;
+
 	public WindowingKey()
 	{
-		super();
-		partitionValue = new BytesWritable();
-		sortValue = new BytesWritable();
+		bytes = EMPTY_BYTES;
+		size = 0;
+		grpSize = 0;
 	}
 
-	public BytesWritable getPartitionValue()
+	public byte[] getBytes()
 	{
-		return partitionValue;
+		return bytes;
 	}
 
-
-	public void setPartitionValue(BytesWritable partitionValue)
+	public int getLength()
 	{
-		this.partitionValue = partitionValue;
+		return size;
 	}
 
-
-	public BytesWritable getSortValue()
+	protected void setSize(int size)
 	{
-		return sortValue;
+		if (size > getCapacity())
+		{
+			setCapacity(size * 3 / 2);
+		}
+		this.size = size;
 	}
 
-
-	public void setSortValue(BytesWritable sortValue)
+	protected int getCapacity()
 	{
-		this.sortValue = sortValue;
-	}
-	
-	/**
-	 * for test purpose only
-	 * @return
-	 */
-	byte[] getBytes()
-	{
-		int pSz = toInt(partitionValue.getBytes(), 0);
-		int sSz = toInt(sortValue.getBytes(), 0);
-		byte[] buf = new byte[4 + pSz + 4 + sSz];
-		System.arraycopy(partitionValue.getBytes(), 0, buf, 0, 4 + pSz);
-		System.arraycopy(sortValue.getBytes(), 0, buf, 4 + pSz, 4 + sSz);
-		return buf;
+		return bytes.length;
 	}
 
-
-	@Override
-	public void write(DataOutput out) throws IOException
+	protected void setCapacity(int new_cap)
 	{
-		partitionValue.write(out);
-		sortValue.write(out);
+		if (new_cap != getCapacity())
+		{
+			byte[] new_data = new byte[new_cap];
+			if (new_cap < size)
+			{
+				size = new_cap;
+			}
+			if (size != 0)
+			{
+				System.arraycopy(bytes, 0, new_data, 0, size);
+			}
+			bytes = new_data;
+		}
 	}
-	
+
+	protected void setGroupSize(int grpSize)
+	{
+		this.grpSize = grpSize;
+	}
+
+	protected void set(byte[] newData, int offset, int length, int grpSize)
+	{
+		setSize(0);
+		setSize(length);
+		System.arraycopy(newData, offset, bytes, 0, size);
+		setGroupSize(grpSize);
+	}
+
 	public void readFields(DataInput in) throws IOException
 	{
-		partitionValue.readFields(in);
-		sortValue.readFields(in);
+		setSize(0); // clear the old data
+		setSize(in.readInt());
+		setGroupSize(in.readInt());
+		in.readFully(bytes, 0, size);
 	}
 
-
-	@Override
-	public int compareTo(WindowingKey o)
+	public void write(DataOutput out) throws IOException
 	{
-		int c = partitionValue.compareTo(o.partitionValue);
-		if ( c == 0)
-			c = sortValue.compareTo(o.sortValue);
-		return c;
+		out.writeInt(size);
+		out.writeInt(grpSize);
+		out.write(bytes, 0, size);
 	}
 	
 	@Override
+	public int compareTo(WindowingKey wKey)
+	{
+		return WritableComparator.get(this.getClass()).compare(getBytes(), 0, getLength(), wKey.getBytes(), 0, wKey.getLength());
+	}
+	
+	public int compareToGroup(WindowingKey wKey)
+	{
+		return WritableComparator.compareBytes(getBytes(), 0, grpSize, wKey.getBytes(), 0, wKey.grpSize);
+	}
+
+	
+	boolean hashCodeValid;
+	protected int myHashCode;
+
+	public void setHashCode(int myHashCode)
+	{
+		hashCodeValid = true;
+		this.myHashCode = myHashCode;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		if (!hashCodeValid)
+		{
+			throw new RuntimeException(
+					"Cannot get hashCode() from deserialized " + HiveKey.class);
+		}
+		return myHashCode;
+	}
+	
+	public boolean equals(Object right_obj)
+	{
+		if (right_obj instanceof WindowingKey)
+			return super.equals(right_obj);
+		return false;
+	}
+
+	/**
+	 * Generate the stream of bytes as hex pairs separated by ' '.
+	 */
 	public String toString()
 	{
-		return "" + partitionValue.toString() + ": " + sortValue.toString();
+		StringBuffer sb = new StringBuffer(3 * size);
+		for (int idx = 0; idx < size; idx++)
+		{
+			// if not the first, put a blank separator in
+			if (idx != 0)
+			{
+				sb.append(' ');
+			}
+			String num = Integer.toHexString(0xff & bytes[idx]);
+			// if it is only one digit, add a leading 0.
+			if (num.length() < 2)
+			{
+				sb.append('0');
+			}
+			sb.append(num);
+		}
+		return sb.toString();
 	}
 	
-
 	public static class Comparator extends WritableComparator
 	{
-
 		public Comparator()
 		{
 			super(WindowingKey.class);
 		}
 
-		@Override
+		/**
+		 * Compare the buffers in serialized form.
+		 */
 		public int compare(byte[] b1, int s1, int l1, byte[] b2, int s2, int l2)
 		{
-			int pSz1 = toInt(b1, s1);
-			int pSz2 = toInt(b2, s2);
-			int c = compareBytes(b1, s1 + 4, pSz1, b2, s2 + 4, pSz2);
-			if ( c != 0 ) return c;
-			
-			int sSz1 = toInt(b1, s1+4+pSz1);
-			int sSz2 = toInt(b2, s2+4+pSz2);
-			c = compareBytes(b1, s1 + 4 + pSz1 + 4, sSz1, b2, s2 + 4 + pSz2 +4, sSz2);
-			return c;
+			return compareBytes(b1, s1 + LENGTH_BYTES, l1 - LENGTH_BYTES, b2,
+					s2 + LENGTH_BYTES, l2 - LENGTH_BYTES);
 		}
 	}
 
 	static
-	{
+	{ // register this comparator
 		WritableComparator.define(WindowingKey.class, new Comparator());
-	}
-	
-	static int toInt(byte[] buf, int i)
-	{
-		return ((0xFF & buf[i]) << 24) | ((0xFF & buf[i + 1]) << 16)
-				| ((0xFF & buf[i + 2]) << 8) | (0xFF & buf[i + 3]);
-
 	}
 
 }
-

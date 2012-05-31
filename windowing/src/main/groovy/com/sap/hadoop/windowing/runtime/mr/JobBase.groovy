@@ -50,8 +50,6 @@ import org.apache.hadoop.util.ToolRunner;
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.metadata.CompositeDataType;
 import com.sap.hadoop.metadata.CompositeSerialization;
-import com.sap.hadoop.metadata.CompositeWritable;
-import com.sap.hadoop.metadata.WindowingKey;
 import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query.Query;

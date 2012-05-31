@@ -40,9 +40,9 @@ import org.apache.hadoop.mapred.InputFormat;
 import org.apache.hadoop.mapred.OutputFormat;
 
 import com.sap.hadoop.HiveUtils;
-import com.sap.hadoop.metadata.CompositeWritable;
 import com.sap.hadoop.metadata.OutputGroupingComparator;
 import com.sap.hadoop.metadata.OutputKeyComparator;
+import com.sap.hadoop.metadata.WindowingKey;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.TableInput;
@@ -149,7 +149,7 @@ class Job extends JobBase
 	    conf.setReducerClass(Reduce.class);
 	    conf.setOutputFormat(outputFormatClass);
 	    conf.setOutputKeyClass(NullWritable.class);
-	    conf.setMapOutputKeyClass(CompositeWritable.class);
+	    conf.setMapOutputKeyClass(WindowingKey.class);
 		conf.setPartitionerClass(Partition.class);
 		
 		conf.setOutputKeyComparatorClass(OutputKeyComparator.class);

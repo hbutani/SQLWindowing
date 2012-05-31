@@ -13,7 +13,8 @@ import org.apache.hadoop.io.Writable;
 
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.metadata.CompositeDataType;
-import com.sap.hadoop.metadata.CompositeWritable;
+import com.sap.hadoop.metadata.WindowingKey;
+import com.sap.hadoop.metadata.WindowingKeySerializer;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.query.TableInput;
@@ -23,9 +24,8 @@ class MapBase
 	Deserializer de;
 	StructObjectInspector inputOI;
 
-	String[] sortCols;
-	CompositeDataType sortDataType;
-	CompositeWritable wkey;
+	WindowingKeySerializer wkS;
+	WindowingKey wkey;
 	
 	public void configure(Configuration jobconf) {
 		try {
@@ -34,12 +34,9 @@ class MapBase
 			
 			setupInput(jobconf)
 			
-			String sortColStr = jobconf.get(Job.WINDOWING_SORT_COLS);
-			sortCols = sortColStr.split(",");
-			String s = jobconf.get(Job.WINDOWING_KEY_TYPE);
-			sortDataType = new CompositeDataType();
-			sortDataType.readFields(s);
-			wkey = sortDataType.create();
+			wkey = new WindowingKey();
+			wkS = new WindowingKeySerializer();
+			wkS.initialize(jobconf, null);
 		}
 		catch(Exception me) {
 			throw new RuntimeException(me);
@@ -76,12 +73,7 @@ class MapBase
 	throws IOException {
 		try {
 			Object o = de.deserialize(value);
-			int si = 0
-			for(String sCol : sortCols) {
-				StructField iField = inputOI.getStructFieldRef(sCol);
-				Object val = inputOI.getStructFieldData(o, iField);
-				wkey.setElement(val, iField.getFieldObjectInspector(), si++);
-			}
+			wkey = (WindowingKey) wkS.serialize(o, inputOI);
 		}
 		catch(SerDeException se) {
 			throw new IOException(se);

@@ -86,7 +86,7 @@ public class WindowingKeySerializer implements Serializer
 		{
 			grpSize = outputByteBuffer.getLength();
 		}
-		wKey.set(outputByteBuffer.getData(), 0, outputByteBuffer.getLength(), grpSize);
+		wKey.unchecked_set(outputByteBuffer.getData(), outputByteBuffer.getLength(), grpSize);
 		wKey.setHashCode(hashCode);
 
 		return wKey;

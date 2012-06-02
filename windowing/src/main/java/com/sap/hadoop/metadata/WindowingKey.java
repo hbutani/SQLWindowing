@@ -39,7 +39,7 @@ public class WindowingKey implements WritableComparable<WindowingKey>
 		return size;
 	}
 
-	protected void setSize(int size)
+	protected final void setSize(int size)
 	{
 		if (size > getCapacity())
 		{
@@ -48,44 +48,44 @@ public class WindowingKey implements WritableComparable<WindowingKey>
 		this.size = size;
 	}
 
-	protected int getCapacity()
+	private int getCapacity()
 	{
 		return bytes.length;
 	}
 
-	protected void setCapacity(int new_cap)
+	private void setCapacity(int new_cap)
 	{
-		if (new_cap != getCapacity())
+		byte[] new_data = new byte[new_cap];
+		if (size != 0)
 		{
-			byte[] new_data = new byte[new_cap];
-			if (new_cap < size)
-			{
-				size = new_cap;
-			}
-			if (size != 0)
-			{
-				System.arraycopy(bytes, 0, new_data, 0, size);
-			}
-			bytes = new_data;
+			System.arraycopy(bytes, 0, new_data, 0, size);
 		}
+		bytes = new_data;
 	}
 
-	protected void setGroupSize(int grpSize)
+	protected final void setGroupSize(int grpSize)
 	{
 		this.grpSize = grpSize;
 	}
 
 	protected void set(byte[] newData, int offset, int length, int grpSize)
 	{
-		setSize(0);
+		//setSize(0);
 		setSize(length);
 		System.arraycopy(newData, offset, bytes, 0, size);
 		setGroupSize(grpSize);
 	}
+	
+	protected final void unchecked_set(byte[] data, int length, int grpSize)
+	{
+		bytes = data;
+		size = length;
+		this.grpSize = grpSize;
+	}
 
 	public void readFields(DataInput in) throws IOException
 	{
-		setSize(0); // clear the old data
+		//setSize(0); // clear the old data
 		setSize(in.readInt());
 		setGroupSize(in.readInt());
 		in.readFully(bytes, 0, size);
@@ -101,7 +101,7 @@ public class WindowingKey implements WritableComparable<WindowingKey>
 	@Override
 	public int compareTo(WindowingKey wKey)
 	{
-		return WritableComparator.get(this.getClass()).compare(getBytes(), 0, getLength(), wKey.getBytes(), 0, wKey.getLength());
+		return comparator.compare(getBytes(), 0, getLength(), wKey.getBytes(), 0, wKey.getLength());
 	}
 	
 	public int compareToGroup(WindowingKey wKey)
@@ -178,9 +178,10 @@ public class WindowingKey implements WritableComparable<WindowingKey>
 		}
 	}
 
+	private static Comparator comparator = new Comparator();
 	static
 	{ // register this comparator
-		WritableComparator.define(WindowingKey.class, new Comparator());
+		WritableComparator.define(WindowingKey.class, comparator);
 	}
 
 }

@@ -8,14 +8,17 @@ import org.apache.hadoop.mapred.JobConfigurable;
 public class OutputKeyComparator implements RawComparator<Object>,
 		JobConfigurable
 {
+	WritableComparator comparator;
+	
 	@Override
 	public void configure(JobConf job)
 	{
+		comparator = WritableComparator.get(WindowingKey.class);
 	}
 
 	public int compare(byte[] b1, int s1, int l1, byte[] b2, int s2, int l2)
 	{
-		return WritableComparator.get(WindowingKey.class).compare(b1, s1, l1, b2, s2, l2);
+		return comparator.compare(b1, s1, l1, b2, s2, l2);
 	}
 
 	@Override

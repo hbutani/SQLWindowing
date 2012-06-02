@@ -13,8 +13,11 @@ class TPCHTest  extends MRBaseTest
 //	@Test
 	void test1()
 	{
+		String currDB = Hive.get(wshell.cfg).getCurrentDatabase()
 		Hive.get(wshell.cfg).setCurrentDatabase("benchmark")
-		wshell.execute("""
+		try
+		{
+			wshell.execute("""
 from lineitem
 partition by l_partkey, l_suppkey
 order by l_partkey, l_suppkey, l_extendedprice
@@ -25,7 +28,11 @@ into path='/tmp/tpch-sqw-qry1'
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 		with serdeproperties('field.delim'=',')
 		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		}
+		finally
+		{
+			Hive.get(wshell.cfg).setCurrentDatabase(currDB)
+		}
 	}
-
 }
 

@@ -43,6 +43,7 @@ import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.metadata.OutputGroupingComparator;
 import com.sap.hadoop.metadata.OutputKeyComparator;
 import com.sap.hadoop.metadata.WindowingKey;
+import com.sap.hadoop.metadata.WindowingKeyPartitioner;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query.Query;
 import com.sap.hadoop.windowing.query.TableInput;
@@ -150,9 +151,9 @@ class Job extends JobBase
 	    conf.setOutputFormat(outputFormatClass);
 	    conf.setOutputKeyClass(NullWritable.class);
 	    conf.setMapOutputKeyClass(WindowingKey.class);
-		conf.setPartitionerClass(Partition.class);
+		conf.setPartitionerClass(WindowingKeyPartitioner.class);
 		
-		conf.setOutputKeyComparatorClass(OutputKeyComparator.class);
+		//conf.setOutputKeyComparatorClass(OutputKeyComparator.class);
 		
 		conf.setOutputValueGroupingComparator(OutputGroupingComparator.class);
 		

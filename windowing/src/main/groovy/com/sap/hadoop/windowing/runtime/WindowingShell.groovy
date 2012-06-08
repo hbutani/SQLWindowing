@@ -152,7 +152,7 @@ class WindowingShell
 		return translator.translate(wshell, qSpec, hCfg, hiveQryExec);
 	}
 
-	public void execute(String query) throws WindowingException
+	public void execute(String query, QueryOutputPrinter outP = null) throws WindowingException
 	{
 		// clone the cfg
 		HiveConf qCfg = new HiveConf(cfg)
@@ -176,7 +176,7 @@ class WindowingShell
 		try
 		{
 			componentQueries.each { Query cq ->
-				execute(cq);
+				execute(cq, outP);
 			}
 		}
 		finally
@@ -185,7 +185,7 @@ class WindowingShell
 		}
 	}
 	
-	protected void execute(Query q) throws WindowingException
+	protected void execute(Query q, QueryOutputPrinter outP) throws WindowingException
 	{
 		QuerySpec qSpec = q.qSpec
 		try
@@ -204,6 +204,11 @@ class WindowingShell
 		if ( qSpec.tableOut.tableName )
 		{
 			loadToOutputTable(q);
+		}
+		
+		if (outP != null)
+		{
+			outP.printQueryOutput(q, cfg)
 		}
 	}
 	

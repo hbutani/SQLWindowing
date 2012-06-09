@@ -1,10 +1,13 @@
 package com.sap.hadoop.windowing.cli
 
 import org.apache.hadoop.conf.Configuration;
+
+import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.WindowingHiveCliDriver;
 import com.sap.hadoop.windowing.runtime.HiveQueryExecutor;
 import com.sap.hadoop.windowing.runtime.Mode;
+import com.sap.hadoop.windowing.runtime.QueryOutputPrinter;
 import com.sap.hadoop.windowing.runtime.WindowingShell;
 
 /*
@@ -14,6 +17,7 @@ class WindowingClient3 implements HiveQueryExecutor
 {
 	WindowingHiveCliDriver hiveDriver;
 	WindowingShell wshell;
+	QueryOutputPrinter qryOutPrntr
 	
 	WindowingClient3(WindowingHiveCliDriver hiveDriver) throws WindowingException
 	{
@@ -21,11 +25,12 @@ class WindowingClient3 implements HiveQueryExecutor
 		Mode wMode = Mode.MR
 		wshell = new WindowingShell( hiveDriver.cfg, wMode.getTranslator(), wMode.getExecutor())
 		wshell.hiveQryExec = this
+		qryOutPrntr = new QueryOutputPrinter(hiveDriver.hiveConsole);
 	}
 	
 	void executeQuery(String query) throws WindowingException
 	{
-		wshell.execute(query);
+		wshell.execute(query, (outputQueryResult() ? qryOutPrntr : null));
 	}
 	
 	void checkQuery(String query) throws WindowingException
@@ -68,5 +73,10 @@ class WindowingClient3 implements HiveQueryExecutor
 	{
 		String hQry = "drop table ${tableName}"
 		executeHiveQuery(hQry);
+	}
+	
+	private boolean outputQueryResult()
+	{
+		return wshell.cfg.getBoolean(Constants.WINDOWING_OUTPUT_QUERY_RESULT, false)
 	}
 }

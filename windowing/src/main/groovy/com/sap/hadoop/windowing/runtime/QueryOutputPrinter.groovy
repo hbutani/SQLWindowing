@@ -61,6 +61,8 @@ class QueryOutputPrinter
 		//todo this is hack; check how this is done in Hive
 		tDesc.setInputFileFormatClass(mapToInputFormat(outputFormatClass))
 		
+		tDesc.setProperties(qry.qSpec.tableOut.serDeProps);
+		
 		FetchOperator ftOp = setupFetchOperator(qry, tDesc, jCfg)
 		
 		while (true) 

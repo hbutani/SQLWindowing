@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde2.SerDeException;
+import org.apache.hadoop.hive.serde2.SerDeStats;
 import org.apache.hadoop.hive.serde2.Serializer;
 import org.apache.hadoop.hive.serde2.binarysortable.OutputByteBuffer;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
@@ -91,6 +92,12 @@ public class WindowingKeySerializer implements Serializer
 
 		return wKey;
 	}
+	
+	public SerDeStats getSerDeStats() 
+	{
+	    // no support for statistics
+	    return null;
+	  }
 
 	/*
 	 * copied from BinarySortableSerDe::serialize

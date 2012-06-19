@@ -129,30 +129,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 	    <scope>compile</scope>
 	</dependency>
 	<dependency>
-		<groupId>org.apache.hadoop.hive</groupId>
-		<artifactId>hive-serde</artifactId>
-		<version>0.7.1-cdh3u1</version>
-	    <!-- <scope>provided</scope>-->
-	</dependency>
-	<dependency>
-		<groupId>org.apache.hadoop.hive</groupId>
-		<artifactId>hive-exec</artifactId>
-		<version>0.7.1-cdh3u1</version>
-	    <!-- <scope>provided</scope>-->
-	</dependency>
-	<dependency>
-		<groupId>org.apache.hadoop.hive</groupId>
-		<artifactId>hive-contrib</artifactId>
-		<version>0.7.1-cdh3u1</version>
-	    <!-- <scope>provided</scope>-->
-	</dependency>
-	<dependency>
-		<groupId>org.apache.hadoop.hive</groupId>
-		<artifactId>hive-metastore</artifactId>
-		<version>0.7.1-cdh3u1</version>
-	    <!-- <scope>provided</scope>-->
-	</dependency>
-	<dependency>
 		<groupId>org.apache.hadoop</groupId>
 		<artifactId>hadoop-core</artifactId>
 		<version>0.20.2-cdh3u1</version>
@@ -165,10 +141,29 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 	    <!--<scope>provided</scope>-->
 	</dependency>
 	<dependency>
-		<groupId>org.apache.hadoop.hive</groupId>
+		<groupId>org.apache.hive</groupId>
+		<artifactId>hive-serde</artifactId>
+		<version>0.9.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.hive</groupId>
+		<artifactId>hive-exec</artifactId>
+		<version>0.9.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.hive</groupId>
+		<artifactId>hive-contrib</artifactId>
+		<version>0.9.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.hive</groupId>
+		<artifactId>hive-metastore</artifactId>
+		<version>0.9.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.hive</groupId>
 		<artifactId>hive-cli</artifactId>
-		<version>0.7.1-cdh3u1</version>
-	    <!-- <scope>provided</scope>-->
+		<version>0.9.0</version>
 	</dependency>
   </dependencies>
   <repositories>
@@ -186,5 +181,15 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
         <name>Spring Framework Repository</name>  
         <url>http://maven.springframework.org/release</url>  
 	</repository>
+	<repository>
+            <id>DataNucleus_Repos2</id>
+            <name>DataNucleus Repository</name>
+            <url>http://www.datanucleus.org/downloads/maven2</url>
+    </repository>
+    <repository>
+            <id>ApacheRepository</id>
+            <name>Apache Repository</name>
+            <url>https://repository.apache.org</url>
+    </repository>
  </repositories>
 </project>

@@ -63,6 +63,11 @@ class FunctionRegistry
 		registerClass(RegCount.class);
 	}
 	
+	public static boolean isWindowingFunction(String name)
+	{
+		return FUNCTION_MAP.containsKey(name);
+	}
+	
 	static HashMap<String, Class<? extends AbstractTableFunction>> TABLEFUNCTION_MAP = [:]
 	
 	public static void registerTableClass(Class<? extends AbstractTableFunction> cls)

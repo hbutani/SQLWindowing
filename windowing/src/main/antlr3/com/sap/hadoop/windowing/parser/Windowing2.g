@@ -42,6 +42,8 @@ tokens {
 
 @header {
 package com.sap.hadoop.windowing.parser;
+
+import com.sap.hadoop.windowing.functions.FunctionRegistry;
 }
 
 @lexer::header {
@@ -81,7 +83,7 @@ package com.sap.hadoop.windowing.parser;
   
   public boolean isWindowingFunction(Token t)
   {
-     return true;
+     return FunctionRegistry.isWindowingFunction(t.getText());
   }
   
 }

@@ -236,6 +236,37 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		println t.toStringTree()
 	}
 	
+	@Test
+	void testHiveFunctions()
+	{
+		CommonTree t = parse("""
+select  p_mfgr,p_name, p_size,
+	sqrt(p_size),
+	rank(p_size / 2 + 7) as r,
+	denserank() as dr,
+	cumedist() as cud,
+	percentrank() as pr,
+	ntile(3) as nt,
+	count(*) as c,
+	count(p_size) as ca,
+	count(distinct p_size) as cd,
+	avg(p_size) as avg, stddev(p_size) as st,
+	first_value(p_size % 5) as fv,
+	last_value(p_size) as lv,
+	first_value(p_size, 'true') over w1 as fv1
+from part
+partition by p_mfgr
+order by p_mfgr, p_name
+where p_size > 5 and p_mfgr like 'abc%'
+window w1 as rows between 2 preceding and 2 following
+into path='/tmp/wout2'
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+with serdeproperties('field.delim'=',')
+format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+		println t.toStringTree()
+	}
+	
 	
 	public static CommonTree parse(String query) throws WindowingException
 	{

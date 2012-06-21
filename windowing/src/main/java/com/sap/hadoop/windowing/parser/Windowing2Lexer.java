@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 Windowing2.g 2012-06-21 14:38:46
+// $ANTLR 3.0.1 Windowing2.g 2012-06-21 15:22:20
 
 package com.sap.hadoop.windowing.parser;
 
@@ -193,8 +193,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mSELECT() throws RecognitionException {
         try {
             int _type = SELECT;
-            // Windowing2.g:437:19: ( S E L E C T )
-            // Windowing2.g:437:21: S E L E C T
+            // Windowing2.g:439:19: ( S E L E C T )
+            // Windowing2.g:439:21: S E L E C T
             {
             mS(); 
             mE(); 
@@ -216,8 +216,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mFROM() throws RecognitionException {
         try {
             int _type = FROM;
-            // Windowing2.g:438:19: ( F R O M )
-            // Windowing2.g:438:21: F R O M
+            // Windowing2.g:440:19: ( F R O M )
+            // Windowing2.g:440:21: F R O M
             {
             mF(); 
             mR(); 
@@ -237,8 +237,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mWHERE() throws RecognitionException {
         try {
             int _type = WHERE;
-            // Windowing2.g:439:19: ( W H E R E )
-            // Windowing2.g:439:21: W H E R E
+            // Windowing2.g:441:19: ( W H E R E )
+            // Windowing2.g:441:21: W H E R E
             {
             mW(); 
             mH(); 
@@ -259,8 +259,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mFILEINPUT() throws RecognitionException {
         try {
             int _type = FILEINPUT;
-            // Windowing2.g:440:18: ( F I L E I N P U T )
-            // Windowing2.g:440:20: F I L E I N P U T
+            // Windowing2.g:442:18: ( F I L E I N P U T )
+            // Windowing2.g:442:20: F I L E I N P U T
             {
             mF(); 
             mI(); 
@@ -285,8 +285,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mORDER() throws RecognitionException {
         try {
             int _type = ORDER;
-            // Windowing2.g:441:19: ( O R D E R )
-            // Windowing2.g:441:21: O R D E R
+            // Windowing2.g:443:19: ( O R D E R )
+            // Windowing2.g:443:21: O R D E R
             {
             mO(); 
             mR(); 
@@ -307,8 +307,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mBY() throws RecognitionException {
         try {
             int _type = BY;
-            // Windowing2.g:442:19: ( B Y )
-            // Windowing2.g:442:21: B Y
+            // Windowing2.g:444:19: ( B Y )
+            // Windowing2.g:444:21: B Y
             {
             mB(); 
             mY(); 
@@ -326,8 +326,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mPARTITION() throws RecognitionException {
         try {
             int _type = PARTITION;
-            // Windowing2.g:443:19: ( P A R T I T I O N )
-            // Windowing2.g:443:21: P A R T I T I O N
+            // Windowing2.g:445:19: ( P A R T I T I O N )
+            // Windowing2.g:445:21: P A R T I T I O N
             {
             mP(); 
             mA(); 
@@ -352,8 +352,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mWITH() throws RecognitionException {
         try {
             int _type = WITH;
-            // Windowing2.g:444:19: ( W I T H )
-            // Windowing2.g:444:21: W I T H
+            // Windowing2.g:446:19: ( W I T H )
+            // Windowing2.g:446:21: W I T H
             {
             mW(); 
             mI(); 
@@ -373,8 +373,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mROWS() throws RecognitionException {
         try {
             int _type = ROWS;
-            // Windowing2.g:445:19: ( R O W S )
-            // Windowing2.g:445:21: R O W S
+            // Windowing2.g:447:19: ( R O W S )
+            // Windowing2.g:447:21: R O W S
             {
             mR(); 
             mO(); 
@@ -394,8 +394,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mRANGE() throws RecognitionException {
         try {
             int _type = RANGE;
-            // Windowing2.g:446:19: ( R A N G E )
-            // Windowing2.g:446:21: R A N G E
+            // Windowing2.g:448:19: ( R A N G E )
+            // Windowing2.g:448:21: R A N G E
             {
             mR(); 
             mA(); 
@@ -416,8 +416,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mBETWEEN() throws RecognitionException {
         try {
             int _type = BETWEEN;
-            // Windowing2.g:447:19: ( B E T W E E N )
-            // Windowing2.g:447:21: B E T W E E N
+            // Windowing2.g:449:19: ( B E T W E E N )
+            // Windowing2.g:449:21: B E T W E E N
             {
             mB(); 
             mE(); 
@@ -440,8 +440,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mCURRENT() throws RecognitionException {
         try {
             int _type = CURRENT;
-            // Windowing2.g:448:19: ( C U R R E N T )
-            // Windowing2.g:448:21: C U R R E N T
+            // Windowing2.g:450:19: ( C U R R E N T )
+            // Windowing2.g:450:21: C U R R E N T
             {
             mC(); 
             mU(); 
@@ -464,8 +464,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mROW() throws RecognitionException {
         try {
             int _type = ROW;
-            // Windowing2.g:449:19: ( R O W )
-            // Windowing2.g:449:21: R O W
+            // Windowing2.g:451:19: ( R O W )
+            // Windowing2.g:451:21: R O W
             {
             mR(); 
             mO(); 
@@ -484,8 +484,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mUNBOUNDED() throws RecognitionException {
         try {
             int _type = UNBOUNDED;
-            // Windowing2.g:450:19: ( U N B O U N D E D )
-            // Windowing2.g:450:21: U N B O U N D E D
+            // Windowing2.g:452:19: ( U N B O U N D E D )
+            // Windowing2.g:452:21: U N B O U N D E D
             {
             mU(); 
             mN(); 
@@ -510,8 +510,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mPRECEDING() throws RecognitionException {
         try {
             int _type = PRECEDING;
-            // Windowing2.g:451:19: ( P R E C E D I N G )
-            // Windowing2.g:451:21: P R E C E D I N G
+            // Windowing2.g:453:19: ( P R E C E D I N G )
+            // Windowing2.g:453:21: P R E C E D I N G
             {
             mP(); 
             mR(); 
@@ -536,8 +536,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mFOLLOWING() throws RecognitionException {
         try {
             int _type = FOLLOWING;
-            // Windowing2.g:452:19: ( F O L L O W I N G )
-            // Windowing2.g:452:21: F O L L O W I N G
+            // Windowing2.g:454:19: ( F O L L O W I N G )
+            // Windowing2.g:454:21: F O L L O W I N G
             {
             mF(); 
             mO(); 
@@ -562,8 +562,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mLESS() throws RecognitionException {
         try {
             int _type = LESS;
-            // Windowing2.g:453:19: ( L E S S )
-            // Windowing2.g:453:21: L E S S
+            // Windowing2.g:455:19: ( L E S S )
+            // Windowing2.g:455:21: L E S S
             {
             mL(); 
             mE(); 
@@ -583,8 +583,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mMORE() throws RecognitionException {
         try {
             int _type = MORE;
-            // Windowing2.g:454:19: ( M O R E )
-            // Windowing2.g:454:21: M O R E
+            // Windowing2.g:456:19: ( M O R E )
+            // Windowing2.g:456:21: M O R E
             {
             mM(); 
             mO(); 
@@ -604,8 +604,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mAS() throws RecognitionException {
         try {
             int _type = AS;
-            // Windowing2.g:455:19: ( A S )
-            // Windowing2.g:455:21: A S
+            // Windowing2.g:457:19: ( A S )
+            // Windowing2.g:457:21: A S
             {
             mA(); 
             mS(); 
@@ -623,8 +623,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mOVER() throws RecognitionException {
         try {
             int _type = OVER;
-            // Windowing2.g:456:19: ( O V E R )
-            // Windowing2.g:456:21: O V E R
+            // Windowing2.g:458:19: ( O V E R )
+            // Windowing2.g:458:21: O V E R
             {
             mO(); 
             mV(); 
@@ -644,8 +644,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mINTO() throws RecognitionException {
         try {
             int _type = INTO;
-            // Windowing2.g:457:19: ( I N T O )
-            // Windowing2.g:457:21: I N T O
+            // Windowing2.g:459:19: ( I N T O )
+            // Windowing2.g:459:21: I N T O
             {
             mI(); 
             mN(); 
@@ -665,8 +665,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mPATH() throws RecognitionException {
         try {
             int _type = PATH;
-            // Windowing2.g:458:19: ( P A T H )
-            // Windowing2.g:458:21: P A T H
+            // Windowing2.g:460:19: ( P A T H )
+            // Windowing2.g:460:21: P A T H
             {
             mP(); 
             mA(); 
@@ -686,8 +686,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mFORMAT() throws RecognitionException {
         try {
             int _type = FORMAT;
-            // Windowing2.g:459:19: ( F O R M A T )
-            // Windowing2.g:459:21: F O R M A T
+            // Windowing2.g:461:19: ( F O R M A T )
+            // Windowing2.g:461:21: F O R M A T
             {
             mF(); 
             mO(); 
@@ -709,8 +709,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mSERDE() throws RecognitionException {
         try {
             int _type = SERDE;
-            // Windowing2.g:460:19: ( S E R D E )
-            // Windowing2.g:460:21: S E R D E
+            // Windowing2.g:462:19: ( S E R D E )
+            // Windowing2.g:462:21: S E R D E
             {
             mS(); 
             mE(); 
@@ -731,8 +731,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mSERDEPROPERTIES() throws RecognitionException {
         try {
             int _type = SERDEPROPERTIES;
-            // Windowing2.g:461:19: ( S E R D E P R O P E R T I E S )
-            // Windowing2.g:461:21: S E R D E P R O P E R T I E S
+            // Windowing2.g:463:19: ( S E R D E P R O P E R T I E S )
+            // Windowing2.g:463:21: S E R D E P R O P E R T I E S
             {
             mS(); 
             mE(); 
@@ -763,8 +763,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mRECORDWRITER() throws RecognitionException {
         try {
             int _type = RECORDWRITER;
-            // Windowing2.g:462:19: ( R E C O R D W R I T E R )
-            // Windowing2.g:462:21: R E C O R D W R I T E R
+            // Windowing2.g:464:19: ( R E C O R D W R I T E R )
+            // Windowing2.g:464:21: R E C O R D W R I T E R
             {
             mR(); 
             mE(); 
@@ -792,8 +792,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mLOAD() throws RecognitionException {
         try {
             int _type = LOAD;
-            // Windowing2.g:463:19: ( L O A D )
-            // Windowing2.g:463:21: L O A D
+            // Windowing2.g:465:19: ( L O A D )
+            // Windowing2.g:465:21: L O A D
             {
             mL(); 
             mO(); 
@@ -813,8 +813,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mTABLE() throws RecognitionException {
         try {
             int _type = TABLE;
-            // Windowing2.g:464:19: ( T A B L E )
-            // Windowing2.g:464:21: T A B L E
+            // Windowing2.g:466:19: ( T A B L E )
+            // Windowing2.g:466:21: T A B L E
             {
             mT(); 
             mA(); 
@@ -835,8 +835,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mOVERWRITE() throws RecognitionException {
         try {
             int _type = OVERWRITE;
-            // Windowing2.g:465:19: ( O V E R W R I T E )
-            // Windowing2.g:465:21: O V E R W R I T E
+            // Windowing2.g:467:19: ( O V E R W R I T E )
+            // Windowing2.g:467:21: O V E R W R I T E
             {
             mO(); 
             mV(); 
@@ -861,8 +861,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mTRUE() throws RecognitionException {
         try {
             int _type = TRUE;
-            // Windowing2.g:466:19: ( T R U E )
-            // Windowing2.g:466:21: T R U E
+            // Windowing2.g:468:19: ( T R U E )
+            // Windowing2.g:468:21: T R U E
             {
             mT(); 
             mR(); 
@@ -882,8 +882,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mFALSE() throws RecognitionException {
         try {
             int _type = FALSE;
-            // Windowing2.g:467:19: ( F A L S E )
-            // Windowing2.g:467:21: F A L S E
+            // Windowing2.g:469:19: ( F A L S E )
+            // Windowing2.g:469:21: F A L S E
             {
             mF(); 
             mA(); 
@@ -904,8 +904,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mLIKE() throws RecognitionException {
         try {
             int _type = LIKE;
-            // Windowing2.g:468:19: ( L I K E )
-            // Windowing2.g:468:21: L I K E
+            // Windowing2.g:470:19: ( L I K E )
+            // Windowing2.g:470:21: L I K E
             {
             mL(); 
             mI(); 
@@ -925,8 +925,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mRLIKE() throws RecognitionException {
         try {
             int _type = RLIKE;
-            // Windowing2.g:469:19: ( R L I K E )
-            // Windowing2.g:469:21: R L I K E
+            // Windowing2.g:471:19: ( R L I K E )
+            // Windowing2.g:471:21: R L I K E
             {
             mR(); 
             mL(); 
@@ -947,8 +947,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mREGEXP() throws RecognitionException {
         try {
             int _type = REGEXP;
-            // Windowing2.g:470:19: ( R E G E X P )
-            // Windowing2.g:470:21: R E G E X P
+            // Windowing2.g:472:19: ( R E G E X P )
+            // Windowing2.g:472:21: R E G E X P
             {
             mR(); 
             mE(); 
@@ -970,8 +970,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mIN() throws RecognitionException {
         try {
             int _type = IN;
-            // Windowing2.g:471:19: ( I N )
-            // Windowing2.g:471:21: I N
+            // Windowing2.g:473:19: ( I N )
+            // Windowing2.g:473:21: I N
             {
             mI(); 
             mN(); 
@@ -989,8 +989,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mTHEN() throws RecognitionException {
         try {
             int _type = THEN;
-            // Windowing2.g:472:16: ( T H E N )
-            // Windowing2.g:472:18: T H E N
+            // Windowing2.g:474:16: ( T H E N )
+            // Windowing2.g:474:18: T H E N
             {
             mT(); 
             mH(); 
@@ -1010,8 +1010,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mIS() throws RecognitionException {
         try {
             int _type = IS;
-            // Windowing2.g:473:19: ( I S )
-            // Windowing2.g:473:21: I S
+            // Windowing2.g:475:19: ( I S )
+            // Windowing2.g:475:21: I S
             {
             mI(); 
             mS(); 
@@ -1029,8 +1029,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mNULL() throws RecognitionException {
         try {
             int _type = NULL;
-            // Windowing2.g:474:19: ( N U L L )
-            // Windowing2.g:474:21: N U L L
+            // Windowing2.g:476:19: ( N U L L )
+            // Windowing2.g:476:21: N U L L
             {
             mN(); 
             mU(); 
@@ -1050,8 +1050,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mCASE() throws RecognitionException {
         try {
             int _type = CASE;
-            // Windowing2.g:475:19: ( C A S E )
-            // Windowing2.g:475:21: C A S E
+            // Windowing2.g:477:19: ( C A S E )
+            // Windowing2.g:477:21: C A S E
             {
             mC(); 
             mA(); 
@@ -1071,8 +1071,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mWHEN() throws RecognitionException {
         try {
             int _type = WHEN;
-            // Windowing2.g:476:19: ( W H E N )
-            // Windowing2.g:476:21: W H E N
+            // Windowing2.g:478:19: ( W H E N )
+            // Windowing2.g:478:21: W H E N
             {
             mW(); 
             mH(); 
@@ -1092,8 +1092,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mELSE() throws RecognitionException {
         try {
             int _type = ELSE;
-            // Windowing2.g:477:19: ( E L S E )
-            // Windowing2.g:477:21: E L S E
+            // Windowing2.g:479:19: ( E L S E )
+            // Windowing2.g:479:21: E L S E
             {
             mE(); 
             mL(); 
@@ -1113,8 +1113,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mEND() throws RecognitionException {
         try {
             int _type = END;
-            // Windowing2.g:478:19: ( E N D )
-            // Windowing2.g:478:21: E N D
+            // Windowing2.g:480:19: ( E N D )
+            // Windowing2.g:480:21: E N D
             {
             mE(); 
             mN(); 
@@ -1133,8 +1133,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mCAST() throws RecognitionException {
         try {
             int _type = CAST;
-            // Windowing2.g:479:18: ( C A S T )
-            // Windowing2.g:479:20: C A S T
+            // Windowing2.g:481:18: ( C A S T )
+            // Windowing2.g:481:20: C A S T
             {
             mC(); 
             mA(); 
@@ -1154,8 +1154,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mTINYINT() throws RecognitionException {
         try {
             int _type = TINYINT;
-            // Windowing2.g:481:2: ( T I N Y I N T )
-            // Windowing2.g:481:4: T I N Y I N T
+            // Windowing2.g:483:2: ( T I N Y I N T )
+            // Windowing2.g:483:4: T I N Y I N T
             {
             mT(); 
             mI(); 
@@ -1178,8 +1178,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mSMALLINT() throws RecognitionException {
         try {
             int _type = SMALLINT;
-            // Windowing2.g:483:2: ( S M A L L I N T )
-            // Windowing2.g:483:4: S M A L L I N T
+            // Windowing2.g:485:2: ( S M A L L I N T )
+            // Windowing2.g:485:4: S M A L L I N T
             {
             mS(); 
             mM(); 
@@ -1203,8 +1203,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mINT() throws RecognitionException {
         try {
             int _type = INT;
-            // Windowing2.g:484:6: ( I N T )
-            // Windowing2.g:484:9: I N T
+            // Windowing2.g:486:6: ( I N T )
+            // Windowing2.g:486:9: I N T
             {
             mI(); 
             mN(); 
@@ -1223,8 +1223,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mBIGINT() throws RecognitionException {
         try {
             int _type = BIGINT;
-            // Windowing2.g:485:8: ( B I G I N T )
-            // Windowing2.g:485:10: B I G I N T
+            // Windowing2.g:487:8: ( B I G I N T )
+            // Windowing2.g:487:10: B I G I N T
             {
             mB(); 
             mI(); 
@@ -1246,8 +1246,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mBOOLEAN() throws RecognitionException {
         try {
             int _type = BOOLEAN;
-            // Windowing2.g:486:9: ( B O O L E A N )
-            // Windowing2.g:486:11: B O O L E A N
+            // Windowing2.g:488:9: ( B O O L E A N )
+            // Windowing2.g:488:11: B O O L E A N
             {
             mB(); 
             mO(); 
@@ -1270,8 +1270,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mFLOAT() throws RecognitionException {
         try {
             int _type = FLOAT;
-            // Windowing2.g:487:7: ( F L O A T )
-            // Windowing2.g:487:9: F L O A T
+            // Windowing2.g:489:7: ( F L O A T )
+            // Windowing2.g:489:9: F L O A T
             {
             mF(); 
             mL(); 
@@ -1292,8 +1292,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mDOUBLE() throws RecognitionException {
         try {
             int _type = DOUBLE;
-            // Windowing2.g:488:9: ( D O U B L E )
-            // Windowing2.g:488:11: D O U B L E
+            // Windowing2.g:490:9: ( D O U B L E )
+            // Windowing2.g:490:11: D O U B L E
             {
             mD(); 
             mO(); 
@@ -1315,8 +1315,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mDATE() throws RecognitionException {
         try {
             int _type = DATE;
-            // Windowing2.g:489:7: ( D A T E )
-            // Windowing2.g:489:9: D A T E
+            // Windowing2.g:491:7: ( D A T E )
+            // Windowing2.g:491:9: D A T E
             {
             mD(); 
             mA(); 
@@ -1336,8 +1336,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mDATETIME() throws RecognitionException {
         try {
             int _type = DATETIME;
-            // Windowing2.g:490:10: ( D A T E T I M E )
-            // Windowing2.g:490:12: D A T E T I M E
+            // Windowing2.g:492:10: ( D A T E T I M E )
+            // Windowing2.g:492:12: D A T E T I M E
             {
             mD(); 
             mA(); 
@@ -1361,8 +1361,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mTIMESTAMP() throws RecognitionException {
         try {
             int _type = TIMESTAMP;
-            // Windowing2.g:492:2: ( T I M E S T A M P )
-            // Windowing2.g:492:5: T I M E S T A M P
+            // Windowing2.g:494:2: ( T I M E S T A M P )
+            // Windowing2.g:494:5: T I M E S T A M P
             {
             mT(); 
             mI(); 
@@ -1387,8 +1387,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mSTRING() throws RecognitionException {
         try {
             int _type = STRING;
-            // Windowing2.g:493:8: ( S T R I N G )
-            // Windowing2.g:493:10: S T R I N G
+            // Windowing2.g:495:8: ( S T R I N G )
+            // Windowing2.g:495:10: S T R I N G
             {
             mS(); 
             mT(); 
@@ -1410,8 +1410,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mBINARY() throws RecognitionException {
         try {
             int _type = BINARY;
-            // Windowing2.g:494:9: ( B I N A R Y )
-            // Windowing2.g:494:12: B I N A R Y
+            // Windowing2.g:496:9: ( B I N A R Y )
+            // Windowing2.g:496:12: B I N A R Y
             {
             mB(); 
             mI(); 
@@ -1433,8 +1433,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mIF() throws RecognitionException {
         try {
             int _type = IF;
-            // Windowing2.g:495:5: ( I F )
-            // Windowing2.g:495:8: I F
+            // Windowing2.g:497:5: ( I F )
+            // Windowing2.g:497:8: I F
             {
             mI(); 
             mF(); 
@@ -1452,8 +1452,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mARRAY() throws RecognitionException {
         try {
             int _type = ARRAY;
-            // Windowing2.g:496:8: ( A R R A Y )
-            // Windowing2.g:496:10: A R R A Y
+            // Windowing2.g:498:8: ( A R R A Y )
+            // Windowing2.g:498:10: A R R A Y
             {
             mA(); 
             mR(); 
@@ -1474,8 +1474,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mMAP() throws RecognitionException {
         try {
             int _type = MAP;
-            // Windowing2.g:497:6: ( M A P )
-            // Windowing2.g:497:8: M A P
+            // Windowing2.g:499:6: ( M A P )
+            // Windowing2.g:499:8: M A P
             {
             mM(); 
             mA(); 
@@ -1494,8 +1494,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mSTRUCT() throws RecognitionException {
         try {
             int _type = STRUCT;
-            // Windowing2.g:498:9: ( S T R U C T )
-            // Windowing2.g:498:11: S T R U C T
+            // Windowing2.g:500:9: ( S T R U C T )
+            // Windowing2.g:500:11: S T R U C T
             {
             mS(); 
             mT(); 
@@ -1517,8 +1517,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mUNION() throws RecognitionException {
         try {
             int _type = UNION;
-            // Windowing2.g:499:8: ( U N I O N )
-            // Windowing2.g:499:10: U N I O N
+            // Windowing2.g:501:8: ( U N I O N )
+            // Windowing2.g:501:10: U N I O N
             {
             mU(); 
             mN(); 
@@ -1539,8 +1539,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mDISTINCT() throws RecognitionException {
         try {
             int _type = DISTINCT;
-            // Windowing2.g:501:2: ( D I S T I N C T )
-            // Windowing2.g:501:4: D I S T I N C T
+            // Windowing2.g:503:2: ( D I S T I N C T )
+            // Windowing2.g:503:4: D I S T I N C T
             {
             mD(); 
             mI(); 
@@ -1564,8 +1564,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mWINDOW() throws RecognitionException {
         try {
             int _type = WINDOW;
-            // Windowing2.g:502:8: ( W I N D O W )
-            // Windowing2.g:502:10: W I N D O W
+            // Windowing2.g:504:8: ( W I N D O W )
+            // Windowing2.g:504:10: W I N D O W
             {
             mW(); 
             mI(); 
@@ -1587,8 +1587,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mASC() throws RecognitionException {
         try {
             int _type = ASC;
-            // Windowing2.g:503:19: ( A S C )
-            // Windowing2.g:503:21: A S C
+            // Windowing2.g:505:19: ( A S C )
+            // Windowing2.g:505:21: A S C
             {
             mA(); 
             mS(); 
@@ -1607,8 +1607,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mDESC() throws RecognitionException {
         try {
             int _type = DESC;
-            // Windowing2.g:504:19: ( D E S C )
-            // Windowing2.g:504:21: D E S C
+            // Windowing2.g:506:19: ( D E S C )
+            // Windowing2.g:506:21: D E S C
             {
             mD(); 
             mE(); 
@@ -1628,8 +1628,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mDOT() throws RecognitionException {
         try {
             int _type = DOT;
-            // Windowing2.g:508:5: ( '.' )
-            // Windowing2.g:508:7: '.'
+            // Windowing2.g:510:5: ( '.' )
+            // Windowing2.g:510:7: '.'
             {
             match('.'); 
 
@@ -1646,8 +1646,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mCOLON() throws RecognitionException {
         try {
             int _type = COLON;
-            // Windowing2.g:509:7: ( ':' )
-            // Windowing2.g:509:9: ':'
+            // Windowing2.g:511:7: ( ':' )
+            // Windowing2.g:511:9: ':'
             {
             match(':'); 
 
@@ -1664,8 +1664,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mCOMMA() throws RecognitionException {
         try {
             int _type = COMMA;
-            // Windowing2.g:510:7: ( ',' )
-            // Windowing2.g:510:9: ','
+            // Windowing2.g:512:7: ( ',' )
+            // Windowing2.g:512:9: ','
             {
             match(','); 
 
@@ -1682,8 +1682,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mSEMICOLON() throws RecognitionException {
         try {
             int _type = SEMICOLON;
-            // Windowing2.g:511:11: ( ';' )
-            // Windowing2.g:511:13: ';'
+            // Windowing2.g:513:11: ( ';' )
+            // Windowing2.g:513:13: ';'
             {
             match(';'); 
 
@@ -1700,8 +1700,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mLPAREN() throws RecognitionException {
         try {
             int _type = LPAREN;
-            // Windowing2.g:513:8: ( '(' )
-            // Windowing2.g:513:10: '('
+            // Windowing2.g:515:8: ( '(' )
+            // Windowing2.g:515:10: '('
             {
             match('('); 
 
@@ -1718,8 +1718,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mRPAREN() throws RecognitionException {
         try {
             int _type = RPAREN;
-            // Windowing2.g:514:8: ( ')' )
-            // Windowing2.g:514:10: ')'
+            // Windowing2.g:516:8: ( ')' )
+            // Windowing2.g:516:10: ')'
             {
             match(')'); 
 
@@ -1736,8 +1736,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mLSQUARE() throws RecognitionException {
         try {
             int _type = LSQUARE;
-            // Windowing2.g:515:9: ( '[' )
-            // Windowing2.g:515:11: '['
+            // Windowing2.g:517:9: ( '[' )
+            // Windowing2.g:517:11: '['
             {
             match('['); 
 
@@ -1754,8 +1754,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mRSQUARE() throws RecognitionException {
         try {
             int _type = RSQUARE;
-            // Windowing2.g:516:9: ( ']' )
-            // Windowing2.g:516:11: ']'
+            // Windowing2.g:518:9: ( ']' )
+            // Windowing2.g:518:11: ']'
             {
             match(']'); 
 
@@ -1772,8 +1772,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mLCURLY() throws RecognitionException {
         try {
             int _type = LCURLY;
-            // Windowing2.g:517:8: ( '{' )
-            // Windowing2.g:517:10: '{'
+            // Windowing2.g:519:8: ( '{' )
+            // Windowing2.g:519:10: '{'
             {
             match('{'); 
 
@@ -1790,8 +1790,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mRCURLY() throws RecognitionException {
         try {
             int _type = RCURLY;
-            // Windowing2.g:518:8: ( '}' )
-            // Windowing2.g:518:10: '}'
+            // Windowing2.g:520:8: ( '}' )
+            // Windowing2.g:520:10: '}'
             {
             match('}'); 
 
@@ -1808,7 +1808,7 @@ public class Windowing2Lexer extends Lexer {
     public final void mEQUAL() throws RecognitionException {
         try {
             int _type = EQUAL;
-            // Windowing2.g:520:7: ( '=' | '==' )
+            // Windowing2.g:522:7: ( '=' | '==' )
             int alt1=2;
             int LA1_0 = input.LA(1);
 
@@ -1823,20 +1823,20 @@ public class Windowing2Lexer extends Lexer {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("520:1: EQUAL : ( '=' | '==' );", 1, 0, input);
+                    new NoViableAltException("522:1: EQUAL : ( '=' | '==' );", 1, 0, input);
 
                 throw nvae;
             }
             switch (alt1) {
                 case 1 :
-                    // Windowing2.g:520:9: '='
+                    // Windowing2.g:522:9: '='
                     {
                     match('='); 
 
                     }
                     break;
                 case 2 :
-                    // Windowing2.g:520:15: '=='
+                    // Windowing2.g:522:15: '=='
                     {
                     match("=="); 
 
@@ -1856,8 +1856,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mEQUAL_NS() throws RecognitionException {
         try {
             int _type = EQUAL_NS;
-            // Windowing2.g:521:10: ( '<=>' )
-            // Windowing2.g:521:12: '<=>'
+            // Windowing2.g:523:10: ( '<=>' )
+            // Windowing2.g:523:12: '<=>'
             {
             match("<=>"); 
 
@@ -1875,7 +1875,7 @@ public class Windowing2Lexer extends Lexer {
     public final void mNOTEQUAL() throws RecognitionException {
         try {
             int _type = NOTEQUAL;
-            // Windowing2.g:522:10: ( '<>' | '!=' )
+            // Windowing2.g:524:10: ( '<>' | '!=' )
             int alt2=2;
             int LA2_0 = input.LA(1);
 
@@ -1887,13 +1887,13 @@ public class Windowing2Lexer extends Lexer {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("522:1: NOTEQUAL : ( '<>' | '!=' );", 2, 0, input);
+                    new NoViableAltException("524:1: NOTEQUAL : ( '<>' | '!=' );", 2, 0, input);
 
                 throw nvae;
             }
             switch (alt2) {
                 case 1 :
-                    // Windowing2.g:522:12: '<>'
+                    // Windowing2.g:524:12: '<>'
                     {
                     match("<>"); 
 
@@ -1901,7 +1901,7 @@ public class Windowing2Lexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // Windowing2.g:522:19: '!='
+                    // Windowing2.g:524:19: '!='
                     {
                     match("!="); 
 
@@ -1921,8 +1921,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mLESSTHANOREQUALTO() throws RecognitionException {
         try {
             int _type = LESSTHANOREQUALTO;
-            // Windowing2.g:523:19: ( '<=' )
-            // Windowing2.g:523:21: '<='
+            // Windowing2.g:525:19: ( '<=' )
+            // Windowing2.g:525:21: '<='
             {
             match("<="); 
 
@@ -1940,8 +1940,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mLESSTHAN() throws RecognitionException {
         try {
             int _type = LESSTHAN;
-            // Windowing2.g:524:10: ( '<' )
-            // Windowing2.g:524:12: '<'
+            // Windowing2.g:526:10: ( '<' )
+            // Windowing2.g:526:12: '<'
             {
             match('<'); 
 
@@ -1958,8 +1958,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mGREATERTHANOREQUALTO() throws RecognitionException {
         try {
             int _type = GREATERTHANOREQUALTO;
-            // Windowing2.g:525:22: ( '>=' )
-            // Windowing2.g:525:24: '>='
+            // Windowing2.g:527:22: ( '>=' )
+            // Windowing2.g:527:24: '>='
             {
             match(">="); 
 
@@ -1977,8 +1977,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mGREATERTHAN() throws RecognitionException {
         try {
             int _type = GREATERTHAN;
-            // Windowing2.g:526:13: ( '>' )
-            // Windowing2.g:526:15: '>'
+            // Windowing2.g:528:13: ( '>' )
+            // Windowing2.g:528:15: '>'
             {
             match('>'); 
 
@@ -1995,8 +1995,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mAND() throws RecognitionException {
         try {
             int _type = AND;
-            // Windowing2.g:527:19: ( A N D )
-            // Windowing2.g:527:21: A N D
+            // Windowing2.g:529:19: ( A N D )
+            // Windowing2.g:529:21: A N D
             {
             mA(); 
             mN(); 
@@ -2015,8 +2015,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mNOT() throws RecognitionException {
         try {
             int _type = NOT;
-            // Windowing2.g:528:19: ( N O T )
-            // Windowing2.g:528:21: N O T
+            // Windowing2.g:530:19: ( N O T )
+            // Windowing2.g:530:21: N O T
             {
             mN(); 
             mO(); 
@@ -2035,8 +2035,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mOR() throws RecognitionException {
         try {
             int _type = OR;
-            // Windowing2.g:529:19: ( O R )
-            // Windowing2.g:529:21: O R
+            // Windowing2.g:531:19: ( O R )
+            // Windowing2.g:531:21: O R
             {
             mO(); 
             mR(); 
@@ -2054,8 +2054,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mXOR() throws RecognitionException {
         try {
             int _type = XOR;
-            // Windowing2.g:530:19: ( X O R )
-            // Windowing2.g:530:21: X O R
+            // Windowing2.g:532:19: ( X O R )
+            // Windowing2.g:532:21: X O R
             {
             mX(); 
             mO(); 
@@ -2074,8 +2074,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mDIVIDE() throws RecognitionException {
         try {
             int _type = DIVIDE;
-            // Windowing2.g:533:8: ( '/' )
-            // Windowing2.g:533:10: '/'
+            // Windowing2.g:535:8: ( '/' )
+            // Windowing2.g:535:10: '/'
             {
             match('/'); 
 
@@ -2092,8 +2092,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mPLUS() throws RecognitionException {
         try {
             int _type = PLUS;
-            // Windowing2.g:534:6: ( '+' )
-            // Windowing2.g:534:8: '+'
+            // Windowing2.g:536:6: ( '+' )
+            // Windowing2.g:536:8: '+'
             {
             match('+'); 
 
@@ -2110,8 +2110,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mMINUS() throws RecognitionException {
         try {
             int _type = MINUS;
-            // Windowing2.g:535:7: ( '-' )
-            // Windowing2.g:535:9: '-'
+            // Windowing2.g:537:7: ( '-' )
+            // Windowing2.g:537:9: '-'
             {
             match('-'); 
 
@@ -2128,8 +2128,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mSTAR() throws RecognitionException {
         try {
             int _type = STAR;
-            // Windowing2.g:536:6: ( '*' )
-            // Windowing2.g:536:8: '*'
+            // Windowing2.g:538:6: ( '*' )
+            // Windowing2.g:538:8: '*'
             {
             match('*'); 
 
@@ -2146,8 +2146,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mMOD() throws RecognitionException {
         try {
             int _type = MOD;
-            // Windowing2.g:537:5: ( '%' )
-            // Windowing2.g:537:7: '%'
+            // Windowing2.g:539:5: ( '%' )
+            // Windowing2.g:539:7: '%'
             {
             match('%'); 
 
@@ -2164,8 +2164,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mDIV() throws RecognitionException {
         try {
             int _type = DIV;
-            // Windowing2.g:538:5: ( 'DIV' )
-            // Windowing2.g:538:7: 'DIV'
+            // Windowing2.g:540:5: ( 'DIV' )
+            // Windowing2.g:540:7: 'DIV'
             {
             match("DIV"); 
 
@@ -2183,8 +2183,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mAMPERSAND() throws RecognitionException {
         try {
             int _type = AMPERSAND;
-            // Windowing2.g:540:11: ( '&' )
-            // Windowing2.g:540:13: '&'
+            // Windowing2.g:542:11: ( '&' )
+            // Windowing2.g:542:13: '&'
             {
             match('&'); 
 
@@ -2201,8 +2201,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mTILDE() throws RecognitionException {
         try {
             int _type = TILDE;
-            // Windowing2.g:541:7: ( '~' )
-            // Windowing2.g:541:9: '~'
+            // Windowing2.g:543:7: ( '~' )
+            // Windowing2.g:543:9: '~'
             {
             match('~'); 
 
@@ -2219,8 +2219,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mBITWISEOR() throws RecognitionException {
         try {
             int _type = BITWISEOR;
-            // Windowing2.g:542:11: ( '|' )
-            // Windowing2.g:542:13: '|'
+            // Windowing2.g:544:11: ( '|' )
+            // Windowing2.g:544:13: '|'
             {
             match('|'); 
 
@@ -2237,8 +2237,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mBITWISEXOR() throws RecognitionException {
         try {
             int _type = BITWISEXOR;
-            // Windowing2.g:543:12: ( '^' )
-            // Windowing2.g:543:14: '^'
+            // Windowing2.g:545:12: ( '^' )
+            // Windowing2.g:545:14: '^'
             {
             match('^'); 
 
@@ -2255,8 +2255,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mQUESTION() throws RecognitionException {
         try {
             int _type = QUESTION;
-            // Windowing2.g:544:10: ( '?' )
-            // Windowing2.g:544:12: '?'
+            // Windowing2.g:546:10: ( '?' )
+            // Windowing2.g:546:12: '?'
             {
             match('?'); 
 
@@ -2273,8 +2273,8 @@ public class Windowing2Lexer extends Lexer {
     public final void mDOLLAR() throws RecognitionException {
         try {
             int _type = DOLLAR;
-            // Windowing2.g:545:8: ( '$' )
-            // Windowing2.g:545:10: '$'
+            // Windowing2.g:547:8: ( '$' )
+            // Windowing2.g:547:10: '$'
             {
             match('$'); 
 
@@ -2291,11 +2291,11 @@ public class Windowing2Lexer extends Lexer {
     public final void mHIVEQUERY() throws RecognitionException {
         try {
             int _type = HIVEQUERY;
-            // Windowing2.g:547:11: ( '<' ( HiveQueryEscapeSequence | ~ ( '>' ) )* '>' )
-            // Windowing2.g:547:13: '<' ( HiveQueryEscapeSequence | ~ ( '>' ) )* '>'
+            // Windowing2.g:549:11: ( '<' ( HiveQueryEscapeSequence | ~ ( '>' ) )* '>' )
+            // Windowing2.g:549:13: '<' ( HiveQueryEscapeSequence | ~ ( '>' ) )* '>'
             {
             match('<'); 
-            // Windowing2.g:548:3: ( HiveQueryEscapeSequence | ~ ( '>' ) )*
+            // Windowing2.g:550:3: ( HiveQueryEscapeSequence | ~ ( '>' ) )*
             loop3:
             do {
                 int alt3=3;
@@ -2329,14 +2329,14 @@ public class Windowing2Lexer extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // Windowing2.g:548:4: HiveQueryEscapeSequence
+            	    // Windowing2.g:550:4: HiveQueryEscapeSequence
             	    {
             	    mHiveQueryEscapeSequence(); 
 
             	    }
             	    break;
             	case 2 :
-            	    // Windowing2.g:548:30: ~ ( '>' )
+            	    // Windowing2.g:550:30: ~ ( '>' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='=')||(input.LA(1)>='?' && input.LA(1)<='\uFFFE') ) {
             	        input.consume();
@@ -2372,8 +2372,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start HiveQueryEscapeSequence
     public final void mHiveQueryEscapeSequence() throws RecognitionException {
         try {
-            // Windowing2.g:553:25: ( '\\\\' '>' )
-            // Windowing2.g:554:3: '\\\\' '>'
+            // Windowing2.g:555:25: ( '\\\\' '>' )
+            // Windowing2.g:556:3: '\\\\' '>'
             {
             match('\\'); 
             match('>'); 
@@ -2390,10 +2390,10 @@ public class Windowing2Lexer extends Lexer {
     public final void mStringLiteral() throws RecognitionException {
         try {
             int _type = StringLiteral;
-            // Windowing2.g:557:5: ( ( '\\'' (~ ( '\\'' | '\\\\' ) | EscapeSequence )* '\\'' | '\\\"' (~ ( '\\\"' | '\\\\' ) | EscapeSequence )* '\\\"' )+ )
-            // Windowing2.g:558:5: ( '\\'' (~ ( '\\'' | '\\\\' ) | EscapeSequence )* '\\'' | '\\\"' (~ ( '\\\"' | '\\\\' ) | EscapeSequence )* '\\\"' )+
+            // Windowing2.g:559:5: ( ( '\\'' (~ ( '\\'' | '\\\\' ) | EscapeSequence )* '\\'' | '\\\"' (~ ( '\\\"' | '\\\\' ) | EscapeSequence )* '\\\"' )+ )
+            // Windowing2.g:560:5: ( '\\'' (~ ( '\\'' | '\\\\' ) | EscapeSequence )* '\\'' | '\\\"' (~ ( '\\\"' | '\\\\' ) | EscapeSequence )* '\\\"' )+
             {
-            // Windowing2.g:558:5: ( '\\'' (~ ( '\\'' | '\\\\' ) | EscapeSequence )* '\\'' | '\\\"' (~ ( '\\\"' | '\\\\' ) | EscapeSequence )* '\\\"' )+
+            // Windowing2.g:560:5: ( '\\'' (~ ( '\\'' | '\\\\' ) | EscapeSequence )* '\\'' | '\\\"' (~ ( '\\\"' | '\\\\' ) | EscapeSequence )* '\\\"' )+
             int cnt6=0;
             loop6:
             do {
@@ -2410,10 +2410,10 @@ public class Windowing2Lexer extends Lexer {
 
                 switch (alt6) {
             	case 1 :
-            	    // Windowing2.g:558:7: '\\'' (~ ( '\\'' | '\\\\' ) | EscapeSequence )* '\\''
+            	    // Windowing2.g:560:7: '\\'' (~ ( '\\'' | '\\\\' ) | EscapeSequence )* '\\''
             	    {
             	    match('\''); 
-            	    // Windowing2.g:558:12: (~ ( '\\'' | '\\\\' ) | EscapeSequence )*
+            	    // Windowing2.g:560:12: (~ ( '\\'' | '\\\\' ) | EscapeSequence )*
             	    loop4:
             	    do {
             	        int alt4=3;
@@ -2429,7 +2429,7 @@ public class Windowing2Lexer extends Lexer {
 
             	        switch (alt4) {
             	    	case 1 :
-            	    	    // Windowing2.g:558:14: ~ ( '\\'' | '\\\\' )
+            	    	    // Windowing2.g:560:14: ~ ( '\\'' | '\\\\' )
             	    	    {
             	    	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFE') ) {
             	    	        input.consume();
@@ -2445,7 +2445,7 @@ public class Windowing2Lexer extends Lexer {
             	    	    }
             	    	    break;
             	    	case 2 :
-            	    	    // Windowing2.g:558:29: EscapeSequence
+            	    	    // Windowing2.g:560:29: EscapeSequence
             	    	    {
             	    	    mEscapeSequence(); 
 
@@ -2462,10 +2462,10 @@ public class Windowing2Lexer extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // Windowing2.g:559:7: '\\\"' (~ ( '\\\"' | '\\\\' ) | EscapeSequence )* '\\\"'
+            	    // Windowing2.g:561:7: '\\\"' (~ ( '\\\"' | '\\\\' ) | EscapeSequence )* '\\\"'
             	    {
             	    match('\"'); 
-            	    // Windowing2.g:559:12: (~ ( '\\\"' | '\\\\' ) | EscapeSequence )*
+            	    // Windowing2.g:561:12: (~ ( '\\\"' | '\\\\' ) | EscapeSequence )*
             	    loop5:
             	    do {
             	        int alt5=3;
@@ -2481,7 +2481,7 @@ public class Windowing2Lexer extends Lexer {
 
             	        switch (alt5) {
             	    	case 1 :
-            	    	    // Windowing2.g:559:14: ~ ( '\\\"' | '\\\\' )
+            	    	    // Windowing2.g:561:14: ~ ( '\\\"' | '\\\\' )
             	    	    {
             	    	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFE') ) {
             	    	        input.consume();
@@ -2497,7 +2497,7 @@ public class Windowing2Lexer extends Lexer {
             	    	    }
             	    	    break;
             	    	case 2 :
-            	    	    // Windowing2.g:559:29: EscapeSequence
+            	    	    // Windowing2.g:561:29: EscapeSequence
             	    	    {
             	    	    mEscapeSequence(); 
 
@@ -2537,7 +2537,7 @@ public class Windowing2Lexer extends Lexer {
     public final void mCharSetLiteral() throws RecognitionException {
         try {
             int _type = CharSetLiteral;
-            // Windowing2.g:564:5: ( StringLiteral | '0' 'X' ( HexDigit | Digit )+ )
+            // Windowing2.g:566:5: ( StringLiteral | '0' 'X' ( HexDigit | Digit )+ )
             int alt8=2;
             int LA8_0 = input.LA(1);
 
@@ -2549,24 +2549,24 @@ public class Windowing2Lexer extends Lexer {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("563:1: CharSetLiteral : ( StringLiteral | '0' 'X' ( HexDigit | Digit )+ );", 8, 0, input);
+                    new NoViableAltException("565:1: CharSetLiteral : ( StringLiteral | '0' 'X' ( HexDigit | Digit )+ );", 8, 0, input);
 
                 throw nvae;
             }
             switch (alt8) {
                 case 1 :
-                    // Windowing2.g:565:5: StringLiteral
+                    // Windowing2.g:567:5: StringLiteral
                     {
                     mStringLiteral(); 
 
                     }
                     break;
                 case 2 :
-                    // Windowing2.g:566:7: '0' 'X' ( HexDigit | Digit )+
+                    // Windowing2.g:568:7: '0' 'X' ( HexDigit | Digit )+
                     {
                     match('0'); 
                     match('X'); 
-                    // Windowing2.g:566:15: ( HexDigit | Digit )+
+                    // Windowing2.g:568:15: ( HexDigit | Digit )+
                     int cnt7=0;
                     loop7:
                     do {
@@ -2621,11 +2621,11 @@ public class Windowing2Lexer extends Lexer {
     public final void mCharSetName() throws RecognitionException {
         try {
             int _type = CharSetName;
-            // Windowing2.g:570:5: ( '_' ( Letter | Digit | '_' | '-' | '.' | ':' )+ )
-            // Windowing2.g:571:5: '_' ( Letter | Digit | '_' | '-' | '.' | ':' )+
+            // Windowing2.g:572:5: ( '_' ( Letter | Digit | '_' | '-' | '.' | ':' )+ )
+            // Windowing2.g:573:5: '_' ( Letter | Digit | '_' | '-' | '.' | ':' )+
             {
             match('_'); 
-            // Windowing2.g:571:9: ( Letter | Digit | '_' | '-' | '.' | ':' )+
+            // Windowing2.g:573:9: ( Letter | Digit | '_' | '-' | '.' | ':' )+
             int cnt9=0;
             loop9:
             do {
@@ -2678,10 +2678,10 @@ public class Windowing2Lexer extends Lexer {
     public final void mBigintLiteral() throws RecognitionException {
         try {
             int _type = BigintLiteral;
-            // Windowing2.g:575:5: ( ( Digit )+ 'L' )
-            // Windowing2.g:576:5: ( Digit )+ 'L'
+            // Windowing2.g:577:5: ( ( Digit )+ 'L' )
+            // Windowing2.g:578:5: ( Digit )+ 'L'
             {
-            // Windowing2.g:576:5: ( Digit )+
+            // Windowing2.g:578:5: ( Digit )+
             int cnt10=0;
             loop10:
             do {
@@ -2695,7 +2695,7 @@ public class Windowing2Lexer extends Lexer {
 
                 switch (alt10) {
             	case 1 :
-            	    // Windowing2.g:576:6: Digit
+            	    // Windowing2.g:578:6: Digit
             	    {
             	    mDigit(); 
 
@@ -2726,10 +2726,10 @@ public class Windowing2Lexer extends Lexer {
     public final void mSmallintLiteral() throws RecognitionException {
         try {
             int _type = SmallintLiteral;
-            // Windowing2.g:580:5: ( ( Digit )+ 'S' )
-            // Windowing2.g:581:5: ( Digit )+ 'S'
+            // Windowing2.g:582:5: ( ( Digit )+ 'S' )
+            // Windowing2.g:583:5: ( Digit )+ 'S'
             {
-            // Windowing2.g:581:5: ( Digit )+
+            // Windowing2.g:583:5: ( Digit )+
             int cnt11=0;
             loop11:
             do {
@@ -2743,7 +2743,7 @@ public class Windowing2Lexer extends Lexer {
 
                 switch (alt11) {
             	case 1 :
-            	    // Windowing2.g:581:6: Digit
+            	    // Windowing2.g:583:6: Digit
             	    {
             	    mDigit(); 
 
@@ -2774,10 +2774,10 @@ public class Windowing2Lexer extends Lexer {
     public final void mTinyintLiteral() throws RecognitionException {
         try {
             int _type = TinyintLiteral;
-            // Windowing2.g:585:5: ( ( Digit )+ 'Y' )
-            // Windowing2.g:586:5: ( Digit )+ 'Y'
+            // Windowing2.g:587:5: ( ( Digit )+ 'Y' )
+            // Windowing2.g:588:5: ( Digit )+ 'Y'
             {
-            // Windowing2.g:586:5: ( Digit )+
+            // Windowing2.g:588:5: ( Digit )+
             int cnt12=0;
             loop12:
             do {
@@ -2791,7 +2791,7 @@ public class Windowing2Lexer extends Lexer {
 
                 switch (alt12) {
             	case 1 :
-            	    // Windowing2.g:586:6: Digit
+            	    // Windowing2.g:588:6: Digit
             	    {
             	    mDigit(); 
 
@@ -2822,10 +2822,10 @@ public class Windowing2Lexer extends Lexer {
     public final void mNumber() throws RecognitionException {
         try {
             int _type = Number;
-            // Windowing2.g:590:5: ( ( Digit )+ ( DOT ( Digit )* ( Exponent )? | Exponent )? )
-            // Windowing2.g:591:5: ( Digit )+ ( DOT ( Digit )* ( Exponent )? | Exponent )?
+            // Windowing2.g:592:5: ( ( Digit )+ ( DOT ( Digit )* ( Exponent )? | Exponent )? )
+            // Windowing2.g:593:5: ( Digit )+ ( DOT ( Digit )* ( Exponent )? | Exponent )?
             {
-            // Windowing2.g:591:5: ( Digit )+
+            // Windowing2.g:593:5: ( Digit )+
             int cnt13=0;
             loop13:
             do {
@@ -2839,7 +2839,7 @@ public class Windowing2Lexer extends Lexer {
 
                 switch (alt13) {
             	case 1 :
-            	    // Windowing2.g:591:6: Digit
+            	    // Windowing2.g:593:6: Digit
             	    {
             	    mDigit(); 
 
@@ -2855,7 +2855,7 @@ public class Windowing2Lexer extends Lexer {
                 cnt13++;
             } while (true);
 
-            // Windowing2.g:591:14: ( DOT ( Digit )* ( Exponent )? | Exponent )?
+            // Windowing2.g:593:14: ( DOT ( Digit )* ( Exponent )? | Exponent )?
             int alt16=3;
             int LA16_0 = input.LA(1);
 
@@ -2867,10 +2867,10 @@ public class Windowing2Lexer extends Lexer {
             }
             switch (alt16) {
                 case 1 :
-                    // Windowing2.g:591:16: DOT ( Digit )* ( Exponent )?
+                    // Windowing2.g:593:16: DOT ( Digit )* ( Exponent )?
                     {
                     mDOT(); 
-                    // Windowing2.g:591:20: ( Digit )*
+                    // Windowing2.g:593:20: ( Digit )*
                     loop14:
                     do {
                         int alt14=2;
@@ -2883,7 +2883,7 @@ public class Windowing2Lexer extends Lexer {
 
                         switch (alt14) {
                     	case 1 :
-                    	    // Windowing2.g:591:21: Digit
+                    	    // Windowing2.g:593:21: Digit
                     	    {
                     	    mDigit(); 
 
@@ -2895,7 +2895,7 @@ public class Windowing2Lexer extends Lexer {
                         }
                     } while (true);
 
-                    // Windowing2.g:591:29: ( Exponent )?
+                    // Windowing2.g:593:29: ( Exponent )?
                     int alt15=2;
                     int LA15_0 = input.LA(1);
 
@@ -2904,7 +2904,7 @@ public class Windowing2Lexer extends Lexer {
                     }
                     switch (alt15) {
                         case 1 :
-                            // Windowing2.g:591:30: Exponent
+                            // Windowing2.g:593:30: Exponent
                             {
                             mExponent(); 
 
@@ -2917,7 +2917,7 @@ public class Windowing2Lexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // Windowing2.g:591:43: Exponent
+                    // Windowing2.g:593:43: Exponent
                     {
                     mExponent(); 
 
@@ -2940,7 +2940,7 @@ public class Windowing2Lexer extends Lexer {
     public final void mIdentifier() throws RecognitionException {
         try {
             int _type = Identifier;
-            // Windowing2.g:595:5: ( ( Letter | Digit ) ( Letter | Digit | '_' )* | '`' ( RegexComponent )+ '`' )
+            // Windowing2.g:597:5: ( ( Letter | Digit ) ( Letter | Digit | '_' )* | '`' ( RegexComponent )+ '`' )
             int alt19=2;
             int LA19_0 = input.LA(1);
 
@@ -2952,13 +2952,13 @@ public class Windowing2Lexer extends Lexer {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("594:1: Identifier : ( ( Letter | Digit ) ( Letter | Digit | '_' )* | '`' ( RegexComponent )+ '`' );", 19, 0, input);
+                    new NoViableAltException("596:1: Identifier : ( ( Letter | Digit ) ( Letter | Digit | '_' )* | '`' ( RegexComponent )+ '`' );", 19, 0, input);
 
                 throw nvae;
             }
             switch (alt19) {
                 case 1 :
-                    // Windowing2.g:596:5: ( Letter | Digit ) ( Letter | Digit | '_' )*
+                    // Windowing2.g:598:5: ( Letter | Digit ) ( Letter | Digit | '_' )*
                     {
                     if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='Z')||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                         input.consume();
@@ -2970,7 +2970,7 @@ public class Windowing2Lexer extends Lexer {
                         recover(mse);    throw mse;
                     }
 
-                    // Windowing2.g:596:22: ( Letter | Digit | '_' )*
+                    // Windowing2.g:598:22: ( Letter | Digit | '_' )*
                     loop17:
                     do {
                         int alt17=2;
@@ -3008,10 +3008,10 @@ public class Windowing2Lexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // Windowing2.g:597:7: '`' ( RegexComponent )+ '`'
+                    // Windowing2.g:599:7: '`' ( RegexComponent )+ '`'
                     {
                     match('`'); 
-                    // Windowing2.g:597:11: ( RegexComponent )+
+                    // Windowing2.g:599:11: ( RegexComponent )+
                     int cnt18=0;
                     loop18:
                     do {
@@ -3025,7 +3025,7 @@ public class Windowing2Lexer extends Lexer {
 
                         switch (alt18) {
                     	case 1 :
-                    	    // Windowing2.g:597:11: RegexComponent
+                    	    // Windowing2.g:599:11: RegexComponent
                     	    {
                     	    mRegexComponent(); 
 
@@ -3058,10 +3058,10 @@ public class Windowing2Lexer extends Lexer {
     public final void mWS() throws RecognitionException {
         try {
             int _type = WS;
-            // Windowing2.g:601:5: ( ( ' ' | '\\t' | '\\r' | '\\f' | '\\n' )+ )
-            // Windowing2.g:601:9: ( ' ' | '\\t' | '\\r' | '\\f' | '\\n' )+
+            // Windowing2.g:603:5: ( ( ' ' | '\\t' | '\\r' | '\\f' | '\\n' )+ )
+            // Windowing2.g:603:9: ( ' ' | '\\t' | '\\r' | '\\f' | '\\n' )+
             {
-            // Windowing2.g:601:9: ( ' ' | '\\t' | '\\r' | '\\f' | '\\n' )+
+            // Windowing2.g:603:9: ( ' ' | '\\t' | '\\r' | '\\f' | '\\n' )+
             int cnt20=0;
             loop20:
             do {
@@ -3115,12 +3115,12 @@ public class Windowing2Lexer extends Lexer {
     public final void mCOMMENT() throws RecognitionException {
         try {
             int _type = COMMENT;
-            // Windowing2.g:611:3: ( '--' (~ ( '\\n' | '\\r' ) )* )
-            // Windowing2.g:611:5: '--' (~ ( '\\n' | '\\r' ) )*
+            // Windowing2.g:613:3: ( '--' (~ ( '\\n' | '\\r' ) )* )
+            // Windowing2.g:613:5: '--' (~ ( '\\n' | '\\r' ) )*
             {
             match("--"); 
 
-            // Windowing2.g:611:10: (~ ( '\\n' | '\\r' ) )*
+            // Windowing2.g:613:10: (~ ( '\\n' | '\\r' ) )*
             loop21:
             do {
                 int alt21=2;
@@ -3133,7 +3133,7 @@ public class Windowing2Lexer extends Lexer {
 
                 switch (alt21) {
             	case 1 :
-            	    // Windowing2.g:611:11: ~ ( '\\n' | '\\r' )
+            	    // Windowing2.g:613:11: ~ ( '\\n' | '\\r' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFE') ) {
             	        input.consume();
@@ -3168,11 +3168,11 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start EscapeSequence
     public final void mEscapeSequence() throws RecognitionException {
         try {
-            // Windowing2.g:617:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ) )
-            // Windowing2.g:617:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )
+            // Windowing2.g:619:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ) )
+            // Windowing2.g:619:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )
             {
             match('\\'); 
-            // Windowing2.g:617:14: ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )
+            // Windowing2.g:619:14: ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )
             int alt22=11;
             switch ( input.LA(1) ) {
             case 'b':
@@ -3251,102 +3251,75 @@ public class Windowing2Lexer extends Lexer {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("617:14: ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )", 22, 0, input);
+                    new NoViableAltException("619:14: ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )", 22, 0, input);
 
                 throw nvae;
             }
 
             switch (alt22) {
                 case 1 :
-                    // Windowing2.g:618:18: 'b'
+                    // Windowing2.g:620:18: 'b'
                     {
                     match('b'); 
 
                     }
                     break;
                 case 2 :
-                    // Windowing2.g:619:18: 't'
+                    // Windowing2.g:621:18: 't'
                     {
                     match('t'); 
 
                     }
                     break;
                 case 3 :
-                    // Windowing2.g:620:18: 'n'
+                    // Windowing2.g:622:18: 'n'
                     {
                     match('n'); 
 
                     }
                     break;
                 case 4 :
-                    // Windowing2.g:621:18: 'f'
+                    // Windowing2.g:623:18: 'f'
                     {
                     match('f'); 
 
                     }
                     break;
                 case 5 :
-                    // Windowing2.g:622:18: 'r'
+                    // Windowing2.g:624:18: 'r'
                     {
                     match('r'); 
 
                     }
                     break;
                 case 6 :
-                    // Windowing2.g:623:18: '\\\"'
+                    // Windowing2.g:625:18: '\\\"'
                     {
                     match('\"'); 
 
                     }
                     break;
                 case 7 :
-                    // Windowing2.g:624:18: '\\''
+                    // Windowing2.g:626:18: '\\''
                     {
                     match('\''); 
 
                     }
                     break;
                 case 8 :
-                    // Windowing2.g:625:18: '\\\\'
+                    // Windowing2.g:627:18: '\\\\'
                     {
                     match('\\'); 
 
                     }
                     break;
                 case 9 :
-                    // Windowing2.g:627:18: ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
+                    // Windowing2.g:629:18: ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
                     {
-                    // Windowing2.g:627:18: ( '0' .. '3' )
-                    // Windowing2.g:627:19: '0' .. '3'
+                    // Windowing2.g:629:18: ( '0' .. '3' )
+                    // Windowing2.g:629:19: '0' .. '3'
                     {
                     matchRange('0','3'); 
-
-                    }
-
-                    // Windowing2.g:627:29: ( '0' .. '7' )
-                    // Windowing2.g:627:30: '0' .. '7'
-                    {
-                    matchRange('0','7'); 
-
-                    }
-
-                    // Windowing2.g:627:40: ( '0' .. '7' )
-                    // Windowing2.g:627:41: '0' .. '7'
-                    {
-                    matchRange('0','7'); 
-
-                    }
-
-
-                    }
-                    break;
-                case 10 :
-                    // Windowing2.g:629:18: ( '0' .. '7' ) ( '0' .. '7' )
-                    {
-                    // Windowing2.g:629:18: ( '0' .. '7' )
-                    // Windowing2.g:629:19: '0' .. '7'
-                    {
-                    matchRange('0','7'); 
 
                     }
 
@@ -3357,14 +3330,41 @@ public class Windowing2Lexer extends Lexer {
 
                     }
 
+                    // Windowing2.g:629:40: ( '0' .. '7' )
+                    // Windowing2.g:629:41: '0' .. '7'
+                    {
+                    matchRange('0','7'); 
+
+                    }
+
+
+                    }
+                    break;
+                case 10 :
+                    // Windowing2.g:631:18: ( '0' .. '7' ) ( '0' .. '7' )
+                    {
+                    // Windowing2.g:631:18: ( '0' .. '7' )
+                    // Windowing2.g:631:19: '0' .. '7'
+                    {
+                    matchRange('0','7'); 
+
+                    }
+
+                    // Windowing2.g:631:29: ( '0' .. '7' )
+                    // Windowing2.g:631:30: '0' .. '7'
+                    {
+                    matchRange('0','7'); 
+
+                    }
+
 
                     }
                     break;
                 case 11 :
-                    // Windowing2.g:631:18: ( '0' .. '7' )
+                    // Windowing2.g:633:18: ( '0' .. '7' )
                     {
-                    // Windowing2.g:631:18: ( '0' .. '7' )
-                    // Windowing2.g:631:19: '0' .. '7'
+                    // Windowing2.g:633:18: ( '0' .. '7' )
+                    // Windowing2.g:633:19: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
@@ -3388,7 +3388,7 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start Letter
     public final void mLetter() throws RecognitionException {
         try {
-            // Windowing2.g:637:5: ( 'a' .. 'z' | 'A' .. 'Z' )
+            // Windowing2.g:639:5: ( 'a' .. 'z' | 'A' .. 'Z' )
             // Windowing2.g:
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='Z')||(input.LA(1)>='a' && input.LA(1)<='z') ) {
@@ -3413,7 +3413,7 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start HexDigit
     public final void mHexDigit() throws RecognitionException {
         try {
-            // Windowing2.g:642:5: ( 'a' .. 'f' | 'A' .. 'F' )
+            // Windowing2.g:644:5: ( 'a' .. 'f' | 'A' .. 'F' )
             // Windowing2.g:
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='F')||(input.LA(1)>='a' && input.LA(1)<='f') ) {
@@ -3438,8 +3438,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start Digit
     public final void mDigit() throws RecognitionException {
         try {
-            // Windowing2.g:647:5: ( '0' .. '9' )
-            // Windowing2.g:648:5: '0' .. '9'
+            // Windowing2.g:649:5: ( '0' .. '9' )
+            // Windowing2.g:650:5: '0' .. '9'
             {
             matchRange('0','9'); 
 
@@ -3454,8 +3454,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start Exponent
     public final void mExponent() throws RecognitionException {
         try {
-            // Windowing2.g:653:5: ( ( 'e' | 'E' ) ( PLUS | MINUS )? ( Digit )+ )
-            // Windowing2.g:654:5: ( 'e' | 'E' ) ( PLUS | MINUS )? ( Digit )+
+            // Windowing2.g:655:5: ( ( 'e' | 'E' ) ( PLUS | MINUS )? ( Digit )+ )
+            // Windowing2.g:656:5: ( 'e' | 'E' ) ( PLUS | MINUS )? ( Digit )+
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -3467,7 +3467,7 @@ public class Windowing2Lexer extends Lexer {
                 recover(mse);    throw mse;
             }
 
-            // Windowing2.g:654:17: ( PLUS | MINUS )?
+            // Windowing2.g:656:17: ( PLUS | MINUS )?
             int alt23=2;
             int LA23_0 = input.LA(1);
 
@@ -3494,7 +3494,7 @@ public class Windowing2Lexer extends Lexer {
 
             }
 
-            // Windowing2.g:654:33: ( Digit )+
+            // Windowing2.g:656:33: ( Digit )+
             int cnt24=0;
             loop24:
             do {
@@ -3508,7 +3508,7 @@ public class Windowing2Lexer extends Lexer {
 
                 switch (alt24) {
             	case 1 :
-            	    // Windowing2.g:654:34: Digit
+            	    // Windowing2.g:656:34: Digit
             	    {
             	    mDigit(); 
 
@@ -3536,7 +3536,7 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start RegexComponent
     public final void mRegexComponent() throws RecognitionException {
         try {
-            // Windowing2.g:659:5: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | PLUS | STAR | QUESTION | MINUS | DOT | LPAREN | RPAREN | LSQUARE | RSQUARE | LCURLY | RCURLY | BITWISEXOR | BITWISEOR | DOLLAR )
+            // Windowing2.g:661:5: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | PLUS | STAR | QUESTION | MINUS | DOT | LPAREN | RPAREN | LSQUARE | RSQUARE | LCURLY | RCURLY | BITWISEXOR | BITWISEOR | DOLLAR )
             // Windowing2.g:
             {
             if ( input.LA(1)=='$'||(input.LA(1)>='(' && input.LA(1)<='+')||(input.LA(1)>='-' && input.LA(1)<='.')||(input.LA(1)>='0' && input.LA(1)<='9')||input.LA(1)=='?'||(input.LA(1)>='A' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='_')||(input.LA(1)>='a' && input.LA(1)<='}') ) {
@@ -3561,8 +3561,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start A
     public final void mA() throws RecognitionException {
         try {
-            // Windowing2.g:666:11: ( ( 'a' | 'A' ) )
-            // Windowing2.g:666:12: ( 'a' | 'A' )
+            // Windowing2.g:668:11: ( ( 'a' | 'A' ) )
+            // Windowing2.g:668:12: ( 'a' | 'A' )
             {
             if ( input.LA(1)=='A'||input.LA(1)=='a' ) {
                 input.consume();
@@ -3586,8 +3586,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start B
     public final void mB() throws RecognitionException {
         try {
-            // Windowing2.g:667:11: ( ( 'b' | 'B' ) )
-            // Windowing2.g:667:12: ( 'b' | 'B' )
+            // Windowing2.g:669:11: ( ( 'b' | 'B' ) )
+            // Windowing2.g:669:12: ( 'b' | 'B' )
             {
             if ( input.LA(1)=='B'||input.LA(1)=='b' ) {
                 input.consume();
@@ -3611,8 +3611,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start C
     public final void mC() throws RecognitionException {
         try {
-            // Windowing2.g:668:11: ( ( 'c' | 'C' ) )
-            // Windowing2.g:668:12: ( 'c' | 'C' )
+            // Windowing2.g:670:11: ( ( 'c' | 'C' ) )
+            // Windowing2.g:670:12: ( 'c' | 'C' )
             {
             if ( input.LA(1)=='C'||input.LA(1)=='c' ) {
                 input.consume();
@@ -3636,8 +3636,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start D
     public final void mD() throws RecognitionException {
         try {
-            // Windowing2.g:669:11: ( ( 'd' | 'D' ) )
-            // Windowing2.g:669:12: ( 'd' | 'D' )
+            // Windowing2.g:671:11: ( ( 'd' | 'D' ) )
+            // Windowing2.g:671:12: ( 'd' | 'D' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -3661,8 +3661,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start E
     public final void mE() throws RecognitionException {
         try {
-            // Windowing2.g:670:11: ( ( 'e' | 'E' ) )
-            // Windowing2.g:670:12: ( 'e' | 'E' )
+            // Windowing2.g:672:11: ( ( 'e' | 'E' ) )
+            // Windowing2.g:672:12: ( 'e' | 'E' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -3686,8 +3686,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start F
     public final void mF() throws RecognitionException {
         try {
-            // Windowing2.g:671:11: ( ( 'f' | 'F' ) )
-            // Windowing2.g:671:12: ( 'f' | 'F' )
+            // Windowing2.g:673:11: ( ( 'f' | 'F' ) )
+            // Windowing2.g:673:12: ( 'f' | 'F' )
             {
             if ( input.LA(1)=='F'||input.LA(1)=='f' ) {
                 input.consume();
@@ -3711,8 +3711,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start G
     public final void mG() throws RecognitionException {
         try {
-            // Windowing2.g:672:11: ( ( 'g' | 'G' ) )
-            // Windowing2.g:672:12: ( 'g' | 'G' )
+            // Windowing2.g:674:11: ( ( 'g' | 'G' ) )
+            // Windowing2.g:674:12: ( 'g' | 'G' )
             {
             if ( input.LA(1)=='G'||input.LA(1)=='g' ) {
                 input.consume();
@@ -3736,8 +3736,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start H
     public final void mH() throws RecognitionException {
         try {
-            // Windowing2.g:673:11: ( ( 'h' | 'H' ) )
-            // Windowing2.g:673:12: ( 'h' | 'H' )
+            // Windowing2.g:675:11: ( ( 'h' | 'H' ) )
+            // Windowing2.g:675:12: ( 'h' | 'H' )
             {
             if ( input.LA(1)=='H'||input.LA(1)=='h' ) {
                 input.consume();
@@ -3761,8 +3761,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start I
     public final void mI() throws RecognitionException {
         try {
-            // Windowing2.g:674:11: ( ( 'i' | 'I' ) )
-            // Windowing2.g:674:12: ( 'i' | 'I' )
+            // Windowing2.g:676:11: ( ( 'i' | 'I' ) )
+            // Windowing2.g:676:12: ( 'i' | 'I' )
             {
             if ( input.LA(1)=='I'||input.LA(1)=='i' ) {
                 input.consume();
@@ -3786,8 +3786,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start J
     public final void mJ() throws RecognitionException {
         try {
-            // Windowing2.g:675:11: ( ( 'j' | 'J' ) )
-            // Windowing2.g:675:12: ( 'j' | 'J' )
+            // Windowing2.g:677:11: ( ( 'j' | 'J' ) )
+            // Windowing2.g:677:12: ( 'j' | 'J' )
             {
             if ( input.LA(1)=='J'||input.LA(1)=='j' ) {
                 input.consume();
@@ -3811,8 +3811,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start K
     public final void mK() throws RecognitionException {
         try {
-            // Windowing2.g:676:11: ( ( 'k' | 'K' ) )
-            // Windowing2.g:676:12: ( 'k' | 'K' )
+            // Windowing2.g:678:11: ( ( 'k' | 'K' ) )
+            // Windowing2.g:678:12: ( 'k' | 'K' )
             {
             if ( input.LA(1)=='K'||input.LA(1)=='k' ) {
                 input.consume();
@@ -3836,8 +3836,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start L
     public final void mL() throws RecognitionException {
         try {
-            // Windowing2.g:677:11: ( ( 'l' | 'L' ) )
-            // Windowing2.g:677:12: ( 'l' | 'L' )
+            // Windowing2.g:679:11: ( ( 'l' | 'L' ) )
+            // Windowing2.g:679:12: ( 'l' | 'L' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -3861,8 +3861,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start M
     public final void mM() throws RecognitionException {
         try {
-            // Windowing2.g:678:11: ( ( 'm' | 'M' ) )
-            // Windowing2.g:678:12: ( 'm' | 'M' )
+            // Windowing2.g:680:11: ( ( 'm' | 'M' ) )
+            // Windowing2.g:680:12: ( 'm' | 'M' )
             {
             if ( input.LA(1)=='M'||input.LA(1)=='m' ) {
                 input.consume();
@@ -3886,8 +3886,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start N
     public final void mN() throws RecognitionException {
         try {
-            // Windowing2.g:679:11: ( ( 'n' | 'N' ) )
-            // Windowing2.g:679:12: ( 'n' | 'N' )
+            // Windowing2.g:681:11: ( ( 'n' | 'N' ) )
+            // Windowing2.g:681:12: ( 'n' | 'N' )
             {
             if ( input.LA(1)=='N'||input.LA(1)=='n' ) {
                 input.consume();
@@ -3911,8 +3911,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start O
     public final void mO() throws RecognitionException {
         try {
-            // Windowing2.g:680:11: ( ( 'o' | 'O' ) )
-            // Windowing2.g:680:12: ( 'o' | 'O' )
+            // Windowing2.g:682:11: ( ( 'o' | 'O' ) )
+            // Windowing2.g:682:12: ( 'o' | 'O' )
             {
             if ( input.LA(1)=='O'||input.LA(1)=='o' ) {
                 input.consume();
@@ -3936,8 +3936,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start P
     public final void mP() throws RecognitionException {
         try {
-            // Windowing2.g:681:11: ( ( 'p' | 'P' ) )
-            // Windowing2.g:681:12: ( 'p' | 'P' )
+            // Windowing2.g:683:11: ( ( 'p' | 'P' ) )
+            // Windowing2.g:683:12: ( 'p' | 'P' )
             {
             if ( input.LA(1)=='P'||input.LA(1)=='p' ) {
                 input.consume();
@@ -3961,8 +3961,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start Q
     public final void mQ() throws RecognitionException {
         try {
-            // Windowing2.g:682:11: ( ( 'q' | 'Q' ) )
-            // Windowing2.g:682:12: ( 'q' | 'Q' )
+            // Windowing2.g:684:11: ( ( 'q' | 'Q' ) )
+            // Windowing2.g:684:12: ( 'q' | 'Q' )
             {
             if ( input.LA(1)=='Q'||input.LA(1)=='q' ) {
                 input.consume();
@@ -3986,8 +3986,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start R
     public final void mR() throws RecognitionException {
         try {
-            // Windowing2.g:683:11: ( ( 'r' | 'R' ) )
-            // Windowing2.g:683:12: ( 'r' | 'R' )
+            // Windowing2.g:685:11: ( ( 'r' | 'R' ) )
+            // Windowing2.g:685:12: ( 'r' | 'R' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -4011,8 +4011,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start S
     public final void mS() throws RecognitionException {
         try {
-            // Windowing2.g:684:11: ( ( 's' | 'S' ) )
-            // Windowing2.g:684:12: ( 's' | 'S' )
+            // Windowing2.g:686:11: ( ( 's' | 'S' ) )
+            // Windowing2.g:686:12: ( 's' | 'S' )
             {
             if ( input.LA(1)=='S'||input.LA(1)=='s' ) {
                 input.consume();
@@ -4036,8 +4036,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start T
     public final void mT() throws RecognitionException {
         try {
-            // Windowing2.g:685:11: ( ( 't' | 'T' ) )
-            // Windowing2.g:685:12: ( 't' | 'T' )
+            // Windowing2.g:687:11: ( ( 't' | 'T' ) )
+            // Windowing2.g:687:12: ( 't' | 'T' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -4061,8 +4061,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start U
     public final void mU() throws RecognitionException {
         try {
-            // Windowing2.g:686:11: ( ( 'u' | 'U' ) )
-            // Windowing2.g:686:12: ( 'u' | 'U' )
+            // Windowing2.g:688:11: ( ( 'u' | 'U' ) )
+            // Windowing2.g:688:12: ( 'u' | 'U' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -4086,8 +4086,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start V
     public final void mV() throws RecognitionException {
         try {
-            // Windowing2.g:687:11: ( ( 'v' | 'V' ) )
-            // Windowing2.g:687:12: ( 'v' | 'V' )
+            // Windowing2.g:689:11: ( ( 'v' | 'V' ) )
+            // Windowing2.g:689:12: ( 'v' | 'V' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -4111,8 +4111,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start W
     public final void mW() throws RecognitionException {
         try {
-            // Windowing2.g:688:11: ( ( 'w' | 'W' ) )
-            // Windowing2.g:688:12: ( 'w' | 'W' )
+            // Windowing2.g:690:11: ( ( 'w' | 'W' ) )
+            // Windowing2.g:690:12: ( 'w' | 'W' )
             {
             if ( input.LA(1)=='W'||input.LA(1)=='w' ) {
                 input.consume();
@@ -4136,8 +4136,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start X
     public final void mX() throws RecognitionException {
         try {
-            // Windowing2.g:689:11: ( ( 'x' | 'X' ) )
-            // Windowing2.g:689:12: ( 'x' | 'X' )
+            // Windowing2.g:691:11: ( ( 'x' | 'X' ) )
+            // Windowing2.g:691:12: ( 'x' | 'X' )
             {
             if ( input.LA(1)=='X'||input.LA(1)=='x' ) {
                 input.consume();
@@ -4161,8 +4161,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start Y
     public final void mY() throws RecognitionException {
         try {
-            // Windowing2.g:690:11: ( ( 'y' | 'Y' ) )
-            // Windowing2.g:690:12: ( 'y' | 'Y' )
+            // Windowing2.g:692:11: ( ( 'y' | 'Y' ) )
+            // Windowing2.g:692:12: ( 'y' | 'Y' )
             {
             if ( input.LA(1)=='Y'||input.LA(1)=='y' ) {
                 input.consume();
@@ -4186,8 +4186,8 @@ public class Windowing2Lexer extends Lexer {
     // $ANTLR start Z
     public final void mZ() throws RecognitionException {
         try {
-            // Windowing2.g:691:11: ( ( 'z' | 'Z' ) )
-            // Windowing2.g:691:12: ( 'z' | 'Z' )
+            // Windowing2.g:693:11: ( ( 'z' | 'Z' ) )
+            // Windowing2.g:693:12: ( 'z' | 'Z' )
             {
             if ( input.LA(1)=='Z'||input.LA(1)=='z' ) {
                 input.consume();

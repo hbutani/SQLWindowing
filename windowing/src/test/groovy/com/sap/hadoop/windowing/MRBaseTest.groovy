@@ -57,7 +57,7 @@ abstract class MRBaseTest
 		conf.set(Constants.HIVE_THRIFTSERVER, "hbserver7.dhcp.pal.sap.corp")
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
 		
-		conf.set("HIVE_HOME", "e:/hadoop/hive2/hive/build/dist")
+		conf.set("HIVE_HOME", "e:/hadoop/hive-0.9.0-bin")
 		
 		conf.set("hadoop.job.ugi", "hbutani,users");
 		
@@ -79,7 +79,11 @@ abstract class MRBaseTest
 		conf.set("hive.metastore.local", "false");
 		
 		conf.set("windowing.jar.file", "/media/MyPassport/windowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
-		conf.set(" mapred.reduce.tasks", "4");
+		conf.set(" mapred.reduce.tasks", "2");
+		
+		
+		conf.set("io.sort.mb", "200");
+		conf.set("mapred.compress.map.output", "true");
 		
 		conf.set(Constants.HIVE_THRIFTSERVER, "localhost")
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
@@ -127,7 +131,7 @@ abstract class MRBaseTest
 		
 		conf.set(Constants.HIVE_THRIFTSERVER, "hbserver7.dhcp.pal.sap.corp")
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
-		conf.set("HIVE_HOME", "e:/hadoop/hive2/hive/build/dist")
+		conf.set("HIVE_HOME", "e:/hadoop/hive-0.9.0-bin")
 		
 		return conf;
 	}

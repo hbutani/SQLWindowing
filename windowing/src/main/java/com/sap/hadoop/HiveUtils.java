@@ -34,7 +34,7 @@ import com.sap.hadoop.windowing.WindowingException;
 
 public class HiveUtils
 {
-	private static final Log LOG = LogFactory.getLog("com.sap.hadoop");
+	private static final Log LOG = LogFactory.getLog("com.sap.hadoop.windowing");
 	
 	@SuppressWarnings("unchecked")
 	public static List<FieldSchema> addTableasJobInput(String db, String table, JobConf job, FileSystem fs) throws WindowingException

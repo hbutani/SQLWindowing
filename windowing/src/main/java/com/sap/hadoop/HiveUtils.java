@@ -5,6 +5,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -20,7 +21,15 @@ import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.metastore.api.MetaException;
 import org.apache.hadoop.hive.metastore.api.StorageDescriptor;
 import org.apache.hadoop.hive.metastore.api.Table;
+import org.apache.hadoop.hive.ql.exec.ColumnInfo;
+import org.apache.hadoop.hive.ql.metadata.Hive;
+import org.apache.hadoop.hive.ql.metadata.VirtualColumn;
+import org.apache.hadoop.hive.ql.parse.RowResolver;
 import org.apache.hadoop.hive.serde2.Deserializer;
+import org.apache.hadoop.hive.serde2.objectinspector.StructField;
+import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
+import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
+import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapred.FileInputFormat;
 import org.apache.hadoop.mapred.InputFormat;
@@ -240,6 +249,64 @@ public class HiveUtils
 		}
 
 		return new URLClassLoader(curPath.toArray(new URL[0]), loader);
+	}
+	
+	public static RowResolver getRowResolver(String db, String table, String alias, HiveConf conf) throws WindowingException
+	{
+		LOG.info("HiveUtils::getRowResolver invoked on " + table);
+		try
+		{
+			HiveMetaStoreClient client = getClient(conf);
+
+			db = validateDB(client, db);
+			org.apache.hadoop.hive.ql.metadata.Table t = Hive.get(conf).getTable(db, table);
+			RowResolver rwsch = new RowResolver();
+			 StructObjectInspector rowObjectInspector = (StructObjectInspector) t.getDeserializer().getObjectInspector();
+			 List<? extends StructField> fields = rowObjectInspector.getAllStructFieldRefs();
+			 for (int i = 0; i < fields.size(); i++)
+			 {
+				 rwsch.put(alias, fields.get(i).getFieldName(), 
+						 	new ColumnInfo(fields.get(i).getFieldName(), 
+						 			TypeInfoUtils.getTypeInfoFromObjectInspector(fields.get(i).getFieldObjectInspector()), 
+						 			alias, 
+						 			false)
+				 );
+			 }
+			 
+			 for (FieldSchema part_col : t.getPartCols()) 
+			 {
+			        LOG.trace("Adding partition col: " + part_col);
+			        rwsch.put(alias, part_col.getName(), 
+			        		new ColumnInfo(part_col.getName(),
+			        				TypeInfoFactory.getPrimitiveTypeInfo(part_col.getType()), alias, true)
+			        );
+			  }
+			 
+			 Iterator<VirtualColumn> vcs = VirtualColumn.getRegistry(conf).iterator();
+		      //use a list for easy cumtomize
+		      List<VirtualColumn> vcList = new ArrayList<VirtualColumn>();
+		      while (vcs.hasNext()) 
+		      {
+		        VirtualColumn vc = vcs.next();
+		        rwsch.put(alias, vc.getName(), 
+		        		new ColumnInfo(vc.getName(),
+		        				vc.getTypeInfo(), alias, true, vc.getIsHidden()
+		        				)
+		        );
+		        vcList.add(vc);
+		      }
+			
+			
+			return rwsch;
+		}
+		catch(WindowingException w)
+		{
+			throw w;
+		}
+		catch(Exception me)
+		{
+			throw new WindowingException(me);
+		}
 	}
 
 }

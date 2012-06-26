@@ -9,6 +9,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
+import org.apache.hadoop.hive.metastore.MetaStoreUtils;
 import org.apache.hadoop.hive.metastore.api.StorageDescriptor;
 import org.apache.hadoop.hive.metastore.api.Table;
 import org.apache.hadoop.mapred.InputFormat;
@@ -63,7 +64,7 @@ class IOUtils
 			
 			TableWindowingInput tIn = new TableWindowingInput()
 			
-			tIn.initialize(null, hConf, getProperties(sd) )
+			tIn.initialize(null, hConf, MetaStoreUtils.getSchema(t) )
 			
 			return tIn;
 			
@@ -79,13 +80,4 @@ class IOUtils
 		}
 	}
 	
-	static Properties getProperties(StorageDescriptor sd)
-	{
-		Properties props = new Properties()
-		
-		sd.getParameters().each { String name, String value ->
-			props.put(name, value);
-		}
-		return props;
-	}
 }

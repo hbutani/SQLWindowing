@@ -2,6 +2,9 @@ package com.sap.hadoop;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.hadoop.hive.serde.Constants;
@@ -37,6 +40,42 @@ public class Utils
     	{
     		throw new BaseException(se);
     	}
+    }
+    
+    public static String toString(List<?> col)
+    {
+    	StringBuilder buf = new StringBuilder();
+    	buf.append("[");
+    	boolean first = true;
+    	for(Object o : col)
+    	{
+    		if ( first )
+    			first = false;
+    		else
+    			buf.append(", ");
+    		buf.append(o.toString());
+    	}
+    	buf.append("]");
+    	return buf.toString();
+    }
+    
+    public static String toString(Map<?, ?> col)
+    {
+    	StringBuilder buf = new StringBuilder();
+    	buf.append("[");
+    	boolean first = true;
+    	for(Map.Entry<?, ?> o : col.entrySet())
+    	{
+    		if ( first )
+    			first = false;
+    		else
+    			buf.append(", ");
+    		buf.append(o.getKey().toString()).
+    				append(" : ").
+    				append(o.getValue().toString());
+    	}
+    	buf.append("]");
+    	return buf.toString();
     }
 
 }

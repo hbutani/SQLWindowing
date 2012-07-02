@@ -136,7 +136,9 @@ hiveQuery :
 ; 
 
 hiveTable :
-  Identifier -> ^(HIVETBL Identifier) 
+  i1=Identifier (DOT i2=Identifier)?
+  -> {$i2 != null}? ^(HIVETBL $i1 $i2)
+  ->                ^(HIVETBL $i1)
 ;
 
 tblfunc :

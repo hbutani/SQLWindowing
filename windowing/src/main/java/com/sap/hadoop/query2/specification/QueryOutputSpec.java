@@ -3,7 +3,7 @@ package com.sap.hadoop.query2.specification;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QueryOutputSpec
+public class QueryOutputSpec implements INameValueList
 {
 	String path;
 	String serDeClass;
@@ -41,6 +41,12 @@ public class QueryOutputSpec
 	{
 		serDeProps = serDeProps == null ? new HashMap<String, String>() : serDeProps;
 		serDeProps.put(name, value);
+	}
+	@Override
+	public void add(String name, String value)
+	{
+		addSerdeProperty(name, value);
+		
 	}
 	public String getRecordWriterClass()
 	{

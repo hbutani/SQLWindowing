@@ -3,7 +3,7 @@ package com.sap.hadoop.query2.specification;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HdfsLocationSpec extends QueryInputSpec
+public class HdfsLocationSpec extends QueryInputSpec implements INameValueList
 {
 	Map<String, String>	properties;
 
@@ -21,6 +21,13 @@ public class HdfsLocationSpec extends QueryInputSpec
 	{
 		properties = properties == null ? new HashMap<String, String>() : properties;
 		properties.put(name, value);
+	}
+	
+	@Override
+	public void add(String name, String value)
+	{
+		addProperty(name, value);
+		
 	}
 
 	@Override

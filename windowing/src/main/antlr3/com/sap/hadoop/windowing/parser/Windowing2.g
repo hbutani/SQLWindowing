@@ -38,6 +38,8 @@ tokens {
   HDFSLOCATION;
   HIVEQ;
   HIVETBL;
+  UPLUS;
+  UMINUS;
 }
 
 @header {
@@ -338,19 +340,19 @@ compareExpr :
   (l=bitOrExpr -> $l)
   (
     (NOT nO=negatableOperator r=bitOrExpr -> 
-                                       ^(NOT ^($nO $compareExpr $r) ) 
+                                       ^($nO FALSE $compareExpr $r) 
     ) |
     
     (cO=compareOperator r=bitOrExpr ->
-                                     ^($cO $compareExpr $r)
+                                     ^($cO TRUE $compareExpr $r)
     ) |
     
     (NOT IN el=expressions ->
-                         ^(NOT ^(FUNCTION IN $compareExpr $el))
+                         ^(FUNCTION IN FALSE $compareExpr $el)
     ) |
     
     (IN expressions ->
-                    ^(FUNCTION IN $compareExpr $el)
+                    ^(FUNCTION IN TRUE $compareExpr $el)
     ) |
     
     (NOT BETWEEN min=bitOrExpr AND max=bitOrExpr ->
@@ -394,7 +396,11 @@ nullExpr :
 ;
 
 unaryExpr :
-  (PLUS^ | MINUS^ | TILDE^)* fieldExpr
+  (PLUS -> ^(UPLUS $unaryExpr) | 
+   MINUS -> ^(UMINUS $unaryExpr) | 
+   TILDE -> ^(TILDE $unaryExpr)
+   )* 
+  fieldExpr
 ;
 
 fieldExpr :

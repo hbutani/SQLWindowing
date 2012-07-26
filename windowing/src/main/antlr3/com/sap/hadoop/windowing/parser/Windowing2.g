@@ -396,9 +396,9 @@ nullExpr :
 ;
 
 unaryExpr :
-  (PLUS -> ^(UPLUS $unaryExpr) | 
-   MINUS -> ^(UMINUS $unaryExpr) | 
-   TILDE -> ^(TILDE $unaryExpr)
+  (PLUS^ | 
+   MINUS^ | 
+   TILDE^
    )* 
   fieldExpr
 ;

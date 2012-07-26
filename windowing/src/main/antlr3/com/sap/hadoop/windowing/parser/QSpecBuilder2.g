@@ -241,25 +241,6 @@ expressions :
   expression*
 ;
 
-expression :
-  orExpr
-;
-
-orExpr :
-  andExpr |
-  ^(OR orExpr andExpr)
-;
-
-andExpr :
-  notExpr |
-  ^(AND andExpr notExpr)
-;
-
-notExpr :
-  compareExpr |
-  ^(NOT notExpr)
-;
-
 negatableOperator :
   LIKE | RLIKE | REGEXP
 ;
@@ -269,76 +250,43 @@ compareOperator :
   GREATERTHANOREQUALTO | GREATERTHAN
 ;
 
-compareExpr :
- ^(negatableOperator FALSE compareExpr  bitOrExpr ) |
- ^(compareOperator TRUE compareExpr bitOrExpr) |
- ^(FUNCTION IN FALSE compareExpr expressions)|
- ^(FUNCTION IN TRUE compareExpr expressions) |
- ^(FUNCTION BETWEEN FALSE compareExpr bitOrExpr bitOrExpr) |
- ^(FUNCTION BETWEEN TRUE compareExpr bitOrExpr bitOrExpr) |
- bitOrExpr
-;
-
-bitOrExpr :
-  ^(BITWISEOR bitOrExpr bitAndExpr)
-;
-
-bitAndExpr :
-  plusExpr |
-  ^(AMPERSAND bitAndExpr)
-;
-
-plusExpr :
-  ^(PLUS plusExpr starExpr) |
-  ^(MINUS plusExpr starExpr) |
-  starExpr
-; 
-
-starExpr :
-  xorExpr |
-  ^(STAR starExpr xorExpr) |
-  ^(DIVIDE starExpr xorExpr) |
-  ^(MOD starExpr xorExpr) |
-  ^(DIV starExpr xorExpr )
-;
-
-xorExpr :
-  ^(BITWISEXOR xorExpr nullExpr) |
-  nullExpr
-;
-
 nullCondition :
   NULL |
   NOTNULL
 ;
 
-nullExpr :
-  ^(FUNCTION nullCondition unaryExpr) |
-  unaryExpr
-;
-
-unaryExpr :
-  fieldExpr |
-  ^(UPLUS unaryExpr ) |
-  ^(UMINUS unaryExpr ) |
-  ^(TILDE unaryExpr )
-;
-
-fieldExpr :
-  ^(LSQUARE fieldExpr expression) |
-  ^(DOT fieldExpr Identifier ) |
-  atomExpr
-;
-
-atomExpr :
-  NULL 
-  | constant
-  | function
-  | castExpr
-  | caseExpr
-  | whenExpr
-  | tableOrColumn
-  | expression
+expression :
+  ^(OR expression expression) |
+  ^(AND expression expression) |
+  ^(NOT expression) |
+  ^(negatableOperator FALSE expression  expression ) |
+  ^(compareOperator TRUE expression expression) |
+  ^(FUNCTION IN FALSE expression expressions)|
+  ^(FUNCTION IN TRUE expression expressions) |
+  ^(FUNCTION BETWEEN FALSE expression expression expression) |
+  ^(FUNCTION BETWEEN TRUE expression expression expression) |
+  ^(BITWISEOR expression expression) |
+  ^(AMPERSAND expression expression) |
+  ^(PLUS expression expression?) |
+  ^(MINUS expression expression?) |
+  ^(STAR expression expression) |
+  ^(DIVIDE expression expression) |
+  ^(MOD expression expression) |
+  ^(DIV expression expression ) |
+  ^(BITWISEXOR expression expression) |
+  ^(FUNCTION nullCondition expression) |
+/*  ^(PLUS expression ) |
+  ^(MINUS expression ) |*/
+  ^(TILDE expression ) |
+  ^(LSQUARE expression expression) |
+  ^(DOT expression Identifier ) |
+  NULL | 
+  constant | 
+  function | 
+  castExpr | 
+  caseExpr | 
+  whenExpr | 
+  tableOrColumn
 ;
 
 booleanValue

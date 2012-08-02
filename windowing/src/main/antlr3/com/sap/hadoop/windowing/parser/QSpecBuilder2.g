@@ -135,9 +135,9 @@ window_function returns [WindowFunctionSpec wFn]
   $wFn = new WindowFunctionSpec();
 }
   : 
-  ^(WDW_FUNCTIONSTAR functionName ws=window_specification?) {$wFn.setName($functionName.text); $wFn.setWindowSpec(ws); } |
+  ^(WDW_FUNCTIONSTAR functionName ws=window_specification?) {$wFn.setName($functionName.text); $wFn.setWindowSpec(ws); $wFn.setStar(true);} |
   ^(WDW_FUNCTION functionName ((e=expression{$wFn.addArg(e);})+)? ws=window_specification?) {$wFn.setName($functionName.text); $wFn.setWindowSpec(ws); } |
-  ^(WDW_FUNCTIONDIST functionName ((e=expression{$wFn.addArg(e);})+)? ws=window_specification?) {$wFn.setName($functionName.text); $wFn.setWindowSpec(ws); }
+  ^(WDW_FUNCTIONDIST functionName ((e=expression{$wFn.addArg(e);})+)? ws=window_specification?) {$wFn.setName($functionName.text); $wFn.setWindowSpec(ws); $wFn.setDistinct(true); }
 ;  
 
 window_clause[QuerySpec qs] :
@@ -204,8 +204,8 @@ valuesboundary returns [BoundarySpec bs] :
   ^(PRECEDING UNBOUNDED) {$bs = new ValueBoundarySpec(Direction.PRECEDING, null, BoundarySpec.UNBOUNDED_AMOUNT);} | 
   ^(FOLLOWING UNBOUNDED) {$bs = new ValueBoundarySpec(Direction.FOLLOWING, null, BoundarySpec.UNBOUNDED_AMOUNT);} |
   CURRENT {$bs = new CurrentRowSpec();} |
-  ^(LESS e=expression Number) {$bs = new ValueBoundarySpec(Direction.PRECEDING, e, BoundarySpec.UNBOUNDED_AMOUNT);} |
-  ^(MORE e=expression Number) {$bs = new ValueBoundarySpec(Direction.PRECEDING, e, BoundarySpec.UNBOUNDED_AMOUNT);}
+  ^(LESS e=expression n=Number) {$bs = new ValueBoundarySpec(Direction.PRECEDING, e, Integer.parseInt($n.text));} |
+  ^(MORE e=expression n=Number) {$bs = new ValueBoundarySpec(Direction.PRECEDING, e, Integer.parseInt($n.text));}
 ;
 
 columnReference returns [ColumnSpec cs]:

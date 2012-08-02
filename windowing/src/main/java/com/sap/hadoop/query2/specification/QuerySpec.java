@@ -138,13 +138,17 @@ public class QuerySpec
 		
 		if ( windowSpecs != null)
 		{
-			boolean first = false;
-			buf.append("window ").append(NL);
+			boolean first = true;
+			buf.append("window ");
 			for(Map.Entry<String, WindowSpec> wentry : windowSpecs.entrySet())
 			{
-				if ( first ) first = false; else buf.append(", ");
-				buf.append(wentry.getKey()).append(" as ").append(wentry.getValue()).append(NL);
+				if ( first ) 
+					first = false; 
+				else 
+					buf.append(",");
+				buf.append(NL).append("  ").append(wentry.getKey()).append(" as ").append(wentry.getValue());
 			}
+			buf.append(NL);
 		}
 		
 		if ( output != null )

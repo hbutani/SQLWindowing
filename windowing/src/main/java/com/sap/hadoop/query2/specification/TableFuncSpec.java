@@ -100,9 +100,10 @@ public class TableFuncSpec extends QueryInputSpec
 		StringBuilder buf = new StringBuilder();
 		
 		buf.append(name).append("(");
-		buf.append(name).append("(");
+		buf.append(QuerySpec.NL).append("  ").append(input);
 		if ( args != null )
 		{
+			buf.append(QuerySpec.NL).append("  ");
 			boolean first = true;
 			for(CommonTree arg : args)
 			{
@@ -110,7 +111,7 @@ public class TableFuncSpec extends QueryInputSpec
 				buf.append(arg.toStringTree());
 			}
 		}
-		buf.append(")");
+		buf.append(QuerySpec.NL).append("  )");
 		if ( partition != null )
 		{
 			buf.append(" ").append(partition);

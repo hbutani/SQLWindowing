@@ -122,7 +122,7 @@ public class WindowSpec
 		if (sourceId != null) buf.append(sprintf("%s ", sourceId));
 		if (partition != null) buf.append(sprintf("%s ", partition));
 		if (order != null) buf.append(sprintf("%s ", order));
-		buf.append(sprintf("%s ", window));
+		if (window != null)  buf.append(sprintf("%s ", window));
 		return buf.toString();
 	}
 }

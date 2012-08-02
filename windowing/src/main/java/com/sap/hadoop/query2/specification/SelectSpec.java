@@ -157,7 +157,8 @@ public class SelectSpec implements Iterable<Object>
 		Iterator<String> aIt = aliases.iterator();
 		for(Object o : this)
 		{
-			if ( first ) first = false; else buf.append(", ");
+			if ( first ) first = false; else buf.append(",");
+			buf.append(QuerySpec.NL).append("  ");
 			if ( o instanceof CommonTree)
 			{
 				buf.append(((CommonTree)o).toStringTree());

@@ -65,7 +65,7 @@ select  returns [SelectSpec ss]
 
 selectColumn[SelectSpec ss]:
   ^(SELECTCOLUMN e=expression i=Identifier?) {ss.addExpression(e, i!=null ? $i.text : null);} |
-  ^(SELECTCOLUMN w=window_function i=Identifier) {ss.addWindowFunc(e, $i.text);}
+  ^(SELECTCOLUMN w=window_function i=Identifier) {ss.addWindowFunc(w, $i.text);}
 ;
 
 tableSpec returns [QueryInputSpec qIn] :
@@ -81,13 +81,13 @@ hiveTable returns [QueryInputSpec hTSpec]:
   ^(HIVETBL t=Identifier) {$hTSpec = new HiveTableSpec(null, $t.text);}
 ;
 
-tblfunc returns [QueryInputSpec tblFn]
+tblfunc returns [QueryInputSpec qIn]
 @init
 {
-  $tblFn = new TableFuncSpec();
+  TableFuncSpec tblFn = new TableFuncSpec();
 }
  :
-  ^(TBLFUNCTION i=Identifier t=tableSpec (e=expression {$tblFn.addArg(e);})*) {$tblFn.setName($i.text); $tblFn.setInput(t);}
+  ^(TBLFUNCTION i=Identifier t=tableSpec (e=expression {tblFn.addArg(e);})*) {tblFn.setName($i.text); tblFn.setInput(t); $qIn = tblFn; }
 ;
 
 hdfsFile returns [HdfsLocationSpec hLoc]

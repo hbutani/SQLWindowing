@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 QSpecBuilder2.g 2012-08-02 07:49:03
+// $ANTLR 3.0.1 QSpecBuilder2.g 2012-08-02 07:58:27
 
 package com.sap.hadoop.windowing.parser;
 
@@ -501,7 +501,7 @@ public class QSpecBuilder2 extends TreeParser {
                     match(input,Identifier,FOLLOW_Identifier_in_selectColumn155); 
 
                     match(input, Token.UP, null); 
-                    ss.addWindowFunc(e, i.getText());
+                    ss.addWindowFunc(w, i.getText());
 
                     }
                     break;
@@ -804,9 +804,9 @@ public class QSpecBuilder2 extends TreeParser {
 
 
     // $ANTLR start tblfunc
-    // QSpecBuilder2.g:84:1: tblfunc returns [QueryInputSpec tblFn] : ^( TBLFUNCTION i= Identifier t= tableSpec (e= expression )* ) ;
+    // QSpecBuilder2.g:84:1: tblfunc returns [QueryInputSpec qIn] : ^( TBLFUNCTION i= Identifier t= tableSpec (e= expression )* ) ;
     public final QueryInputSpec tblfunc() throws RecognitionException {
-        QueryInputSpec tblFn = null;
+        QueryInputSpec qIn = null;
 
         CommonTree i=null;
         QueryInputSpec t = null;
@@ -815,7 +815,7 @@ public class QSpecBuilder2 extends TreeParser {
 
 
 
-          tblFn = new TableFuncSpec();
+          TableFuncSpec tblFn = new TableFuncSpec();
 
         try {
             // QSpecBuilder2.g:89:2: ( ^( TBLFUNCTION i= Identifier t= tableSpec (e= expression )* ) )
@@ -861,7 +861,7 @@ public class QSpecBuilder2 extends TreeParser {
 
 
             match(input, Token.UP, null); 
-            tblFn.setName(i.getText()); tblFn.setInput(t);
+            tblFn.setName(i.getText()); tblFn.setInput(t); qIn = tblFn; 
 
             }
 
@@ -872,7 +872,7 @@ public class QSpecBuilder2 extends TreeParser {
         }
         finally {
         }
-        return tblFn;
+        return qIn;
     }
     // $ANTLR end tblfunc
 

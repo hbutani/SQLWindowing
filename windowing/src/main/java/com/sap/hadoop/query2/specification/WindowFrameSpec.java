@@ -4,29 +4,36 @@ import static com.sap.hadoop.Utils.sprintf;
 
 import org.antlr.runtime.tree.CommonTree;
 
-import com.sap.hadoop.windowing.query.Boundary;
-
 public class WindowFrameSpec
 {
-	Boundary start;
-	Boundary end;
+	BoundarySpec start;
+	BoundarySpec end;
 	
-	public Boundary getStart()
+	public WindowFrameSpec() {}
+	
+	public WindowFrameSpec(BoundarySpec start, BoundarySpec end)
+	{
+		super();
+		this.start = start;
+		this.end = end;
+	}
+
+	public BoundarySpec getStart()
 	{
 		return start;
 	}
 
-	public void setStart(Boundary start)
+	public void setStart(BoundarySpec start)
 	{
 		this.start = start;
 	}
 
-	public Boundary getEnd()
+	public BoundarySpec getEnd()
 	{
 		return end;
 	}
 
-	public void setEnd(Boundary end)
+	public void setEnd(BoundarySpec end)
 	{
 		this.end = end;
 	}
@@ -94,6 +101,15 @@ public class WindowFrameSpec
 		Direction direction;
 		int amt;
 		
+		public RangeBoundarySpec() {}
+		
+		public RangeBoundarySpec(Direction direction, int amt)
+		{
+			super();
+			this.direction = direction;
+			this.amt = amt;
+		}
+
 		public Direction getDirection()
 		{
 			return direction;
@@ -179,6 +195,17 @@ public class WindowFrameSpec
 		CommonTree expression;
 		int amt;
 		
+		public ValueBoundarySpec() {}
+		
+		public ValueBoundarySpec(Direction direction, CommonTree expression,
+				int amt)
+		{
+			super();
+			this.direction = direction;
+			this.expression = expression;
+			this.amt = amt;
+		}
+
 		public Direction getDirection()
 		{
 			return direction;

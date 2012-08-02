@@ -10,23 +10,21 @@ public class SelectSpec implements Iterable<Object>
 	ArrayList<CommonTree> expressions;
 	ArrayList<WindowFunctionSpec> windowFuncs;
 	ArrayList<Boolean> isWindowFn;
+	ArrayList<String> aliases;
 	
 	public ArrayList<CommonTree> getExpressions()
 	{
 		return expressions;
 	}
 	
-	public void setExpressions(ArrayList<CommonTree> expressions)
-	{
-		this.expressions = expressions;
-	}
-	
-	public void addExpression(CommonTree expr)
+	public void addExpression(CommonTree expr, String alias)
 	{
 		isWindowFn = isWindowFn == null ? new ArrayList<Boolean>() : isWindowFn;
 		expressions = expressions == null ? new ArrayList<CommonTree>() : expressions;
+		aliases = aliases == null ? new ArrayList<String>() : aliases;
 		isWindowFn.add(false);
 		expressions.add(expr);
+		aliases.add(alias);
 	}
 	
 	public ArrayList<WindowFunctionSpec> getWindowFuncs()
@@ -34,27 +32,19 @@ public class SelectSpec implements Iterable<Object>
 		return windowFuncs;
 	}
 	
-	public void setWindowFuncs(ArrayList<WindowFunctionSpec> windowFuncs)
-	{
-		this.windowFuncs = windowFuncs;
-	}
-	
-	public void addWindowFuncn(WindowFunctionSpec wFn)
+	public void addWindowFunc(WindowFunctionSpec wFn, String alias)
 	{
 		isWindowFn = isWindowFn == null ? new ArrayList<Boolean>() : isWindowFn;
 		windowFuncs = windowFuncs == null ? new ArrayList<WindowFunctionSpec>() : windowFuncs;
+		aliases = aliases == null ? new ArrayList<String>() : aliases;
 		isWindowFn.add(true);
 		windowFuncs.add(wFn);
+		aliases.add(alias);
 	}
 	
 	public ArrayList<Boolean> getIsWindowFn()
 	{
 		return isWindowFn;
-	}
-	
-	public void setIsWindowFn(ArrayList<Boolean> isWindowFn)
-	{
-		this.isWindowFn = isWindowFn;
 	}
 	
 	public class It implements Iterator<Object>
@@ -113,6 +103,8 @@ public class SelectSpec implements Iterable<Object>
 				+ ((isWindowFn == null) ? 0 : isWindowFn.hashCode());
 		result = prime * result
 				+ ((windowFuncs == null) ? 0 : windowFuncs.hashCode());
+		result = prime * result
+				+ ((aliases == null) ? 0 : aliases.hashCode());
 		return result;
 	}
 
@@ -147,6 +139,13 @@ public class SelectSpec implements Iterable<Object>
 		}
 		else if (!windowFuncs.equals(other.windowFuncs))
 			return false;
+		if (aliases == null)
+		{
+			if (other.aliases != null)
+				return false;
+		}
+		else if (!aliases.equals(other.aliases))
+			return false;
 		return true;
 	}
 	
@@ -155,10 +154,16 @@ public class SelectSpec implements Iterable<Object>
 		StringBuilder buf = new StringBuilder();
 		buf.append("select ");
 		boolean first = true;
+		Iterator<String> aIt = aliases.iterator();
 		for(Object o : this)
 		{
 			if ( first ) first = false; else buf.append(", ");
 			buf.append(o.toString());
+			String alias = aIt.next();
+			if (alias != null )
+			{
+				buf.append(" as ").append(alias);
+			}
 		}
 		return buf.toString();
 	}

@@ -8,6 +8,14 @@ public class OrderColumnSpec extends ColumnSpec
 {
 	Order order;
 	
+	public OrderColumnSpec() {}
+	
+	public OrderColumnSpec(String tableName, String columnName, Order order)
+	{
+		super(tableName, columnName);
+		this.order = order;
+	}
+
 	public Order getOrder()
 	{
 		return order;

@@ -9,6 +9,18 @@ public class WindowSpec
 	OrderSpec order;
 	WindowFrameSpec window;
 	
+	public WindowSpec() {}
+	
+	public WindowSpec(String sourceId, PartitionSpec partition,
+			OrderSpec order, WindowFrameSpec window)
+	{
+		super();
+		this.sourceId = sourceId;
+		this.partition = partition;
+		this.order = order;
+		this.window = window;
+	}
+
 	public String getSourceId()
 	{
 		return sourceId;

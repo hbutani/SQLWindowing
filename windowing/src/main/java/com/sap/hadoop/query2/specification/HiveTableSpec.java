@@ -5,6 +5,15 @@ public class HiveTableSpec extends QueryInputSpec
 	String dbName;
 	String tableName;
 	
+	public HiveTableSpec() {}
+	
+	public HiveTableSpec(String dbName, String tableName)
+	{
+		super();
+		this.dbName = dbName;
+		this.tableName = tableName;
+	}
+
 	public String getDbName()
 	{
 		return dbName;

@@ -7,6 +7,15 @@ public class ColumnSpec
 	String tableName;
 	String columnName;
 	
+	public ColumnSpec() {}
+	
+	public ColumnSpec(String tableName, String columnName)
+	{
+		super();
+		setTableName(tableName);
+		setColumnName(columnName);
+	}
+
 	public String getTableName()
 	{
 		return tableName;

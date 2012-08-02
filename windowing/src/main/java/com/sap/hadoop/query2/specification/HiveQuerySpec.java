@@ -4,6 +4,14 @@ public class HiveQuerySpec  extends QueryInputSpec
 {
 	String hiveQuery;
 
+	public HiveQuerySpec() {}
+	
+	public HiveQuerySpec(String hiveQuery)
+	{
+		super();
+		this.hiveQuery = hiveQuery;
+	}
+
 	public String getHiveQuery()
 	{
 		return hiveQuery;

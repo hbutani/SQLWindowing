@@ -158,7 +158,14 @@ public class SelectSpec implements Iterable<Object>
 		for(Object o : this)
 		{
 			if ( first ) first = false; else buf.append(", ");
-			buf.append(o.toString());
+			if ( o instanceof CommonTree)
+			{
+				buf.append(((CommonTree)o).toStringTree());
+			}
+			else
+			{
+				buf.append(o.toString());
+			}
 			String alias = aIt.next();
 			if (alias != null )
 			{

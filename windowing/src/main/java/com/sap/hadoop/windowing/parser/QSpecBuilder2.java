@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 QSpecBuilder2.g 2012-08-02 07:58:27
+// $ANTLR 3.0.1 QSpecBuilder2.g 2012-08-02 09:06:28
 
 package com.sap.hadoop.windowing.parser;
 
@@ -237,29 +237,31 @@ public class QSpecBuilder2 extends TreeParser {
 
 
     // $ANTLR start query
-    // QSpecBuilder2.g:53:1: query : ^( QUERY tableSpec ss= select ( where[qSpec] )? ( window_clause[qSpec] )? (oc= outputClause )? ) ;
+    // QSpecBuilder2.g:53:1: query : ^( QUERY ts= tableSpec ss= select ( where[qSpec] )? ( window_clause[qSpec] )? (oc= outputClause )? ) ;
     public final void query() throws RecognitionException {
+        QueryInputSpec ts = null;
+
         SelectSpec ss = null;
 
         QueryOutputSpec oc = null;
 
 
         try {
-            // QSpecBuilder2.g:53:7: ( ^( QUERY tableSpec ss= select ( where[qSpec] )? ( window_clause[qSpec] )? (oc= outputClause )? ) )
-            // QSpecBuilder2.g:54:2: ^( QUERY tableSpec ss= select ( where[qSpec] )? ( window_clause[qSpec] )? (oc= outputClause )? )
+            // QSpecBuilder2.g:53:7: ( ^( QUERY ts= tableSpec ss= select ( where[qSpec] )? ( window_clause[qSpec] )? (oc= outputClause )? ) )
+            // QSpecBuilder2.g:54:2: ^( QUERY ts= tableSpec ss= select ( where[qSpec] )? ( window_clause[qSpec] )? (oc= outputClause )? )
             {
             match(input,QUERY,FOLLOW_QUERY_in_query66); 
 
             match(input, Token.DOWN, null); 
-            pushFollow(FOLLOW_tableSpec_in_query68);
-            tableSpec();
+            pushFollow(FOLLOW_tableSpec_in_query70);
+            ts=tableSpec();
             _fsp--;
 
-            pushFollow(FOLLOW_select_in_query72);
+            pushFollow(FOLLOW_select_in_query74);
             ss=select();
             _fsp--;
 
-            // QSpecBuilder2.g:54:30: ( where[qSpec] )?
+            // QSpecBuilder2.g:54:33: ( where[qSpec] )?
             int alt1=2;
             int LA1_0 = input.LA(1);
 
@@ -268,9 +270,9 @@ public class QSpecBuilder2 extends TreeParser {
             }
             switch (alt1) {
                 case 1 :
-                    // QSpecBuilder2.g:54:30: where[qSpec]
+                    // QSpecBuilder2.g:54:33: where[qSpec]
                     {
-                    pushFollow(FOLLOW_where_in_query74);
+                    pushFollow(FOLLOW_where_in_query76);
                     where(qSpec);
                     _fsp--;
 
@@ -280,7 +282,7 @@ public class QSpecBuilder2 extends TreeParser {
 
             }
 
-            // QSpecBuilder2.g:54:44: ( window_clause[qSpec] )?
+            // QSpecBuilder2.g:54:47: ( window_clause[qSpec] )?
             int alt2=2;
             int LA2_0 = input.LA(1);
 
@@ -289,9 +291,9 @@ public class QSpecBuilder2 extends TreeParser {
             }
             switch (alt2) {
                 case 1 :
-                    // QSpecBuilder2.g:54:44: window_clause[qSpec]
+                    // QSpecBuilder2.g:54:47: window_clause[qSpec]
                     {
-                    pushFollow(FOLLOW_window_clause_in_query78);
+                    pushFollow(FOLLOW_window_clause_in_query80);
                     window_clause(qSpec);
                     _fsp--;
 
@@ -301,7 +303,7 @@ public class QSpecBuilder2 extends TreeParser {
 
             }
 
-            // QSpecBuilder2.g:54:68: (oc= outputClause )?
+            // QSpecBuilder2.g:54:71: (oc= outputClause )?
             int alt3=2;
             int LA3_0 = input.LA(1);
 
@@ -310,9 +312,9 @@ public class QSpecBuilder2 extends TreeParser {
             }
             switch (alt3) {
                 case 1 :
-                    // QSpecBuilder2.g:54:68: oc= outputClause
+                    // QSpecBuilder2.g:54:71: oc= outputClause
                     {
-                    pushFollow(FOLLOW_outputClause_in_query84);
+                    pushFollow(FOLLOW_outputClause_in_query86);
                     oc=outputClause();
                     _fsp--;
 
@@ -324,7 +326,7 @@ public class QSpecBuilder2 extends TreeParser {
 
 
             match(input, Token.UP, null); 
-            qSpec.setSelectList(ss); qSpec.setOutput(oc);
+             qSpec.setInput(ts); qSpec.setSelectList(ss); qSpec.setOutput(oc);
 
             }
 
@@ -352,7 +354,7 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:62:2: ( ^( SELECT ( selectColumn[ss] )+ ) )
             // QSpecBuilder2.g:63:3: ^( SELECT ( selectColumn[ss] )+ )
             {
-            match(input,SELECT,FOLLOW_SELECT_in_select111); 
+            match(input,SELECT,FOLLOW_SELECT_in_select113); 
 
             match(input, Token.DOWN, null); 
             // QSpecBuilder2.g:63:12: ( selectColumn[ss] )+
@@ -371,7 +373,7 @@ public class QSpecBuilder2 extends TreeParser {
             	case 1 :
             	    // QSpecBuilder2.g:63:12: selectColumn[ss]
             	    {
-            	    pushFollow(FOLLOW_selectColumn_in_select113);
+            	    pushFollow(FOLLOW_selectColumn_in_select115);
             	    selectColumn(ss);
             	    _fsp--;
 
@@ -455,10 +457,10 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:67:3: ^( SELECTCOLUMN e= expression (i= Identifier )? )
                     {
-                    match(input,SELECTCOLUMN,FOLLOW_SELECTCOLUMN_in_selectColumn128); 
+                    match(input,SELECTCOLUMN,FOLLOW_SELECTCOLUMN_in_selectColumn130); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_selectColumn132);
+                    pushFollow(FOLLOW_expression_in_selectColumn134);
                     e=expression();
                     _fsp--;
 
@@ -474,7 +476,7 @@ public class QSpecBuilder2 extends TreeParser {
                             // QSpecBuilder2.g:67:32: i= Identifier
                             {
                             i=(CommonTree)input.LT(1);
-                            match(input,Identifier,FOLLOW_Identifier_in_selectColumn136); 
+                            match(input,Identifier,FOLLOW_Identifier_in_selectColumn138); 
 
                             }
                             break;
@@ -490,15 +492,15 @@ public class QSpecBuilder2 extends TreeParser {
                 case 2 :
                     // QSpecBuilder2.g:68:3: ^( SELECTCOLUMN w= window_function i= Identifier )
                     {
-                    match(input,SELECTCOLUMN,FOLLOW_SELECTCOLUMN_in_selectColumn147); 
+                    match(input,SELECTCOLUMN,FOLLOW_SELECTCOLUMN_in_selectColumn149); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_window_function_in_selectColumn151);
+                    pushFollow(FOLLOW_window_function_in_selectColumn153);
                     w=window_function();
                     _fsp--;
 
                     i=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_selectColumn155); 
+                    match(input,Identifier,FOLLOW_Identifier_in_selectColumn157); 
 
                     match(input, Token.UP, null); 
                     ss.addWindowFunc(w, i.getText());
@@ -535,7 +537,7 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:71:40: ( ^( INPUT (t= tblfunc | t= hiveQuery | t= hdfsFile | t= hiveTable ) (p= partitionby )? (o= orderby )? ) )
             // QSpecBuilder2.g:72:2: ^( INPUT (t= tblfunc | t= hiveQuery | t= hdfsFile | t= hiveTable ) (p= partitionby )? (o= orderby )? )
             {
-            match(input,INPUT,FOLLOW_INPUT_in_tableSpec173); 
+            match(input,INPUT,FOLLOW_INPUT_in_tableSpec175); 
 
             match(input, Token.DOWN, null); 
             // QSpecBuilder2.g:72:10: (t= tblfunc | t= hiveQuery | t= hdfsFile | t= hiveTable )
@@ -572,7 +574,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:72:11: t= tblfunc
                     {
-                    pushFollow(FOLLOW_tblfunc_in_tableSpec178);
+                    pushFollow(FOLLOW_tblfunc_in_tableSpec180);
                     t=tblfunc();
                     _fsp--;
 
@@ -582,7 +584,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 2 :
                     // QSpecBuilder2.g:72:21: t= hiveQuery
                     {
-                    pushFollow(FOLLOW_hiveQuery_in_tableSpec182);
+                    pushFollow(FOLLOW_hiveQuery_in_tableSpec184);
                     t=hiveQuery();
                     _fsp--;
 
@@ -592,7 +594,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 3 :
                     // QSpecBuilder2.g:72:33: t= hdfsFile
                     {
-                    pushFollow(FOLLOW_hdfsFile_in_tableSpec186);
+                    pushFollow(FOLLOW_hdfsFile_in_tableSpec188);
                     t=hdfsFile();
                     _fsp--;
 
@@ -602,7 +604,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 4 :
                     // QSpecBuilder2.g:72:44: t= hiveTable
                     {
-                    pushFollow(FOLLOW_hiveTable_in_tableSpec190);
+                    pushFollow(FOLLOW_hiveTable_in_tableSpec192);
                     t=hiveTable();
                     _fsp--;
 
@@ -623,7 +625,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:72:58: p= partitionby
                     {
-                    pushFollow(FOLLOW_partitionby_in_tableSpec196);
+                    pushFollow(FOLLOW_partitionby_in_tableSpec198);
                     p=partitionby();
                     _fsp--;
 
@@ -645,7 +647,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:72:96: o= orderby
                     {
-                    pushFollow(FOLLOW_orderby_in_tableSpec205);
+                    pushFollow(FOLLOW_orderby_in_tableSpec207);
                     o=orderby();
                     _fsp--;
 
@@ -686,7 +688,7 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:76:2: hq= HIVEQUERY
             {
             hq=(CommonTree)input.LT(1);
-            match(input,HIVEQUERY,FOLLOW_HIVEQUERY_in_hiveQuery228); 
+            match(input,HIVEQUERY,FOLLOW_HIVEQUERY_in_hiveQuery230); 
             hQSpec = new HiveQuerySpec(hq.getText());
 
             }
@@ -762,13 +764,13 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:80:3: ^( HIVETBL d= Identifier t= Identifier )
                     {
-                    match(input,HIVETBL,FOLLOW_HIVETBL_in_hiveTable246); 
+                    match(input,HIVETBL,FOLLOW_HIVETBL_in_hiveTable248); 
 
                     match(input, Token.DOWN, null); 
                     d=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_hiveTable250); 
+                    match(input,Identifier,FOLLOW_Identifier_in_hiveTable252); 
                     t=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_hiveTable254); 
+                    match(input,Identifier,FOLLOW_Identifier_in_hiveTable256); 
 
                     match(input, Token.UP, null); 
                     hTSpec = new HiveTableSpec(d.getText(), t.getText());
@@ -778,11 +780,11 @@ public class QSpecBuilder2 extends TreeParser {
                 case 2 :
                     // QSpecBuilder2.g:81:3: ^( HIVETBL t= Identifier )
                     {
-                    match(input,HIVETBL,FOLLOW_HIVETBL_in_hiveTable264); 
+                    match(input,HIVETBL,FOLLOW_HIVETBL_in_hiveTable266); 
 
                     match(input, Token.DOWN, null); 
                     t=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_hiveTable268); 
+                    match(input,Identifier,FOLLOW_Identifier_in_hiveTable270); 
 
                     match(input, Token.UP, null); 
                     hTSpec = new HiveTableSpec(null, t.getText());
@@ -821,12 +823,12 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:89:2: ( ^( TBLFUNCTION i= Identifier t= tableSpec (e= expression )* ) )
             // QSpecBuilder2.g:90:3: ^( TBLFUNCTION i= Identifier t= tableSpec (e= expression )* )
             {
-            match(input,TBLFUNCTION,FOLLOW_TBLFUNCTION_in_tblfunc293); 
+            match(input,TBLFUNCTION,FOLLOW_TBLFUNCTION_in_tblfunc295); 
 
             match(input, Token.DOWN, null); 
             i=(CommonTree)input.LT(1);
-            match(input,Identifier,FOLLOW_Identifier_in_tblfunc297); 
-            pushFollow(FOLLOW_tableSpec_in_tblfunc301);
+            match(input,Identifier,FOLLOW_Identifier_in_tblfunc299); 
+            pushFollow(FOLLOW_tableSpec_in_tblfunc303);
             t=tableSpec();
             _fsp--;
 
@@ -845,7 +847,7 @@ public class QSpecBuilder2 extends TreeParser {
             	case 1 :
             	    // QSpecBuilder2.g:90:43: e= expression
             	    {
-            	    pushFollow(FOLLOW_expression_in_tblfunc306);
+            	    pushFollow(FOLLOW_expression_in_tblfunc308);
             	    e=expression();
             	    _fsp--;
 
@@ -889,7 +891,7 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:97:1: ( ^( HDFSLOCATION ( namevalue[hLoc] )* ) )
             // QSpecBuilder2.g:98:2: ^( HDFSLOCATION ( namevalue[hLoc] )* )
             {
-            match(input,HDFSLOCATION,FOLLOW_HDFSLOCATION_in_hdfsFile333); 
+            match(input,HDFSLOCATION,FOLLOW_HDFSLOCATION_in_hdfsFile335); 
 
             if ( input.LA(1)==Token.DOWN ) {
                 match(input, Token.DOWN, null); 
@@ -908,7 +910,7 @@ public class QSpecBuilder2 extends TreeParser {
                 	case 1 :
                 	    // QSpecBuilder2.g:98:17: namevalue[hLoc]
                 	    {
-                	    pushFollow(FOLLOW_namevalue_in_hdfsFile335);
+                	    pushFollow(FOLLOW_namevalue_in_hdfsFile337);
                 	    namevalue(hLoc);
                 	    _fsp--;
 
@@ -949,10 +951,10 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:101:21: ( ^( WHERE e= expression ) )
             // QSpecBuilder2.g:102:2: ^( WHERE e= expression )
             {
-            match(input,WHERE,FOLLOW_WHERE_in_where351); 
+            match(input,WHERE,FOLLOW_WHERE_in_where353); 
 
             match(input, Token.DOWN, null); 
-            pushFollow(FOLLOW_expression_in_where355);
+            pushFollow(FOLLOW_expression_in_where357);
             e=expression();
             _fsp--;
 
@@ -988,11 +990,11 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:108:2: ( ^( OUTPUTSPEC p= StringLiteral ( outputSerDe[qOut] )? ( loadClause[qOut] )? ) )
             // QSpecBuilder2.g:109:3: ^( OUTPUTSPEC p= StringLiteral ( outputSerDe[qOut] )? ( loadClause[qOut] )? )
             {
-            match(input,OUTPUTSPEC,FOLLOW_OUTPUTSPEC_in_outputClause378); 
+            match(input,OUTPUTSPEC,FOLLOW_OUTPUTSPEC_in_outputClause380); 
 
             match(input, Token.DOWN, null); 
             p=(CommonTree)input.LT(1);
-            match(input,StringLiteral,FOLLOW_StringLiteral_in_outputClause382); 
+            match(input,StringLiteral,FOLLOW_StringLiteral_in_outputClause384); 
             // QSpecBuilder2.g:109:32: ( outputSerDe[qOut] )?
             int alt13=2;
             int LA13_0 = input.LA(1);
@@ -1004,7 +1006,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:109:32: outputSerDe[qOut]
                     {
-                    pushFollow(FOLLOW_outputSerDe_in_outputClause384);
+                    pushFollow(FOLLOW_outputSerDe_in_outputClause386);
                     outputSerDe(qOut);
                     _fsp--;
 
@@ -1025,7 +1027,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:109:51: loadClause[qOut]
                     {
-                    pushFollow(FOLLOW_loadClause_in_outputClause388);
+                    pushFollow(FOLLOW_loadClause_in_outputClause390);
                     loadClause(qOut);
                     _fsp--;
 
@@ -1062,12 +1064,12 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:112:35: ( ^( SERDE sd= StringLiteral outputFormatOrWriter[qOut] ( outputSerDePropeties[qOut] )? ) )
             // QSpecBuilder2.g:113:3: ^( SERDE sd= StringLiteral outputFormatOrWriter[qOut] ( outputSerDePropeties[qOut] )? )
             {
-            match(input,SERDE,FOLLOW_SERDE_in_outputSerDe406); 
+            match(input,SERDE,FOLLOW_SERDE_in_outputSerDe408); 
 
             match(input, Token.DOWN, null); 
             sd=(CommonTree)input.LT(1);
-            match(input,StringLiteral,FOLLOW_StringLiteral_in_outputSerDe410); 
-            pushFollow(FOLLOW_outputFormatOrWriter_in_outputSerDe412);
+            match(input,StringLiteral,FOLLOW_StringLiteral_in_outputSerDe412); 
+            pushFollow(FOLLOW_outputFormatOrWriter_in_outputSerDe414);
             outputFormatOrWriter(qOut);
             _fsp--;
 
@@ -1082,7 +1084,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:113:55: outputSerDePropeties[qOut]
                     {
-                    pushFollow(FOLLOW_outputSerDePropeties_in_outputSerDe415);
+                    pushFollow(FOLLOW_outputSerDePropeties_in_outputSerDe417);
                     outputSerDePropeties(qOut);
                     _fsp--;
 
@@ -1117,7 +1119,7 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:116:48: ( ^( SERDEPROPERTIES ( namevalue[properties] )* ) )
             // QSpecBuilder2.g:117:3: ^( SERDEPROPERTIES ( namevalue[properties] )* )
             {
-            match(input,SERDEPROPERTIES,FOLLOW_SERDEPROPERTIES_in_outputSerDePropeties432); 
+            match(input,SERDEPROPERTIES,FOLLOW_SERDEPROPERTIES_in_outputSerDePropeties434); 
 
             if ( input.LA(1)==Token.DOWN ) {
                 match(input, Token.DOWN, null); 
@@ -1136,7 +1138,7 @@ public class QSpecBuilder2 extends TreeParser {
                 	case 1 :
                 	    // QSpecBuilder2.g:117:21: namevalue[properties]
                 	    {
-                	    pushFollow(FOLLOW_namevalue_in_outputSerDePropeties434);
+                	    pushFollow(FOLLOW_namevalue_in_outputSerDePropeties436);
                 	    namevalue(properties);
                 	    _fsp--;
 
@@ -1194,11 +1196,11 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:121:3: ^( RECORDWRITER rw= StringLiteral )
                     {
-                    match(input,RECORDWRITER,FOLLOW_RECORDWRITER_in_outputFormatOrWriter450); 
+                    match(input,RECORDWRITER,FOLLOW_RECORDWRITER_in_outputFormatOrWriter452); 
 
                     match(input, Token.DOWN, null); 
                     rw=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_outputFormatOrWriter454); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_outputFormatOrWriter456); 
 
                     match(input, Token.UP, null); 
                     qOut.setRecordWriterClass(rw.getText());
@@ -1208,11 +1210,11 @@ public class QSpecBuilder2 extends TreeParser {
                 case 2 :
                     // QSpecBuilder2.g:122:3: ^( FORMAT of= StringLiteral )
                     {
-                    match(input,FORMAT,FOLLOW_FORMAT_in_outputFormatOrWriter464); 
+                    match(input,FORMAT,FOLLOW_FORMAT_in_outputFormatOrWriter466); 
 
                     match(input, Token.DOWN, null); 
                     of=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_outputFormatOrWriter468); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_outputFormatOrWriter470); 
 
                     match(input, Token.UP, null); 
                     qOut.setOutputFormatClass(of.getText());
@@ -1244,11 +1246,11 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:125:33: ( ^( LOADSPEC ht= Identifier (hp= StringLiteral )? (ow= OVERWRITE )? ) )
             // QSpecBuilder2.g:126:3: ^( LOADSPEC ht= Identifier (hp= StringLiteral )? (ow= OVERWRITE )? )
             {
-            match(input,LOADSPEC,FOLLOW_LOADSPEC_in_loadClause483); 
+            match(input,LOADSPEC,FOLLOW_LOADSPEC_in_loadClause485); 
 
             match(input, Token.DOWN, null); 
             ht=(CommonTree)input.LT(1);
-            match(input,Identifier,FOLLOW_Identifier_in_loadClause487); 
+            match(input,Identifier,FOLLOW_Identifier_in_loadClause489); 
             // QSpecBuilder2.g:126:30: (hp= StringLiteral )?
             int alt18=2;
             int LA18_0 = input.LA(1);
@@ -1261,7 +1263,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:126:30: hp= StringLiteral
                     {
                     hp=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_loadClause491); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_loadClause493); 
 
                     }
                     break;
@@ -1280,7 +1282,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:126:48: ow= OVERWRITE
                     {
                     ow=(CommonTree)input.LT(1);
-                    match(input,OVERWRITE,FOLLOW_OVERWRITE_in_loadClause496); 
+                    match(input,OVERWRITE,FOLLOW_OVERWRITE_in_loadClause498); 
 
                     }
                     break;
@@ -1310,9 +1312,11 @@ public class QSpecBuilder2 extends TreeParser {
 
 
     // $ANTLR start window_function
-    // QSpecBuilder2.g:133:1: window_function returns [WindowFunctionSpec wFn] : ( ^( WDW_FUNCTIONSTAR functionName ( window_specification )? ) | ^( WDW_FUNCTION functionName ( ( expression )+ )? ( window_specification )? ) | ^( WDW_FUNCTIONDIST functionName ( (e= expression )+ )? ( window_specification )? ) );
+    // QSpecBuilder2.g:133:1: window_function returns [WindowFunctionSpec wFn] : ( ^( WDW_FUNCTIONSTAR functionName (ws= window_specification )? ) | ^( WDW_FUNCTION functionName ( (e= expression )+ )? (ws= window_specification )? ) | ^( WDW_FUNCTIONDIST functionName ( (e= expression )+ )? (ws= window_specification )? ) );
     public final WindowFunctionSpec window_function() throws RecognitionException {
         WindowFunctionSpec wFn = null;
+
+        WindowSpec ws = null;
 
         CommonTree e = null;
 
@@ -1327,7 +1331,7 @@ public class QSpecBuilder2 extends TreeParser {
           wFn = new WindowFunctionSpec();
 
         try {
-            // QSpecBuilder2.g:137:3: ( ^( WDW_FUNCTIONSTAR functionName ( window_specification )? ) | ^( WDW_FUNCTION functionName ( ( expression )+ )? ( window_specification )? ) | ^( WDW_FUNCTIONDIST functionName ( (e= expression )+ )? ( window_specification )? ) )
+            // QSpecBuilder2.g:137:3: ( ^( WDW_FUNCTIONSTAR functionName (ws= window_specification )? ) | ^( WDW_FUNCTION functionName ( (e= expression )+ )? (ws= window_specification )? ) | ^( WDW_FUNCTIONDIST functionName ( (e= expression )+ )? (ws= window_specification )? ) )
             int alt27=3;
             switch ( input.LA(1) ) {
             case WDW_FUNCTIONSTAR:
@@ -1347,23 +1351,23 @@ public class QSpecBuilder2 extends TreeParser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("133:1: window_function returns [WindowFunctionSpec wFn] : ( ^( WDW_FUNCTIONSTAR functionName ( window_specification )? ) | ^( WDW_FUNCTION functionName ( ( expression )+ )? ( window_specification )? ) | ^( WDW_FUNCTIONDIST functionName ( (e= expression )+ )? ( window_specification )? ) );", 27, 0, input);
+                    new NoViableAltException("133:1: window_function returns [WindowFunctionSpec wFn] : ( ^( WDW_FUNCTIONSTAR functionName (ws= window_specification )? ) | ^( WDW_FUNCTION functionName ( (e= expression )+ )? (ws= window_specification )? ) | ^( WDW_FUNCTIONDIST functionName ( (e= expression )+ )? (ws= window_specification )? ) );", 27, 0, input);
 
                 throw nvae;
             }
 
             switch (alt27) {
                 case 1 :
-                    // QSpecBuilder2.g:138:3: ^( WDW_FUNCTIONSTAR functionName ( window_specification )? )
+                    // QSpecBuilder2.g:138:3: ^( WDW_FUNCTIONSTAR functionName (ws= window_specification )? )
                     {
-                    match(input,WDW_FUNCTIONSTAR,FOLLOW_WDW_FUNCTIONSTAR_in_window_function524); 
+                    match(input,WDW_FUNCTIONSTAR,FOLLOW_WDW_FUNCTIONSTAR_in_window_function526); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_functionName_in_window_function526);
+                    pushFollow(FOLLOW_functionName_in_window_function528);
                     functionName1=functionName();
                     _fsp--;
 
-                    // QSpecBuilder2.g:138:35: ( window_specification )?
+                    // QSpecBuilder2.g:138:37: (ws= window_specification )?
                     int alt20=2;
                     int LA20_0 = input.LA(1);
 
@@ -1372,10 +1376,10 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                     switch (alt20) {
                         case 1 :
-                            // QSpecBuilder2.g:138:35: window_specification
+                            // QSpecBuilder2.g:138:37: ws= window_specification
                             {
-                            pushFollow(FOLLOW_window_specification_in_window_function528);
-                            window_specification();
+                            pushFollow(FOLLOW_window_specification_in_window_function532);
+                            ws=window_specification();
                             _fsp--;
 
 
@@ -1388,21 +1392,21 @@ public class QSpecBuilder2 extends TreeParser {
                     match(input, Token.UP, null); 
                     wFn.setName(input.getTokenStream().toString(
                       input.getTreeAdaptor().getTokenStartIndex(functionName1.start),
-                      input.getTreeAdaptor().getTokenStopIndex(functionName1.start))); 
+                      input.getTreeAdaptor().getTokenStopIndex(functionName1.start))); wFn.setWindowSpec(ws); 
 
                     }
                     break;
                 case 2 :
-                    // QSpecBuilder2.g:139:3: ^( WDW_FUNCTION functionName ( ( expression )+ )? ( window_specification )? )
+                    // QSpecBuilder2.g:139:3: ^( WDW_FUNCTION functionName ( (e= expression )+ )? (ws= window_specification )? )
                     {
-                    match(input,WDW_FUNCTION,FOLLOW_WDW_FUNCTION_in_window_function539); 
+                    match(input,WDW_FUNCTION,FOLLOW_WDW_FUNCTION_in_window_function543); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_functionName_in_window_function541);
+                    pushFollow(FOLLOW_functionName_in_window_function545);
                     functionName2=functionName();
                     _fsp--;
 
-                    // QSpecBuilder2.g:139:31: ( ( expression )+ )?
+                    // QSpecBuilder2.g:139:31: ( (e= expression )+ )?
                     int alt22=2;
                     int LA22_0 = input.LA(1);
 
@@ -1411,9 +1415,9 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                     switch (alt22) {
                         case 1 :
-                            // QSpecBuilder2.g:139:32: ( expression )+
+                            // QSpecBuilder2.g:139:32: (e= expression )+
                             {
-                            // QSpecBuilder2.g:139:32: ( expression )+
+                            // QSpecBuilder2.g:139:32: (e= expression )+
                             int cnt21=0;
                             loop21:
                             do {
@@ -1427,12 +1431,13 @@ public class QSpecBuilder2 extends TreeParser {
 
                                 switch (alt21) {
                             	case 1 :
-                            	    // QSpecBuilder2.g:139:32: expression
+                            	    // QSpecBuilder2.g:139:33: e= expression
                             	    {
-                            	    pushFollow(FOLLOW_expression_in_window_function544);
-                            	    expression();
+                            	    pushFollow(FOLLOW_expression_in_window_function551);
+                            	    e=expression();
                             	    _fsp--;
 
+                            	    wFn.addArg(e);
 
                             	    }
                             	    break;
@@ -1452,7 +1457,7 @@ public class QSpecBuilder2 extends TreeParser {
 
                     }
 
-                    // QSpecBuilder2.g:139:46: ( window_specification )?
+                    // QSpecBuilder2.g:139:69: (ws= window_specification )?
                     int alt23=2;
                     int LA23_0 = input.LA(1);
 
@@ -1461,10 +1466,10 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                     switch (alt23) {
                         case 1 :
-                            // QSpecBuilder2.g:139:46: window_specification
+                            // QSpecBuilder2.g:139:69: ws= window_specification
                             {
-                            pushFollow(FOLLOW_window_specification_in_window_function549);
-                            window_specification();
+                            pushFollow(FOLLOW_window_specification_in_window_function560);
+                            ws=window_specification();
                             _fsp--;
 
 
@@ -1477,17 +1482,17 @@ public class QSpecBuilder2 extends TreeParser {
                     match(input, Token.UP, null); 
                     wFn.setName(input.getTokenStream().toString(
                       input.getTreeAdaptor().getTokenStartIndex(functionName2.start),
-                      input.getTreeAdaptor().getTokenStopIndex(functionName2.start))); 
+                      input.getTreeAdaptor().getTokenStopIndex(functionName2.start))); wFn.setWindowSpec(ws); 
 
                     }
                     break;
                 case 3 :
-                    // QSpecBuilder2.g:140:3: ^( WDW_FUNCTIONDIST functionName ( (e= expression )+ )? ( window_specification )? )
+                    // QSpecBuilder2.g:140:3: ^( WDW_FUNCTIONDIST functionName ( (e= expression )+ )? (ws= window_specification )? )
                     {
-                    match(input,WDW_FUNCTIONDIST,FOLLOW_WDW_FUNCTIONDIST_in_window_function560); 
+                    match(input,WDW_FUNCTIONDIST,FOLLOW_WDW_FUNCTIONDIST_in_window_function571); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_functionName_in_window_function562);
+                    pushFollow(FOLLOW_functionName_in_window_function573);
                     functionName3=functionName();
                     _fsp--;
 
@@ -1518,7 +1523,7 @@ public class QSpecBuilder2 extends TreeParser {
                             	case 1 :
                             	    // QSpecBuilder2.g:140:37: e= expression
                             	    {
-                            	    pushFollow(FOLLOW_expression_in_window_function568);
+                            	    pushFollow(FOLLOW_expression_in_window_function579);
                             	    e=expression();
                             	    _fsp--;
 
@@ -1542,7 +1547,7 @@ public class QSpecBuilder2 extends TreeParser {
 
                     }
 
-                    // QSpecBuilder2.g:140:71: ( window_specification )?
+                    // QSpecBuilder2.g:140:73: (ws= window_specification )?
                     int alt26=2;
                     int LA26_0 = input.LA(1);
 
@@ -1551,10 +1556,10 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                     switch (alt26) {
                         case 1 :
-                            // QSpecBuilder2.g:140:71: window_specification
+                            // QSpecBuilder2.g:140:73: ws= window_specification
                             {
-                            pushFollow(FOLLOW_window_specification_in_window_function575);
-                            window_specification();
+                            pushFollow(FOLLOW_window_specification_in_window_function588);
+                            ws=window_specification();
                             _fsp--;
 
 
@@ -1567,7 +1572,7 @@ public class QSpecBuilder2 extends TreeParser {
                     match(input, Token.UP, null); 
                     wFn.setName(input.getTokenStream().toString(
                       input.getTreeAdaptor().getTokenStartIndex(functionName3.start),
-                      input.getTreeAdaptor().getTokenStopIndex(functionName3.start))); 
+                      input.getTreeAdaptor().getTokenStopIndex(functionName3.start))); wFn.setWindowSpec(ws); 
 
                     }
                     break;
@@ -1592,7 +1597,7 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:143:29: ( ^( WINDOW ( window_defn[qs] )+ ) )
             // QSpecBuilder2.g:144:3: ^( WINDOW ( window_defn[qs] )+ )
             {
-            match(input,WINDOW,FOLLOW_WINDOW_in_window_clause594); 
+            match(input,WINDOW,FOLLOW_WINDOW_in_window_clause607); 
 
             match(input, Token.DOWN, null); 
             // QSpecBuilder2.g:144:12: ( window_defn[qs] )+
@@ -1611,7 +1616,7 @@ public class QSpecBuilder2 extends TreeParser {
             	case 1 :
             	    // QSpecBuilder2.g:144:12: window_defn[qs]
             	    {
-            	    pushFollow(FOLLOW_window_defn_in_window_clause596);
+            	    pushFollow(FOLLOW_window_defn_in_window_clause609);
             	    window_defn(qs);
             	    _fsp--;
 
@@ -1656,12 +1661,12 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:147:27: ( ^( WINDOWDEF i= Identifier ws= window_specification ) )
             // QSpecBuilder2.g:148:3: ^( WINDOWDEF i= Identifier ws= window_specification )
             {
-            match(input,WINDOWDEF,FOLLOW_WINDOWDEF_in_window_defn614); 
+            match(input,WINDOWDEF,FOLLOW_WINDOWDEF_in_window_defn627); 
 
             match(input, Token.DOWN, null); 
             i=(CommonTree)input.LT(1);
-            match(input,Identifier,FOLLOW_Identifier_in_window_defn618); 
-            pushFollow(FOLLOW_window_specification_in_window_defn622);
+            match(input,Identifier,FOLLOW_Identifier_in_window_defn631); 
+            pushFollow(FOLLOW_window_specification_in_window_defn635);
             ws=window_specification();
             _fsp--;
 
@@ -1700,7 +1705,7 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:151:45: ( ^( WINDOWSPEC (i= Identifier )? (p= partitionby )? (o= orderby )? (wf= window_frame )? ) )
             // QSpecBuilder2.g:152:3: ^( WINDOWSPEC (i= Identifier )? (p= partitionby )? (o= orderby )? (wf= window_frame )? )
             {
-            match(input,WINDOWSPEC,FOLLOW_WINDOWSPEC_in_window_specification642); 
+            match(input,WINDOWSPEC,FOLLOW_WINDOWSPEC_in_window_specification655); 
 
             if ( input.LA(1)==Token.DOWN ) {
                 match(input, Token.DOWN, null); 
@@ -1716,7 +1721,7 @@ public class QSpecBuilder2 extends TreeParser {
                         // QSpecBuilder2.g:152:17: i= Identifier
                         {
                         i=(CommonTree)input.LT(1);
-                        match(input,Identifier,FOLLOW_Identifier_in_window_specification646); 
+                        match(input,Identifier,FOLLOW_Identifier_in_window_specification659); 
 
                         }
                         break;
@@ -1734,7 +1739,7 @@ public class QSpecBuilder2 extends TreeParser {
                     case 1 :
                         // QSpecBuilder2.g:152:31: p= partitionby
                         {
-                        pushFollow(FOLLOW_partitionby_in_window_specification651);
+                        pushFollow(FOLLOW_partitionby_in_window_specification664);
                         p=partitionby();
                         _fsp--;
 
@@ -1755,7 +1760,7 @@ public class QSpecBuilder2 extends TreeParser {
                     case 1 :
                         // QSpecBuilder2.g:152:46: o= orderby
                         {
-                        pushFollow(FOLLOW_orderby_in_window_specification656);
+                        pushFollow(FOLLOW_orderby_in_window_specification669);
                         o=orderby();
                         _fsp--;
 
@@ -1776,7 +1781,7 @@ public class QSpecBuilder2 extends TreeParser {
                     case 1 :
                         // QSpecBuilder2.g:152:58: wf= window_frame
                         {
-                        pushFollow(FOLLOW_window_frame_in_window_specification661);
+                        pushFollow(FOLLOW_window_frame_in_window_specification674);
                         wf=window_frame();
                         _fsp--;
 
@@ -1820,7 +1825,7 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:159:2: ( ^( ORDER (o= ordercolumn )+ ) )
             // QSpecBuilder2.g:160:2: ^( ORDER (o= ordercolumn )+ )
             {
-            match(input,ORDER,FOLLOW_ORDER_in_orderby686); 
+            match(input,ORDER,FOLLOW_ORDER_in_orderby699); 
 
             match(input, Token.DOWN, null); 
             // QSpecBuilder2.g:160:10: (o= ordercolumn )+
@@ -1839,7 +1844,7 @@ public class QSpecBuilder2 extends TreeParser {
             	case 1 :
             	    // QSpecBuilder2.g:160:11: o= ordercolumn
             	    {
-            	    pushFollow(FOLLOW_ordercolumn_in_orderby691);
+            	    pushFollow(FOLLOW_ordercolumn_in_orderby704);
             	    o=ordercolumn();
             	    _fsp--;
 
@@ -2008,15 +2013,15 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:164:2: ^( ORDERCOLUMN cr= columnReference o= ASC )
                     {
-                    match(input,ORDERCOLUMN,FOLLOW_ORDERCOLUMN_in_ordercolumn711); 
+                    match(input,ORDERCOLUMN,FOLLOW_ORDERCOLUMN_in_ordercolumn724); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_columnReference_in_ordercolumn715);
+                    pushFollow(FOLLOW_columnReference_in_ordercolumn728);
                     cr=columnReference();
                     _fsp--;
 
                     o=(CommonTree)input.LT(1);
-                    match(input,ASC,FOLLOW_ASC_in_ordercolumn719); 
+                    match(input,ASC,FOLLOW_ASC_in_ordercolumn732); 
 
                     match(input, Token.UP, null); 
                     ocs = new OrderColumnSpec(cr.getTableName(), cr.getColumnName(), Order.ASC); 
@@ -2026,14 +2031,14 @@ public class QSpecBuilder2 extends TreeParser {
                 case 2 :
                     // QSpecBuilder2.g:165:2: ^( ORDERCOLUMN cr= columnReference DESC )
                     {
-                    match(input,ORDERCOLUMN,FOLLOW_ORDERCOLUMN_in_ordercolumn727); 
+                    match(input,ORDERCOLUMN,FOLLOW_ORDERCOLUMN_in_ordercolumn740); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_columnReference_in_ordercolumn731);
+                    pushFollow(FOLLOW_columnReference_in_ordercolumn744);
                     cr=columnReference();
                     _fsp--;
 
-                    match(input,DESC,FOLLOW_DESC_in_ordercolumn733); 
+                    match(input,DESC,FOLLOW_DESC_in_ordercolumn746); 
 
                     match(input, Token.UP, null); 
                     ocs = new OrderColumnSpec(cr.getTableName(), cr.getColumnName(), Order.DESC); 
@@ -2043,10 +2048,10 @@ public class QSpecBuilder2 extends TreeParser {
                 case 3 :
                     // QSpecBuilder2.g:166:2: ^( ORDERCOLUMN cr= columnReference )
                     {
-                    match(input,ORDERCOLUMN,FOLLOW_ORDERCOLUMN_in_ordercolumn741); 
+                    match(input,ORDERCOLUMN,FOLLOW_ORDERCOLUMN_in_ordercolumn754); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_columnReference_in_ordercolumn745);
+                    pushFollow(FOLLOW_columnReference_in_ordercolumn758);
                     cr=columnReference();
                     _fsp--;
 
@@ -2085,7 +2090,7 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:173:3: ( ^( PARTITION (cr= columnReference )+ ) )
             // QSpecBuilder2.g:174:2: ^( PARTITION (cr= columnReference )+ )
             {
-            match(input,PARTITION,FOLLOW_PARTITION_in_partitionby771); 
+            match(input,PARTITION,FOLLOW_PARTITION_in_partitionby784); 
 
             match(input, Token.DOWN, null); 
             // QSpecBuilder2.g:174:14: (cr= columnReference )+
@@ -2104,7 +2109,7 @@ public class QSpecBuilder2 extends TreeParser {
             	case 1 :
             	    // QSpecBuilder2.g:174:15: cr= columnReference
             	    {
-            	    pushFollow(FOLLOW_columnReference_in_partitionby776);
+            	    pushFollow(FOLLOW_columnReference_in_partitionby789);
             	    cr=columnReference();
             	    _fsp--;
 
@@ -2168,7 +2173,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:178:2: w= window_range_expression
                     {
-                    pushFollow(FOLLOW_window_range_expression_in_window_frame796);
+                    pushFollow(FOLLOW_window_range_expression_in_window_frame809);
                     w=window_range_expression();
                     _fsp--;
 
@@ -2179,7 +2184,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 2 :
                     // QSpecBuilder2.g:179:2: w= window_value_expression
                     {
-                    pushFollow(FOLLOW_window_value_expression_in_window_frame805);
+                    pushFollow(FOLLOW_window_value_expression_in_window_frame818);
                     w=window_value_expression();
                     _fsp--;
 
@@ -2215,14 +2220,14 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:182:54: ( ^( WINDOWRANGE s= rowsboundary e= rowsboundary ) )
             // QSpecBuilder2.g:183:2: ^( WINDOWRANGE s= rowsboundary e= rowsboundary )
             {
-            match(input,WINDOWRANGE,FOLLOW_WINDOWRANGE_in_window_range_expression822); 
+            match(input,WINDOWRANGE,FOLLOW_WINDOWRANGE_in_window_range_expression835); 
 
             match(input, Token.DOWN, null); 
-            pushFollow(FOLLOW_rowsboundary_in_window_range_expression826);
+            pushFollow(FOLLOW_rowsboundary_in_window_range_expression839);
             s=rowsboundary();
             _fsp--;
 
-            pushFollow(FOLLOW_rowsboundary_in_window_range_expression830);
+            pushFollow(FOLLOW_rowsboundary_in_window_range_expression843);
             e=rowsboundary();
             _fsp--;
 
@@ -2331,10 +2336,10 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:192:3: ^( PRECEDING UNBOUNDED )
                     {
-                    match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary857); 
+                    match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary870); 
 
                     match(input, Token.DOWN, null); 
-                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_rowsboundary859); 
+                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_rowsboundary872); 
 
                     match(input, Token.UP, null); 
                     rbs.setDirection(Direction.PRECEDING); rbs.setAmt(BoundarySpec.UNBOUNDED_AMOUNT);
@@ -2344,10 +2349,10 @@ public class QSpecBuilder2 extends TreeParser {
                 case 2 :
                     // QSpecBuilder2.g:193:3: ^( FOLLOWING UNBOUNDED )
                     {
-                    match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary870); 
+                    match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary883); 
 
                     match(input, Token.DOWN, null); 
-                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_rowsboundary872); 
+                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_rowsboundary885); 
 
                     match(input, Token.UP, null); 
                     rbs.setDirection(Direction.FOLLOWING); rbs.setAmt(BoundarySpec.UNBOUNDED_AMOUNT);
@@ -2357,7 +2362,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 3 :
                     // QSpecBuilder2.g:194:3: CURRENT
                     {
-                    match(input,CURRENT,FOLLOW_CURRENT_in_rowsboundary881); 
+                    match(input,CURRENT,FOLLOW_CURRENT_in_rowsboundary894); 
                     bs = new CurrentRowSpec();
 
                     }
@@ -2365,11 +2370,11 @@ public class QSpecBuilder2 extends TreeParser {
                 case 4 :
                     // QSpecBuilder2.g:195:3: ^( PRECEDING n= Number )
                     {
-                    match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary890); 
+                    match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary903); 
 
                     match(input, Token.DOWN, null); 
                     n=(CommonTree)input.LT(1);
-                    match(input,Number,FOLLOW_Number_in_rowsboundary894); 
+                    match(input,Number,FOLLOW_Number_in_rowsboundary907); 
 
                     match(input, Token.UP, null); 
                     rbs.setDirection(Direction.PRECEDING); rbs.setAmt(Integer.parseInt(n.getText()));
@@ -2379,11 +2384,11 @@ public class QSpecBuilder2 extends TreeParser {
                 case 5 :
                     // QSpecBuilder2.g:196:3: ^( FOLLOWING n= Number )
                     {
-                    match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary904); 
+                    match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary917); 
 
                     match(input, Token.DOWN, null); 
                     n=(CommonTree)input.LT(1);
-                    match(input,Number,FOLLOW_Number_in_rowsboundary908); 
+                    match(input,Number,FOLLOW_Number_in_rowsboundary921); 
 
                     match(input, Token.UP, null); 
                     rbs.setDirection(Direction.FOLLOWING); rbs.setAmt(Integer.parseInt(n.getText()));
@@ -2418,14 +2423,14 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:199:54: ( ^( WINDOWVALUES s= valuesboundary e= valuesboundary ) )
             // QSpecBuilder2.g:200:2: ^( WINDOWVALUES s= valuesboundary e= valuesboundary )
             {
-            match(input,WINDOWVALUES,FOLLOW_WINDOWVALUES_in_window_value_expression926); 
+            match(input,WINDOWVALUES,FOLLOW_WINDOWVALUES_in_window_value_expression939); 
 
             match(input, Token.DOWN, null); 
-            pushFollow(FOLLOW_valuesboundary_in_window_value_expression930);
+            pushFollow(FOLLOW_valuesboundary_in_window_value_expression943);
             s=valuesboundary();
             _fsp--;
 
-            pushFollow(FOLLOW_valuesboundary_in_window_value_expression934);
+            pushFollow(FOLLOW_valuesboundary_in_window_value_expression947);
             e=valuesboundary();
             _fsp--;
 
@@ -2495,10 +2500,10 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:204:3: ^( PRECEDING UNBOUNDED )
                     {
-                    match(input,PRECEDING,FOLLOW_PRECEDING_in_valuesboundary953); 
+                    match(input,PRECEDING,FOLLOW_PRECEDING_in_valuesboundary966); 
 
                     match(input, Token.DOWN, null); 
-                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_valuesboundary955); 
+                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_valuesboundary968); 
 
                     match(input, Token.UP, null); 
                     bs = new ValueBoundarySpec(Direction.PRECEDING, null, BoundarySpec.UNBOUNDED_AMOUNT);
@@ -2508,10 +2513,10 @@ public class QSpecBuilder2 extends TreeParser {
                 case 2 :
                     // QSpecBuilder2.g:205:3: ^( FOLLOWING UNBOUNDED )
                     {
-                    match(input,FOLLOWING,FOLLOW_FOLLOWING_in_valuesboundary966); 
+                    match(input,FOLLOWING,FOLLOW_FOLLOWING_in_valuesboundary979); 
 
                     match(input, Token.DOWN, null); 
-                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_valuesboundary968); 
+                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_valuesboundary981); 
 
                     match(input, Token.UP, null); 
                     bs = new ValueBoundarySpec(Direction.FOLLOWING, null, BoundarySpec.UNBOUNDED_AMOUNT);
@@ -2521,7 +2526,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 3 :
                     // QSpecBuilder2.g:206:3: CURRENT
                     {
-                    match(input,CURRENT,FOLLOW_CURRENT_in_valuesboundary977); 
+                    match(input,CURRENT,FOLLOW_CURRENT_in_valuesboundary990); 
                     bs = new CurrentRowSpec();
 
                     }
@@ -2529,14 +2534,14 @@ public class QSpecBuilder2 extends TreeParser {
                 case 4 :
                     // QSpecBuilder2.g:207:3: ^( LESS e= expression Number )
                     {
-                    match(input,LESS,FOLLOW_LESS_in_valuesboundary986); 
+                    match(input,LESS,FOLLOW_LESS_in_valuesboundary999); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_valuesboundary990);
+                    pushFollow(FOLLOW_expression_in_valuesboundary1003);
                     e=expression();
                     _fsp--;
 
-                    match(input,Number,FOLLOW_Number_in_valuesboundary992); 
+                    match(input,Number,FOLLOW_Number_in_valuesboundary1005); 
 
                     match(input, Token.UP, null); 
                     bs = new ValueBoundarySpec(Direction.PRECEDING, e, BoundarySpec.UNBOUNDED_AMOUNT);
@@ -2546,14 +2551,14 @@ public class QSpecBuilder2 extends TreeParser {
                 case 5 :
                     // QSpecBuilder2.g:208:3: ^( MORE e= expression Number )
                     {
-                    match(input,MORE,FOLLOW_MORE_in_valuesboundary1002); 
+                    match(input,MORE,FOLLOW_MORE_in_valuesboundary1015); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_valuesboundary1006);
+                    pushFollow(FOLLOW_expression_in_valuesboundary1019);
                     e=expression();
                     _fsp--;
 
-                    match(input,Number,FOLLOW_Number_in_valuesboundary1008); 
+                    match(input,Number,FOLLOW_Number_in_valuesboundary1021); 
 
                     match(input, Token.UP, null); 
                     bs = new ValueBoundarySpec(Direction.PRECEDING, e, BoundarySpec.UNBOUNDED_AMOUNT);
@@ -2633,13 +2638,13 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:212:3: ^( COLUMNREF t= Identifier c= Identifier )
                     {
-                    match(input,COLUMNREF,FOLLOW_COLUMNREF_in_columnReference1026); 
+                    match(input,COLUMNREF,FOLLOW_COLUMNREF_in_columnReference1039); 
 
                     match(input, Token.DOWN, null); 
                     t=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_columnReference1030); 
+                    match(input,Identifier,FOLLOW_Identifier_in_columnReference1043); 
                     c=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_columnReference1034); 
+                    match(input,Identifier,FOLLOW_Identifier_in_columnReference1047); 
 
                     match(input, Token.UP, null); 
                     cs = new ColumnSpec(t.getText(),c.getText());
@@ -2649,14 +2654,14 @@ public class QSpecBuilder2 extends TreeParser {
                 case 2 :
                     // QSpecBuilder2.g:213:3: ^( COLUMNREF t= Identifier )
                     {
-                    match(input,COLUMNREF,FOLLOW_COLUMNREF_in_columnReference1044); 
+                    match(input,COLUMNREF,FOLLOW_COLUMNREF_in_columnReference1057); 
 
                     match(input, Token.DOWN, null); 
                     t=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_columnReference1048); 
+                    match(input,Identifier,FOLLOW_Identifier_in_columnReference1061); 
 
                     match(input, Token.UP, null); 
-                    cs = new ColumnSpec(t.getText(),null);
+                    cs = new ColumnSpec(null,t.getText());
 
                     }
                     break;
@@ -2686,10 +2691,10 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:219:3: ^(tc= TABLEORCOL Identifier )
             {
             tc=(CommonTree)input.LT(1);
-            match(input,TABLEORCOL,FOLLOW_TABLEORCOL_in_tableOrColumn1073); 
+            match(input,TABLEORCOL,FOLLOW_TABLEORCOL_in_tableOrColumn1086); 
 
             match(input, Token.DOWN, null); 
-            match(input,Identifier,FOLLOW_Identifier_in_tableOrColumn1075); 
+            match(input,Identifier,FOLLOW_Identifier_in_tableOrColumn1088); 
 
             match(input, Token.UP, null); 
             tr =tc;
@@ -2748,10 +2753,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:225:3: ^(fs= FUNCTIONSTAR functionName )
                     {
                     fs=(CommonTree)input.LT(1);
-                    match(input,FUNCTIONSTAR,FOLLOW_FUNCTIONSTAR_in_function1099); 
+                    match(input,FUNCTIONSTAR,FOLLOW_FUNCTIONSTAR_in_function1112); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_functionName_in_function1101);
+                    pushFollow(FOLLOW_functionName_in_function1114);
                     functionName();
                     _fsp--;
 
@@ -2765,10 +2770,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:226:3: ^(f= FUNCTION functionName ( ( expression )+ )? )
                     {
                     f=(CommonTree)input.LT(1);
-                    match(input,FUNCTION,FOLLOW_FUNCTION_in_function1114); 
+                    match(input,FUNCTION,FOLLOW_FUNCTION_in_function1127); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_functionName_in_function1116);
+                    pushFollow(FOLLOW_functionName_in_function1129);
                     functionName();
                     _fsp--;
 
@@ -2799,7 +2804,7 @@ public class QSpecBuilder2 extends TreeParser {
                             	case 1 :
                             	    // QSpecBuilder2.g:226:30: expression
                             	    {
-                            	    pushFollow(FOLLOW_expression_in_function1119);
+                            	    pushFollow(FOLLOW_expression_in_function1132);
                             	    expression();
                             	    _fsp--;
 
@@ -2832,10 +2837,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:227:3: ^(fd= FUNCTIONDIST functionName ( ( expression )+ )? )
                     {
                     fd=(CommonTree)input.LT(1);
-                    match(input,FUNCTIONDIST,FOLLOW_FUNCTIONDIST_in_function1134); 
+                    match(input,FUNCTIONDIST,FOLLOW_FUNCTIONDIST_in_function1147); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_functionName_in_function1136);
+                    pushFollow(FOLLOW_functionName_in_function1149);
                     functionName();
                     _fsp--;
 
@@ -2866,7 +2871,7 @@ public class QSpecBuilder2 extends TreeParser {
                             	case 1 :
                             	    // QSpecBuilder2.g:227:35: expression
                             	    {
-                            	    pushFollow(FOLLOW_expression_in_function1139);
+                            	    pushFollow(FOLLOW_expression_in_function1152);
                             	    expression();
                             	    _fsp--;
 
@@ -2958,14 +2963,14 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:236:3: ^(f= FUNCTION primitiveType expression )
             {
             f=(CommonTree)input.LT(1);
-            match(input,FUNCTION,FOLLOW_FUNCTION_in_castExpr1223); 
+            match(input,FUNCTION,FOLLOW_FUNCTION_in_castExpr1236); 
 
             match(input, Token.DOWN, null); 
-            pushFollow(FOLLOW_primitiveType_in_castExpr1225);
+            pushFollow(FOLLOW_primitiveType_in_castExpr1238);
             primitiveType();
             _fsp--;
 
-            pushFollow(FOLLOW_expression_in_castExpr1227);
+            pushFollow(FOLLOW_expression_in_castExpr1240);
             expression();
             _fsp--;
 
@@ -2999,10 +3004,10 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:240:3: ^(f= FUNCTION CASE ( expression )* )
             {
             f=(CommonTree)input.LT(1);
-            match(input,FUNCTION,FOLLOW_FUNCTION_in_caseExpr1248); 
+            match(input,FUNCTION,FOLLOW_FUNCTION_in_caseExpr1261); 
 
             match(input, Token.DOWN, null); 
-            match(input,CASE,FOLLOW_CASE_in_caseExpr1250); 
+            match(input,CASE,FOLLOW_CASE_in_caseExpr1263); 
             // QSpecBuilder2.g:240:21: ( expression )*
             loop45:
             do {
@@ -3018,7 +3023,7 @@ public class QSpecBuilder2 extends TreeParser {
             	case 1 :
             	    // QSpecBuilder2.g:240:21: expression
             	    {
-            	    pushFollow(FOLLOW_expression_in_caseExpr1252);
+            	    pushFollow(FOLLOW_expression_in_caseExpr1265);
             	    expression();
             	    _fsp--;
 
@@ -3061,10 +3066,10 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:244:3: ^(f= FUNCTION WHEN ( expression )* )
             {
             f=(CommonTree)input.LT(1);
-            match(input,FUNCTION,FOLLOW_FUNCTION_in_whenExpr1276); 
+            match(input,FUNCTION,FOLLOW_FUNCTION_in_whenExpr1289); 
 
             match(input, Token.DOWN, null); 
-            match(input,WHEN,FOLLOW_WHEN_in_whenExpr1278); 
+            match(input,WHEN,FOLLOW_WHEN_in_whenExpr1291); 
             // QSpecBuilder2.g:244:21: ( expression )*
             loop46:
             do {
@@ -3080,7 +3085,7 @@ public class QSpecBuilder2 extends TreeParser {
             	case 1 :
             	    // QSpecBuilder2.g:244:21: expression
             	    {
-            	    pushFollow(FOLLOW_expression_in_whenExpr1280);
+            	    pushFollow(FOLLOW_expression_in_whenExpr1293);
             	    expression();
             	    _fsp--;
 
@@ -3185,7 +3190,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:248:3: n= Number
                     {
                     n=(CommonTree)input.LT(1);
-                    match(input,Number,FOLLOW_Number_in_constant1301); 
+                    match(input,Number,FOLLOW_Number_in_constant1314); 
                      tr = n; 
 
                     }
@@ -3194,7 +3199,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:249:5: s= StringLiteral
                     {
                     s=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_constant1311); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_constant1324); 
                      tr = s; 
 
                     }
@@ -3202,7 +3207,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 3 :
                     // QSpecBuilder2.g:250:5: sls= stringLiteralSequence
                     {
-                    pushFollow(FOLLOW_stringLiteralSequence_in_constant1321);
+                    pushFollow(FOLLOW_stringLiteralSequence_in_constant1334);
                     sls=stringLiteralSequence();
                     _fsp--;
 
@@ -3214,7 +3219,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:251:5: bl= BigintLiteral
                     {
                     bl=(CommonTree)input.LT(1);
-                    match(input,BigintLiteral,FOLLOW_BigintLiteral_in_constant1331); 
+                    match(input,BigintLiteral,FOLLOW_BigintLiteral_in_constant1344); 
                      tr = bl; 
 
                     }
@@ -3223,7 +3228,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:252:5: sl= SmallintLiteral
                     {
                     sl=(CommonTree)input.LT(1);
-                    match(input,SmallintLiteral,FOLLOW_SmallintLiteral_in_constant1341); 
+                    match(input,SmallintLiteral,FOLLOW_SmallintLiteral_in_constant1354); 
                      tr = sl; 
 
                     }
@@ -3232,7 +3237,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:253:5: tl= TinyintLiteral
                     {
                     tl=(CommonTree)input.LT(1);
-                    match(input,TinyintLiteral,FOLLOW_TinyintLiteral_in_constant1351); 
+                    match(input,TinyintLiteral,FOLLOW_TinyintLiteral_in_constant1364); 
                      tr = tl; 
 
                     }
@@ -3240,7 +3245,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 7 :
                     // QSpecBuilder2.g:254:5: csl= charSetStringLiteral
                     {
-                    pushFollow(FOLLOW_charSetStringLiteral_in_constant1361);
+                    pushFollow(FOLLOW_charSetStringLiteral_in_constant1374);
                     csl=charSetStringLiteral();
                     _fsp--;
 
@@ -3251,7 +3256,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 8 :
                     // QSpecBuilder2.g:255:5: bv= booleanValue
                     {
-                    pushFollow(FOLLOW_booleanValue_in_constant1371);
+                    pushFollow(FOLLOW_booleanValue_in_constant1384);
                     bv=booleanValue();
                     _fsp--;
 
@@ -3285,10 +3290,10 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:259:5: ^(s= STRINGLITERALSEQUENCE StringLiteral ( StringLiteral )+ )
             {
             s=(CommonTree)input.LT(1);
-            match(input,STRINGLITERALSEQUENCE,FOLLOW_STRINGLITERALSEQUENCE_in_stringLiteralSequence1393); 
+            match(input,STRINGLITERALSEQUENCE,FOLLOW_STRINGLITERALSEQUENCE_in_stringLiteralSequence1406); 
 
             match(input, Token.DOWN, null); 
-            match(input,StringLiteral,FOLLOW_StringLiteral_in_stringLiteralSequence1395); 
+            match(input,StringLiteral,FOLLOW_StringLiteral_in_stringLiteralSequence1408); 
             // QSpecBuilder2.g:259:45: ( StringLiteral )+
             int cnt48=0;
             loop48:
@@ -3305,7 +3310,7 @@ public class QSpecBuilder2 extends TreeParser {
             	case 1 :
             	    // QSpecBuilder2.g:259:45: StringLiteral
             	    {
-            	    match(input,StringLiteral,FOLLOW_StringLiteral_in_stringLiteralSequence1397); 
+            	    match(input,StringLiteral,FOLLOW_StringLiteral_in_stringLiteralSequence1410); 
 
             	    }
             	    break;
@@ -3349,11 +3354,11 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:263:5: ^(c= CHARSETLITERAL CharSetName CharSetLiteral )
             {
             c=(CommonTree)input.LT(1);
-            match(input,CHARSETLITERAL,FOLLOW_CHARSETLITERAL_in_charSetStringLiteral1421); 
+            match(input,CHARSETLITERAL,FOLLOW_CHARSETLITERAL_in_charSetStringLiteral1434); 
 
             match(input, Token.DOWN, null); 
-            match(input,CharSetName,FOLLOW_CharSetName_in_charSetStringLiteral1423); 
-            match(input,CharSetLiteral,FOLLOW_CharSetLiteral_in_charSetStringLiteral1425); 
+            match(input,CharSetName,FOLLOW_CharSetName_in_charSetStringLiteral1436); 
+            match(input,CharSetLiteral,FOLLOW_CharSetLiteral_in_charSetStringLiteral1438); 
 
             match(input, Token.UP, null); 
              tr = c; 
@@ -3394,7 +3399,7 @@ public class QSpecBuilder2 extends TreeParser {
             	case 1 :
             	    // QSpecBuilder2.g:267:3: expression
             	    {
-            	    pushFollow(FOLLOW_expression_in_expressions1439);
+            	    pushFollow(FOLLOW_expression_in_expressions1452);
             	    expression();
             	    _fsp--;
 
@@ -3462,7 +3467,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:271:3: l= LIKE
                     {
                     l=(CommonTree)input.LT(1);
-                    match(input,LIKE,FOLLOW_LIKE_in_negatableOperator1457); 
+                    match(input,LIKE,FOLLOW_LIKE_in_negatableOperator1470); 
                     tr =l;
 
                     }
@@ -3471,7 +3476,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:272:3: rl= RLIKE
                     {
                     rl=(CommonTree)input.LT(1);
-                    match(input,RLIKE,FOLLOW_RLIKE_in_negatableOperator1468); 
+                    match(input,RLIKE,FOLLOW_RLIKE_in_negatableOperator1481); 
                     tr =rl;
 
                     }
@@ -3480,7 +3485,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:273:3: rexp= REGEXP
                     {
                     rexp=(CommonTree)input.LT(1);
-                    match(input,REGEXP,FOLLOW_REGEXP_in_negatableOperator1479); 
+                    match(input,REGEXP,FOLLOW_REGEXP_in_negatableOperator1492); 
                     tr =rexp;
 
                     }
@@ -3571,7 +3576,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:277:3: n= negatableOperator
                     {
-                    pushFollow(FOLLOW_negatableOperator_in_compareOperator1499);
+                    pushFollow(FOLLOW_negatableOperator_in_compareOperator1512);
                     n=negatableOperator();
                     _fsp--;
 
@@ -3583,7 +3588,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:278:3: e= EQUAL
                     {
                     e=(CommonTree)input.LT(1);
-                    match(input,EQUAL,FOLLOW_EQUAL_in_compareOperator1510); 
+                    match(input,EQUAL,FOLLOW_EQUAL_in_compareOperator1523); 
                     tr =e;
 
                     }
@@ -3592,7 +3597,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:279:3: en= EQUAL_NS
                     {
                     en=(CommonTree)input.LT(1);
-                    match(input,EQUAL_NS,FOLLOW_EQUAL_NS_in_compareOperator1521); 
+                    match(input,EQUAL_NS,FOLLOW_EQUAL_NS_in_compareOperator1534); 
                     tr =en;
 
                     }
@@ -3601,7 +3606,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:280:3: nte= NOTEQUAL
                     {
                     nte=(CommonTree)input.LT(1);
-                    match(input,NOTEQUAL,FOLLOW_NOTEQUAL_in_compareOperator1532); 
+                    match(input,NOTEQUAL,FOLLOW_NOTEQUAL_in_compareOperator1545); 
                     tr =nte;
 
                     }
@@ -3610,7 +3615,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:281:3: lte= LESSTHANOREQUALTO
                     {
                     lte=(CommonTree)input.LT(1);
-                    match(input,LESSTHANOREQUALTO,FOLLOW_LESSTHANOREQUALTO_in_compareOperator1543); 
+                    match(input,LESSTHANOREQUALTO,FOLLOW_LESSTHANOREQUALTO_in_compareOperator1556); 
                     tr =lte;
 
                     }
@@ -3619,7 +3624,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:282:3: lt= LESSTHAN
                     {
                     lt=(CommonTree)input.LT(1);
-                    match(input,LESSTHAN,FOLLOW_LESSTHAN_in_compareOperator1554); 
+                    match(input,LESSTHAN,FOLLOW_LESSTHAN_in_compareOperator1567); 
                     tr =lt;
 
                     }
@@ -3628,7 +3633,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:283:3: gte= GREATERTHANOREQUALTO
                     {
                     gte=(CommonTree)input.LT(1);
-                    match(input,GREATERTHANOREQUALTO,FOLLOW_GREATERTHANOREQUALTO_in_compareOperator1565); 
+                    match(input,GREATERTHANOREQUALTO,FOLLOW_GREATERTHANOREQUALTO_in_compareOperator1578); 
                     tr =gte;
 
                     }
@@ -3637,7 +3642,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:284:3: gt= GREATERTHAN
                     {
                     gt=(CommonTree)input.LT(1);
-                    match(input,GREATERTHAN,FOLLOW_GREATERTHAN_in_compareOperator1576); 
+                    match(input,GREATERTHAN,FOLLOW_GREATERTHAN_in_compareOperator1589); 
                     tr =gt;
 
                     }
@@ -3689,7 +3694,7 @@ public class QSpecBuilder2 extends TreeParser {
 
 
     // $ANTLR start expression
-    // QSpecBuilder2.g:292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tableOrColumn );
+    // QSpecBuilder2.g:292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );
     public final CommonTree expression() throws RecognitionException {
         CommonTree tr = null;
 
@@ -3728,9 +3733,11 @@ public class QSpecBuilder2 extends TreeParser {
 
         CommonTree whn = null;
 
+        CommonTree tc = null;
+
 
         try {
-            // QSpecBuilder2.g:292:36: ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tableOrColumn )
+            // QSpecBuilder2.g:292:36: ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn )
             int alt54=29;
             switch ( input.LA(1) ) {
             case OR:
@@ -3763,14 +3770,14 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tableOrColumn );", 54, 25, input);
+                            new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 25, input);
 
                         throw nvae;
                     }
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tableOrColumn );", 54, 4, input);
+                        new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 4, input);
 
                     throw nvae;
                 }
@@ -3791,14 +3798,14 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tableOrColumn );", 54, 25, input);
+                            new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 25, input);
 
                         throw nvae;
                     }
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tableOrColumn );", 54, 5, input);
+                        new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 5, input);
 
                     throw nvae;
                 }
@@ -3819,14 +3826,14 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tableOrColumn );", 54, 25, input);
+                            new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 25, input);
 
                         throw nvae;
                     }
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tableOrColumn );", 54, 6, input);
+                        new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 6, input);
 
                     throw nvae;
                 }
@@ -3871,7 +3878,7 @@ public class QSpecBuilder2 extends TreeParser {
                         }
                         else {
                             NoViableAltException nvae =
-                                new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tableOrColumn );", 54, 30, input);
+                                new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 30, input);
 
                             throw nvae;
                         }
@@ -3889,7 +3896,7 @@ public class QSpecBuilder2 extends TreeParser {
                         }
                         else {
                             NoViableAltException nvae =
-                                new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tableOrColumn );", 54, 31, input);
+                                new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 31, input);
 
                             throw nvae;
                         }
@@ -3929,7 +3936,7 @@ public class QSpecBuilder2 extends TreeParser {
                         break;
                     default:
                         NoViableAltException nvae =
-                            new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tableOrColumn );", 54, 26, input);
+                            new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 26, input);
 
                         throw nvae;
                     }
@@ -3937,7 +3944,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tableOrColumn );", 54, 8, input);
+                        new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 8, input);
 
                     throw nvae;
                 }
@@ -4034,7 +4041,7 @@ public class QSpecBuilder2 extends TreeParser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tableOrColumn );", 54, 0, input);
+                    new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 0, input);
 
                 throw nvae;
             }
@@ -4044,14 +4051,14 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:293:3: ^(or= OR expression expression )
                     {
                     or=(CommonTree)input.LT(1);
-                    match(input,OR,FOLLOW_OR_in_expression1614); 
+                    match(input,OR,FOLLOW_OR_in_expression1627); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1616);
+                    pushFollow(FOLLOW_expression_in_expression1629);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1618);
+                    pushFollow(FOLLOW_expression_in_expression1631);
                     expression();
                     _fsp--;
 
@@ -4065,14 +4072,14 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:294:3: ^(ad= AND expression expression )
                     {
                     ad=(CommonTree)input.LT(1);
-                    match(input,AND,FOLLOW_AND_in_expression1629); 
+                    match(input,AND,FOLLOW_AND_in_expression1642); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1631);
+                    pushFollow(FOLLOW_expression_in_expression1644);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1633);
+                    pushFollow(FOLLOW_expression_in_expression1646);
                     expression();
                     _fsp--;
 
@@ -4086,10 +4093,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:295:3: ^(nt= NOT expression )
                     {
                     nt=(CommonTree)input.LT(1);
-                    match(input,NOT,FOLLOW_NOT_in_expression1644); 
+                    match(input,NOT,FOLLOW_NOT_in_expression1657); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1646);
+                    pushFollow(FOLLOW_expression_in_expression1659);
                     expression();
                     _fsp--;
 
@@ -4102,18 +4109,18 @@ public class QSpecBuilder2 extends TreeParser {
                 case 4 :
                     // QSpecBuilder2.g:296:3: ^(nOp= negatableOperator FALSE expression expression )
                     {
-                    pushFollow(FOLLOW_negatableOperator_in_expression1657);
+                    pushFollow(FOLLOW_negatableOperator_in_expression1670);
                     nOp=negatableOperator();
                     _fsp--;
 
 
                     match(input, Token.DOWN, null); 
-                    match(input,FALSE,FOLLOW_FALSE_in_expression1659); 
-                    pushFollow(FOLLOW_expression_in_expression1661);
+                    match(input,FALSE,FOLLOW_FALSE_in_expression1672); 
+                    pushFollow(FOLLOW_expression_in_expression1674);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1664);
+                    pushFollow(FOLLOW_expression_in_expression1677);
                     expression();
                     _fsp--;
 
@@ -4126,18 +4133,18 @@ public class QSpecBuilder2 extends TreeParser {
                 case 5 :
                     // QSpecBuilder2.g:297:3: ^(cOp= compareOperator TRUE expression expression )
                     {
-                    pushFollow(FOLLOW_compareOperator_in_expression1677);
+                    pushFollow(FOLLOW_compareOperator_in_expression1690);
                     cOp=compareOperator();
                     _fsp--;
 
 
                     match(input, Token.DOWN, null); 
-                    match(input,TRUE,FOLLOW_TRUE_in_expression1679); 
-                    pushFollow(FOLLOW_expression_in_expression1681);
+                    match(input,TRUE,FOLLOW_TRUE_in_expression1692); 
+                    pushFollow(FOLLOW_expression_in_expression1694);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1683);
+                    pushFollow(FOLLOW_expression_in_expression1696);
                     expression();
                     _fsp--;
 
@@ -4151,16 +4158,16 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:298:3: ^(fInF= FUNCTION IN FALSE expression expressions )
                     {
                     fInF=(CommonTree)input.LT(1);
-                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1695); 
+                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1708); 
 
                     match(input, Token.DOWN, null); 
-                    match(input,IN,FOLLOW_IN_in_expression1697); 
-                    match(input,FALSE,FOLLOW_FALSE_in_expression1699); 
-                    pushFollow(FOLLOW_expression_in_expression1701);
+                    match(input,IN,FOLLOW_IN_in_expression1710); 
+                    match(input,FALSE,FOLLOW_FALSE_in_expression1712); 
+                    pushFollow(FOLLOW_expression_in_expression1714);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expressions_in_expression1703);
+                    pushFollow(FOLLOW_expressions_in_expression1716);
                     expressions();
                     _fsp--;
 
@@ -4174,16 +4181,16 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:299:3: ^(fInT= FUNCTION IN TRUE expression expressions )
                     {
                     fInT=(CommonTree)input.LT(1);
-                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1715); 
+                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1728); 
 
                     match(input, Token.DOWN, null); 
-                    match(input,IN,FOLLOW_IN_in_expression1717); 
-                    match(input,TRUE,FOLLOW_TRUE_in_expression1719); 
-                    pushFollow(FOLLOW_expression_in_expression1721);
+                    match(input,IN,FOLLOW_IN_in_expression1730); 
+                    match(input,TRUE,FOLLOW_TRUE_in_expression1732); 
+                    pushFollow(FOLLOW_expression_in_expression1734);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expressions_in_expression1723);
+                    pushFollow(FOLLOW_expressions_in_expression1736);
                     expressions();
                     _fsp--;
 
@@ -4197,20 +4204,20 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:300:3: ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression )
                     {
                     fBtF=(CommonTree)input.LT(1);
-                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1735); 
+                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1748); 
 
                     match(input, Token.DOWN, null); 
-                    match(input,BETWEEN,FOLLOW_BETWEEN_in_expression1737); 
-                    match(input,FALSE,FOLLOW_FALSE_in_expression1739); 
-                    pushFollow(FOLLOW_expression_in_expression1741);
+                    match(input,BETWEEN,FOLLOW_BETWEEN_in_expression1750); 
+                    match(input,FALSE,FOLLOW_FALSE_in_expression1752); 
+                    pushFollow(FOLLOW_expression_in_expression1754);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1743);
+                    pushFollow(FOLLOW_expression_in_expression1756);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1745);
+                    pushFollow(FOLLOW_expression_in_expression1758);
                     expression();
                     _fsp--;
 
@@ -4224,20 +4231,20 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:301:3: ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression )
                     {
                     fBtT=(CommonTree)input.LT(1);
-                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1757); 
+                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1770); 
 
                     match(input, Token.DOWN, null); 
-                    match(input,BETWEEN,FOLLOW_BETWEEN_in_expression1759); 
-                    match(input,TRUE,FOLLOW_TRUE_in_expression1761); 
-                    pushFollow(FOLLOW_expression_in_expression1763);
+                    match(input,BETWEEN,FOLLOW_BETWEEN_in_expression1772); 
+                    match(input,TRUE,FOLLOW_TRUE_in_expression1774); 
+                    pushFollow(FOLLOW_expression_in_expression1776);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1765);
+                    pushFollow(FOLLOW_expression_in_expression1778);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1767);
+                    pushFollow(FOLLOW_expression_in_expression1780);
                     expression();
                     _fsp--;
 
@@ -4251,14 +4258,14 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:302:3: ^(bitOr= BITWISEOR expression expression )
                     {
                     bitOr=(CommonTree)input.LT(1);
-                    match(input,BITWISEOR,FOLLOW_BITWISEOR_in_expression1779); 
+                    match(input,BITWISEOR,FOLLOW_BITWISEOR_in_expression1792); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1781);
+                    pushFollow(FOLLOW_expression_in_expression1794);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1783);
+                    pushFollow(FOLLOW_expression_in_expression1796);
                     expression();
                     _fsp--;
 
@@ -4272,14 +4279,14 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:303:3: ^(amp= AMPERSAND expression expression )
                     {
                     amp=(CommonTree)input.LT(1);
-                    match(input,AMPERSAND,FOLLOW_AMPERSAND_in_expression1795); 
+                    match(input,AMPERSAND,FOLLOW_AMPERSAND_in_expression1808); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1797);
+                    pushFollow(FOLLOW_expression_in_expression1810);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1799);
+                    pushFollow(FOLLOW_expression_in_expression1812);
                     expression();
                     _fsp--;
 
@@ -4293,10 +4300,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:304:3: ^(plus= PLUS expression ( expression )? )
                     {
                     plus=(CommonTree)input.LT(1);
-                    match(input,PLUS,FOLLOW_PLUS_in_expression1811); 
+                    match(input,PLUS,FOLLOW_PLUS_in_expression1824); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1813);
+                    pushFollow(FOLLOW_expression_in_expression1826);
                     expression();
                     _fsp--;
 
@@ -4311,7 +4318,7 @@ public class QSpecBuilder2 extends TreeParser {
                         case 1 :
                             // QSpecBuilder2.g:304:26: expression
                             {
-                            pushFollow(FOLLOW_expression_in_expression1815);
+                            pushFollow(FOLLOW_expression_in_expression1828);
                             expression();
                             _fsp--;
 
@@ -4331,10 +4338,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:305:3: ^(minus= MINUS expression ( expression )? )
                     {
                     minus=(CommonTree)input.LT(1);
-                    match(input,MINUS,FOLLOW_MINUS_in_expression1828); 
+                    match(input,MINUS,FOLLOW_MINUS_in_expression1841); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1830);
+                    pushFollow(FOLLOW_expression_in_expression1843);
                     expression();
                     _fsp--;
 
@@ -4349,7 +4356,7 @@ public class QSpecBuilder2 extends TreeParser {
                         case 1 :
                             // QSpecBuilder2.g:305:28: expression
                             {
-                            pushFollow(FOLLOW_expression_in_expression1832);
+                            pushFollow(FOLLOW_expression_in_expression1845);
                             expression();
                             _fsp--;
 
@@ -4369,14 +4376,14 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:306:3: ^(star= STAR expression expression )
                     {
                     star=(CommonTree)input.LT(1);
-                    match(input,STAR,FOLLOW_STAR_in_expression1845); 
+                    match(input,STAR,FOLLOW_STAR_in_expression1858); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1847);
+                    pushFollow(FOLLOW_expression_in_expression1860);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1849);
+                    pushFollow(FOLLOW_expression_in_expression1862);
                     expression();
                     _fsp--;
 
@@ -4390,14 +4397,14 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:307:3: ^(divide= DIVIDE expression expression )
                     {
                     divide=(CommonTree)input.LT(1);
-                    match(input,DIVIDE,FOLLOW_DIVIDE_in_expression1861); 
+                    match(input,DIVIDE,FOLLOW_DIVIDE_in_expression1874); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1863);
+                    pushFollow(FOLLOW_expression_in_expression1876);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1865);
+                    pushFollow(FOLLOW_expression_in_expression1878);
                     expression();
                     _fsp--;
 
@@ -4411,14 +4418,14 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:308:3: ^(mod= MOD expression expression )
                     {
                     mod=(CommonTree)input.LT(1);
-                    match(input,MOD,FOLLOW_MOD_in_expression1877); 
+                    match(input,MOD,FOLLOW_MOD_in_expression1890); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1879);
+                    pushFollow(FOLLOW_expression_in_expression1892);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1881);
+                    pushFollow(FOLLOW_expression_in_expression1894);
                     expression();
                     _fsp--;
 
@@ -4432,14 +4439,14 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:309:3: ^(div= DIV expression expression )
                     {
                     div=(CommonTree)input.LT(1);
-                    match(input,DIV,FOLLOW_DIV_in_expression1893); 
+                    match(input,DIV,FOLLOW_DIV_in_expression1906); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1895);
+                    pushFollow(FOLLOW_expression_in_expression1908);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1897);
+                    pushFollow(FOLLOW_expression_in_expression1910);
                     expression();
                     _fsp--;
 
@@ -4453,14 +4460,14 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:310:3: ^(bitxor= BITWISEXOR expression expression )
                     {
                     bitxor=(CommonTree)input.LT(1);
-                    match(input,BITWISEXOR,FOLLOW_BITWISEXOR_in_expression1910); 
+                    match(input,BITWISEXOR,FOLLOW_BITWISEXOR_in_expression1923); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1912);
+                    pushFollow(FOLLOW_expression_in_expression1925);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1914);
+                    pushFollow(FOLLOW_expression_in_expression1927);
                     expression();
                     _fsp--;
 
@@ -4474,14 +4481,14 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:311:3: ^(fnNull= FUNCTION nullCondition expression )
                     {
                     fnNull=(CommonTree)input.LT(1);
-                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1926); 
+                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1939); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_nullCondition_in_expression1928);
+                    pushFollow(FOLLOW_nullCondition_in_expression1941);
                     nullCondition();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1930);
+                    pushFollow(FOLLOW_expression_in_expression1943);
                     expression();
                     _fsp--;
 
@@ -4495,10 +4502,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:314:3: ^(tilde= TILDE expression )
                     {
                     tilde=(CommonTree)input.LT(1);
-                    match(input,TILDE,FOLLOW_TILDE_in_expression1944); 
+                    match(input,TILDE,FOLLOW_TILDE_in_expression1957); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1946);
+                    pushFollow(FOLLOW_expression_in_expression1959);
                     expression();
                     _fsp--;
 
@@ -4512,14 +4519,14 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:315:3: ^(arry= LSQUARE expression expression )
                     {
                     arry=(CommonTree)input.LT(1);
-                    match(input,LSQUARE,FOLLOW_LSQUARE_in_expression1959); 
+                    match(input,LSQUARE,FOLLOW_LSQUARE_in_expression1972); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1961);
+                    pushFollow(FOLLOW_expression_in_expression1974);
                     expression();
                     _fsp--;
 
-                    pushFollow(FOLLOW_expression_in_expression1963);
+                    pushFollow(FOLLOW_expression_in_expression1976);
                     expression();
                     _fsp--;
 
@@ -4533,14 +4540,14 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:316:3: ^(dot= DOT expression Identifier )
                     {
                     dot=(CommonTree)input.LT(1);
-                    match(input,DOT,FOLLOW_DOT_in_expression1975); 
+                    match(input,DOT,FOLLOW_DOT_in_expression1988); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1977);
+                    pushFollow(FOLLOW_expression_in_expression1990);
                     expression();
                     _fsp--;
 
-                    match(input,Identifier,FOLLOW_Identifier_in_expression1979); 
+                    match(input,Identifier,FOLLOW_Identifier_in_expression1992); 
 
                     match(input, Token.UP, null); 
                     tr =dot;
@@ -4551,7 +4558,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:317:3: nl= NULL
                     {
                     nl=(CommonTree)input.LT(1);
-                    match(input,NULL,FOLLOW_NULL_in_expression1991); 
+                    match(input,NULL,FOLLOW_NULL_in_expression2004); 
                     tr =nl;
 
                     }
@@ -4559,7 +4566,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 24 :
                     // QSpecBuilder2.g:318:3: c= constant
                     {
-                    pushFollow(FOLLOW_constant_in_expression2001);
+                    pushFollow(FOLLOW_constant_in_expression2014);
                     c=constant();
                     _fsp--;
 
@@ -4570,7 +4577,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 25 :
                     // QSpecBuilder2.g:319:3: f= function
                     {
-                    pushFollow(FOLLOW_function_in_expression2012);
+                    pushFollow(FOLLOW_function_in_expression2025);
                     f=function();
                     _fsp--;
 
@@ -4581,7 +4588,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 26 :
                     // QSpecBuilder2.g:320:3: cs= castExpr
                     {
-                    pushFollow(FOLLOW_castExpr_in_expression2023);
+                    pushFollow(FOLLOW_castExpr_in_expression2036);
                     cs=castExpr();
                     _fsp--;
 
@@ -4592,7 +4599,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 27 :
                     // QSpecBuilder2.g:321:3: cse= caseExpr
                     {
-                    pushFollow(FOLLOW_caseExpr_in_expression2034);
+                    pushFollow(FOLLOW_caseExpr_in_expression2047);
                     cse=caseExpr();
                     _fsp--;
 
@@ -4603,7 +4610,7 @@ public class QSpecBuilder2 extends TreeParser {
                 case 28 :
                     // QSpecBuilder2.g:322:3: whn= whenExpr
                     {
-                    pushFollow(FOLLOW_whenExpr_in_expression2045);
+                    pushFollow(FOLLOW_whenExpr_in_expression2058);
                     whn=whenExpr();
                     _fsp--;
 
@@ -4612,12 +4619,13 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                     break;
                 case 29 :
-                    // QSpecBuilder2.g:323:3: tableOrColumn
+                    // QSpecBuilder2.g:323:3: tc= tableOrColumn
                     {
-                    pushFollow(FOLLOW_tableOrColumn_in_expression2054);
-                    tableOrColumn();
+                    pushFollow(FOLLOW_tableOrColumn_in_expression2069);
+                    tc=tableOrColumn();
                     _fsp--;
 
+                    tr =tc;
 
                     }
                     break;
@@ -4665,7 +4673,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:328:5: t= TRUE
                     {
                     t=(CommonTree)input.LT(1);
-                    match(input,TRUE,FOLLOW_TRUE_in_booleanValue2077); 
+                    match(input,TRUE,FOLLOW_TRUE_in_booleanValue2094); 
                      tr = t; 
 
                     }
@@ -4674,7 +4682,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:329:5: f= FALSE
                     {
                     f=(CommonTree)input.LT(1);
-                    match(input,FALSE,FOLLOW_FALSE_in_booleanValue2090); 
+                    match(input,FALSE,FOLLOW_FALSE_in_booleanValue2107); 
                      tr = f; 
 
                     }
@@ -4772,13 +4780,13 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:348:2: ^( PARAM n= Identifier v= StringLiteral )
                     {
-                    match(input,PARAM,FOLLOW_PARAM_in_namevalue2215); 
+                    match(input,PARAM,FOLLOW_PARAM_in_namevalue2232); 
 
                     match(input, Token.DOWN, null); 
                     n=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_namevalue2219); 
+                    match(input,Identifier,FOLLOW_Identifier_in_namevalue2236); 
                     v=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue2223); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue2240); 
 
                     match(input, Token.UP, null); 
                     properties.add(n.getText(), v.getText());
@@ -4788,13 +4796,13 @@ public class QSpecBuilder2 extends TreeParser {
                 case 2 :
                     // QSpecBuilder2.g:349:2: ^( PARAM n= StringLiteral v= StringLiteral )
                     {
-                    match(input,PARAM,FOLLOW_PARAM_in_namevalue2232); 
+                    match(input,PARAM,FOLLOW_PARAM_in_namevalue2249); 
 
                     match(input, Token.DOWN, null); 
                     n=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue2236); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue2253); 
                     v=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue2240); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue2257); 
 
                     match(input, Token.UP, null); 
                     properties.add(n.getText(), v.getText());
@@ -4818,262 +4826,262 @@ public class QSpecBuilder2 extends TreeParser {
  
 
     public static final BitSet FOLLOW_QUERY_in_query66 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_tableSpec_in_query68 = new BitSet(new long[]{0x0000002000000000L});
-    public static final BitSet FOLLOW_select_in_query72 = new BitSet(new long[]{0x8000400000020008L});
-    public static final BitSet FOLLOW_where_in_query74 = new BitSet(new long[]{0x8000000000020008L});
-    public static final BitSet FOLLOW_window_clause_in_query78 = new BitSet(new long[]{0x0000000000020008L});
-    public static final BitSet FOLLOW_outputClause_in_query84 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_SELECT_in_select111 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_selectColumn_in_select113 = new BitSet(new long[]{0x0000000000010008L});
-    public static final BitSet FOLLOW_SELECTCOLUMN_in_selectColumn128 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_selectColumn132 = new BitSet(new long[]{0x0000010000000008L});
-    public static final BitSet FOLLOW_Identifier_in_selectColumn136 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_SELECTCOLUMN_in_selectColumn147 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_window_function_in_selectColumn151 = new BitSet(new long[]{0x0000010000000000L});
-    public static final BitSet FOLLOW_Identifier_in_selectColumn155 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_INPUT_in_tableSpec173 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_tblfunc_in_tableSpec178 = new BitSet(new long[]{0x0800000000000008L,0x0000000000000001L});
-    public static final BitSet FOLLOW_hiveQuery_in_tableSpec182 = new BitSet(new long[]{0x0800000000000008L,0x0000000000000001L});
-    public static final BitSet FOLLOW_hdfsFile_in_tableSpec186 = new BitSet(new long[]{0x0800000000000008L,0x0000000000000001L});
-    public static final BitSet FOLLOW_hiveTable_in_tableSpec190 = new BitSet(new long[]{0x0800000000000008L,0x0000000000000001L});
-    public static final BitSet FOLLOW_partitionby_in_tableSpec196 = new BitSet(new long[]{0x0000000000000008L,0x0000000000000001L});
-    public static final BitSet FOLLOW_orderby_in_tableSpec205 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_HIVEQUERY_in_hiveQuery228 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_HIVETBL_in_hiveTable246 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_Identifier_in_hiveTable250 = new BitSet(new long[]{0x0000010000000000L});
-    public static final BitSet FOLLOW_Identifier_in_hiveTable254 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_HIVETBL_in_hiveTable264 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_Identifier_in_hiveTable268 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_TBLFUNCTION_in_tblfunc293 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_Identifier_in_tblfunc297 = new BitSet(new long[]{0x0000000080000000L});
-    public static final BitSet FOLLOW_tableSpec_in_tblfunc301 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_tblfunc306 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_HDFSLOCATION_in_hdfsFile333 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_namevalue_in_hdfsFile335 = new BitSet(new long[]{0x0000000000000088L});
-    public static final BitSet FOLLOW_WHERE_in_where351 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_where355 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_OUTPUTSPEC_in_outputClause378 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_StringLiteral_in_outputClause382 = new BitSet(new long[]{0x0008000000080008L});
-    public static final BitSet FOLLOW_outputSerDe_in_outputClause384 = new BitSet(new long[]{0x0000000000080008L});
-    public static final BitSet FOLLOW_loadClause_in_outputClause388 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_SERDE_in_outputSerDe406 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_StringLiteral_in_outputSerDe410 = new BitSet(new long[]{0x00C0000000000000L});
-    public static final BitSet FOLLOW_outputFormatOrWriter_in_outputSerDe412 = new BitSet(new long[]{0x0020000000000008L});
-    public static final BitSet FOLLOW_outputSerDePropeties_in_outputSerDe415 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_SERDEPROPERTIES_in_outputSerDePropeties432 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_namevalue_in_outputSerDePropeties434 = new BitSet(new long[]{0x0000000000000088L});
-    public static final BitSet FOLLOW_RECORDWRITER_in_outputFormatOrWriter450 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_StringLiteral_in_outputFormatOrWriter454 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FORMAT_in_outputFormatOrWriter464 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_StringLiteral_in_outputFormatOrWriter468 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_LOADSPEC_in_loadClause483 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_Identifier_in_loadClause487 = new BitSet(new long[]{0x0204000000000008L});
-    public static final BitSet FOLLOW_StringLiteral_in_loadClause491 = new BitSet(new long[]{0x0200000000000008L});
-    public static final BitSet FOLLOW_OVERWRITE_in_loadClause496 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_WDW_FUNCTIONSTAR_in_window_function524 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_functionName_in_window_function526 = new BitSet(new long[]{0x0000000020000008L});
-    public static final BitSet FOLLOW_window_specification_in_window_function528 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_WDW_FUNCTION_in_window_function539 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_functionName_in_window_function541 = new BitSet(new long[]{0x1006040029B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_window_function544 = new BitSet(new long[]{0x1006040029B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_window_specification_in_window_function549 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_WDW_FUNCTIONDIST_in_window_function560 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_functionName_in_window_function562 = new BitSet(new long[]{0x1006040029B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_window_function568 = new BitSet(new long[]{0x1006040029B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_window_specification_in_window_function575 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_WINDOW_in_window_clause594 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_window_defn_in_window_clause596 = new BitSet(new long[]{0x0000000040000008L});
-    public static final BitSet FOLLOW_WINDOWDEF_in_window_defn614 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_Identifier_in_window_defn618 = new BitSet(new long[]{0x0000000020000000L});
-    public static final BitSet FOLLOW_window_specification_in_window_defn622 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_WINDOWSPEC_in_window_specification642 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_Identifier_in_window_specification646 = new BitSet(new long[]{0x0800000000006008L,0x0000000000000001L});
-    public static final BitSet FOLLOW_partitionby_in_window_specification651 = new BitSet(new long[]{0x0000000000006008L,0x0000000000000001L});
-    public static final BitSet FOLLOW_orderby_in_window_specification656 = new BitSet(new long[]{0x0000000000006008L});
-    public static final BitSet FOLLOW_window_frame_in_window_specification661 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_ORDER_in_orderby686 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_ordercolumn_in_orderby691 = new BitSet(new long[]{0x0000000000000108L});
-    public static final BitSet FOLLOW_ORDERCOLUMN_in_ordercolumn711 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_columnReference_in_ordercolumn715 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000004L});
-    public static final BitSet FOLLOW_ASC_in_ordercolumn719 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_ORDERCOLUMN_in_ordercolumn727 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_columnReference_in_ordercolumn731 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
-    public static final BitSet FOLLOW_DESC_in_ordercolumn733 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_ORDERCOLUMN_in_ordercolumn741 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_columnReference_in_ordercolumn745 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_PARTITION_in_partitionby771 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_columnReference_in_partitionby776 = new BitSet(new long[]{0x0000000010000008L});
-    public static final BitSet FOLLOW_window_range_expression_in_window_frame796 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_window_value_expression_in_window_frame805 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_WINDOWRANGE_in_window_range_expression822 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_rowsboundary_in_window_range_expression826 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000700L});
-    public static final BitSet FOLLOW_rowsboundary_in_window_range_expression830 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_PRECEDING_in_rowsboundary857 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_UNBOUNDED_in_rowsboundary859 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FOLLOWING_in_rowsboundary870 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_tableSpec_in_query70 = new BitSet(new long[]{0x0000002000000000L});
+    public static final BitSet FOLLOW_select_in_query74 = new BitSet(new long[]{0x8000400000020008L});
+    public static final BitSet FOLLOW_where_in_query76 = new BitSet(new long[]{0x8000000000020008L});
+    public static final BitSet FOLLOW_window_clause_in_query80 = new BitSet(new long[]{0x0000000000020008L});
+    public static final BitSet FOLLOW_outputClause_in_query86 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_SELECT_in_select113 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_selectColumn_in_select115 = new BitSet(new long[]{0x0000000000010008L});
+    public static final BitSet FOLLOW_SELECTCOLUMN_in_selectColumn130 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_selectColumn134 = new BitSet(new long[]{0x0000010000000008L});
+    public static final BitSet FOLLOW_Identifier_in_selectColumn138 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_SELECTCOLUMN_in_selectColumn149 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_window_function_in_selectColumn153 = new BitSet(new long[]{0x0000010000000000L});
+    public static final BitSet FOLLOW_Identifier_in_selectColumn157 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_INPUT_in_tableSpec175 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_tblfunc_in_tableSpec180 = new BitSet(new long[]{0x0800000000000008L,0x0000000000000001L});
+    public static final BitSet FOLLOW_hiveQuery_in_tableSpec184 = new BitSet(new long[]{0x0800000000000008L,0x0000000000000001L});
+    public static final BitSet FOLLOW_hdfsFile_in_tableSpec188 = new BitSet(new long[]{0x0800000000000008L,0x0000000000000001L});
+    public static final BitSet FOLLOW_hiveTable_in_tableSpec192 = new BitSet(new long[]{0x0800000000000008L,0x0000000000000001L});
+    public static final BitSet FOLLOW_partitionby_in_tableSpec198 = new BitSet(new long[]{0x0000000000000008L,0x0000000000000001L});
+    public static final BitSet FOLLOW_orderby_in_tableSpec207 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_HIVEQUERY_in_hiveQuery230 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_HIVETBL_in_hiveTable248 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_Identifier_in_hiveTable252 = new BitSet(new long[]{0x0000010000000000L});
+    public static final BitSet FOLLOW_Identifier_in_hiveTable256 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_HIVETBL_in_hiveTable266 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_Identifier_in_hiveTable270 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_TBLFUNCTION_in_tblfunc295 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_Identifier_in_tblfunc299 = new BitSet(new long[]{0x0000000080000000L});
+    public static final BitSet FOLLOW_tableSpec_in_tblfunc303 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_tblfunc308 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_HDFSLOCATION_in_hdfsFile335 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_namevalue_in_hdfsFile337 = new BitSet(new long[]{0x0000000000000088L});
+    public static final BitSet FOLLOW_WHERE_in_where353 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_where357 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_OUTPUTSPEC_in_outputClause380 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_StringLiteral_in_outputClause384 = new BitSet(new long[]{0x0008000000080008L});
+    public static final BitSet FOLLOW_outputSerDe_in_outputClause386 = new BitSet(new long[]{0x0000000000080008L});
+    public static final BitSet FOLLOW_loadClause_in_outputClause390 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_SERDE_in_outputSerDe408 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_StringLiteral_in_outputSerDe412 = new BitSet(new long[]{0x00C0000000000000L});
+    public static final BitSet FOLLOW_outputFormatOrWriter_in_outputSerDe414 = new BitSet(new long[]{0x0020000000000008L});
+    public static final BitSet FOLLOW_outputSerDePropeties_in_outputSerDe417 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_SERDEPROPERTIES_in_outputSerDePropeties434 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_namevalue_in_outputSerDePropeties436 = new BitSet(new long[]{0x0000000000000088L});
+    public static final BitSet FOLLOW_RECORDWRITER_in_outputFormatOrWriter452 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_StringLiteral_in_outputFormatOrWriter456 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FORMAT_in_outputFormatOrWriter466 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_StringLiteral_in_outputFormatOrWriter470 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_LOADSPEC_in_loadClause485 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_Identifier_in_loadClause489 = new BitSet(new long[]{0x0204000000000008L});
+    public static final BitSet FOLLOW_StringLiteral_in_loadClause493 = new BitSet(new long[]{0x0200000000000008L});
+    public static final BitSet FOLLOW_OVERWRITE_in_loadClause498 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_WDW_FUNCTIONSTAR_in_window_function526 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_functionName_in_window_function528 = new BitSet(new long[]{0x0000000020000008L});
+    public static final BitSet FOLLOW_window_specification_in_window_function532 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_WDW_FUNCTION_in_window_function543 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_functionName_in_window_function545 = new BitSet(new long[]{0x1006040029B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_window_function551 = new BitSet(new long[]{0x1006040029B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_window_specification_in_window_function560 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_WDW_FUNCTIONDIST_in_window_function571 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_functionName_in_window_function573 = new BitSet(new long[]{0x1006040029B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_window_function579 = new BitSet(new long[]{0x1006040029B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_window_specification_in_window_function588 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_WINDOW_in_window_clause607 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_window_defn_in_window_clause609 = new BitSet(new long[]{0x0000000040000008L});
+    public static final BitSet FOLLOW_WINDOWDEF_in_window_defn627 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_Identifier_in_window_defn631 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_window_specification_in_window_defn635 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_WINDOWSPEC_in_window_specification655 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_Identifier_in_window_specification659 = new BitSet(new long[]{0x0800000000006008L,0x0000000000000001L});
+    public static final BitSet FOLLOW_partitionby_in_window_specification664 = new BitSet(new long[]{0x0000000000006008L,0x0000000000000001L});
+    public static final BitSet FOLLOW_orderby_in_window_specification669 = new BitSet(new long[]{0x0000000000006008L});
+    public static final BitSet FOLLOW_window_frame_in_window_specification674 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_ORDER_in_orderby699 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_ordercolumn_in_orderby704 = new BitSet(new long[]{0x0000000000000108L});
+    public static final BitSet FOLLOW_ORDERCOLUMN_in_ordercolumn724 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_columnReference_in_ordercolumn728 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000004L});
+    public static final BitSet FOLLOW_ASC_in_ordercolumn732 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_ORDERCOLUMN_in_ordercolumn740 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_columnReference_in_ordercolumn744 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
+    public static final BitSet FOLLOW_DESC_in_ordercolumn746 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_ORDERCOLUMN_in_ordercolumn754 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_columnReference_in_ordercolumn758 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_PARTITION_in_partitionby784 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_columnReference_in_partitionby789 = new BitSet(new long[]{0x0000000010000008L});
+    public static final BitSet FOLLOW_window_range_expression_in_window_frame809 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_window_value_expression_in_window_frame818 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_WINDOWRANGE_in_window_range_expression835 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_rowsboundary_in_window_range_expression839 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000700L});
+    public static final BitSet FOLLOW_rowsboundary_in_window_range_expression843 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_PRECEDING_in_rowsboundary870 = new BitSet(new long[]{0x0000000000000004L});
     public static final BitSet FOLLOW_UNBOUNDED_in_rowsboundary872 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_CURRENT_in_rowsboundary881 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_PRECEDING_in_rowsboundary890 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_Number_in_rowsboundary894 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FOLLOWING_in_rowsboundary904 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_Number_in_rowsboundary908 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_WINDOWVALUES_in_window_value_expression926 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_valuesboundary_in_window_value_expression930 = new BitSet(new long[]{0x0000000000000000L,0x000000000000C700L});
-    public static final BitSet FOLLOW_valuesboundary_in_window_value_expression934 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_PRECEDING_in_valuesboundary953 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_UNBOUNDED_in_valuesboundary955 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FOLLOWING_in_valuesboundary966 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_FOLLOWING_in_rowsboundary883 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_UNBOUNDED_in_rowsboundary885 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_CURRENT_in_rowsboundary894 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_PRECEDING_in_rowsboundary903 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_Number_in_rowsboundary907 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FOLLOWING_in_rowsboundary917 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_Number_in_rowsboundary921 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_WINDOWVALUES_in_window_value_expression939 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_valuesboundary_in_window_value_expression943 = new BitSet(new long[]{0x0000000000000000L,0x000000000000C700L});
+    public static final BitSet FOLLOW_valuesboundary_in_window_value_expression947 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_PRECEDING_in_valuesboundary966 = new BitSet(new long[]{0x0000000000000004L});
     public static final BitSet FOLLOW_UNBOUNDED_in_valuesboundary968 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_CURRENT_in_valuesboundary977 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LESS_in_valuesboundary986 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_valuesboundary990 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_Number_in_valuesboundary992 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_MORE_in_valuesboundary1002 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_valuesboundary1006 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_Number_in_valuesboundary1008 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_COLUMNREF_in_columnReference1026 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_Identifier_in_columnReference1030 = new BitSet(new long[]{0x0000010000000000L});
-    public static final BitSet FOLLOW_Identifier_in_columnReference1034 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_COLUMNREF_in_columnReference1044 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_Identifier_in_columnReference1048 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_TABLEORCOL_in_tableOrColumn1073 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_Identifier_in_tableOrColumn1075 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FUNCTIONSTAR_in_function1099 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_functionName_in_function1101 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FUNCTION_in_function1114 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_functionName_in_function1116 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_function1119 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_FUNCTIONDIST_in_function1134 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_functionName_in_function1136 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_function1139 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_FOLLOWING_in_valuesboundary979 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_UNBOUNDED_in_valuesboundary981 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_CURRENT_in_valuesboundary990 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LESS_in_valuesboundary999 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_valuesboundary1003 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_Number_in_valuesboundary1005 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_MORE_in_valuesboundary1015 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_valuesboundary1019 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_Number_in_valuesboundary1021 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_COLUMNREF_in_columnReference1039 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_Identifier_in_columnReference1043 = new BitSet(new long[]{0x0000010000000000L});
+    public static final BitSet FOLLOW_Identifier_in_columnReference1047 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_COLUMNREF_in_columnReference1057 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_Identifier_in_columnReference1061 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_TABLEORCOL_in_tableOrColumn1086 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_Identifier_in_tableOrColumn1088 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FUNCTIONSTAR_in_function1112 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_functionName_in_function1114 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FUNCTION_in_function1127 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_functionName_in_function1129 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_function1132 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_FUNCTIONDIST_in_function1147 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_functionName_in_function1149 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_function1152 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
     public static final BitSet FOLLOW_set_in_functionName0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FUNCTION_in_castExpr1223 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_primitiveType_in_castExpr1225 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_castExpr1227 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FUNCTION_in_caseExpr1248 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_CASE_in_caseExpr1250 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_caseExpr1252 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_FUNCTION_in_whenExpr1276 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_WHEN_in_whenExpr1278 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_whenExpr1280 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_Number_in_constant1301 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_StringLiteral_in_constant1311 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_stringLiteralSequence_in_constant1321 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_BigintLiteral_in_constant1331 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SmallintLiteral_in_constant1341 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_TinyintLiteral_in_constant1351 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_charSetStringLiteral_in_constant1361 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_booleanValue_in_constant1371 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_STRINGLITERALSEQUENCE_in_stringLiteralSequence1393 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_StringLiteral_in_stringLiteralSequence1395 = new BitSet(new long[]{0x0004000000000000L});
-    public static final BitSet FOLLOW_StringLiteral_in_stringLiteralSequence1397 = new BitSet(new long[]{0x0004000000000008L});
-    public static final BitSet FOLLOW_CHARSETLITERAL_in_charSetStringLiteral1421 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_CharSetName_in_charSetStringLiteral1423 = new BitSet(new long[]{0x0000000000000000L,0x0000000080000000L});
-    public static final BitSet FOLLOW_CharSetLiteral_in_charSetStringLiteral1425 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_expression_in_expressions1439 = new BitSet(new long[]{0x1006040009B00202L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_LIKE_in_negatableOperator1457 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RLIKE_in_negatableOperator1468 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_REGEXP_in_negatableOperator1479 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_negatableOperator_in_compareOperator1499 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_EQUAL_in_compareOperator1510 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_EQUAL_NS_in_compareOperator1521 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NOTEQUAL_in_compareOperator1532 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LESSTHANOREQUALTO_in_compareOperator1543 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LESSTHAN_in_compareOperator1554 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_GREATERTHANOREQUALTO_in_compareOperator1565 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_GREATERTHAN_in_compareOperator1576 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FUNCTION_in_castExpr1236 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_primitiveType_in_castExpr1238 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_castExpr1240 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FUNCTION_in_caseExpr1261 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_CASE_in_caseExpr1263 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_caseExpr1265 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_FUNCTION_in_whenExpr1289 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_WHEN_in_whenExpr1291 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_whenExpr1293 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_Number_in_constant1314 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_StringLiteral_in_constant1324 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_stringLiteralSequence_in_constant1334 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_BigintLiteral_in_constant1344 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SmallintLiteral_in_constant1354 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_TinyintLiteral_in_constant1364 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_charSetStringLiteral_in_constant1374 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_booleanValue_in_constant1384 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_STRINGLITERALSEQUENCE_in_stringLiteralSequence1406 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_StringLiteral_in_stringLiteralSequence1408 = new BitSet(new long[]{0x0004000000000000L});
+    public static final BitSet FOLLOW_StringLiteral_in_stringLiteralSequence1410 = new BitSet(new long[]{0x0004000000000008L});
+    public static final BitSet FOLLOW_CHARSETLITERAL_in_charSetStringLiteral1434 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_CharSetName_in_charSetStringLiteral1436 = new BitSet(new long[]{0x0000000000000000L,0x0000000080000000L});
+    public static final BitSet FOLLOW_CharSetLiteral_in_charSetStringLiteral1438 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_expression_in_expressions1452 = new BitSet(new long[]{0x1006040009B00202L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_LIKE_in_negatableOperator1470 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RLIKE_in_negatableOperator1481 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_REGEXP_in_negatableOperator1492 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_negatableOperator_in_compareOperator1512 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_EQUAL_in_compareOperator1523 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_EQUAL_NS_in_compareOperator1534 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NOTEQUAL_in_compareOperator1545 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LESSTHANOREQUALTO_in_compareOperator1556 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LESSTHAN_in_compareOperator1567 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_GREATERTHANOREQUALTO_in_compareOperator1578 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_GREATERTHAN_in_compareOperator1589 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_nullCondition0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_OR_in_expression1614 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1616 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1618 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_AND_in_expression1629 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1631 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1633 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_NOT_in_expression1644 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_OR_in_expression1627 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1629 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1631 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_AND_in_expression1642 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1644 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
     public static final BitSet FOLLOW_expression_in_expression1646 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_negatableOperator_in_expression1657 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_FALSE_in_expression1659 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1661 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1664 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_compareOperator_in_expression1677 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_TRUE_in_expression1679 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1681 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1683 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FUNCTION_in_expression1695 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_IN_in_expression1697 = new BitSet(new long[]{0x0000000000000000L,0x0400000000000000L});
-    public static final BitSet FOLLOW_FALSE_in_expression1699 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1701 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expressions_in_expression1703 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FUNCTION_in_expression1715 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_IN_in_expression1717 = new BitSet(new long[]{0x0000000000000000L,0x0200000000000000L});
-    public static final BitSet FOLLOW_TRUE_in_expression1719 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1721 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expressions_in_expression1723 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FUNCTION_in_expression1735 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_BETWEEN_in_expression1737 = new BitSet(new long[]{0x0000000000000000L,0x0400000000000000L});
-    public static final BitSet FOLLOW_FALSE_in_expression1739 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1741 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1743 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1745 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FUNCTION_in_expression1757 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_BETWEEN_in_expression1759 = new BitSet(new long[]{0x0000000000000000L,0x0200000000000000L});
-    public static final BitSet FOLLOW_TRUE_in_expression1761 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1763 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1765 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1767 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_BITWISEOR_in_expression1779 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1781 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1783 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_AMPERSAND_in_expression1795 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1797 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1799 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_PLUS_in_expression1811 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1813 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1815 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_MINUS_in_expression1828 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1830 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1832 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_STAR_in_expression1845 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1847 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1849 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_DIVIDE_in_expression1861 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1863 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1865 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_MOD_in_expression1877 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1879 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1881 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_DIV_in_expression1893 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1895 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1897 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_BITWISEXOR_in_expression1910 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1912 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1914 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FUNCTION_in_expression1926 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_nullCondition_in_expression1928 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1930 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_TILDE_in_expression1944 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1946 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_LSQUARE_in_expression1959 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1961 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1963 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_DOT_in_expression1975 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1977 = new BitSet(new long[]{0x0000010000000000L});
-    public static final BitSet FOLLOW_Identifier_in_expression1979 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_NULL_in_expression1991 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_constant_in_expression2001 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_function_in_expression2012 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_castExpr_in_expression2023 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_caseExpr_in_expression2034 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_whenExpr_in_expression2045 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_tableOrColumn_in_expression2054 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_TRUE_in_booleanValue2077 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FALSE_in_booleanValue2090 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NOT_in_expression1657 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1659 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_negatableOperator_in_expression1670 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_FALSE_in_expression1672 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1674 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1677 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_compareOperator_in_expression1690 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_TRUE_in_expression1692 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1694 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1696 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FUNCTION_in_expression1708 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_IN_in_expression1710 = new BitSet(new long[]{0x0000000000000000L,0x0400000000000000L});
+    public static final BitSet FOLLOW_FALSE_in_expression1712 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1714 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expressions_in_expression1716 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FUNCTION_in_expression1728 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_IN_in_expression1730 = new BitSet(new long[]{0x0000000000000000L,0x0200000000000000L});
+    public static final BitSet FOLLOW_TRUE_in_expression1732 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1734 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expressions_in_expression1736 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FUNCTION_in_expression1748 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_BETWEEN_in_expression1750 = new BitSet(new long[]{0x0000000000000000L,0x0400000000000000L});
+    public static final BitSet FOLLOW_FALSE_in_expression1752 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1754 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1756 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1758 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FUNCTION_in_expression1770 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_BETWEEN_in_expression1772 = new BitSet(new long[]{0x0000000000000000L,0x0200000000000000L});
+    public static final BitSet FOLLOW_TRUE_in_expression1774 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1776 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1778 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1780 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_BITWISEOR_in_expression1792 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1794 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1796 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_AMPERSAND_in_expression1808 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1810 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1812 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_PLUS_in_expression1824 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1826 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1828 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_MINUS_in_expression1841 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1843 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1845 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_STAR_in_expression1858 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1860 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1862 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_DIVIDE_in_expression1874 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1876 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1878 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_MOD_in_expression1890 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1892 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1894 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_DIV_in_expression1906 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1908 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1910 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_BITWISEXOR_in_expression1923 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1925 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1927 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FUNCTION_in_expression1939 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_nullCondition_in_expression1941 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1943 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_TILDE_in_expression1957 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1959 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_LSQUARE_in_expression1972 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1974 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1976 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_DOT_in_expression1988 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1990 = new BitSet(new long[]{0x0000010000000000L});
+    public static final BitSet FOLLOW_Identifier_in_expression1992 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_NULL_in_expression2004 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_constant_in_expression2014 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_function_in_expression2025 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_castExpr_in_expression2036 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_caseExpr_in_expression2047 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_whenExpr_in_expression2058 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_tableOrColumn_in_expression2069 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_TRUE_in_booleanValue2094 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FALSE_in_booleanValue2107 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_primitiveType0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_PARAM_in_namevalue2215 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_Identifier_in_namevalue2219 = new BitSet(new long[]{0x0004000000000000L});
-    public static final BitSet FOLLOW_StringLiteral_in_namevalue2223 = new BitSet(new long[]{0x0000000000000008L});
     public static final BitSet FOLLOW_PARAM_in_namevalue2232 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_StringLiteral_in_namevalue2236 = new BitSet(new long[]{0x0004000000000000L});
+    public static final BitSet FOLLOW_Identifier_in_namevalue2236 = new BitSet(new long[]{0x0004000000000000L});
     public static final BitSet FOLLOW_StringLiteral_in_namevalue2240 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_PARAM_in_namevalue2249 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_StringLiteral_in_namevalue2253 = new BitSet(new long[]{0x0004000000000000L});
+    public static final BitSet FOLLOW_StringLiteral_in_namevalue2257 = new BitSet(new long[]{0x0000000000000008L});
 
 }

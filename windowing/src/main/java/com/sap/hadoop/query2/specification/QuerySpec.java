@@ -124,32 +124,32 @@ public class QuerySpec
 		return true;
 	}
 	
-	
+	public static String NL = System.getProperty("line.separator");
 	public String toString()
 	{
 		StringBuilder buf = new StringBuilder();
 		
-		buf.append(selectList);
-		buf.append(" from ").append(input);
+		buf.append(selectList).append(NL);
+		buf.append("from ").append(input).append(NL);
 		if ( whereExpr != null )
 		{
-			buf.append(" where ").append(whereExpr.toStringTree());
+			buf.append("where ").append(whereExpr.toStringTree()).append(NL);
 		}
 		
 		if ( windowSpecs != null)
 		{
 			boolean first = false;
-			buf.append(" window ");
+			buf.append("window ").append(NL);
 			for(Map.Entry<String, WindowSpec> wentry : windowSpecs.entrySet())
 			{
 				if ( first ) first = false; else buf.append(", ");
-				buf.append(wentry.getKey()).append(" as ").append(wentry.getValue());
+				buf.append(wentry.getKey()).append(" as ").append(wentry.getValue()).append(NL);
 			}
 		}
 		
 		if ( output != null )
 		{
-			buf.append(" into ").append(output);
+			buf.append("into ").append(output).append(NL);
 		}
 		
 		return buf.toString();

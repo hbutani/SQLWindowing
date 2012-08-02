@@ -51,7 +51,7 @@ import com.sap.hadoop.windowing.WindowingException;
 
 
 query :
- ^(QUERY tableSpec ss=select where[qSpec]? window_clause[qSpec]? oc=outputClause?) {qSpec.setSelectList(ss); qSpec.setOutput(oc);}
+ ^(QUERY ts=tableSpec ss=select where[qSpec]? window_clause[qSpec]? oc=outputClause?) { qSpec.setInput(ts); qSpec.setSelectList(ss); qSpec.setOutput(oc);}
 ;
 
 select  returns [SelectSpec ss]
@@ -135,9 +135,9 @@ window_function returns [WindowFunctionSpec wFn]
   $wFn = new WindowFunctionSpec();
 }
   : 
-  ^(WDW_FUNCTIONSTAR functionName window_specification?) {$wFn.setName($functionName.text); } |
-  ^(WDW_FUNCTION functionName (expression+)? window_specification?) {$wFn.setName($functionName.text); } |
-  ^(WDW_FUNCTIONDIST functionName ((e=expression{$wFn.addArg(e);})+)? window_specification?) {$wFn.setName($functionName.text); }
+  ^(WDW_FUNCTIONSTAR functionName ws=window_specification?) {$wFn.setName($functionName.text); $wFn.setWindowSpec(ws); } |
+  ^(WDW_FUNCTION functionName ((e=expression{$wFn.addArg(e);})+)? ws=window_specification?) {$wFn.setName($functionName.text); $wFn.setWindowSpec(ws); } |
+  ^(WDW_FUNCTIONDIST functionName ((e=expression{$wFn.addArg(e);})+)? ws=window_specification?) {$wFn.setName($functionName.text); $wFn.setWindowSpec(ws); }
 ;  
 
 window_clause[QuerySpec qs] :
@@ -210,7 +210,7 @@ valuesboundary returns [BoundarySpec bs] :
 
 columnReference returns [ColumnSpec cs]:
   ^(COLUMNREF t=Identifier c=Identifier) {$cs = new ColumnSpec($t.text,$c.text);} |
-  ^(COLUMNREF t=Identifier) {$cs = new ColumnSpec($t.text,null);}
+  ^(COLUMNREF t=Identifier) {$cs = new ColumnSpec(null,$t.text);}
 ;  
 
 
@@ -320,7 +320,7 @@ expression returns [CommonTree tr] :
   cs=castExpr {$tr = cs;} | 
   cse=caseExpr {$tr = cse;} | 
   whn=whenExpr {$tr = whn;} | 
-  tableOrColumn
+  tc=tableOrColumn {$tr=tc;}
 ;
 
 booleanValue returns [CommonTree tr]

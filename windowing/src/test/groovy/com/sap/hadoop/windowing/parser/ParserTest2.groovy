@@ -6,6 +6,12 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
+import org.antlr.runtime.tree.TreeAdaptor;
+import org.antlr.runtime.tree.CommonTreeAdaptor;
+import org.antlr.runtime.Token;
+
+import org.apache.hadoop.hive.ql.parse.ASTNode;
+
 import org.junit.Test;
 
 import com.sap.hadoop.windowing.BaseTest;
@@ -281,6 +287,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 			lexer = new Windowing2Lexer(new ANTLRStringStream(query));
 			tokens = new CommonTokenStream(lexer);
 			parser = new Windowing2Parser(tokens);
+			parser.setTreeAdaptor(adaptor);
 			t = parser.query().getTree()
 			
 			err = parser.getWindowingParseErrors()
@@ -301,4 +308,22 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
 		return t;
 	}
+	
+	/**
+	* Copied from Hive ParserDriver.
+	*/
+   public static final TreeAdaptor adaptor = new CommonTreeAdaptor() {
+	 /**
+	  * Creates an ASTNode for the given token. The ASTNode is a wrapper around
+	  * antlr's CommonTree class that implements the Node interface.
+	  *
+	  * @param payload
+	  *          The token.
+	  * @return Object (which is actually an ASTNode) for the token.
+	  */
+	 @Override
+	 public Object create(Token payload) {
+	   return new ASTNode(payload);
+	 }
+   };
 }

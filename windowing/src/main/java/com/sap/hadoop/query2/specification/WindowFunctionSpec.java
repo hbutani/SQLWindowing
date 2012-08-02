@@ -133,14 +133,14 @@ public class WindowFunctionSpec
 			if ( isDistinct )
 			{
 				buf.append("distinct ");
-				if ( args != null )
+			}
+			if ( args != null )
+			{
+				boolean first = true;
+				for(CommonTree arg : args)
 				{
-					boolean first = true;
-					for(CommonTree arg : args)
-					{
-						if ( first) first = false; else buf.append(", ");
-						buf.append(arg.toStringTree());
-					}
+					if ( first) first = false; else buf.append(", ");
+					buf.append(arg.toStringTree());
 				}
 			}
 		}

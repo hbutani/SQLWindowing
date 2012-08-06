@@ -46,8 +46,8 @@ select p_mfgr,p_name, p_size,
 		with serdeproperties('field.delim'=',')
 		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
-//		println qSpec
-		assert qSpec.toString() == """select 
+		println qSpec
+		assert qSpec.toString().replaceAll(QuerySpec.NL, "\n") == """select 
   (TABLEORCOL p_mfgr),
   (TABLEORCOL p_name),
   (TABLEORCOL p_size),
@@ -96,7 +96,7 @@ with serdeproperties('field.delim'=',')
 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
 //		println qSpec
-		assert qSpec.toString() == """select 
+		assert qSpec.toString().replaceAll(QuerySpec.NL, "\n") == """select 
   (TABLEORCOL p_mfgr),
   (TABLEORCOL p_name),
   (TABLEORCOL p_size),
@@ -137,7 +137,7 @@ with serdeproperties('field.delim'=',')
 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
 //		println qSpec
-		assert qSpec.toString() == """select 
+		assert qSpec.toString().replaceAll(QuerySpec.NL, "\n") == """select 
   (TABLEORCOL p_mfgr),
   count(*) as c,
   count(distinct (TABLEORCOL p_size)) as cd
@@ -166,7 +166,7 @@ with serdeproperties('field.delim'=',')
 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
 //		println qSpec
-		assert qSpec.toString() == """select 
+		assert qSpec.toString().replaceAll(QuerySpec.NL, "\n") == """select 
   (TABLEORCOL p_mfgr),
   (TABLEORCOL p_name),
   (TABLEORCOL p_size),
@@ -202,7 +202,7 @@ with serdeproperties('field.delim'=',')
 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
 //		println qSpec
-		assert qSpec.toString() == """select 
+		assert qSpec.toString().replaceAll(QuerySpec.NL, "\n") == """select 
   (TABLEORCOL p_mfgr),
   (TABLEORCOL p_name),
   (TABLEORCOL p_size),
@@ -246,7 +246,7 @@ array("p_mfgr", "p_name", "p_size",
 select p_mfgr, p_name, p_size, avgSize, sizes""")
 		
 //		println qSpec
-		assert qSpec.toString() == """select 
+		assert qSpec.toString().replaceAll(QuerySpec.NL, "\n") == """select 
   (TABLEORCOL p_mfgr),
   (TABLEORCOL p_name),
   (TABLEORCOL p_size),
@@ -276,7 +276,7 @@ with serdeproperties('field.delim'=',')
 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
 //		println qSpec
-		assert qSpec.toString() == """select 
+		assert qSpec.toString().replaceAll(QuerySpec.NL, "\n") == """select 
   (TABLEORCOL origin_city_name),
   (TABLEORCOL year),
   (TABLEORCOL month),
@@ -306,7 +306,7 @@ serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
 //		println qSpec
-		assert qSpec.toString() == """select 
+		assert qSpec.toString().replaceAll(QuerySpec.NL, "\n") == """select 
   (TABLEORCOL p_mfgr),
   (TABLEORCOL p_name),
   (TABLEORCOL p_size),
@@ -339,7 +339,7 @@ with serdeproperties('field.delim'=',')
 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
 //		println qSpec
-		assert qSpec.toString() == """select 
+		assert qSpec.toString().replaceAll(QuerySpec.NL, "\n") == """select 
   (TABLEORCOL itemset)
 from candidateFrequentItemSets(
   <select * from basketdata

@@ -85,8 +85,8 @@ class HiveRTTest extends MRBaseTest
 		cols << function("substr", column("p_mfgr", rr), constant(1), constant(7))
 		aliases << "s2"
 		
-		cols << function("map_keys", function("struct", column("p_name", rr), column("p_size", rr)))
-		aliases << "m"
+		//cols << function("map_keys", function("struct", column("p_name", rr), column("p_size", rr)))
+		//aliases << "m"
 		
 		return new SelectDesc(cols, aliases, false)
 	}

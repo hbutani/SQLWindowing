@@ -176,7 +176,7 @@ public class HiveUtils
 	
 			if ( db == null )
 			{
-				return dbs.get(0);
+				return "default";
 			}
 			
 			for(String d : dbs)

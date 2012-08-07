@@ -101,6 +101,84 @@ class HiveExprTest extends MRBaseTest
 		}
 	}
 	
+	@Test
+	void testStringExprs()
+	{
+		ArrayList<ASTNode> exprs = [
+			build("substr(p_name, 1,5)"),
+			build("concat(substr(p_name, 1,5), '--')"),
+			build("lpad(concat(substr(p_name, 1,5), '--'),10, ' ')"),
+			build("lpad(concat(substr(p_name, 1,5), '--'),10, ' ') like '%e%')"),
+			build("upper(lpad(concat(substr(p_name, 1,5), '--'),10, ' '))")
+		]
+		
+		HashMap<Node, Object> map;
+		
+		ArrayList<ExprNodeDesc> cols = []
+		
+		exprs.each { e ->
+			map = WindowingTypeCheckProcFactory.genExprNode(e, typeChkCtx)
+			cols << map.get(e)
+		}
+		
+		
+		ArrayList<String> aliases = ["c1", "c2", "c3", "c4", "c5"]
+		SelectDesc selectDesc = new SelectDesc(cols, aliases, false)
+		SelectOp select = new SelectOp()
+		select.initialize(selectDesc, inoI)
+		
+		
+		while( wIn.next(w) != -1)
+		{
+			Object r = deS.deserialize(w)
+			select.process(r)
+			println select.output
+		}
+	}
+	
+	@Test
+	void testCompareExprs()
+	{
+		ArrayList<ASTNode> exprs = [
+			build("p_name"),
+			build("lpad(concat(substr(p_name, 1,5), '--'),10, ' ') like '%e%')"),
+			build("p_retailprice"),
+			build("p_retailprice > 1300"),
+			build("not p_retailprice > 1300"),
+			build("p_retailprice between 1300 and 1800")
+		]
+		
+		println exprs[5].toStringTree();
+		
+		HashMap<Node, Object> map;
+		
+		ArrayList<ExprNodeDesc> cols = []
+		
+		exprs.each { e ->
+			map = WindowingTypeCheckProcFactory.genExprNode(e, typeChkCtx)
+			cols << map.get(e)
+		}
+		
+		
+		ArrayList<String> aliases = []
+		
+		0..<exprs.size().each { i ->
+			aliases << "c${i}".toString()
+		}
+		
+		SelectDesc selectDesc = new SelectDesc(cols, aliases, false)
+		SelectOp select = new SelectOp()
+		select.initialize(selectDesc, inoI)
+		
+		
+		while( wIn.next(w) != -1)
+		{
+			Object r = deS.deserialize(w)
+			select.process(r)
+			println select.output
+		}
+	}
+	
 	public static ASTNode build(String expr) throws WindowingException
 	{
 		Windowing2Lexer lexer;

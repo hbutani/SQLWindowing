@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 Windowing2.g 2012-07-13 18:13:49
+// $ANTLR 3.0.1 Windowing2.g 2012-08-07 09:43:22
 
 package com.sap.hadoop.windowing.parser;
 
@@ -455,7 +455,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: window_clause, outputClause, tableSpec, select, where
+            // elements: outputClause, window_clause, where, select, tableSpec
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -637,7 +637,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: where, select, outputClause, window_clause, tableSpec
+            // elements: select, tableSpec, where, window_clause, outputClause
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -774,7 +774,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: selectColumn, SELECT
+            // elements: SELECT, selectColumn
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -2055,7 +2055,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: p, hvT, p, o, p, p, tf, o, hdf, hq, o, o
+            // elements: o, o, o, p, hq, p, p, tf, p, hvT, hdf, o
             // token labels: 
             // rule labels: retval, hq, hvT, p, hdf, tf, o
             // token list labels: 
@@ -2449,7 +2449,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: name, expression, tableSpec
+            // elements: name, tableSpec, expression
             // token labels: name
             // rule labels: retval
             // token list labels: 
@@ -2697,7 +2697,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: WHERE, expression
+            // elements: expression, WHERE
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -2967,7 +2967,7 @@ public class Windowing2Parser extends Parser {
             if ( backtracking==0 ) stream_outputFormatOrWriter.add(o.getTree());
 
             // AST REWRITE
-            // elements: SERDE, s, p, o
+            // elements: o, s, SERDE, p
             // token labels: s
             // rule labels: retval, p, o
             // token list labels: 
@@ -3241,7 +3241,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: StringLiteral, RECORDWRITER
+                    // elements: RECORDWRITER, StringLiteral
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -3282,7 +3282,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: FORMAT, StringLiteral
+                    // elements: StringLiteral, FORMAT
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -3433,7 +3433,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: t, ov, l
+            // elements: ov, l, t
             // token labels: ov, t, l
             // rule labels: retval
             // token list labels: 
@@ -3704,7 +3704,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: ws, ws, functionName, ws, expression, functionName, expression, functionName
+            // elements: ws, functionName, expression, functionName, expression, ws, functionName, ws
             // token labels: 
             // rule labels: retval, ws
             // token list labels: 
@@ -3893,7 +3893,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: window_defn, WINDOW
+            // elements: WINDOW, window_defn
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -3987,7 +3987,7 @@ public class Windowing2Parser extends Parser {
             if ( backtracking==0 ) stream_window_specification.add(window_specification73.getTree());
 
             // AST REWRITE
-            // elements: Identifier, window_specification
+            // elements: window_specification, Identifier
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -4152,7 +4152,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: orderby, partitionby, window_frame, Identifier
+            // elements: partitionby, window_frame, orderby, Identifier
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -4312,7 +4312,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: ordercolumn, ORDER
+            // elements: ORDER, ordercolumn
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -4430,7 +4430,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: o, columnReference
+            // elements: columnReference, o
             // token labels: o
             // rule labels: retval
             // token list labels: 
@@ -4765,7 +4765,7 @@ public class Windowing2Parser extends Parser {
             if ( backtracking==0 ) stream_rowsboundary.add(e.getTree());
 
             // AST REWRITE
-            // elements: e, s
+            // elements: s, e
             // token labels: 
             // rule labels: retval, e, s
             // token list labels: 
@@ -4924,7 +4924,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: r, UNBOUNDED
+                    // elements: UNBOUNDED, r
                     // token labels: r
                     // rule labels: retval
                     // token list labels: 
@@ -5042,7 +5042,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: Number, d
+                    // elements: d, Number
                     // token labels: d
                     // rule labels: retval
                     // token list labels: 
@@ -5146,7 +5146,7 @@ public class Windowing2Parser extends Parser {
             if ( backtracking==0 ) stream_valuesboundary.add(e.getTree());
 
             // AST REWRITE
-            // elements: s, e
+            // elements: e, s
             // token labels: 
             // rule labels: retval, e, s
             // token list labels: 
@@ -5330,7 +5330,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: UNBOUNDED, r
+                    // elements: r, UNBOUNDED
                     // token labels: r
                     // rule labels: retval
                     // token list labels: 
@@ -5453,7 +5453,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: rowExp, d, rngExp
+                    // elements: d, rngExp, rowExp
                     // token labels: d, rngExp
                     // rule labels: retval, rowExp
                     // token list labels: 
@@ -5562,7 +5562,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: i2, i1, i1
+            // elements: i1, i1, i2
             // token labels: i2, i1
             // rule labels: retval
             // token list labels: 
@@ -5871,7 +5871,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: expression, functionName, expression, functionName, functionName
+            // elements: functionName, expression, functionName, expression, functionName
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -6265,7 +6265,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: CASE, expression
+            // elements: expression, CASE
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -6865,7 +6865,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: csName, csLiteral
+            // elements: csLiteral, csName
             // token labels: csName, csLiteral
             // rule labels: retval
             // token list labels: 
@@ -7615,7 +7615,7 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start compareExpr
-    // Windowing2.g:339:1: compareExpr : (l= bitOrExpr -> $l) ( ( NOT nO= negatableOperator r= bitOrExpr -> ^( $nO FALSE $compareExpr $r) ) | (cO= compareOperator r= bitOrExpr -> ^( $cO TRUE $compareExpr $r) ) | ( NOT IN el= expressions -> ^( FUNCTION IN FALSE $compareExpr $el) ) | ( IN expressions -> ^( FUNCTION IN TRUE $compareExpr $el) ) | ( NOT BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max) ) | ( BETWEEN bitOrExpr AND bitOrExpr -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max) ) )* ;
+    // Windowing2.g:339:1: compareExpr : (l= bitOrExpr -> $l) ( ( NOT nO= negatableOperator r= bitOrExpr -> ^( NOT ^( $nO $compareExpr $r) ) ) | (cO= compareOperator r= bitOrExpr -> ^( $cO $compareExpr $r) ) | ( NOT IN el= expressions -> ^( NOT ^( FUNCTION IN $compareExpr $el) ) ) | ( IN expressions -> ^( FUNCTION IN $compareExpr $el) ) | ( NOT BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max) ) | ( BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max) ) )* ;
     public final compareExpr_return compareExpr() throws RecognitionException {
         compareExpr_return retval = new compareExpr_return();
         retval.start = input.LT(1);
@@ -7630,7 +7630,7 @@ public class Windowing2Parser extends Parser {
         Token BETWEEN175=null;
         Token AND176=null;
         Token BETWEEN177=null;
-        Token AND179=null;
+        Token AND178=null;
         bitOrExpr_return l = null;
 
         negatableOperator_return nO = null;
@@ -7647,10 +7647,6 @@ public class Windowing2Parser extends Parser {
 
         expressions_return expressions173 = null;
 
-        bitOrExpr_return bitOrExpr178 = null;
-
-        bitOrExpr_return bitOrExpr180 = null;
-
 
         Object NOT169_tree=null;
         Object NOT170_tree=null;
@@ -7660,7 +7656,7 @@ public class Windowing2Parser extends Parser {
         Object BETWEEN175_tree=null;
         Object AND176_tree=null;
         Object BETWEEN177_tree=null;
-        Object AND179_tree=null;
+        Object AND178_tree=null;
         RewriteRuleTokenStream stream_IN=new RewriteRuleTokenStream(adaptor,"token IN");
         RewriteRuleTokenStream stream_NOT=new RewriteRuleTokenStream(adaptor,"token NOT");
         RewriteRuleTokenStream stream_AND=new RewriteRuleTokenStream(adaptor,"token AND");
@@ -7670,8 +7666,8 @@ public class Windowing2Parser extends Parser {
         RewriteRuleSubtreeStream stream_compareOperator=new RewriteRuleSubtreeStream(adaptor,"rule compareOperator");
         RewriteRuleSubtreeStream stream_expressions=new RewriteRuleSubtreeStream(adaptor,"rule expressions");
         try {
-            // Windowing2.g:339:13: ( (l= bitOrExpr -> $l) ( ( NOT nO= negatableOperator r= bitOrExpr -> ^( $nO FALSE $compareExpr $r) ) | (cO= compareOperator r= bitOrExpr -> ^( $cO TRUE $compareExpr $r) ) | ( NOT IN el= expressions -> ^( FUNCTION IN FALSE $compareExpr $el) ) | ( IN expressions -> ^( FUNCTION IN TRUE $compareExpr $el) ) | ( NOT BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max) ) | ( BETWEEN bitOrExpr AND bitOrExpr -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max) ) )* )
-            // Windowing2.g:340:3: (l= bitOrExpr -> $l) ( ( NOT nO= negatableOperator r= bitOrExpr -> ^( $nO FALSE $compareExpr $r) ) | (cO= compareOperator r= bitOrExpr -> ^( $cO TRUE $compareExpr $r) ) | ( NOT IN el= expressions -> ^( FUNCTION IN FALSE $compareExpr $el) ) | ( IN expressions -> ^( FUNCTION IN TRUE $compareExpr $el) ) | ( NOT BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max) ) | ( BETWEEN bitOrExpr AND bitOrExpr -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max) ) )*
+            // Windowing2.g:339:13: ( (l= bitOrExpr -> $l) ( ( NOT nO= negatableOperator r= bitOrExpr -> ^( NOT ^( $nO $compareExpr $r) ) ) | (cO= compareOperator r= bitOrExpr -> ^( $cO $compareExpr $r) ) | ( NOT IN el= expressions -> ^( NOT ^( FUNCTION IN $compareExpr $el) ) ) | ( IN expressions -> ^( FUNCTION IN $compareExpr $el) ) | ( NOT BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max) ) | ( BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max) ) )* )
+            // Windowing2.g:340:3: (l= bitOrExpr -> $l) ( ( NOT nO= negatableOperator r= bitOrExpr -> ^( NOT ^( $nO $compareExpr $r) ) ) | (cO= compareOperator r= bitOrExpr -> ^( $cO $compareExpr $r) ) | ( NOT IN el= expressions -> ^( NOT ^( FUNCTION IN $compareExpr $el) ) ) | ( IN expressions -> ^( FUNCTION IN $compareExpr $el) ) | ( NOT BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max) ) | ( BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max) ) )*
             {
             // Windowing2.g:340:3: (l= bitOrExpr -> $l)
             // Windowing2.g:340:4: l= bitOrExpr
@@ -7704,7 +7700,7 @@ public class Windowing2Parser extends Parser {
 
             }
 
-            // Windowing2.g:341:3: ( ( NOT nO= negatableOperator r= bitOrExpr -> ^( $nO FALSE $compareExpr $r) ) | (cO= compareOperator r= bitOrExpr -> ^( $cO TRUE $compareExpr $r) ) | ( NOT IN el= expressions -> ^( FUNCTION IN FALSE $compareExpr $el) ) | ( IN expressions -> ^( FUNCTION IN TRUE $compareExpr $el) ) | ( NOT BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max) ) | ( BETWEEN bitOrExpr AND bitOrExpr -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max) ) )*
+            // Windowing2.g:341:3: ( ( NOT nO= negatableOperator r= bitOrExpr -> ^( NOT ^( $nO $compareExpr $r) ) ) | (cO= compareOperator r= bitOrExpr -> ^( $cO $compareExpr $r) ) | ( NOT IN el= expressions -> ^( NOT ^( FUNCTION IN $compareExpr $el) ) ) | ( IN expressions -> ^( FUNCTION IN $compareExpr $el) ) | ( NOT BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max) ) | ( BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max) ) )*
             loop62:
             do {
                 int alt62=7;
@@ -7763,28 +7759,28 @@ public class Windowing2Parser extends Parser {
 
                 switch (alt62) {
             	case 1 :
-            	    // Windowing2.g:342:5: ( NOT nO= negatableOperator r= bitOrExpr -> ^( $nO FALSE $compareExpr $r) )
+            	    // Windowing2.g:342:5: ( NOT nO= negatableOperator r= bitOrExpr -> ^( NOT ^( $nO $compareExpr $r) ) )
             	    {
-            	    // Windowing2.g:342:5: ( NOT nO= negatableOperator r= bitOrExpr -> ^( $nO FALSE $compareExpr $r) )
-            	    // Windowing2.g:342:6: NOT nO= negatableOperator r= bitOrExpr
+            	    // Windowing2.g:342:5: ( NOT nO= negatableOperator r= bitOrExpr -> ^( NOT ^( $nO $compareExpr $r) ) )
+            	    // Windowing2.g:342:9: NOT nO= negatableOperator r= bitOrExpr
             	    {
             	    NOT169=(Token)input.LT(1);
-            	    match(input,NOT,FOLLOW_NOT_in_compareExpr2344); if (failed) return retval;
+            	    match(input,NOT,FOLLOW_NOT_in_compareExpr2347); if (failed) return retval;
             	    if ( backtracking==0 ) stream_NOT.add(NOT169);
 
-            	    pushFollow(FOLLOW_negatableOperator_in_compareExpr2348);
+            	    pushFollow(FOLLOW_negatableOperator_in_compareExpr2351);
             	    nO=negatableOperator();
             	    _fsp--;
             	    if (failed) return retval;
             	    if ( backtracking==0 ) stream_negatableOperator.add(nO.getTree());
-            	    pushFollow(FOLLOW_bitOrExpr_in_compareExpr2352);
+            	    pushFollow(FOLLOW_bitOrExpr_in_compareExpr2355);
             	    r=bitOrExpr();
             	    _fsp--;
             	    if (failed) return retval;
             	    if ( backtracking==0 ) stream_bitOrExpr.add(r.getTree());
 
             	    // AST REWRITE
-            	    // elements: compareExpr, nO, r
+            	    // elements: r, compareExpr, nO, NOT
             	    // token labels: 
             	    // rule labels: nO, retval, r
             	    // token list labels: 
@@ -7796,16 +7792,23 @@ public class Windowing2Parser extends Parser {
             	    RewriteRuleSubtreeStream stream_r=new RewriteRuleSubtreeStream(adaptor,"token r",r!=null?r.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 342:43: -> ^( $nO FALSE $compareExpr $r)
+            	    // 342:46: -> ^( NOT ^( $nO $compareExpr $r) )
             	    {
-            	        // Windowing2.g:343:40: ^( $nO FALSE $compareExpr $r)
+            	        // Windowing2.g:342:49: ^( NOT ^( $nO $compareExpr $r) )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
-            	        root_1 = (Object)adaptor.becomeRoot(stream_nO.nextNode(), root_1);
+            	        root_1 = (Object)adaptor.becomeRoot(stream_NOT.next(), root_1);
 
-            	        adaptor.addChild(root_1, adaptor.create(FALSE, "FALSE"));
-            	        adaptor.addChild(root_1, stream_retval.next());
-            	        adaptor.addChild(root_1, stream_r.next());
+            	        // Windowing2.g:342:56: ^( $nO $compareExpr $r)
+            	        {
+            	        Object root_2 = (Object)adaptor.nil();
+            	        root_2 = (Object)adaptor.becomeRoot(stream_nO.nextNode(), root_2);
+
+            	        adaptor.addChild(root_2, stream_retval.next());
+            	        adaptor.addChild(root_2, stream_r.next());
+
+            	        adaptor.addChild(root_1, root_2);
+            	        }
 
             	        adaptor.addChild(root_0, root_1);
             	        }
@@ -7820,24 +7823,24 @@ public class Windowing2Parser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // Windowing2.g:346:5: (cO= compareOperator r= bitOrExpr -> ^( $cO TRUE $compareExpr $r) )
+            	    // Windowing2.g:343:5: (cO= compareOperator r= bitOrExpr -> ^( $cO $compareExpr $r) )
             	    {
-            	    // Windowing2.g:346:5: (cO= compareOperator r= bitOrExpr -> ^( $cO TRUE $compareExpr $r) )
-            	    // Windowing2.g:346:6: cO= compareOperator r= bitOrExpr
+            	    // Windowing2.g:343:5: (cO= compareOperator r= bitOrExpr -> ^( $cO $compareExpr $r) )
+            	    // Windowing2.g:343:9: cO= compareOperator r= bitOrExpr
             	    {
-            	    pushFollow(FOLLOW_compareOperator_in_compareExpr2430);
+            	    pushFollow(FOLLOW_compareOperator_in_compareExpr2392);
             	    cO=compareOperator();
             	    _fsp--;
             	    if (failed) return retval;
             	    if ( backtracking==0 ) stream_compareOperator.add(cO.getTree());
-            	    pushFollow(FOLLOW_bitOrExpr_in_compareExpr2434);
+            	    pushFollow(FOLLOW_bitOrExpr_in_compareExpr2396);
             	    r=bitOrExpr();
             	    _fsp--;
             	    if (failed) return retval;
             	    if ( backtracking==0 ) stream_bitOrExpr.add(r.getTree());
 
             	    // AST REWRITE
-            	    // elements: compareExpr, cO, r
+            	    // elements: r, compareExpr, cO
             	    // token labels: 
             	    // rule labels: cO, retval, r
             	    // token list labels: 
@@ -7849,14 +7852,13 @@ public class Windowing2Parser extends Parser {
             	    RewriteRuleSubtreeStream stream_r=new RewriteRuleSubtreeStream(adaptor,"token r",r!=null?r.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 346:37: -> ^( $cO TRUE $compareExpr $r)
+            	    // 343:40: -> ^( $cO $compareExpr $r)
             	    {
-            	        // Windowing2.g:347:38: ^( $cO TRUE $compareExpr $r)
+            	        // Windowing2.g:343:44: ^( $cO $compareExpr $r)
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(stream_cO.nextNode(), root_1);
 
-            	        adaptor.addChild(root_1, adaptor.create(TRUE, "TRUE"));
             	        adaptor.addChild(root_1, stream_retval.next());
             	        adaptor.addChild(root_1, stream_r.next());
 
@@ -7873,27 +7875,27 @@ public class Windowing2Parser extends Parser {
             	    }
             	    break;
             	case 3 :
-            	    // Windowing2.g:350:5: ( NOT IN el= expressions -> ^( FUNCTION IN FALSE $compareExpr $el) )
+            	    // Windowing2.g:344:5: ( NOT IN el= expressions -> ^( NOT ^( FUNCTION IN $compareExpr $el) ) )
             	    {
-            	    // Windowing2.g:350:5: ( NOT IN el= expressions -> ^( FUNCTION IN FALSE $compareExpr $el) )
-            	    // Windowing2.g:350:6: NOT IN el= expressions
+            	    // Windowing2.g:344:5: ( NOT IN el= expressions -> ^( NOT ^( FUNCTION IN $compareExpr $el) ) )
+            	    // Windowing2.g:344:9: NOT IN el= expressions
             	    {
             	    NOT170=(Token)input.LT(1);
-            	    match(input,NOT,FOLLOW_NOT_in_compareExpr2506); if (failed) return retval;
+            	    match(input,NOT,FOLLOW_NOT_in_compareExpr2437); if (failed) return retval;
             	    if ( backtracking==0 ) stream_NOT.add(NOT170);
 
             	    IN171=(Token)input.LT(1);
-            	    match(input,IN,FOLLOW_IN_in_compareExpr2508); if (failed) return retval;
+            	    match(input,IN,FOLLOW_IN_in_compareExpr2439); if (failed) return retval;
             	    if ( backtracking==0 ) stream_IN.add(IN171);
 
-            	    pushFollow(FOLLOW_expressions_in_compareExpr2512);
+            	    pushFollow(FOLLOW_expressions_in_compareExpr2443);
             	    el=expressions();
             	    _fsp--;
             	    if (failed) return retval;
             	    if ( backtracking==0 ) stream_expressions.add(el.getTree());
 
             	    // AST REWRITE
-            	    // elements: el, compareExpr, IN
+            	    // elements: el, IN, NOT, compareExpr
             	    // token labels: 
             	    // rule labels: retval, el
             	    // token list labels: 
@@ -7904,17 +7906,24 @@ public class Windowing2Parser extends Parser {
             	    RewriteRuleSubtreeStream stream_el=new RewriteRuleSubtreeStream(adaptor,"token el",el!=null?el.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 350:28: -> ^( FUNCTION IN FALSE $compareExpr $el)
+            	    // 344:31: -> ^( NOT ^( FUNCTION IN $compareExpr $el) )
             	    {
-            	        // Windowing2.g:351:26: ^( FUNCTION IN FALSE $compareExpr $el)
+            	        // Windowing2.g:344:34: ^( NOT ^( FUNCTION IN $compareExpr $el) )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
-            	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(FUNCTION, "FUNCTION"), root_1);
+            	        root_1 = (Object)adaptor.becomeRoot(stream_NOT.next(), root_1);
 
-            	        adaptor.addChild(root_1, stream_IN.next());
-            	        adaptor.addChild(root_1, adaptor.create(FALSE, "FALSE"));
-            	        adaptor.addChild(root_1, stream_retval.next());
-            	        adaptor.addChild(root_1, stream_el.next());
+            	        // Windowing2.g:344:41: ^( FUNCTION IN $compareExpr $el)
+            	        {
+            	        Object root_2 = (Object)adaptor.nil();
+            	        root_2 = (Object)adaptor.becomeRoot(adaptor.create(FUNCTION, "FUNCTION"), root_2);
+
+            	        adaptor.addChild(root_2, stream_IN.next());
+            	        adaptor.addChild(root_2, stream_retval.next());
+            	        adaptor.addChild(root_2, stream_el.next());
+
+            	        adaptor.addChild(root_1, root_2);
+            	        }
 
             	        adaptor.addChild(root_0, root_1);
             	        }
@@ -7929,23 +7938,23 @@ public class Windowing2Parser extends Parser {
             	    }
             	    break;
             	case 4 :
-            	    // Windowing2.g:354:5: ( IN expressions -> ^( FUNCTION IN TRUE $compareExpr $el) )
+            	    // Windowing2.g:345:5: ( IN expressions -> ^( FUNCTION IN $compareExpr $el) )
             	    {
-            	    // Windowing2.g:354:5: ( IN expressions -> ^( FUNCTION IN TRUE $compareExpr $el) )
-            	    // Windowing2.g:354:6: IN expressions
+            	    // Windowing2.g:345:5: ( IN expressions -> ^( FUNCTION IN $compareExpr $el) )
+            	    // Windowing2.g:345:9: IN expressions
             	    {
             	    IN172=(Token)input.LT(1);
-            	    match(input,IN,FOLLOW_IN_in_compareExpr2573); if (failed) return retval;
+            	    match(input,IN,FOLLOW_IN_in_compareExpr2488); if (failed) return retval;
             	    if ( backtracking==0 ) stream_IN.add(IN172);
 
-            	    pushFollow(FOLLOW_expressions_in_compareExpr2575);
+            	    pushFollow(FOLLOW_expressions_in_compareExpr2490);
             	    expressions173=expressions();
             	    _fsp--;
             	    if (failed) return retval;
             	    if ( backtracking==0 ) stream_expressions.add(expressions173.getTree());
 
             	    // AST REWRITE
-            	    // elements: IN, el, compareExpr
+            	    // elements: el, compareExpr, IN
             	    // token labels: 
             	    // rule labels: retval, el
             	    // token list labels: 
@@ -7956,15 +7965,14 @@ public class Windowing2Parser extends Parser {
             	    RewriteRuleSubtreeStream stream_el=new RewriteRuleSubtreeStream(adaptor,"token el",el!=null?el.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 354:21: -> ^( FUNCTION IN TRUE $compareExpr $el)
+            	    // 345:24: -> ^( FUNCTION IN $compareExpr $el)
             	    {
-            	        // Windowing2.g:355:21: ^( FUNCTION IN TRUE $compareExpr $el)
+            	        // Windowing2.g:345:27: ^( FUNCTION IN $compareExpr $el)
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(FUNCTION, "FUNCTION"), root_1);
 
             	        adaptor.addChild(root_1, stream_IN.next());
-            	        adaptor.addChild(root_1, adaptor.create(TRUE, "TRUE"));
             	        adaptor.addChild(root_1, stream_retval.next());
             	        adaptor.addChild(root_1, stream_el.next());
 
@@ -7981,29 +7989,29 @@ public class Windowing2Parser extends Parser {
             	    }
             	    break;
             	case 5 :
-            	    // Windowing2.g:358:5: ( NOT BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max) )
+            	    // Windowing2.g:346:5: ( NOT BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max) )
             	    {
-            	    // Windowing2.g:358:5: ( NOT BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max) )
-            	    // Windowing2.g:358:6: NOT BETWEEN min= bitOrExpr AND max= bitOrExpr
+            	    // Windowing2.g:346:5: ( NOT BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max) )
+            	    // Windowing2.g:346:9: NOT BETWEEN min= bitOrExpr AND max= bitOrExpr
             	    {
             	    NOT174=(Token)input.LT(1);
-            	    match(input,NOT,FOLLOW_NOT_in_compareExpr2631); if (failed) return retval;
+            	    match(input,NOT,FOLLOW_NOT_in_compareExpr2544); if (failed) return retval;
             	    if ( backtracking==0 ) stream_NOT.add(NOT174);
 
             	    BETWEEN175=(Token)input.LT(1);
-            	    match(input,BETWEEN,FOLLOW_BETWEEN_in_compareExpr2633); if (failed) return retval;
+            	    match(input,BETWEEN,FOLLOW_BETWEEN_in_compareExpr2546); if (failed) return retval;
             	    if ( backtracking==0 ) stream_BETWEEN.add(BETWEEN175);
 
-            	    pushFollow(FOLLOW_bitOrExpr_in_compareExpr2637);
+            	    pushFollow(FOLLOW_bitOrExpr_in_compareExpr2550);
             	    min=bitOrExpr();
             	    _fsp--;
             	    if (failed) return retval;
             	    if ( backtracking==0 ) stream_bitOrExpr.add(min.getTree());
             	    AND176=(Token)input.LT(1);
-            	    match(input,AND,FOLLOW_AND_in_compareExpr2639); if (failed) return retval;
+            	    match(input,AND,FOLLOW_AND_in_compareExpr2552); if (failed) return retval;
             	    if ( backtracking==0 ) stream_AND.add(AND176);
 
-            	    pushFollow(FOLLOW_bitOrExpr_in_compareExpr2643);
+            	    pushFollow(FOLLOW_bitOrExpr_in_compareExpr2556);
             	    max=bitOrExpr();
             	    _fsp--;
             	    if (failed) return retval;
@@ -8022,15 +8030,15 @@ public class Windowing2Parser extends Parser {
             	    RewriteRuleSubtreeStream stream_max=new RewriteRuleSubtreeStream(adaptor,"token max",max!=null?max.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 358:50: -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max)
+            	    // 346:53: -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max)
             	    {
-            	        // Windowing2.g:359:38: ^( FUNCTION BETWEEN FALSE $compareExpr $min $max)
+            	        // Windowing2.g:346:56: ^( FUNCTION BETWEEN TRUE $compareExpr $min $max)
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(FUNCTION, "FUNCTION"), root_1);
 
             	        adaptor.addChild(root_1, stream_BETWEEN.next());
-            	        adaptor.addChild(root_1, adaptor.create(FALSE, "FALSE"));
+            	        adaptor.addChild(root_1, adaptor.create(TRUE, "TRUE"));
             	        adaptor.addChild(root_1, stream_retval.next());
             	        adaptor.addChild(root_1, stream_min.next());
             	        adaptor.addChild(root_1, stream_max.next());
@@ -8048,32 +8056,32 @@ public class Windowing2Parser extends Parser {
             	    }
             	    break;
             	case 6 :
-            	    // Windowing2.g:361:5: ( BETWEEN bitOrExpr AND bitOrExpr -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max) )
+            	    // Windowing2.g:347:5: ( BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max) )
             	    {
-            	    // Windowing2.g:361:5: ( BETWEEN bitOrExpr AND bitOrExpr -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max) )
-            	    // Windowing2.g:361:6: BETWEEN bitOrExpr AND bitOrExpr
+            	    // Windowing2.g:347:5: ( BETWEEN min= bitOrExpr AND max= bitOrExpr -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max) )
+            	    // Windowing2.g:347:9: BETWEEN min= bitOrExpr AND max= bitOrExpr
             	    {
             	    BETWEEN177=(Token)input.LT(1);
-            	    match(input,BETWEEN,FOLLOW_BETWEEN_in_compareExpr2714); if (failed) return retval;
+            	    match(input,BETWEEN,FOLLOW_BETWEEN_in_compareExpr2594); if (failed) return retval;
             	    if ( backtracking==0 ) stream_BETWEEN.add(BETWEEN177);
 
-            	    pushFollow(FOLLOW_bitOrExpr_in_compareExpr2716);
-            	    bitOrExpr178=bitOrExpr();
+            	    pushFollow(FOLLOW_bitOrExpr_in_compareExpr2599);
+            	    min=bitOrExpr();
             	    _fsp--;
             	    if (failed) return retval;
-            	    if ( backtracking==0 ) stream_bitOrExpr.add(bitOrExpr178.getTree());
-            	    AND179=(Token)input.LT(1);
-            	    match(input,AND,FOLLOW_AND_in_compareExpr2718); if (failed) return retval;
-            	    if ( backtracking==0 ) stream_AND.add(AND179);
+            	    if ( backtracking==0 ) stream_bitOrExpr.add(min.getTree());
+            	    AND178=(Token)input.LT(1);
+            	    match(input,AND,FOLLOW_AND_in_compareExpr2601); if (failed) return retval;
+            	    if ( backtracking==0 ) stream_AND.add(AND178);
 
-            	    pushFollow(FOLLOW_bitOrExpr_in_compareExpr2720);
-            	    bitOrExpr180=bitOrExpr();
+            	    pushFollow(FOLLOW_bitOrExpr_in_compareExpr2606);
+            	    max=bitOrExpr();
             	    _fsp--;
             	    if (failed) return retval;
-            	    if ( backtracking==0 ) stream_bitOrExpr.add(bitOrExpr180.getTree());
+            	    if ( backtracking==0 ) stream_bitOrExpr.add(max.getTree());
 
             	    // AST REWRITE
-            	    // elements: max, compareExpr, min, BETWEEN
+            	    // elements: max, min, BETWEEN, compareExpr
             	    // token labels: 
             	    // rule labels: min, retval, max
             	    // token list labels: 
@@ -8085,15 +8093,15 @@ public class Windowing2Parser extends Parser {
             	    RewriteRuleSubtreeStream stream_max=new RewriteRuleSubtreeStream(adaptor,"token max",max!=null?max.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 361:38: -> ^( FUNCTION BETWEEN TRUE $compareExpr $min $max)
+            	    // 347:51: -> ^( FUNCTION BETWEEN FALSE $compareExpr $min $max)
             	    {
-            	        // Windowing2.g:362:38: ^( FUNCTION BETWEEN TRUE $compareExpr $min $max)
+            	        // Windowing2.g:347:55: ^( FUNCTION BETWEEN FALSE $compareExpr $min $max)
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(FUNCTION, "FUNCTION"), root_1);
 
             	        adaptor.addChild(root_1, stream_BETWEEN.next());
-            	        adaptor.addChild(root_1, adaptor.create(TRUE, "TRUE"));
+            	        adaptor.addChild(root_1, adaptor.create(FALSE, "FALSE"));
             	        adaptor.addChild(root_1, stream_retval.next());
             	        adaptor.addChild(root_1, stream_min.next());
             	        adaptor.addChild(root_1, stream_max.next());
@@ -8142,33 +8150,33 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start bitOrExpr
-    // Windowing2.g:367:1: bitOrExpr : bitAndExpr ( BITWISEOR bitAndExpr )* ;
+    // Windowing2.g:351:1: bitOrExpr : bitAndExpr ( BITWISEOR bitAndExpr )* ;
     public final bitOrExpr_return bitOrExpr() throws RecognitionException {
         bitOrExpr_return retval = new bitOrExpr_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token BITWISEOR182=null;
+        Token BITWISEOR180=null;
+        bitAndExpr_return bitAndExpr179 = null;
+
         bitAndExpr_return bitAndExpr181 = null;
 
-        bitAndExpr_return bitAndExpr183 = null;
 
-
-        Object BITWISEOR182_tree=null;
+        Object BITWISEOR180_tree=null;
 
         try {
-            // Windowing2.g:367:11: ( bitAndExpr ( BITWISEOR bitAndExpr )* )
-            // Windowing2.g:368:3: bitAndExpr ( BITWISEOR bitAndExpr )*
+            // Windowing2.g:351:11: ( bitAndExpr ( BITWISEOR bitAndExpr )* )
+            // Windowing2.g:352:3: bitAndExpr ( BITWISEOR bitAndExpr )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_bitAndExpr_in_bitOrExpr2798);
-            bitAndExpr181=bitAndExpr();
+            pushFollow(FOLLOW_bitAndExpr_in_bitOrExpr2644);
+            bitAndExpr179=bitAndExpr();
             _fsp--;
             if (failed) return retval;
-            if ( backtracking==0 ) adaptor.addChild(root_0, bitAndExpr181.getTree());
-            // Windowing2.g:368:14: ( BITWISEOR bitAndExpr )*
+            if ( backtracking==0 ) adaptor.addChild(root_0, bitAndExpr179.getTree());
+            // Windowing2.g:352:14: ( BITWISEOR bitAndExpr )*
             loop63:
             do {
                 int alt63=2;
@@ -8181,19 +8189,19 @@ public class Windowing2Parser extends Parser {
 
                 switch (alt63) {
             	case 1 :
-            	    // Windowing2.g:368:15: BITWISEOR bitAndExpr
+            	    // Windowing2.g:352:15: BITWISEOR bitAndExpr
             	    {
-            	    BITWISEOR182=(Token)input.LT(1);
-            	    match(input,BITWISEOR,FOLLOW_BITWISEOR_in_bitOrExpr2801); if (failed) return retval;
+            	    BITWISEOR180=(Token)input.LT(1);
+            	    match(input,BITWISEOR,FOLLOW_BITWISEOR_in_bitOrExpr2647); if (failed) return retval;
             	    if ( backtracking==0 ) {
-            	    BITWISEOR182_tree = (Object)adaptor.create(BITWISEOR182);
-            	    root_0 = (Object)adaptor.becomeRoot(BITWISEOR182_tree, root_0);
+            	    BITWISEOR180_tree = (Object)adaptor.create(BITWISEOR180);
+            	    root_0 = (Object)adaptor.becomeRoot(BITWISEOR180_tree, root_0);
             	    }
-            	    pushFollow(FOLLOW_bitAndExpr_in_bitOrExpr2804);
-            	    bitAndExpr183=bitAndExpr();
+            	    pushFollow(FOLLOW_bitAndExpr_in_bitOrExpr2650);
+            	    bitAndExpr181=bitAndExpr();
             	    _fsp--;
             	    if (failed) return retval;
-            	    if ( backtracking==0 ) adaptor.addChild(root_0, bitAndExpr183.getTree());
+            	    if ( backtracking==0 ) adaptor.addChild(root_0, bitAndExpr181.getTree());
 
             	    }
             	    break;
@@ -8229,33 +8237,33 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start bitAndExpr
-    // Windowing2.g:371:1: bitAndExpr : plusExpr ( AMPERSAND plusExpr )* ;
+    // Windowing2.g:355:1: bitAndExpr : plusExpr ( AMPERSAND plusExpr )* ;
     public final bitAndExpr_return bitAndExpr() throws RecognitionException {
         bitAndExpr_return retval = new bitAndExpr_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token AMPERSAND185=null;
+        Token AMPERSAND183=null;
+        plusExpr_return plusExpr182 = null;
+
         plusExpr_return plusExpr184 = null;
 
-        plusExpr_return plusExpr186 = null;
 
-
-        Object AMPERSAND185_tree=null;
+        Object AMPERSAND183_tree=null;
 
         try {
-            // Windowing2.g:371:12: ( plusExpr ( AMPERSAND plusExpr )* )
-            // Windowing2.g:372:3: plusExpr ( AMPERSAND plusExpr )*
+            // Windowing2.g:355:12: ( plusExpr ( AMPERSAND plusExpr )* )
+            // Windowing2.g:356:3: plusExpr ( AMPERSAND plusExpr )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_plusExpr_in_bitAndExpr2817);
-            plusExpr184=plusExpr();
+            pushFollow(FOLLOW_plusExpr_in_bitAndExpr2663);
+            plusExpr182=plusExpr();
             _fsp--;
             if (failed) return retval;
-            if ( backtracking==0 ) adaptor.addChild(root_0, plusExpr184.getTree());
-            // Windowing2.g:372:12: ( AMPERSAND plusExpr )*
+            if ( backtracking==0 ) adaptor.addChild(root_0, plusExpr182.getTree());
+            // Windowing2.g:356:12: ( AMPERSAND plusExpr )*
             loop64:
             do {
                 int alt64=2;
@@ -8268,19 +8276,19 @@ public class Windowing2Parser extends Parser {
 
                 switch (alt64) {
             	case 1 :
-            	    // Windowing2.g:372:13: AMPERSAND plusExpr
+            	    // Windowing2.g:356:13: AMPERSAND plusExpr
             	    {
-            	    AMPERSAND185=(Token)input.LT(1);
-            	    match(input,AMPERSAND,FOLLOW_AMPERSAND_in_bitAndExpr2820); if (failed) return retval;
+            	    AMPERSAND183=(Token)input.LT(1);
+            	    match(input,AMPERSAND,FOLLOW_AMPERSAND_in_bitAndExpr2666); if (failed) return retval;
             	    if ( backtracking==0 ) {
-            	    AMPERSAND185_tree = (Object)adaptor.create(AMPERSAND185);
-            	    root_0 = (Object)adaptor.becomeRoot(AMPERSAND185_tree, root_0);
+            	    AMPERSAND183_tree = (Object)adaptor.create(AMPERSAND183);
+            	    root_0 = (Object)adaptor.becomeRoot(AMPERSAND183_tree, root_0);
             	    }
-            	    pushFollow(FOLLOW_plusExpr_in_bitAndExpr2823);
-            	    plusExpr186=plusExpr();
+            	    pushFollow(FOLLOW_plusExpr_in_bitAndExpr2669);
+            	    plusExpr184=plusExpr();
             	    _fsp--;
             	    if (failed) return retval;
-            	    if ( backtracking==0 ) adaptor.addChild(root_0, plusExpr186.getTree());
+            	    if ( backtracking==0 ) adaptor.addChild(root_0, plusExpr184.getTree());
 
             	    }
             	    break;
@@ -8316,35 +8324,35 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start plusExpr
-    // Windowing2.g:375:1: plusExpr : starExpr ( ( PLUS | MINUS ) starExpr )* ;
+    // Windowing2.g:359:1: plusExpr : starExpr ( ( PLUS | MINUS ) starExpr )* ;
     public final plusExpr_return plusExpr() throws RecognitionException {
         plusExpr_return retval = new plusExpr_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token PLUS188=null;
-        Token MINUS189=null;
-        starExpr_return starExpr187 = null;
+        Token PLUS186=null;
+        Token MINUS187=null;
+        starExpr_return starExpr185 = null;
 
-        starExpr_return starExpr190 = null;
+        starExpr_return starExpr188 = null;
 
 
-        Object PLUS188_tree=null;
-        Object MINUS189_tree=null;
+        Object PLUS186_tree=null;
+        Object MINUS187_tree=null;
 
         try {
-            // Windowing2.g:375:10: ( starExpr ( ( PLUS | MINUS ) starExpr )* )
-            // Windowing2.g:376:3: starExpr ( ( PLUS | MINUS ) starExpr )*
+            // Windowing2.g:359:10: ( starExpr ( ( PLUS | MINUS ) starExpr )* )
+            // Windowing2.g:360:3: starExpr ( ( PLUS | MINUS ) starExpr )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_starExpr_in_plusExpr2836);
-            starExpr187=starExpr();
+            pushFollow(FOLLOW_starExpr_in_plusExpr2682);
+            starExpr185=starExpr();
             _fsp--;
             if (failed) return retval;
-            if ( backtracking==0 ) adaptor.addChild(root_0, starExpr187.getTree());
-            // Windowing2.g:376:12: ( ( PLUS | MINUS ) starExpr )*
+            if ( backtracking==0 ) adaptor.addChild(root_0, starExpr185.getTree());
+            // Windowing2.g:360:12: ( ( PLUS | MINUS ) starExpr )*
             loop66:
             do {
                 int alt66=2;
@@ -8357,9 +8365,9 @@ public class Windowing2Parser extends Parser {
 
                 switch (alt66) {
             	case 1 :
-            	    // Windowing2.g:376:13: ( PLUS | MINUS ) starExpr
+            	    // Windowing2.g:360:13: ( PLUS | MINUS ) starExpr
             	    {
-            	    // Windowing2.g:376:13: ( PLUS | MINUS )
+            	    // Windowing2.g:360:13: ( PLUS | MINUS )
             	    int alt65=2;
             	    int LA65_0 = input.LA(1);
 
@@ -8372,31 +8380,31 @@ public class Windowing2Parser extends Parser {
             	    else {
             	        if (backtracking>0) {failed=true; return retval;}
             	        NoViableAltException nvae =
-            	            new NoViableAltException("376:13: ( PLUS | MINUS )", 65, 0, input);
+            	            new NoViableAltException("360:13: ( PLUS | MINUS )", 65, 0, input);
 
             	        throw nvae;
             	    }
             	    switch (alt65) {
             	        case 1 :
-            	            // Windowing2.g:376:14: PLUS
+            	            // Windowing2.g:360:14: PLUS
             	            {
-            	            PLUS188=(Token)input.LT(1);
-            	            match(input,PLUS,FOLLOW_PLUS_in_plusExpr2840); if (failed) return retval;
+            	            PLUS186=(Token)input.LT(1);
+            	            match(input,PLUS,FOLLOW_PLUS_in_plusExpr2686); if (failed) return retval;
             	            if ( backtracking==0 ) {
-            	            PLUS188_tree = (Object)adaptor.create(PLUS188);
-            	            root_0 = (Object)adaptor.becomeRoot(PLUS188_tree, root_0);
+            	            PLUS186_tree = (Object)adaptor.create(PLUS186);
+            	            root_0 = (Object)adaptor.becomeRoot(PLUS186_tree, root_0);
             	            }
 
             	            }
             	            break;
             	        case 2 :
-            	            // Windowing2.g:376:22: MINUS
+            	            // Windowing2.g:360:22: MINUS
             	            {
-            	            MINUS189=(Token)input.LT(1);
-            	            match(input,MINUS,FOLLOW_MINUS_in_plusExpr2845); if (failed) return retval;
+            	            MINUS187=(Token)input.LT(1);
+            	            match(input,MINUS,FOLLOW_MINUS_in_plusExpr2691); if (failed) return retval;
             	            if ( backtracking==0 ) {
-            	            MINUS189_tree = (Object)adaptor.create(MINUS189);
-            	            root_0 = (Object)adaptor.becomeRoot(MINUS189_tree, root_0);
+            	            MINUS187_tree = (Object)adaptor.create(MINUS187);
+            	            root_0 = (Object)adaptor.becomeRoot(MINUS187_tree, root_0);
             	            }
 
             	            }
@@ -8404,11 +8412,11 @@ public class Windowing2Parser extends Parser {
 
             	    }
 
-            	    pushFollow(FOLLOW_starExpr_in_plusExpr2850);
-            	    starExpr190=starExpr();
+            	    pushFollow(FOLLOW_starExpr_in_plusExpr2696);
+            	    starExpr188=starExpr();
             	    _fsp--;
             	    if (failed) return retval;
-            	    if ( backtracking==0 ) adaptor.addChild(root_0, starExpr190.getTree());
+            	    if ( backtracking==0 ) adaptor.addChild(root_0, starExpr188.getTree());
 
             	    }
             	    break;
@@ -8444,39 +8452,39 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start starExpr
-    // Windowing2.g:379:1: starExpr : xorExpr ( ( STAR | DIVIDE | MOD | DIV ) xorExpr )* ;
+    // Windowing2.g:363:1: starExpr : xorExpr ( ( STAR | DIVIDE | MOD | DIV ) xorExpr )* ;
     public final starExpr_return starExpr() throws RecognitionException {
         starExpr_return retval = new starExpr_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token STAR192=null;
-        Token DIVIDE193=null;
-        Token MOD194=null;
-        Token DIV195=null;
-        xorExpr_return xorExpr191 = null;
+        Token STAR190=null;
+        Token DIVIDE191=null;
+        Token MOD192=null;
+        Token DIV193=null;
+        xorExpr_return xorExpr189 = null;
 
-        xorExpr_return xorExpr196 = null;
+        xorExpr_return xorExpr194 = null;
 
 
-        Object STAR192_tree=null;
-        Object DIVIDE193_tree=null;
-        Object MOD194_tree=null;
-        Object DIV195_tree=null;
+        Object STAR190_tree=null;
+        Object DIVIDE191_tree=null;
+        Object MOD192_tree=null;
+        Object DIV193_tree=null;
 
         try {
-            // Windowing2.g:379:10: ( xorExpr ( ( STAR | DIVIDE | MOD | DIV ) xorExpr )* )
-            // Windowing2.g:380:3: xorExpr ( ( STAR | DIVIDE | MOD | DIV ) xorExpr )*
+            // Windowing2.g:363:10: ( xorExpr ( ( STAR | DIVIDE | MOD | DIV ) xorExpr )* )
+            // Windowing2.g:364:3: xorExpr ( ( STAR | DIVIDE | MOD | DIV ) xorExpr )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_xorExpr_in_starExpr2864);
-            xorExpr191=xorExpr();
+            pushFollow(FOLLOW_xorExpr_in_starExpr2710);
+            xorExpr189=xorExpr();
             _fsp--;
             if (failed) return retval;
-            if ( backtracking==0 ) adaptor.addChild(root_0, xorExpr191.getTree());
-            // Windowing2.g:380:11: ( ( STAR | DIVIDE | MOD | DIV ) xorExpr )*
+            if ( backtracking==0 ) adaptor.addChild(root_0, xorExpr189.getTree());
+            // Windowing2.g:364:11: ( ( STAR | DIVIDE | MOD | DIV ) xorExpr )*
             loop68:
             do {
                 int alt68=2;
@@ -8489,9 +8497,9 @@ public class Windowing2Parser extends Parser {
 
                 switch (alt68) {
             	case 1 :
-            	    // Windowing2.g:380:12: ( STAR | DIVIDE | MOD | DIV ) xorExpr
+            	    // Windowing2.g:364:12: ( STAR | DIVIDE | MOD | DIV ) xorExpr
             	    {
-            	    // Windowing2.g:380:12: ( STAR | DIVIDE | MOD | DIV )
+            	    // Windowing2.g:364:12: ( STAR | DIVIDE | MOD | DIV )
             	    int alt67=4;
             	    switch ( input.LA(1) ) {
             	    case STAR:
@@ -8517,56 +8525,56 @@ public class Windowing2Parser extends Parser {
             	    default:
             	        if (backtracking>0) {failed=true; return retval;}
             	        NoViableAltException nvae =
-            	            new NoViableAltException("380:12: ( STAR | DIVIDE | MOD | DIV )", 67, 0, input);
+            	            new NoViableAltException("364:12: ( STAR | DIVIDE | MOD | DIV )", 67, 0, input);
 
             	        throw nvae;
             	    }
 
             	    switch (alt67) {
             	        case 1 :
-            	            // Windowing2.g:380:13: STAR
+            	            // Windowing2.g:364:13: STAR
             	            {
-            	            STAR192=(Token)input.LT(1);
-            	            match(input,STAR,FOLLOW_STAR_in_starExpr2868); if (failed) return retval;
+            	            STAR190=(Token)input.LT(1);
+            	            match(input,STAR,FOLLOW_STAR_in_starExpr2714); if (failed) return retval;
             	            if ( backtracking==0 ) {
-            	            STAR192_tree = (Object)adaptor.create(STAR192);
-            	            root_0 = (Object)adaptor.becomeRoot(STAR192_tree, root_0);
+            	            STAR190_tree = (Object)adaptor.create(STAR190);
+            	            root_0 = (Object)adaptor.becomeRoot(STAR190_tree, root_0);
             	            }
 
             	            }
             	            break;
             	        case 2 :
-            	            // Windowing2.g:380:21: DIVIDE
+            	            // Windowing2.g:364:21: DIVIDE
             	            {
-            	            DIVIDE193=(Token)input.LT(1);
-            	            match(input,DIVIDE,FOLLOW_DIVIDE_in_starExpr2873); if (failed) return retval;
+            	            DIVIDE191=(Token)input.LT(1);
+            	            match(input,DIVIDE,FOLLOW_DIVIDE_in_starExpr2719); if (failed) return retval;
             	            if ( backtracking==0 ) {
-            	            DIVIDE193_tree = (Object)adaptor.create(DIVIDE193);
-            	            root_0 = (Object)adaptor.becomeRoot(DIVIDE193_tree, root_0);
+            	            DIVIDE191_tree = (Object)adaptor.create(DIVIDE191);
+            	            root_0 = (Object)adaptor.becomeRoot(DIVIDE191_tree, root_0);
             	            }
 
             	            }
             	            break;
             	        case 3 :
-            	            // Windowing2.g:380:31: MOD
+            	            // Windowing2.g:364:31: MOD
             	            {
-            	            MOD194=(Token)input.LT(1);
-            	            match(input,MOD,FOLLOW_MOD_in_starExpr2878); if (failed) return retval;
+            	            MOD192=(Token)input.LT(1);
+            	            match(input,MOD,FOLLOW_MOD_in_starExpr2724); if (failed) return retval;
             	            if ( backtracking==0 ) {
-            	            MOD194_tree = (Object)adaptor.create(MOD194);
-            	            root_0 = (Object)adaptor.becomeRoot(MOD194_tree, root_0);
+            	            MOD192_tree = (Object)adaptor.create(MOD192);
+            	            root_0 = (Object)adaptor.becomeRoot(MOD192_tree, root_0);
             	            }
 
             	            }
             	            break;
             	        case 4 :
-            	            // Windowing2.g:380:38: DIV
+            	            // Windowing2.g:364:38: DIV
             	            {
-            	            DIV195=(Token)input.LT(1);
-            	            match(input,DIV,FOLLOW_DIV_in_starExpr2883); if (failed) return retval;
+            	            DIV193=(Token)input.LT(1);
+            	            match(input,DIV,FOLLOW_DIV_in_starExpr2729); if (failed) return retval;
             	            if ( backtracking==0 ) {
-            	            DIV195_tree = (Object)adaptor.create(DIV195);
-            	            root_0 = (Object)adaptor.becomeRoot(DIV195_tree, root_0);
+            	            DIV193_tree = (Object)adaptor.create(DIV193);
+            	            root_0 = (Object)adaptor.becomeRoot(DIV193_tree, root_0);
             	            }
 
             	            }
@@ -8574,11 +8582,11 @@ public class Windowing2Parser extends Parser {
 
             	    }
 
-            	    pushFollow(FOLLOW_xorExpr_in_starExpr2887);
-            	    xorExpr196=xorExpr();
+            	    pushFollow(FOLLOW_xorExpr_in_starExpr2733);
+            	    xorExpr194=xorExpr();
             	    _fsp--;
             	    if (failed) return retval;
-            	    if ( backtracking==0 ) adaptor.addChild(root_0, xorExpr196.getTree());
+            	    if ( backtracking==0 ) adaptor.addChild(root_0, xorExpr194.getTree());
 
             	    }
             	    break;
@@ -8614,33 +8622,33 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start xorExpr
-    // Windowing2.g:383:1: xorExpr : nullExpr ( BITWISEXOR nullExpr )* ;
+    // Windowing2.g:367:1: xorExpr : nullExpr ( BITWISEXOR nullExpr )* ;
     public final xorExpr_return xorExpr() throws RecognitionException {
         xorExpr_return retval = new xorExpr_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token BITWISEXOR198=null;
+        Token BITWISEXOR196=null;
+        nullExpr_return nullExpr195 = null;
+
         nullExpr_return nullExpr197 = null;
 
-        nullExpr_return nullExpr199 = null;
 
-
-        Object BITWISEXOR198_tree=null;
+        Object BITWISEXOR196_tree=null;
 
         try {
-            // Windowing2.g:383:9: ( nullExpr ( BITWISEXOR nullExpr )* )
-            // Windowing2.g:384:3: nullExpr ( BITWISEXOR nullExpr )*
+            // Windowing2.g:367:9: ( nullExpr ( BITWISEXOR nullExpr )* )
+            // Windowing2.g:368:3: nullExpr ( BITWISEXOR nullExpr )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_nullExpr_in_xorExpr2900);
-            nullExpr197=nullExpr();
+            pushFollow(FOLLOW_nullExpr_in_xorExpr2746);
+            nullExpr195=nullExpr();
             _fsp--;
             if (failed) return retval;
-            if ( backtracking==0 ) adaptor.addChild(root_0, nullExpr197.getTree());
-            // Windowing2.g:384:12: ( BITWISEXOR nullExpr )*
+            if ( backtracking==0 ) adaptor.addChild(root_0, nullExpr195.getTree());
+            // Windowing2.g:368:12: ( BITWISEXOR nullExpr )*
             loop69:
             do {
                 int alt69=2;
@@ -8653,19 +8661,19 @@ public class Windowing2Parser extends Parser {
 
                 switch (alt69) {
             	case 1 :
-            	    // Windowing2.g:384:13: BITWISEXOR nullExpr
+            	    // Windowing2.g:368:13: BITWISEXOR nullExpr
             	    {
-            	    BITWISEXOR198=(Token)input.LT(1);
-            	    match(input,BITWISEXOR,FOLLOW_BITWISEXOR_in_xorExpr2903); if (failed) return retval;
+            	    BITWISEXOR196=(Token)input.LT(1);
+            	    match(input,BITWISEXOR,FOLLOW_BITWISEXOR_in_xorExpr2749); if (failed) return retval;
             	    if ( backtracking==0 ) {
-            	    BITWISEXOR198_tree = (Object)adaptor.create(BITWISEXOR198);
-            	    adaptor.addChild(root_0, BITWISEXOR198_tree);
+            	    BITWISEXOR196_tree = (Object)adaptor.create(BITWISEXOR196);
+            	    adaptor.addChild(root_0, BITWISEXOR196_tree);
             	    }
-            	    pushFollow(FOLLOW_nullExpr_in_xorExpr2905);
-            	    nullExpr199=nullExpr();
+            	    pushFollow(FOLLOW_nullExpr_in_xorExpr2751);
+            	    nullExpr197=nullExpr();
             	    _fsp--;
             	    if (failed) return retval;
-            	    if ( backtracking==0 ) adaptor.addChild(root_0, nullExpr199.getTree());
+            	    if ( backtracking==0 ) adaptor.addChild(root_0, nullExpr197.getTree());
 
             	    }
             	    break;
@@ -8701,25 +8709,25 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start nullCondition
-    // Windowing2.g:387:1: nullCondition : ( NULL | NOT NULL -> ^( NOTNULL ) );
+    // Windowing2.g:371:1: nullCondition : ( NULL | NOT NULL -> ^( NOTNULL ) );
     public final nullCondition_return nullCondition() throws RecognitionException {
         nullCondition_return retval = new nullCondition_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
+        Token NULL198=null;
+        Token NOT199=null;
         Token NULL200=null;
-        Token NOT201=null;
-        Token NULL202=null;
 
+        Object NULL198_tree=null;
+        Object NOT199_tree=null;
         Object NULL200_tree=null;
-        Object NOT201_tree=null;
-        Object NULL202_tree=null;
         RewriteRuleTokenStream stream_NOT=new RewriteRuleTokenStream(adaptor,"token NOT");
         RewriteRuleTokenStream stream_NULL=new RewriteRuleTokenStream(adaptor,"token NULL");
 
         try {
-            // Windowing2.g:387:15: ( NULL | NOT NULL -> ^( NOTNULL ) )
+            // Windowing2.g:371:15: ( NULL | NOT NULL -> ^( NOTNULL ) )
             int alt70=2;
             int LA70_0 = input.LA(1);
 
@@ -8732,35 +8740,35 @@ public class Windowing2Parser extends Parser {
             else {
                 if (backtracking>0) {failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("387:1: nullCondition : ( NULL | NOT NULL -> ^( NOTNULL ) );", 70, 0, input);
+                    new NoViableAltException("371:1: nullCondition : ( NULL | NOT NULL -> ^( NOTNULL ) );", 70, 0, input);
 
                 throw nvae;
             }
             switch (alt70) {
                 case 1 :
-                    // Windowing2.g:388:3: NULL
+                    // Windowing2.g:372:3: NULL
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    NULL200=(Token)input.LT(1);
-                    match(input,NULL,FOLLOW_NULL_in_nullCondition2918); if (failed) return retval;
+                    NULL198=(Token)input.LT(1);
+                    match(input,NULL,FOLLOW_NULL_in_nullCondition2764); if (failed) return retval;
                     if ( backtracking==0 ) {
-                    NULL200_tree = (Object)adaptor.create(NULL200);
-                    adaptor.addChild(root_0, NULL200_tree);
+                    NULL198_tree = (Object)adaptor.create(NULL198);
+                    adaptor.addChild(root_0, NULL198_tree);
                     }
 
                     }
                     break;
                 case 2 :
-                    // Windowing2.g:389:3: NOT NULL
+                    // Windowing2.g:373:3: NOT NULL
                     {
-                    NOT201=(Token)input.LT(1);
-                    match(input,NOT,FOLLOW_NOT_in_nullCondition2924); if (failed) return retval;
-                    if ( backtracking==0 ) stream_NOT.add(NOT201);
+                    NOT199=(Token)input.LT(1);
+                    match(input,NOT,FOLLOW_NOT_in_nullCondition2770); if (failed) return retval;
+                    if ( backtracking==0 ) stream_NOT.add(NOT199);
 
-                    NULL202=(Token)input.LT(1);
-                    match(input,NULL,FOLLOW_NULL_in_nullCondition2926); if (failed) return retval;
-                    if ( backtracking==0 ) stream_NULL.add(NULL202);
+                    NULL200=(Token)input.LT(1);
+                    match(input,NULL,FOLLOW_NULL_in_nullCondition2772); if (failed) return retval;
+                    if ( backtracking==0 ) stream_NULL.add(NULL200);
 
 
                     // AST REWRITE
@@ -8774,9 +8782,9 @@ public class Windowing2Parser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 389:12: -> ^( NOTNULL )
+                    // 373:12: -> ^( NOTNULL )
                     {
-                        // Windowing2.g:389:15: ^( NOTNULL )
+                        // Windowing2.g:373:15: ^( NOTNULL )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(NOTNULL, "NOTNULL"), root_1);
@@ -8815,7 +8823,7 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start nullExpr
-    // Windowing2.g:392:1: nullExpr : unaryExpr (i= IS nullCondition )? -> {$i != null}? ^( FUNCTION nullCondition unaryExpr ) -> unaryExpr ;
+    // Windowing2.g:376:1: nullExpr : unaryExpr (i= IS nullCondition )? -> {$i != null}? ^( FUNCTION nullCondition unaryExpr ) -> unaryExpr ;
     public final nullExpr_return nullExpr() throws RecognitionException {
         nullExpr_return retval = new nullExpr_return();
         retval.start = input.LT(1);
@@ -8823,9 +8831,9 @@ public class Windowing2Parser extends Parser {
         Object root_0 = null;
 
         Token i=null;
-        unaryExpr_return unaryExpr203 = null;
+        unaryExpr_return unaryExpr201 = null;
 
-        nullCondition_return nullCondition204 = null;
+        nullCondition_return nullCondition202 = null;
 
 
         Object i_tree=null;
@@ -8833,15 +8841,15 @@ public class Windowing2Parser extends Parser {
         RewriteRuleSubtreeStream stream_unaryExpr=new RewriteRuleSubtreeStream(adaptor,"rule unaryExpr");
         RewriteRuleSubtreeStream stream_nullCondition=new RewriteRuleSubtreeStream(adaptor,"rule nullCondition");
         try {
-            // Windowing2.g:392:10: ( unaryExpr (i= IS nullCondition )? -> {$i != null}? ^( FUNCTION nullCondition unaryExpr ) -> unaryExpr )
-            // Windowing2.g:393:3: unaryExpr (i= IS nullCondition )?
+            // Windowing2.g:376:10: ( unaryExpr (i= IS nullCondition )? -> {$i != null}? ^( FUNCTION nullCondition unaryExpr ) -> unaryExpr )
+            // Windowing2.g:377:3: unaryExpr (i= IS nullCondition )?
             {
-            pushFollow(FOLLOW_unaryExpr_in_nullExpr2943);
-            unaryExpr203=unaryExpr();
+            pushFollow(FOLLOW_unaryExpr_in_nullExpr2789);
+            unaryExpr201=unaryExpr();
             _fsp--;
             if (failed) return retval;
-            if ( backtracking==0 ) stream_unaryExpr.add(unaryExpr203.getTree());
-            // Windowing2.g:393:13: (i= IS nullCondition )?
+            if ( backtracking==0 ) stream_unaryExpr.add(unaryExpr201.getTree());
+            // Windowing2.g:377:13: (i= IS nullCondition )?
             int alt71=2;
             int LA71_0 = input.LA(1);
 
@@ -8850,17 +8858,17 @@ public class Windowing2Parser extends Parser {
             }
             switch (alt71) {
                 case 1 :
-                    // Windowing2.g:393:14: i= IS nullCondition
+                    // Windowing2.g:377:14: i= IS nullCondition
                     {
                     i=(Token)input.LT(1);
-                    match(input,IS,FOLLOW_IS_in_nullExpr2948); if (failed) return retval;
+                    match(input,IS,FOLLOW_IS_in_nullExpr2794); if (failed) return retval;
                     if ( backtracking==0 ) stream_IS.add(i);
 
-                    pushFollow(FOLLOW_nullCondition_in_nullExpr2950);
-                    nullCondition204=nullCondition();
+                    pushFollow(FOLLOW_nullCondition_in_nullExpr2796);
+                    nullCondition202=nullCondition();
                     _fsp--;
                     if (failed) return retval;
-                    if ( backtracking==0 ) stream_nullCondition.add(nullCondition204.getTree());
+                    if ( backtracking==0 ) stream_nullCondition.add(nullCondition202.getTree());
 
                     }
                     break;
@@ -8869,7 +8877,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: nullCondition, unaryExpr, unaryExpr
+            // elements: unaryExpr, nullCondition, unaryExpr
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -8879,9 +8887,9 @@ public class Windowing2Parser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 394:3: -> {$i != null}? ^( FUNCTION nullCondition unaryExpr )
+            // 378:3: -> {$i != null}? ^( FUNCTION nullCondition unaryExpr )
             if (i != null) {
-                // Windowing2.g:394:20: ^( FUNCTION nullCondition unaryExpr )
+                // Windowing2.g:378:20: ^( FUNCTION nullCondition unaryExpr )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(FUNCTION, "FUNCTION"), root_1);
@@ -8893,7 +8901,7 @@ public class Windowing2Parser extends Parser {
                 }
 
             }
-            else // 395:3: -> unaryExpr
+            else // 379:3: -> unaryExpr
             {
                 adaptor.addChild(root_0, stream_unaryExpr.next());
 
@@ -8926,30 +8934,30 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start unaryExpr
-    // Windowing2.g:398:1: unaryExpr : ( PLUS | MINUS | TILDE )* fieldExpr ;
+    // Windowing2.g:382:1: unaryExpr : ( PLUS | MINUS | TILDE )* fieldExpr ;
     public final unaryExpr_return unaryExpr() throws RecognitionException {
         unaryExpr_return retval = new unaryExpr_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token PLUS205=null;
-        Token MINUS206=null;
-        Token TILDE207=null;
-        fieldExpr_return fieldExpr208 = null;
+        Token PLUS203=null;
+        Token MINUS204=null;
+        Token TILDE205=null;
+        fieldExpr_return fieldExpr206 = null;
 
 
-        Object PLUS205_tree=null;
-        Object MINUS206_tree=null;
-        Object TILDE207_tree=null;
+        Object PLUS203_tree=null;
+        Object MINUS204_tree=null;
+        Object TILDE205_tree=null;
 
         try {
-            // Windowing2.g:398:11: ( ( PLUS | MINUS | TILDE )* fieldExpr )
-            // Windowing2.g:399:3: ( PLUS | MINUS | TILDE )* fieldExpr
+            // Windowing2.g:382:11: ( ( PLUS | MINUS | TILDE )* fieldExpr )
+            // Windowing2.g:383:3: ( PLUS | MINUS | TILDE )* fieldExpr
             {
             root_0 = (Object)adaptor.nil();
 
-            // Windowing2.g:399:3: ( PLUS | MINUS | TILDE )*
+            // Windowing2.g:383:3: ( PLUS | MINUS | TILDE )*
             loop72:
             do {
                 int alt72=4;
@@ -8974,37 +8982,37 @@ public class Windowing2Parser extends Parser {
 
                 switch (alt72) {
             	case 1 :
-            	    // Windowing2.g:399:4: PLUS
+            	    // Windowing2.g:383:4: PLUS
             	    {
-            	    PLUS205=(Token)input.LT(1);
-            	    match(input,PLUS,FOLLOW_PLUS_in_unaryExpr2984); if (failed) return retval;
+            	    PLUS203=(Token)input.LT(1);
+            	    match(input,PLUS,FOLLOW_PLUS_in_unaryExpr2830); if (failed) return retval;
             	    if ( backtracking==0 ) {
-            	    PLUS205_tree = (Object)adaptor.create(PLUS205);
-            	    root_0 = (Object)adaptor.becomeRoot(PLUS205_tree, root_0);
+            	    PLUS203_tree = (Object)adaptor.create(PLUS203);
+            	    root_0 = (Object)adaptor.becomeRoot(PLUS203_tree, root_0);
             	    }
 
             	    }
             	    break;
             	case 2 :
-            	    // Windowing2.g:400:4: MINUS
+            	    // Windowing2.g:384:4: MINUS
             	    {
-            	    MINUS206=(Token)input.LT(1);
-            	    match(input,MINUS,FOLLOW_MINUS_in_unaryExpr2993); if (failed) return retval;
+            	    MINUS204=(Token)input.LT(1);
+            	    match(input,MINUS,FOLLOW_MINUS_in_unaryExpr2839); if (failed) return retval;
             	    if ( backtracking==0 ) {
-            	    MINUS206_tree = (Object)adaptor.create(MINUS206);
-            	    root_0 = (Object)adaptor.becomeRoot(MINUS206_tree, root_0);
+            	    MINUS204_tree = (Object)adaptor.create(MINUS204);
+            	    root_0 = (Object)adaptor.becomeRoot(MINUS204_tree, root_0);
             	    }
 
             	    }
             	    break;
             	case 3 :
-            	    // Windowing2.g:401:4: TILDE
+            	    // Windowing2.g:385:4: TILDE
             	    {
-            	    TILDE207=(Token)input.LT(1);
-            	    match(input,TILDE,FOLLOW_TILDE_in_unaryExpr3002); if (failed) return retval;
+            	    TILDE205=(Token)input.LT(1);
+            	    match(input,TILDE,FOLLOW_TILDE_in_unaryExpr2848); if (failed) return retval;
             	    if ( backtracking==0 ) {
-            	    TILDE207_tree = (Object)adaptor.create(TILDE207);
-            	    root_0 = (Object)adaptor.becomeRoot(TILDE207_tree, root_0);
+            	    TILDE205_tree = (Object)adaptor.create(TILDE205);
+            	    root_0 = (Object)adaptor.becomeRoot(TILDE205_tree, root_0);
             	    }
 
             	    }
@@ -9015,11 +9023,11 @@ public class Windowing2Parser extends Parser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_fieldExpr_in_unaryExpr3014);
-            fieldExpr208=fieldExpr();
+            pushFollow(FOLLOW_fieldExpr_in_unaryExpr2860);
+            fieldExpr206=fieldExpr();
             _fsp--;
             if (failed) return retval;
-            if ( backtracking==0 ) adaptor.addChild(root_0, fieldExpr208.getTree());
+            if ( backtracking==0 ) adaptor.addChild(root_0, fieldExpr206.getTree());
 
             }
 
@@ -9046,39 +9054,39 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start fieldExpr
-    // Windowing2.g:406:1: fieldExpr : atomExpr ( ( LSQUARE expression RSQUARE ) | ( DOT Identifier ) )* ;
+    // Windowing2.g:390:1: fieldExpr : atomExpr ( ( LSQUARE expression RSQUARE ) | ( DOT Identifier ) )* ;
     public final fieldExpr_return fieldExpr() throws RecognitionException {
         fieldExpr_return retval = new fieldExpr_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token LSQUARE210=null;
-        Token RSQUARE212=null;
-        Token DOT213=null;
-        Token Identifier214=null;
-        atomExpr_return atomExpr209 = null;
+        Token LSQUARE208=null;
+        Token RSQUARE210=null;
+        Token DOT211=null;
+        Token Identifier212=null;
+        atomExpr_return atomExpr207 = null;
 
-        expression_return expression211 = null;
+        expression_return expression209 = null;
 
 
-        Object LSQUARE210_tree=null;
-        Object RSQUARE212_tree=null;
-        Object DOT213_tree=null;
-        Object Identifier214_tree=null;
+        Object LSQUARE208_tree=null;
+        Object RSQUARE210_tree=null;
+        Object DOT211_tree=null;
+        Object Identifier212_tree=null;
 
         try {
-            // Windowing2.g:406:11: ( atomExpr ( ( LSQUARE expression RSQUARE ) | ( DOT Identifier ) )* )
-            // Windowing2.g:407:3: atomExpr ( ( LSQUARE expression RSQUARE ) | ( DOT Identifier ) )*
+            // Windowing2.g:390:11: ( atomExpr ( ( LSQUARE expression RSQUARE ) | ( DOT Identifier ) )* )
+            // Windowing2.g:391:3: atomExpr ( ( LSQUARE expression RSQUARE ) | ( DOT Identifier ) )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_atomExpr_in_fieldExpr3025);
-            atomExpr209=atomExpr();
+            pushFollow(FOLLOW_atomExpr_in_fieldExpr2871);
+            atomExpr207=atomExpr();
             _fsp--;
             if (failed) return retval;
-            if ( backtracking==0 ) adaptor.addChild(root_0, atomExpr209.getTree());
-            // Windowing2.g:407:12: ( ( LSQUARE expression RSQUARE ) | ( DOT Identifier ) )*
+            if ( backtracking==0 ) adaptor.addChild(root_0, atomExpr207.getTree());
+            // Windowing2.g:391:12: ( ( LSQUARE expression RSQUARE ) | ( DOT Identifier ) )*
             loop73:
             do {
                 int alt73=3;
@@ -9094,24 +9102,24 @@ public class Windowing2Parser extends Parser {
 
                 switch (alt73) {
             	case 1 :
-            	    // Windowing2.g:407:13: ( LSQUARE expression RSQUARE )
+            	    // Windowing2.g:391:13: ( LSQUARE expression RSQUARE )
             	    {
-            	    // Windowing2.g:407:13: ( LSQUARE expression RSQUARE )
-            	    // Windowing2.g:407:14: LSQUARE expression RSQUARE
+            	    // Windowing2.g:391:13: ( LSQUARE expression RSQUARE )
+            	    // Windowing2.g:391:14: LSQUARE expression RSQUARE
             	    {
-            	    LSQUARE210=(Token)input.LT(1);
-            	    match(input,LSQUARE,FOLLOW_LSQUARE_in_fieldExpr3029); if (failed) return retval;
+            	    LSQUARE208=(Token)input.LT(1);
+            	    match(input,LSQUARE,FOLLOW_LSQUARE_in_fieldExpr2875); if (failed) return retval;
             	    if ( backtracking==0 ) {
-            	    LSQUARE210_tree = (Object)adaptor.create(LSQUARE210);
-            	    root_0 = (Object)adaptor.becomeRoot(LSQUARE210_tree, root_0);
+            	    LSQUARE208_tree = (Object)adaptor.create(LSQUARE208);
+            	    root_0 = (Object)adaptor.becomeRoot(LSQUARE208_tree, root_0);
             	    }
-            	    pushFollow(FOLLOW_expression_in_fieldExpr3032);
-            	    expression211=expression();
+            	    pushFollow(FOLLOW_expression_in_fieldExpr2878);
+            	    expression209=expression();
             	    _fsp--;
             	    if (failed) return retval;
-            	    if ( backtracking==0 ) adaptor.addChild(root_0, expression211.getTree());
-            	    RSQUARE212=(Token)input.LT(1);
-            	    match(input,RSQUARE,FOLLOW_RSQUARE_in_fieldExpr3034); if (failed) return retval;
+            	    if ( backtracking==0 ) adaptor.addChild(root_0, expression209.getTree());
+            	    RSQUARE210=(Token)input.LT(1);
+            	    match(input,RSQUARE,FOLLOW_RSQUARE_in_fieldExpr2880); if (failed) return retval;
 
             	    }
 
@@ -9119,22 +9127,22 @@ public class Windowing2Parser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // Windowing2.g:407:46: ( DOT Identifier )
+            	    // Windowing2.g:391:46: ( DOT Identifier )
             	    {
-            	    // Windowing2.g:407:46: ( DOT Identifier )
-            	    // Windowing2.g:407:47: DOT Identifier
+            	    // Windowing2.g:391:46: ( DOT Identifier )
+            	    // Windowing2.g:391:47: DOT Identifier
             	    {
-            	    DOT213=(Token)input.LT(1);
-            	    match(input,DOT,FOLLOW_DOT_in_fieldExpr3041); if (failed) return retval;
+            	    DOT211=(Token)input.LT(1);
+            	    match(input,DOT,FOLLOW_DOT_in_fieldExpr2887); if (failed) return retval;
             	    if ( backtracking==0 ) {
-            	    DOT213_tree = (Object)adaptor.create(DOT213);
-            	    root_0 = (Object)adaptor.becomeRoot(DOT213_tree, root_0);
+            	    DOT211_tree = (Object)adaptor.create(DOT211);
+            	    root_0 = (Object)adaptor.becomeRoot(DOT211_tree, root_0);
             	    }
-            	    Identifier214=(Token)input.LT(1);
-            	    match(input,Identifier,FOLLOW_Identifier_in_fieldExpr3044); if (failed) return retval;
+            	    Identifier212=(Token)input.LT(1);
+            	    match(input,Identifier,FOLLOW_Identifier_in_fieldExpr2890); if (failed) return retval;
             	    if ( backtracking==0 ) {
-            	    Identifier214_tree = (Object)adaptor.create(Identifier214);
-            	    adaptor.addChild(root_0, Identifier214_tree);
+            	    Identifier212_tree = (Object)adaptor.create(Identifier212);
+            	    adaptor.addChild(root_0, Identifier212_tree);
             	    }
 
             	    }
@@ -9174,37 +9182,37 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start atomExpr
-    // Windowing2.g:410:1: atomExpr : ( NULL | constant | function | castExpr | caseExpr | whenExpr | tableOrColumn | LPAREN expression RPAREN );
+    // Windowing2.g:394:1: atomExpr : ( NULL | constant | function | castExpr | caseExpr | whenExpr | tableOrColumn | LPAREN expression RPAREN );
     public final atomExpr_return atomExpr() throws RecognitionException {
         atomExpr_return retval = new atomExpr_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token NULL215=null;
-        Token LPAREN222=null;
-        Token RPAREN224=null;
-        constant_return constant216 = null;
+        Token NULL213=null;
+        Token LPAREN220=null;
+        Token RPAREN222=null;
+        constant_return constant214 = null;
 
-        function_return function217 = null;
+        function_return function215 = null;
 
-        castExpr_return castExpr218 = null;
+        castExpr_return castExpr216 = null;
 
-        caseExpr_return caseExpr219 = null;
+        caseExpr_return caseExpr217 = null;
 
-        whenExpr_return whenExpr220 = null;
+        whenExpr_return whenExpr218 = null;
 
-        tableOrColumn_return tableOrColumn221 = null;
+        tableOrColumn_return tableOrColumn219 = null;
 
-        expression_return expression223 = null;
+        expression_return expression221 = null;
 
 
-        Object NULL215_tree=null;
-        Object LPAREN222_tree=null;
-        Object RPAREN224_tree=null;
+        Object NULL213_tree=null;
+        Object LPAREN220_tree=null;
+        Object RPAREN222_tree=null;
 
         try {
-            // Windowing2.g:410:10: ( NULL | constant | function | castExpr | caseExpr | whenExpr | tableOrColumn | LPAREN expression RPAREN )
+            // Windowing2.g:394:10: ( NULL | constant | function | castExpr | caseExpr | whenExpr | tableOrColumn | LPAREN expression RPAREN )
             int alt74=8;
             switch ( input.LA(1) ) {
             case NULL:
@@ -9237,7 +9245,7 @@ public class Windowing2Parser extends Parser {
                 else {
                     if (backtracking>0) {failed=true; return retval;}
                     NoViableAltException nvae =
-                        new NoViableAltException("410:1: atomExpr : ( NULL | constant | function | castExpr | caseExpr | whenExpr | tableOrColumn | LPAREN expression RPAREN );", 74, 10, input);
+                        new NoViableAltException("394:1: atomExpr : ( NULL | constant | function | castExpr | caseExpr | whenExpr | tableOrColumn | LPAREN expression RPAREN );", 74, 10, input);
 
                     throw nvae;
                 }
@@ -9261,7 +9269,7 @@ public class Windowing2Parser extends Parser {
                 else {
                     if (backtracking>0) {failed=true; return retval;}
                     NoViableAltException nvae =
-                        new NoViableAltException("410:1: atomExpr : ( NULL | constant | function | castExpr | caseExpr | whenExpr | tableOrColumn | LPAREN expression RPAREN );", 74, 12, input);
+                        new NoViableAltException("394:1: atomExpr : ( NULL | constant | function | castExpr | caseExpr | whenExpr | tableOrColumn | LPAREN expression RPAREN );", 74, 12, input);
 
                     throw nvae;
                 }
@@ -9284,118 +9292,118 @@ public class Windowing2Parser extends Parser {
             default:
                 if (backtracking>0) {failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("410:1: atomExpr : ( NULL | constant | function | castExpr | caseExpr | whenExpr | tableOrColumn | LPAREN expression RPAREN );", 74, 0, input);
+                    new NoViableAltException("394:1: atomExpr : ( NULL | constant | function | castExpr | caseExpr | whenExpr | tableOrColumn | LPAREN expression RPAREN );", 74, 0, input);
 
                 throw nvae;
             }
 
             switch (alt74) {
                 case 1 :
-                    // Windowing2.g:411:3: NULL
+                    // Windowing2.g:395:3: NULL
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    NULL215=(Token)input.LT(1);
-                    match(input,NULL,FOLLOW_NULL_in_atomExpr3058); if (failed) return retval;
+                    NULL213=(Token)input.LT(1);
+                    match(input,NULL,FOLLOW_NULL_in_atomExpr2904); if (failed) return retval;
                     if ( backtracking==0 ) {
-                    NULL215_tree = (Object)adaptor.create(NULL215);
-                    adaptor.addChild(root_0, NULL215_tree);
+                    NULL213_tree = (Object)adaptor.create(NULL213);
+                    adaptor.addChild(root_0, NULL213_tree);
                     }
 
                     }
                     break;
                 case 2 :
-                    // Windowing2.g:412:5: constant
+                    // Windowing2.g:396:5: constant
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_constant_in_atomExpr3065);
-                    constant216=constant();
+                    pushFollow(FOLLOW_constant_in_atomExpr2911);
+                    constant214=constant();
                     _fsp--;
                     if (failed) return retval;
-                    if ( backtracking==0 ) adaptor.addChild(root_0, constant216.getTree());
+                    if ( backtracking==0 ) adaptor.addChild(root_0, constant214.getTree());
 
                     }
                     break;
                 case 3 :
-                    // Windowing2.g:413:5: function
+                    // Windowing2.g:397:5: function
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_function_in_atomExpr3071);
-                    function217=function();
+                    pushFollow(FOLLOW_function_in_atomExpr2917);
+                    function215=function();
                     _fsp--;
                     if (failed) return retval;
-                    if ( backtracking==0 ) adaptor.addChild(root_0, function217.getTree());
+                    if ( backtracking==0 ) adaptor.addChild(root_0, function215.getTree());
 
                     }
                     break;
                 case 4 :
-                    // Windowing2.g:414:5: castExpr
+                    // Windowing2.g:398:5: castExpr
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_castExpr_in_atomExpr3077);
-                    castExpr218=castExpr();
+                    pushFollow(FOLLOW_castExpr_in_atomExpr2923);
+                    castExpr216=castExpr();
                     _fsp--;
                     if (failed) return retval;
-                    if ( backtracking==0 ) adaptor.addChild(root_0, castExpr218.getTree());
+                    if ( backtracking==0 ) adaptor.addChild(root_0, castExpr216.getTree());
 
                     }
                     break;
                 case 5 :
-                    // Windowing2.g:415:5: caseExpr
+                    // Windowing2.g:399:5: caseExpr
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_caseExpr_in_atomExpr3083);
-                    caseExpr219=caseExpr();
+                    pushFollow(FOLLOW_caseExpr_in_atomExpr2929);
+                    caseExpr217=caseExpr();
                     _fsp--;
                     if (failed) return retval;
-                    if ( backtracking==0 ) adaptor.addChild(root_0, caseExpr219.getTree());
+                    if ( backtracking==0 ) adaptor.addChild(root_0, caseExpr217.getTree());
 
                     }
                     break;
                 case 6 :
-                    // Windowing2.g:416:5: whenExpr
+                    // Windowing2.g:400:5: whenExpr
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_whenExpr_in_atomExpr3089);
-                    whenExpr220=whenExpr();
+                    pushFollow(FOLLOW_whenExpr_in_atomExpr2935);
+                    whenExpr218=whenExpr();
                     _fsp--;
                     if (failed) return retval;
-                    if ( backtracking==0 ) adaptor.addChild(root_0, whenExpr220.getTree());
+                    if ( backtracking==0 ) adaptor.addChild(root_0, whenExpr218.getTree());
 
                     }
                     break;
                 case 7 :
-                    // Windowing2.g:417:5: tableOrColumn
+                    // Windowing2.g:401:5: tableOrColumn
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_tableOrColumn_in_atomExpr3095);
-                    tableOrColumn221=tableOrColumn();
+                    pushFollow(FOLLOW_tableOrColumn_in_atomExpr2941);
+                    tableOrColumn219=tableOrColumn();
                     _fsp--;
                     if (failed) return retval;
-                    if ( backtracking==0 ) adaptor.addChild(root_0, tableOrColumn221.getTree());
+                    if ( backtracking==0 ) adaptor.addChild(root_0, tableOrColumn219.getTree());
 
                     }
                     break;
                 case 8 :
-                    // Windowing2.g:418:5: LPAREN expression RPAREN
+                    // Windowing2.g:402:5: LPAREN expression RPAREN
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    LPAREN222=(Token)input.LT(1);
-                    match(input,LPAREN,FOLLOW_LPAREN_in_atomExpr3101); if (failed) return retval;
-                    pushFollow(FOLLOW_expression_in_atomExpr3104);
-                    expression223=expression();
+                    LPAREN220=(Token)input.LT(1);
+                    match(input,LPAREN,FOLLOW_LPAREN_in_atomExpr2947); if (failed) return retval;
+                    pushFollow(FOLLOW_expression_in_atomExpr2950);
+                    expression221=expression();
                     _fsp--;
                     if (failed) return retval;
-                    if ( backtracking==0 ) adaptor.addChild(root_0, expression223.getTree());
-                    RPAREN224=(Token)input.LT(1);
-                    match(input,RPAREN,FOLLOW_RPAREN_in_atomExpr3106); if (failed) return retval;
+                    if ( backtracking==0 ) adaptor.addChild(root_0, expression221.getTree());
+                    RPAREN222=(Token)input.LT(1);
+                    match(input,RPAREN,FOLLOW_RPAREN_in_atomExpr2952); if (failed) return retval;
 
                     }
                     break;
@@ -9424,21 +9432,21 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start booleanValue
-    // Windowing2.g:421:1: booleanValue : ( TRUE | FALSE );
+    // Windowing2.g:405:1: booleanValue : ( TRUE | FALSE );
     public final booleanValue_return booleanValue() throws RecognitionException {
         booleanValue_return retval = new booleanValue_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token TRUE225=null;
-        Token FALSE226=null;
+        Token TRUE223=null;
+        Token FALSE224=null;
 
-        Object TRUE225_tree=null;
-        Object FALSE226_tree=null;
+        Object TRUE223_tree=null;
+        Object FALSE224_tree=null;
 
         try {
-            // Windowing2.g:422:5: ( TRUE | FALSE )
+            // Windowing2.g:406:5: ( TRUE | FALSE )
             int alt75=2;
             int LA75_0 = input.LA(1);
 
@@ -9451,35 +9459,35 @@ public class Windowing2Parser extends Parser {
             else {
                 if (backtracking>0) {failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("421:1: booleanValue : ( TRUE | FALSE );", 75, 0, input);
+                    new NoViableAltException("405:1: booleanValue : ( TRUE | FALSE );", 75, 0, input);
 
                 throw nvae;
             }
             switch (alt75) {
                 case 1 :
-                    // Windowing2.g:423:5: TRUE
+                    // Windowing2.g:407:5: TRUE
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    TRUE225=(Token)input.LT(1);
-                    match(input,TRUE,FOLLOW_TRUE_in_booleanValue3124); if (failed) return retval;
+                    TRUE223=(Token)input.LT(1);
+                    match(input,TRUE,FOLLOW_TRUE_in_booleanValue2970); if (failed) return retval;
                     if ( backtracking==0 ) {
-                    TRUE225_tree = (Object)adaptor.create(TRUE225);
-                    root_0 = (Object)adaptor.becomeRoot(TRUE225_tree, root_0);
+                    TRUE223_tree = (Object)adaptor.create(TRUE223);
+                    root_0 = (Object)adaptor.becomeRoot(TRUE223_tree, root_0);
                     }
 
                     }
                     break;
                 case 2 :
-                    // Windowing2.g:423:13: FALSE
+                    // Windowing2.g:407:13: FALSE
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    FALSE226=(Token)input.LT(1);
-                    match(input,FALSE,FOLLOW_FALSE_in_booleanValue3129); if (failed) return retval;
+                    FALSE224=(Token)input.LT(1);
+                    match(input,FALSE,FOLLOW_FALSE_in_booleanValue2975); if (failed) return retval;
                     if ( backtracking==0 ) {
-                    FALSE226_tree = (Object)adaptor.create(FALSE226);
-                    root_0 = (Object)adaptor.becomeRoot(FALSE226_tree, root_0);
+                    FALSE224_tree = (Object)adaptor.create(FALSE224);
+                    root_0 = (Object)adaptor.becomeRoot(FALSE224_tree, root_0);
                     }
 
                     }
@@ -9509,27 +9517,27 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start primitiveType
-    // Windowing2.g:426:1: primitiveType : ( TINYINT | SMALLINT | INT | BIGINT | BOOLEAN | FLOAT | DOUBLE | DATE | DATETIME | TIMESTAMP | STRING | BINARY );
+    // Windowing2.g:410:1: primitiveType : ( TINYINT | SMALLINT | INT | BIGINT | BOOLEAN | FLOAT | DOUBLE | DATE | DATETIME | TIMESTAMP | STRING | BINARY );
     public final primitiveType_return primitiveType() throws RecognitionException {
         primitiveType_return retval = new primitiveType_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token set227=null;
+        Token set225=null;
 
-        Object set227_tree=null;
+        Object set225_tree=null;
 
         try {
-            // Windowing2.g:426:15: ( TINYINT | SMALLINT | INT | BIGINT | BOOLEAN | FLOAT | DOUBLE | DATE | DATETIME | TIMESTAMP | STRING | BINARY )
+            // Windowing2.g:410:15: ( TINYINT | SMALLINT | INT | BIGINT | BOOLEAN | FLOAT | DOUBLE | DATE | DATETIME | TIMESTAMP | STRING | BINARY )
             // Windowing2.g:
             {
             root_0 = (Object)adaptor.nil();
 
-            set227=(Token)input.LT(1);
+            set225=(Token)input.LT(1);
             if ( (input.LA(1)>=TINYINT && input.LA(1)<=BINARY) ) {
                 input.consume();
-                if ( backtracking==0 ) adaptor.addChild(root_0, adaptor.create(set227));
+                if ( backtracking==0 ) adaptor.addChild(root_0, adaptor.create(set225));
                 errorRecovery=false;failed=false;
             }
             else {
@@ -9565,7 +9573,7 @@ public class Windowing2Parser extends Parser {
     };
 
     // $ANTLR start namevalue
-    // Windowing2.g:441:1: namevalue : (i= Identifier | i= StringLiteral ) EQUAL v= StringLiteral -> ^( PARAM $i $v) ;
+    // Windowing2.g:425:1: namevalue : (i= Identifier | i= StringLiteral ) EQUAL v= StringLiteral -> ^( PARAM $i $v) ;
     public final namevalue_return namevalue() throws RecognitionException {
         namevalue_return retval = new namevalue_return();
         retval.start = input.LT(1);
@@ -9574,20 +9582,20 @@ public class Windowing2Parser extends Parser {
 
         Token i=null;
         Token v=null;
-        Token EQUAL228=null;
+        Token EQUAL226=null;
 
         Object i_tree=null;
         Object v_tree=null;
-        Object EQUAL228_tree=null;
+        Object EQUAL226_tree=null;
         RewriteRuleTokenStream stream_StringLiteral=new RewriteRuleTokenStream(adaptor,"token StringLiteral");
         RewriteRuleTokenStream stream_Identifier=new RewriteRuleTokenStream(adaptor,"token Identifier");
         RewriteRuleTokenStream stream_EQUAL=new RewriteRuleTokenStream(adaptor,"token EQUAL");
 
         try {
-            // Windowing2.g:441:11: ( (i= Identifier | i= StringLiteral ) EQUAL v= StringLiteral -> ^( PARAM $i $v) )
-            // Windowing2.g:442:2: (i= Identifier | i= StringLiteral ) EQUAL v= StringLiteral
+            // Windowing2.g:425:11: ( (i= Identifier | i= StringLiteral ) EQUAL v= StringLiteral -> ^( PARAM $i $v) )
+            // Windowing2.g:426:2: (i= Identifier | i= StringLiteral ) EQUAL v= StringLiteral
             {
-            // Windowing2.g:442:2: (i= Identifier | i= StringLiteral )
+            // Windowing2.g:426:2: (i= Identifier | i= StringLiteral )
             int alt76=2;
             int LA76_0 = input.LA(1);
 
@@ -9600,26 +9608,26 @@ public class Windowing2Parser extends Parser {
             else {
                 if (backtracking>0) {failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("442:2: (i= Identifier | i= StringLiteral )", 76, 0, input);
+                    new NoViableAltException("426:2: (i= Identifier | i= StringLiteral )", 76, 0, input);
 
                 throw nvae;
             }
             switch (alt76) {
                 case 1 :
-                    // Windowing2.g:442:3: i= Identifier
+                    // Windowing2.g:426:3: i= Identifier
                     {
                     i=(Token)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_namevalue3254); if (failed) return retval;
+                    match(input,Identifier,FOLLOW_Identifier_in_namevalue3100); if (failed) return retval;
                     if ( backtracking==0 ) stream_Identifier.add(i);
 
 
                     }
                     break;
                 case 2 :
-                    // Windowing2.g:442:16: i= StringLiteral
+                    // Windowing2.g:426:16: i= StringLiteral
                     {
                     i=(Token)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue3258); if (failed) return retval;
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue3104); if (failed) return retval;
                     if ( backtracking==0 ) stream_StringLiteral.add(i);
 
 
@@ -9628,12 +9636,12 @@ public class Windowing2Parser extends Parser {
 
             }
 
-            EQUAL228=(Token)input.LT(1);
-            match(input,EQUAL,FOLLOW_EQUAL_in_namevalue3261); if (failed) return retval;
-            if ( backtracking==0 ) stream_EQUAL.add(EQUAL228);
+            EQUAL226=(Token)input.LT(1);
+            match(input,EQUAL,FOLLOW_EQUAL_in_namevalue3107); if (failed) return retval;
+            if ( backtracking==0 ) stream_EQUAL.add(EQUAL226);
 
             v=(Token)input.LT(1);
-            match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue3265); if (failed) return retval;
+            match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue3111); if (failed) return retval;
             if ( backtracking==0 ) stream_StringLiteral.add(v);
 
 
@@ -9650,9 +9658,9 @@ public class Windowing2Parser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 442:55: -> ^( PARAM $i $v)
+            // 426:55: -> ^( PARAM $i $v)
             {
-                // Windowing2.g:442:58: ^( PARAM $i $v)
+                // Windowing2.g:426:58: ^( PARAM $i $v)
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(PARAM, "PARAM"), root_1);
@@ -9960,77 +9968,77 @@ public class Windowing2Parser extends Parser {
     public static final BitSet FOLLOW_GREATERTHANOREQUALTO_in_compareOperator2309 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_GREATERTHAN_in_compareOperator2313 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_bitOrExpr_in_compareExpr2327 = new BitSet(new long[]{0x0002000000000002L,0x00000FFE00000020L});
-    public static final BitSet FOLLOW_NOT_in_compareExpr2344 = new BitSet(new long[]{0x0000000000000000L,0x0000001C00000000L});
-    public static final BitSet FOLLOW_negatableOperator_in_compareExpr2348 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_bitOrExpr_in_compareExpr2352 = new BitSet(new long[]{0x0002000000000002L,0x00000FFE00000020L});
-    public static final BitSet FOLLOW_compareOperator_in_compareExpr2430 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_bitOrExpr_in_compareExpr2434 = new BitSet(new long[]{0x0002000000000002L,0x00000FFE00000020L});
-    public static final BitSet FOLLOW_NOT_in_compareExpr2506 = new BitSet(new long[]{0x0000000000000000L,0x0000080000000000L});
-    public static final BitSet FOLLOW_IN_in_compareExpr2508 = new BitSet(new long[]{0x0000080000000000L});
-    public static final BitSet FOLLOW_expressions_in_compareExpr2512 = new BitSet(new long[]{0x0002000000000002L,0x00000FFE00000020L});
-    public static final BitSet FOLLOW_IN_in_compareExpr2573 = new BitSet(new long[]{0x0000080000000000L});
-    public static final BitSet FOLLOW_expressions_in_compareExpr2575 = new BitSet(new long[]{0x0002000000000002L,0x00000FFE00000020L});
-    public static final BitSet FOLLOW_NOT_in_compareExpr2631 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_BETWEEN_in_compareExpr2633 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_bitOrExpr_in_compareExpr2637 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000040L});
-    public static final BitSet FOLLOW_AND_in_compareExpr2639 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_bitOrExpr_in_compareExpr2643 = new BitSet(new long[]{0x0002000000000002L,0x00000FFE00000020L});
-    public static final BitSet FOLLOW_BETWEEN_in_compareExpr2714 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_bitOrExpr_in_compareExpr2716 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000040L});
-    public static final BitSet FOLLOW_AND_in_compareExpr2718 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_bitOrExpr_in_compareExpr2720 = new BitSet(new long[]{0x0002000000000002L,0x00000FFE00000020L});
-    public static final BitSet FOLLOW_bitAndExpr_in_bitOrExpr2798 = new BitSet(new long[]{0x0000000000000002L,0x0000100000000000L});
-    public static final BitSet FOLLOW_BITWISEOR_in_bitOrExpr2801 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_bitAndExpr_in_bitOrExpr2804 = new BitSet(new long[]{0x0000000000000002L,0x0000100000000000L});
-    public static final BitSet FOLLOW_plusExpr_in_bitAndExpr2817 = new BitSet(new long[]{0x0000000000000002L,0x0000200000000000L});
-    public static final BitSet FOLLOW_AMPERSAND_in_bitAndExpr2820 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_plusExpr_in_bitAndExpr2823 = new BitSet(new long[]{0x0000000000000002L,0x0000200000000000L});
-    public static final BitSet FOLLOW_starExpr_in_plusExpr2836 = new BitSet(new long[]{0x0000000000000002L,0x0000C00000000000L});
-    public static final BitSet FOLLOW_PLUS_in_plusExpr2840 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_MINUS_in_plusExpr2845 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_starExpr_in_plusExpr2850 = new BitSet(new long[]{0x0000000000000002L,0x0000C00000000000L});
-    public static final BitSet FOLLOW_xorExpr_in_starExpr2864 = new BitSet(new long[]{0x1000000000000002L,0x0007000000000000L});
-    public static final BitSet FOLLOW_STAR_in_starExpr2868 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_DIVIDE_in_starExpr2873 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_MOD_in_starExpr2878 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_DIV_in_starExpr2883 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_xorExpr_in_starExpr2887 = new BitSet(new long[]{0x1000000000000002L,0x0007000000000000L});
-    public static final BitSet FOLLOW_nullExpr_in_xorExpr2900 = new BitSet(new long[]{0x0000000000000002L,0x0008000000000000L});
-    public static final BitSet FOLLOW_BITWISEXOR_in_xorExpr2903 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_nullExpr_in_xorExpr2905 = new BitSet(new long[]{0x0000000000000002L,0x0008000000000000L});
-    public static final BitSet FOLLOW_NULL_in_nullCondition2918 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NOT_in_nullCondition2924 = new BitSet(new long[]{0x0000000000000000L,0x0010000000000000L});
-    public static final BitSet FOLLOW_NULL_in_nullCondition2926 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_unaryExpr_in_nullExpr2943 = new BitSet(new long[]{0x0000000000000002L,0x0020000000000000L});
-    public static final BitSet FOLLOW_IS_in_nullExpr2948 = new BitSet(new long[]{0x0000000000000000L,0x0010000200000000L});
-    public static final BitSet FOLLOW_nullCondition_in_nullExpr2950 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_PLUS_in_unaryExpr2984 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_MINUS_in_unaryExpr2993 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_TILDE_in_unaryExpr3002 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
-    public static final BitSet FOLLOW_fieldExpr_in_unaryExpr3014 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_atomExpr_in_fieldExpr3025 = new BitSet(new long[]{0x0000040000000002L,0x0080000000000000L});
-    public static final BitSet FOLLOW_LSQUARE_in_fieldExpr3029 = new BitSet(new long[]{0x0004090000000000L,0x0650C002787F1000L});
-    public static final BitSet FOLLOW_expression_in_fieldExpr3032 = new BitSet(new long[]{0x0000000000000000L,0x0100000000000000L});
-    public static final BitSet FOLLOW_RSQUARE_in_fieldExpr3034 = new BitSet(new long[]{0x0000040000000002L,0x0080000000000000L});
-    public static final BitSet FOLLOW_DOT_in_fieldExpr3041 = new BitSet(new long[]{0x0000010000000000L});
-    public static final BitSet FOLLOW_Identifier_in_fieldExpr3044 = new BitSet(new long[]{0x0000040000000002L,0x0080000000000000L});
-    public static final BitSet FOLLOW_NULL_in_atomExpr3058 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_constant_in_atomExpr3065 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_function_in_atomExpr3071 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_castExpr_in_atomExpr3077 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_caseExpr_in_atomExpr3083 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_whenExpr_in_atomExpr3089 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_tableOrColumn_in_atomExpr3095 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LPAREN_in_atomExpr3101 = new BitSet(new long[]{0x0004090000000000L,0x0650C002787F1000L});
-    public static final BitSet FOLLOW_expression_in_atomExpr3104 = new BitSet(new long[]{0x0000100000000000L});
-    public static final BitSet FOLLOW_RPAREN_in_atomExpr3106 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_TRUE_in_booleanValue3124 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FALSE_in_booleanValue3129 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NOT_in_compareExpr2347 = new BitSet(new long[]{0x0000000000000000L,0x0000001C00000000L});
+    public static final BitSet FOLLOW_negatableOperator_in_compareExpr2351 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_bitOrExpr_in_compareExpr2355 = new BitSet(new long[]{0x0002000000000002L,0x00000FFE00000020L});
+    public static final BitSet FOLLOW_compareOperator_in_compareExpr2392 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_bitOrExpr_in_compareExpr2396 = new BitSet(new long[]{0x0002000000000002L,0x00000FFE00000020L});
+    public static final BitSet FOLLOW_NOT_in_compareExpr2437 = new BitSet(new long[]{0x0000000000000000L,0x0000080000000000L});
+    public static final BitSet FOLLOW_IN_in_compareExpr2439 = new BitSet(new long[]{0x0000080000000000L});
+    public static final BitSet FOLLOW_expressions_in_compareExpr2443 = new BitSet(new long[]{0x0002000000000002L,0x00000FFE00000020L});
+    public static final BitSet FOLLOW_IN_in_compareExpr2488 = new BitSet(new long[]{0x0000080000000000L});
+    public static final BitSet FOLLOW_expressions_in_compareExpr2490 = new BitSet(new long[]{0x0002000000000002L,0x00000FFE00000020L});
+    public static final BitSet FOLLOW_NOT_in_compareExpr2544 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_BETWEEN_in_compareExpr2546 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_bitOrExpr_in_compareExpr2550 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000040L});
+    public static final BitSet FOLLOW_AND_in_compareExpr2552 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_bitOrExpr_in_compareExpr2556 = new BitSet(new long[]{0x0002000000000002L,0x00000FFE00000020L});
+    public static final BitSet FOLLOW_BETWEEN_in_compareExpr2594 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_bitOrExpr_in_compareExpr2599 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000040L});
+    public static final BitSet FOLLOW_AND_in_compareExpr2601 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_bitOrExpr_in_compareExpr2606 = new BitSet(new long[]{0x0002000000000002L,0x00000FFE00000020L});
+    public static final BitSet FOLLOW_bitAndExpr_in_bitOrExpr2644 = new BitSet(new long[]{0x0000000000000002L,0x0000100000000000L});
+    public static final BitSet FOLLOW_BITWISEOR_in_bitOrExpr2647 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_bitAndExpr_in_bitOrExpr2650 = new BitSet(new long[]{0x0000000000000002L,0x0000100000000000L});
+    public static final BitSet FOLLOW_plusExpr_in_bitAndExpr2663 = new BitSet(new long[]{0x0000000000000002L,0x0000200000000000L});
+    public static final BitSet FOLLOW_AMPERSAND_in_bitAndExpr2666 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_plusExpr_in_bitAndExpr2669 = new BitSet(new long[]{0x0000000000000002L,0x0000200000000000L});
+    public static final BitSet FOLLOW_starExpr_in_plusExpr2682 = new BitSet(new long[]{0x0000000000000002L,0x0000C00000000000L});
+    public static final BitSet FOLLOW_PLUS_in_plusExpr2686 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_MINUS_in_plusExpr2691 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_starExpr_in_plusExpr2696 = new BitSet(new long[]{0x0000000000000002L,0x0000C00000000000L});
+    public static final BitSet FOLLOW_xorExpr_in_starExpr2710 = new BitSet(new long[]{0x1000000000000002L,0x0007000000000000L});
+    public static final BitSet FOLLOW_STAR_in_starExpr2714 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_DIVIDE_in_starExpr2719 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_MOD_in_starExpr2724 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_DIV_in_starExpr2729 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_xorExpr_in_starExpr2733 = new BitSet(new long[]{0x1000000000000002L,0x0007000000000000L});
+    public static final BitSet FOLLOW_nullExpr_in_xorExpr2746 = new BitSet(new long[]{0x0000000000000002L,0x0008000000000000L});
+    public static final BitSet FOLLOW_BITWISEXOR_in_xorExpr2749 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_nullExpr_in_xorExpr2751 = new BitSet(new long[]{0x0000000000000002L,0x0008000000000000L});
+    public static final BitSet FOLLOW_NULL_in_nullCondition2764 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NOT_in_nullCondition2770 = new BitSet(new long[]{0x0000000000000000L,0x0010000000000000L});
+    public static final BitSet FOLLOW_NULL_in_nullCondition2772 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_unaryExpr_in_nullExpr2789 = new BitSet(new long[]{0x0000000000000002L,0x0020000000000000L});
+    public static final BitSet FOLLOW_IS_in_nullExpr2794 = new BitSet(new long[]{0x0000000000000000L,0x0010000200000000L});
+    public static final BitSet FOLLOW_nullCondition_in_nullExpr2796 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_PLUS_in_unaryExpr2830 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_MINUS_in_unaryExpr2839 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_TILDE_in_unaryExpr2848 = new BitSet(new long[]{0x0004090000000000L,0x0650C000787F1000L});
+    public static final BitSet FOLLOW_fieldExpr_in_unaryExpr2860 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_atomExpr_in_fieldExpr2871 = new BitSet(new long[]{0x0000040000000002L,0x0080000000000000L});
+    public static final BitSet FOLLOW_LSQUARE_in_fieldExpr2875 = new BitSet(new long[]{0x0004090000000000L,0x0650C002787F1000L});
+    public static final BitSet FOLLOW_expression_in_fieldExpr2878 = new BitSet(new long[]{0x0000000000000000L,0x0100000000000000L});
+    public static final BitSet FOLLOW_RSQUARE_in_fieldExpr2880 = new BitSet(new long[]{0x0000040000000002L,0x0080000000000000L});
+    public static final BitSet FOLLOW_DOT_in_fieldExpr2887 = new BitSet(new long[]{0x0000010000000000L});
+    public static final BitSet FOLLOW_Identifier_in_fieldExpr2890 = new BitSet(new long[]{0x0000040000000002L,0x0080000000000000L});
+    public static final BitSet FOLLOW_NULL_in_atomExpr2904 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_constant_in_atomExpr2911 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_function_in_atomExpr2917 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_castExpr_in_atomExpr2923 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_caseExpr_in_atomExpr2929 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_whenExpr_in_atomExpr2935 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_tableOrColumn_in_atomExpr2941 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LPAREN_in_atomExpr2947 = new BitSet(new long[]{0x0004090000000000L,0x0650C002787F1000L});
+    public static final BitSet FOLLOW_expression_in_atomExpr2950 = new BitSet(new long[]{0x0000100000000000L});
+    public static final BitSet FOLLOW_RPAREN_in_atomExpr2952 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_TRUE_in_booleanValue2970 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FALSE_in_booleanValue2975 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_primitiveType0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_Identifier_in_namevalue3254 = new BitSet(new long[]{0x0002000000000000L});
-    public static final BitSet FOLLOW_StringLiteral_in_namevalue3258 = new BitSet(new long[]{0x0002000000000000L});
-    public static final BitSet FOLLOW_EQUAL_in_namevalue3261 = new BitSet(new long[]{0x0004000000000000L});
-    public static final BitSet FOLLOW_StringLiteral_in_namevalue3265 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_Identifier_in_namevalue3100 = new BitSet(new long[]{0x0002000000000000L});
+    public static final BitSet FOLLOW_StringLiteral_in_namevalue3104 = new BitSet(new long[]{0x0002000000000000L});
+    public static final BitSet FOLLOW_EQUAL_in_namevalue3107 = new BitSet(new long[]{0x0004000000000000L});
+    public static final BitSet FOLLOW_StringLiteral_in_namevalue3111 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_COMMA_in_synpred11250 = new BitSet(new long[]{0x0000010000000000L});
     public static final BitSet FOLLOW_ordercolumn_in_synpred11252 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_COMMA_in_synpred21323 = new BitSet(new long[]{0x0000010000000000L});

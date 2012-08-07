@@ -339,28 +339,12 @@ compareOperator :
 compareExpr :
   (l=bitOrExpr -> $l)
   (
-    (NOT nO=negatableOperator r=bitOrExpr -> 
-                                       ^($nO FALSE $compareExpr $r) 
-    ) |
-    
-    (cO=compareOperator r=bitOrExpr ->
-                                     ^($cO TRUE $compareExpr $r)
-    ) |
-    
-    (NOT IN el=expressions ->
-                         ^(FUNCTION IN FALSE $compareExpr $el)
-    ) |
-    
-    (IN expressions ->
-                    ^(FUNCTION IN TRUE $compareExpr $el)
-    ) |
-    
-    (NOT BETWEEN min=bitOrExpr AND max=bitOrExpr ->
-                                     ^(FUNCTION BETWEEN FALSE $compareExpr $min $max)
-    ) |
-    (BETWEEN bitOrExpr AND bitOrExpr ->
-                                     ^(FUNCTION BETWEEN TRUE $compareExpr $min $max)
-    )
+    (   NOT nO=negatableOperator r=bitOrExpr -> ^(NOT  ^($nO $compareExpr $r))   )  |
+    (   cO=compareOperator r=bitOrExpr ->  ^($cO $compareExpr $r)             )  |
+    (   NOT IN el=expressions -> ^(NOT  ^(FUNCTION IN  $compareExpr $el) )         )   |
+    (   IN expressions -> ^(FUNCTION IN  $compareExpr $el)                        )   |
+    (   NOT BETWEEN min=bitOrExpr AND max=bitOrExpr -> ^(FUNCTION BETWEEN TRUE $compareExpr $min $max)    )   |
+    (   BETWEEN  min=bitOrExpr AND  max=bitOrExpr ->  ^(FUNCTION BETWEEN FALSE $compareExpr $min $max) )
   )*
 ;
 

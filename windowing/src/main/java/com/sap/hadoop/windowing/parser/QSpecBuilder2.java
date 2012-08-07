@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 QSpecBuilder2.g 2012-08-02 09:53:51
+// $ANTLR 3.0.1 QSpecBuilder2.g 2012-08-07 09:44:05
 
 package com.sap.hadoop.windowing.parser;
 
@@ -20,7 +20,8 @@ import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
-
+import java.util.Map;
+import java.util.HashMap;
 public class QSpecBuilder2 extends TreeParser {
     public static final String[] tokenNames = new String[] {
         "<invalid>", "<EOR>", "<DOWN>", "<UP>", "NUMERIC", "INTEGER", "UMINUS", "PARAM", "ORDERCOLUMN", "FUNCTION", "WDW_FUNCTION", "FUNCTIONS", "QUERY", "WINDOWRANGE", "WINDOWVALUES", "TYPENAME", "SELECTCOLUMN", "OUTPUTSPEC", "TBLFUNCTION", "LOADSPEC", "STRINGLITERALSEQUENCE", "CHARSETLITERAL", "NOTNULL", "FUNCTIONSTAR", "FUNCTIONDIST", "WDW_FUNCTIONSTAR", "WDW_FUNCTIONDIST", "TABLEORCOL", "COLUMNREF", "WINDOWSPEC", "WINDOWDEF", "INPUT", "HDFSLOCATION", "HIVEQ", "HIVETBL", "UPLUS", "FROM", "SELECT", "COMMA", "AS", "Identifier", "HIVEQUERY", "DOT", "LPAREN", "RPAREN", "FILEINPUT", "WHERE", "INTO", "PATH", "EQUAL", "StringLiteral", "SERDE", "WITH", "SERDEPROPERTIES", "RECORDWRITER", "FORMAT", "LOAD", "OVERWRITE", "TABLE", "PARTITION", "STAR", "DISTINCT", "OVER", "WINDOW", "ORDER", "BY", "ASC", "DESC", "ROWS", "BETWEEN", "AND", "UNBOUNDED", "PRECEDING", "FOLLOWING", "CURRENT", "ROW", "Number", "RANGE", "LESS", "MORE", "IF", "ARRAY", "MAP", "STRUCT", "UNION", "CAST", "CASE", "WHEN", "THEN", "ELSE", "END", "BigintLiteral", "SmallintLiteral", "TinyintLiteral", "CharSetName", "CharSetLiteral", "OR", "NOT", "LIKE", "RLIKE", "REGEXP", "EQUAL_NS", "NOTEQUAL", "LESSTHANOREQUALTO", "LESSTHAN", "GREATERTHANOREQUALTO", "GREATERTHAN", "IN", "BITWISEOR", "AMPERSAND", "PLUS", "MINUS", "DIVIDE", "MOD", "DIV", "BITWISEXOR", "NULL", "IS", "TILDE", "LSQUARE", "RSQUARE", "TRUE", "FALSE", "TINYINT", "SMALLINT", "INT", "BIGINT", "BOOLEAN", "FLOAT", "DOUBLE", "DATE", "DATETIME", "TIMESTAMP", "STRING", "BINARY", "S", "E", "L", "C", "T", "F", "R", "O", "M", "W", "H", "I", "N", "P", "U", "D", "B", "Y", "A", "G", "V", "K", "X", "COLON", "SEMICOLON", "LCURLY", "RCURLY", "XOR", "QUESTION", "DOLLAR", "HiveQueryEscapeSequence", "EscapeSequence", "HexDigit", "Digit", "Letter", "Exponent", "RegexComponent", "WS", "COMMENT", "J", "Q", "Z"
@@ -208,7 +209,8 @@ public class QSpecBuilder2 extends TreeParser {
 
         public QSpecBuilder2(TreeNodeStream input) {
             super(input);
-        }
+            ruleMemo = new HashMap[46+1];
+         }
         
 
     public String[] getTokenNames() { return tokenNames; }
@@ -250,17 +252,17 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:53:7: ( ^( QUERY ts= tableSpec ss= select ( where[qSpec] )? ( window_clause[qSpec] )? (oc= outputClause )? ) )
             // QSpecBuilder2.g:54:2: ^( QUERY ts= tableSpec ss= select ( where[qSpec] )? ( window_clause[qSpec] )? (oc= outputClause )? )
             {
-            match(input,QUERY,FOLLOW_QUERY_in_query66); 
+            match(input,QUERY,FOLLOW_QUERY_in_query66); if (failed) return ;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return ;
             pushFollow(FOLLOW_tableSpec_in_query70);
             ts=tableSpec();
             _fsp--;
-
+            if (failed) return ;
             pushFollow(FOLLOW_select_in_query74);
             ss=select();
             _fsp--;
-
+            if (failed) return ;
             // QSpecBuilder2.g:54:33: ( where[qSpec] )?
             int alt1=2;
             int LA1_0 = input.LA(1);
@@ -275,7 +277,7 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_where_in_query76);
                     where(qSpec);
                     _fsp--;
-
+                    if (failed) return ;
 
                     }
                     break;
@@ -296,7 +298,7 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_window_clause_in_query80);
                     window_clause(qSpec);
                     _fsp--;
-
+                    if (failed) return ;
 
                     }
                     break;
@@ -317,7 +319,7 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_outputClause_in_query86);
                     oc=outputClause();
                     _fsp--;
-
+                    if (failed) return ;
 
                     }
                     break;
@@ -325,8 +327,10 @@ public class QSpecBuilder2 extends TreeParser {
             }
 
 
-            match(input, Token.UP, null); 
-             qSpec.setInput(ts); qSpec.setSelectList(ss); qSpec.setOutput(oc);
+            match(input, Token.UP, null); if (failed) return ;
+            if ( backtracking==0 ) {
+               qSpec.setInput(ts); qSpec.setSelectList(ss); qSpec.setOutput(oc);
+            }
 
             }
 
@@ -354,9 +358,9 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:62:2: ( ^( SELECT ( selectColumn[ss] )+ ) )
             // QSpecBuilder2.g:63:3: ^( SELECT ( selectColumn[ss] )+ )
             {
-            match(input,SELECT,FOLLOW_SELECT_in_select113); 
+            match(input,SELECT,FOLLOW_SELECT_in_select113); if (failed) return ss;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return ss;
             // QSpecBuilder2.g:63:12: ( selectColumn[ss] )+
             int cnt4=0;
             loop4:
@@ -376,13 +380,14 @@ public class QSpecBuilder2 extends TreeParser {
             	    pushFollow(FOLLOW_selectColumn_in_select115);
             	    selectColumn(ss);
             	    _fsp--;
-
+            	    if (failed) return ss;
 
             	    }
             	    break;
 
             	default :
             	    if ( cnt4 >= 1 ) break loop4;
+            	    if (backtracking>0) {failed=true; return ss;}
                         EarlyExitException eee =
                             new EarlyExitException(4, input);
                         throw eee;
@@ -391,7 +396,7 @@ public class QSpecBuilder2 extends TreeParser {
             } while (true);
 
 
-            match(input, Token.UP, null); 
+            match(input, Token.UP, null); if (failed) return ss;
 
             }
 
@@ -434,6 +439,7 @@ public class QSpecBuilder2 extends TreeParser {
                         alt6=1;
                     }
                     else {
+                        if (backtracking>0) {failed=true; return ;}
                         NoViableAltException nvae =
                             new NoViableAltException("66:1: selectColumn[SelectSpec ss] : ( ^( SELECTCOLUMN e= expression (i= Identifier )? ) | ^( SELECTCOLUMN w= window_function i= Identifier ) );", 6, 2, input);
 
@@ -441,6 +447,7 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                 }
                 else {
+                    if (backtracking>0) {failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("66:1: selectColumn[SelectSpec ss] : ( ^( SELECTCOLUMN e= expression (i= Identifier )? ) | ^( SELECTCOLUMN w= window_function i= Identifier ) );", 6, 1, input);
 
@@ -448,6 +455,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
             }
             else {
+                if (backtracking>0) {failed=true; return ;}
                 NoViableAltException nvae =
                     new NoViableAltException("66:1: selectColumn[SelectSpec ss] : ( ^( SELECTCOLUMN e= expression (i= Identifier )? ) | ^( SELECTCOLUMN w= window_function i= Identifier ) );", 6, 0, input);
 
@@ -457,13 +465,13 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:67:3: ^( SELECTCOLUMN e= expression (i= Identifier )? )
                     {
-                    match(input,SELECTCOLUMN,FOLLOW_SELECTCOLUMN_in_selectColumn130); 
+                    match(input,SELECTCOLUMN,FOLLOW_SELECTCOLUMN_in_selectColumn130); if (failed) return ;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return ;
                     pushFollow(FOLLOW_expression_in_selectColumn134);
                     e=expression();
                     _fsp--;
-
+                    if (failed) return ;
                     // QSpecBuilder2.g:67:32: (i= Identifier )?
                     int alt5=2;
                     int LA5_0 = input.LA(1);
@@ -476,7 +484,7 @@ public class QSpecBuilder2 extends TreeParser {
                             // QSpecBuilder2.g:67:32: i= Identifier
                             {
                             i=(CommonTree)input.LT(1);
-                            match(input,Identifier,FOLLOW_Identifier_in_selectColumn138); 
+                            match(input,Identifier,FOLLOW_Identifier_in_selectColumn138); if (failed) return ;
 
                             }
                             break;
@@ -484,26 +492,30 @@ public class QSpecBuilder2 extends TreeParser {
                     }
 
 
-                    match(input, Token.UP, null); 
-                    ss.addExpression(e, i!=null ? i.getText() : null);
+                    match(input, Token.UP, null); if (failed) return ;
+                    if ( backtracking==0 ) {
+                      ss.addExpression(e, i!=null ? i.getText() : null);
+                    }
 
                     }
                     break;
                 case 2 :
                     // QSpecBuilder2.g:68:3: ^( SELECTCOLUMN w= window_function i= Identifier )
                     {
-                    match(input,SELECTCOLUMN,FOLLOW_SELECTCOLUMN_in_selectColumn149); 
+                    match(input,SELECTCOLUMN,FOLLOW_SELECTCOLUMN_in_selectColumn149); if (failed) return ;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return ;
                     pushFollow(FOLLOW_window_function_in_selectColumn153);
                     w=window_function();
                     _fsp--;
-
+                    if (failed) return ;
                     i=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_selectColumn157); 
+                    match(input,Identifier,FOLLOW_Identifier_in_selectColumn157); if (failed) return ;
 
-                    match(input, Token.UP, null); 
-                    ss.addWindowFunc(w, i.getText());
+                    match(input, Token.UP, null); if (failed) return ;
+                    if ( backtracking==0 ) {
+                      ss.addWindowFunc(w, i.getText());
+                    }
 
                     }
                     break;
@@ -537,9 +549,9 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:71:40: ( ^( INPUT (t= tblfunc | t= hiveQuery | t= hdfsFile | t= hiveTable ) (p= partitionby )? (o= orderby )? ) )
             // QSpecBuilder2.g:72:2: ^( INPUT (t= tblfunc | t= hiveQuery | t= hdfsFile | t= hiveTable ) (p= partitionby )? (o= orderby )? )
             {
-            match(input,INPUT,FOLLOW_INPUT_in_tableSpec175); 
+            match(input,INPUT,FOLLOW_INPUT_in_tableSpec175); if (failed) return qIn;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return qIn;
             // QSpecBuilder2.g:72:10: (t= tblfunc | t= hiveQuery | t= hdfsFile | t= hiveTable )
             int alt7=4;
             switch ( input.LA(1) ) {
@@ -564,6 +576,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
                 break;
             default:
+                if (backtracking>0) {failed=true; return qIn;}
                 NoViableAltException nvae =
                     new NoViableAltException("72:10: (t= tblfunc | t= hiveQuery | t= hdfsFile | t= hiveTable )", 7, 0, input);
 
@@ -577,7 +590,7 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_tblfunc_in_tableSpec180);
                     t=tblfunc();
                     _fsp--;
-
+                    if (failed) return qIn;
 
                     }
                     break;
@@ -587,7 +600,7 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_hiveQuery_in_tableSpec184);
                     t=hiveQuery();
                     _fsp--;
-
+                    if (failed) return qIn;
 
                     }
                     break;
@@ -597,7 +610,7 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_hdfsFile_in_tableSpec188);
                     t=hdfsFile();
                     _fsp--;
-
+                    if (failed) return qIn;
 
                     }
                     break;
@@ -607,7 +620,7 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_hiveTable_in_tableSpec192);
                     t=hiveTable();
                     _fsp--;
-
+                    if (failed) return qIn;
 
                     }
                     break;
@@ -628,8 +641,10 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_partitionby_in_tableSpec198);
                     p=partitionby();
                     _fsp--;
-
-                    t.setPartition(p);
+                    if (failed) return qIn;
+                    if ( backtracking==0 ) {
+                      t.setPartition(p);
+                    }
 
                     }
                     break;
@@ -650,8 +665,10 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_orderby_in_tableSpec207);
                     o=orderby();
                     _fsp--;
-
-                    t.setOrder(o);
+                    if (failed) return qIn;
+                    if ( backtracking==0 ) {
+                      t.setOrder(o);
+                    }
 
                     }
                     break;
@@ -659,8 +676,10 @@ public class QSpecBuilder2 extends TreeParser {
             }
 
 
-            match(input, Token.UP, null); 
-            qIn = t;
+            match(input, Token.UP, null); if (failed) return qIn;
+            if ( backtracking==0 ) {
+              qIn = t;
+            }
 
             }
 
@@ -688,8 +707,10 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:76:2: hq= HIVEQUERY
             {
             hq=(CommonTree)input.LT(1);
-            match(input,HIVEQUERY,FOLLOW_HIVEQUERY_in_hiveQuery230); 
-            hQSpec = new HiveQuerySpec(hq.getText());
+            match(input,HIVEQUERY,FOLLOW_HIVEQUERY_in_hiveQuery230); if (failed) return hQSpec;
+            if ( backtracking==0 ) {
+              hQSpec = new HiveQuerySpec(hq.getText());
+            }
 
             }
 
@@ -734,6 +755,7 @@ public class QSpecBuilder2 extends TreeParser {
                             alt10=1;
                         }
                         else {
+                            if (backtracking>0) {failed=true; return hTSpec;}
                             NoViableAltException nvae =
                                 new NoViableAltException("79:1: hiveTable returns [QueryInputSpec hTSpec] : ( ^( HIVETBL d= Identifier t= Identifier ) | ^( HIVETBL t= Identifier ) );", 10, 3, input);
 
@@ -741,6 +763,7 @@ public class QSpecBuilder2 extends TreeParser {
                         }
                     }
                     else {
+                        if (backtracking>0) {failed=true; return hTSpec;}
                         NoViableAltException nvae =
                             new NoViableAltException("79:1: hiveTable returns [QueryInputSpec hTSpec] : ( ^( HIVETBL d= Identifier t= Identifier ) | ^( HIVETBL t= Identifier ) );", 10, 2, input);
 
@@ -748,6 +771,7 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                 }
                 else {
+                    if (backtracking>0) {failed=true; return hTSpec;}
                     NoViableAltException nvae =
                         new NoViableAltException("79:1: hiveTable returns [QueryInputSpec hTSpec] : ( ^( HIVETBL d= Identifier t= Identifier ) | ^( HIVETBL t= Identifier ) );", 10, 1, input);
 
@@ -755,6 +779,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
             }
             else {
+                if (backtracking>0) {failed=true; return hTSpec;}
                 NoViableAltException nvae =
                     new NoViableAltException("79:1: hiveTable returns [QueryInputSpec hTSpec] : ( ^( HIVETBL d= Identifier t= Identifier ) | ^( HIVETBL t= Identifier ) );", 10, 0, input);
 
@@ -764,30 +789,34 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:80:3: ^( HIVETBL d= Identifier t= Identifier )
                     {
-                    match(input,HIVETBL,FOLLOW_HIVETBL_in_hiveTable248); 
+                    match(input,HIVETBL,FOLLOW_HIVETBL_in_hiveTable248); if (failed) return hTSpec;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return hTSpec;
                     d=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_hiveTable252); 
+                    match(input,Identifier,FOLLOW_Identifier_in_hiveTable252); if (failed) return hTSpec;
                     t=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_hiveTable256); 
+                    match(input,Identifier,FOLLOW_Identifier_in_hiveTable256); if (failed) return hTSpec;
 
-                    match(input, Token.UP, null); 
-                    hTSpec = new HiveTableSpec(d.getText(), t.getText());
+                    match(input, Token.UP, null); if (failed) return hTSpec;
+                    if ( backtracking==0 ) {
+                      hTSpec = new HiveTableSpec(d.getText(), t.getText());
+                    }
 
                     }
                     break;
                 case 2 :
                     // QSpecBuilder2.g:81:3: ^( HIVETBL t= Identifier )
                     {
-                    match(input,HIVETBL,FOLLOW_HIVETBL_in_hiveTable266); 
+                    match(input,HIVETBL,FOLLOW_HIVETBL_in_hiveTable266); if (failed) return hTSpec;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return hTSpec;
                     t=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_hiveTable270); 
+                    match(input,Identifier,FOLLOW_Identifier_in_hiveTable270); if (failed) return hTSpec;
 
-                    match(input, Token.UP, null); 
-                    hTSpec = new HiveTableSpec(null, t.getText());
+                    match(input, Token.UP, null); if (failed) return hTSpec;
+                    if ( backtracking==0 ) {
+                      hTSpec = new HiveTableSpec(null, t.getText());
+                    }
 
                     }
                     break;
@@ -823,15 +852,15 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:89:2: ( ^( TBLFUNCTION i= Identifier t= tableSpec (e= expression )* ) )
             // QSpecBuilder2.g:90:3: ^( TBLFUNCTION i= Identifier t= tableSpec (e= expression )* )
             {
-            match(input,TBLFUNCTION,FOLLOW_TBLFUNCTION_in_tblfunc295); 
+            match(input,TBLFUNCTION,FOLLOW_TBLFUNCTION_in_tblfunc295); if (failed) return qIn;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return qIn;
             i=(CommonTree)input.LT(1);
-            match(input,Identifier,FOLLOW_Identifier_in_tblfunc299); 
+            match(input,Identifier,FOLLOW_Identifier_in_tblfunc299); if (failed) return qIn;
             pushFollow(FOLLOW_tableSpec_in_tblfunc303);
             t=tableSpec();
             _fsp--;
-
+            if (failed) return qIn;
             // QSpecBuilder2.g:90:42: (e= expression )*
             loop11:
             do {
@@ -850,8 +879,10 @@ public class QSpecBuilder2 extends TreeParser {
             	    pushFollow(FOLLOW_expression_in_tblfunc308);
             	    e=expression();
             	    _fsp--;
-
-            	    tblFn.addArg(e);
+            	    if (failed) return qIn;
+            	    if ( backtracking==0 ) {
+            	      tblFn.addArg(e);
+            	    }
 
             	    }
             	    break;
@@ -862,8 +893,10 @@ public class QSpecBuilder2 extends TreeParser {
             } while (true);
 
 
-            match(input, Token.UP, null); 
-            tblFn.setName(i.getText()); tblFn.setInput(t); qIn = tblFn; 
+            match(input, Token.UP, null); if (failed) return qIn;
+            if ( backtracking==0 ) {
+              tblFn.setName(i.getText()); tblFn.setInput(t); qIn = tblFn; 
+            }
 
             }
 
@@ -891,10 +924,10 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:97:1: ( ^( HDFSLOCATION ( namevalue[hLoc] )* ) )
             // QSpecBuilder2.g:98:2: ^( HDFSLOCATION ( namevalue[hLoc] )* )
             {
-            match(input,HDFSLOCATION,FOLLOW_HDFSLOCATION_in_hdfsFile335); 
+            match(input,HDFSLOCATION,FOLLOW_HDFSLOCATION_in_hdfsFile335); if (failed) return hLoc;
 
             if ( input.LA(1)==Token.DOWN ) {
-                match(input, Token.DOWN, null); 
+                match(input, Token.DOWN, null); if (failed) return hLoc;
                 // QSpecBuilder2.g:98:17: ( namevalue[hLoc] )*
                 loop12:
                 do {
@@ -913,7 +946,7 @@ public class QSpecBuilder2 extends TreeParser {
                 	    pushFollow(FOLLOW_namevalue_in_hdfsFile337);
                 	    namevalue(hLoc);
                 	    _fsp--;
-
+                	    if (failed) return hLoc;
 
                 	    }
                 	    break;
@@ -924,7 +957,7 @@ public class QSpecBuilder2 extends TreeParser {
                 } while (true);
 
 
-                match(input, Token.UP, null); 
+                match(input, Token.UP, null); if (failed) return hLoc;
             }
 
             }
@@ -951,16 +984,18 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:101:21: ( ^( WHERE e= expression ) )
             // QSpecBuilder2.g:102:2: ^( WHERE e= expression )
             {
-            match(input,WHERE,FOLLOW_WHERE_in_where353); 
+            match(input,WHERE,FOLLOW_WHERE_in_where353); if (failed) return ;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return ;
             pushFollow(FOLLOW_expression_in_where357);
             e=expression();
             _fsp--;
+            if (failed) return ;
 
-
-            match(input, Token.UP, null); 
-            qs.setWhereExpr(e);
+            match(input, Token.UP, null); if (failed) return ;
+            if ( backtracking==0 ) {
+              qs.setWhereExpr(e);
+            }
 
             }
 
@@ -990,11 +1025,11 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:108:2: ( ^( OUTPUTSPEC p= StringLiteral ( outputSerDe[qOut] )? ( loadClause[qOut] )? ) )
             // QSpecBuilder2.g:109:3: ^( OUTPUTSPEC p= StringLiteral ( outputSerDe[qOut] )? ( loadClause[qOut] )? )
             {
-            match(input,OUTPUTSPEC,FOLLOW_OUTPUTSPEC_in_outputClause380); 
+            match(input,OUTPUTSPEC,FOLLOW_OUTPUTSPEC_in_outputClause380); if (failed) return qOut;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return qOut;
             p=(CommonTree)input.LT(1);
-            match(input,StringLiteral,FOLLOW_StringLiteral_in_outputClause384); 
+            match(input,StringLiteral,FOLLOW_StringLiteral_in_outputClause384); if (failed) return qOut;
             // QSpecBuilder2.g:109:32: ( outputSerDe[qOut] )?
             int alt13=2;
             int LA13_0 = input.LA(1);
@@ -1009,7 +1044,7 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_outputSerDe_in_outputClause386);
                     outputSerDe(qOut);
                     _fsp--;
-
+                    if (failed) return qOut;
 
                     }
                     break;
@@ -1030,7 +1065,7 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_loadClause_in_outputClause390);
                     loadClause(qOut);
                     _fsp--;
-
+                    if (failed) return qOut;
 
                     }
                     break;
@@ -1038,8 +1073,10 @@ public class QSpecBuilder2 extends TreeParser {
             }
 
 
-            match(input, Token.UP, null); 
-            qOut.setPath(p.getText());
+            match(input, Token.UP, null); if (failed) return qOut;
+            if ( backtracking==0 ) {
+              qOut.setPath(p.getText());
+            }
 
             }
 
@@ -1064,15 +1101,15 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:112:35: ( ^( SERDE sd= StringLiteral outputFormatOrWriter[qOut] ( outputSerDePropeties[qOut] )? ) )
             // QSpecBuilder2.g:113:3: ^( SERDE sd= StringLiteral outputFormatOrWriter[qOut] ( outputSerDePropeties[qOut] )? )
             {
-            match(input,SERDE,FOLLOW_SERDE_in_outputSerDe408); 
+            match(input,SERDE,FOLLOW_SERDE_in_outputSerDe408); if (failed) return ;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return ;
             sd=(CommonTree)input.LT(1);
-            match(input,StringLiteral,FOLLOW_StringLiteral_in_outputSerDe412); 
+            match(input,StringLiteral,FOLLOW_StringLiteral_in_outputSerDe412); if (failed) return ;
             pushFollow(FOLLOW_outputFormatOrWriter_in_outputSerDe414);
             outputFormatOrWriter(qOut);
             _fsp--;
-
+            if (failed) return ;
             // QSpecBuilder2.g:113:55: ( outputSerDePropeties[qOut] )?
             int alt15=2;
             int LA15_0 = input.LA(1);
@@ -1087,7 +1124,7 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_outputSerDePropeties_in_outputSerDe417);
                     outputSerDePropeties(qOut);
                     _fsp--;
-
+                    if (failed) return ;
 
                     }
                     break;
@@ -1095,8 +1132,10 @@ public class QSpecBuilder2 extends TreeParser {
             }
 
 
-            match(input, Token.UP, null); 
-            qOut.setSerDeClass(sd.getText());
+            match(input, Token.UP, null); if (failed) return ;
+            if ( backtracking==0 ) {
+              qOut.setSerDeClass(sd.getText());
+            }
 
             }
 
@@ -1119,10 +1158,10 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:116:48: ( ^( SERDEPROPERTIES ( namevalue[properties] )* ) )
             // QSpecBuilder2.g:117:3: ^( SERDEPROPERTIES ( namevalue[properties] )* )
             {
-            match(input,SERDEPROPERTIES,FOLLOW_SERDEPROPERTIES_in_outputSerDePropeties434); 
+            match(input,SERDEPROPERTIES,FOLLOW_SERDEPROPERTIES_in_outputSerDePropeties434); if (failed) return ;
 
             if ( input.LA(1)==Token.DOWN ) {
-                match(input, Token.DOWN, null); 
+                match(input, Token.DOWN, null); if (failed) return ;
                 // QSpecBuilder2.g:117:21: ( namevalue[properties] )*
                 loop16:
                 do {
@@ -1141,7 +1180,7 @@ public class QSpecBuilder2 extends TreeParser {
                 	    pushFollow(FOLLOW_namevalue_in_outputSerDePropeties436);
                 	    namevalue(properties);
                 	    _fsp--;
-
+                	    if (failed) return ;
 
                 	    }
                 	    break;
@@ -1152,7 +1191,7 @@ public class QSpecBuilder2 extends TreeParser {
                 } while (true);
 
 
-                match(input, Token.UP, null); 
+                match(input, Token.UP, null); if (failed) return ;
             }
 
             }
@@ -1187,6 +1226,7 @@ public class QSpecBuilder2 extends TreeParser {
                 alt17=2;
             }
             else {
+                if (backtracking>0) {failed=true; return ;}
                 NoViableAltException nvae =
                     new NoViableAltException("120:1: outputFormatOrWriter[QueryOutputSpec qOut] : ( ^( RECORDWRITER rw= StringLiteral ) | ^( FORMAT of= StringLiteral ) );", 17, 0, input);
 
@@ -1196,28 +1236,32 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:121:3: ^( RECORDWRITER rw= StringLiteral )
                     {
-                    match(input,RECORDWRITER,FOLLOW_RECORDWRITER_in_outputFormatOrWriter452); 
+                    match(input,RECORDWRITER,FOLLOW_RECORDWRITER_in_outputFormatOrWriter452); if (failed) return ;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return ;
                     rw=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_outputFormatOrWriter456); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_outputFormatOrWriter456); if (failed) return ;
 
-                    match(input, Token.UP, null); 
-                    qOut.setRecordWriterClass(rw.getText());
+                    match(input, Token.UP, null); if (failed) return ;
+                    if ( backtracking==0 ) {
+                      qOut.setRecordWriterClass(rw.getText());
+                    }
 
                     }
                     break;
                 case 2 :
                     // QSpecBuilder2.g:122:3: ^( FORMAT of= StringLiteral )
                     {
-                    match(input,FORMAT,FOLLOW_FORMAT_in_outputFormatOrWriter466); 
+                    match(input,FORMAT,FOLLOW_FORMAT_in_outputFormatOrWriter466); if (failed) return ;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return ;
                     of=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_outputFormatOrWriter470); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_outputFormatOrWriter470); if (failed) return ;
 
-                    match(input, Token.UP, null); 
-                    qOut.setOutputFormatClass(of.getText());
+                    match(input, Token.UP, null); if (failed) return ;
+                    if ( backtracking==0 ) {
+                      qOut.setOutputFormatClass(of.getText());
+                    }
 
                     }
                     break;
@@ -1246,11 +1290,11 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:125:33: ( ^( LOADSPEC ht= Identifier (hp= StringLiteral )? (ow= OVERWRITE )? ) )
             // QSpecBuilder2.g:126:3: ^( LOADSPEC ht= Identifier (hp= StringLiteral )? (ow= OVERWRITE )? )
             {
-            match(input,LOADSPEC,FOLLOW_LOADSPEC_in_loadClause485); 
+            match(input,LOADSPEC,FOLLOW_LOADSPEC_in_loadClause485); if (failed) return ;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return ;
             ht=(CommonTree)input.LT(1);
-            match(input,Identifier,FOLLOW_Identifier_in_loadClause489); 
+            match(input,Identifier,FOLLOW_Identifier_in_loadClause489); if (failed) return ;
             // QSpecBuilder2.g:126:30: (hp= StringLiteral )?
             int alt18=2;
             int LA18_0 = input.LA(1);
@@ -1263,7 +1307,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:126:30: hp= StringLiteral
                     {
                     hp=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_loadClause493); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_loadClause493); if (failed) return ;
 
                     }
                     break;
@@ -1282,7 +1326,7 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:126:48: ow= OVERWRITE
                     {
                     ow=(CommonTree)input.LT(1);
-                    match(input,OVERWRITE,FOLLOW_OVERWRITE_in_loadClause498); 
+                    match(input,OVERWRITE,FOLLOW_OVERWRITE_in_loadClause498); if (failed) return ;
 
                     }
                     break;
@@ -1290,12 +1334,14 @@ public class QSpecBuilder2 extends TreeParser {
             }
 
 
-            match(input, Token.UP, null); 
+            match(input, Token.UP, null); if (failed) return ;
+            if ( backtracking==0 ) {
 
-                qOut.setHiveTable(ht.getText());
-                qOut.setPartitionClause(hp.getText());
-                qOut.setOverwriteHiveTable(true);
-              
+                  qOut.setHiveTable(ht.getText());
+                  qOut.setPartitionClause(hp.getText());
+                  qOut.setOverwriteHiveTable(true);
+                
+            }
 
             }
 
@@ -1350,6 +1396,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
                 break;
             default:
+                if (backtracking>0) {failed=true; return wFn;}
                 NoViableAltException nvae =
                     new NoViableAltException("133:1: window_function returns [WindowFunctionSpec wFn] : ( ^( WDW_FUNCTIONSTAR functionName (ws= window_specification )? ) | ^( WDW_FUNCTION functionName ( (e= expression )+ )? (ws= window_specification )? ) | ^( WDW_FUNCTIONDIST functionName ( (e= expression )+ )? (ws= window_specification )? ) );", 27, 0, input);
 
@@ -1360,13 +1407,13 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:138:3: ^( WDW_FUNCTIONSTAR functionName (ws= window_specification )? )
                     {
-                    match(input,WDW_FUNCTIONSTAR,FOLLOW_WDW_FUNCTIONSTAR_in_window_function526); 
+                    match(input,WDW_FUNCTIONSTAR,FOLLOW_WDW_FUNCTIONSTAR_in_window_function526); if (failed) return wFn;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return wFn;
                     pushFollow(FOLLOW_functionName_in_window_function528);
                     functionName1=functionName();
                     _fsp--;
-
+                    if (failed) return wFn;
                     // QSpecBuilder2.g:138:37: (ws= window_specification )?
                     int alt20=2;
                     int LA20_0 = input.LA(1);
@@ -1381,7 +1428,7 @@ public class QSpecBuilder2 extends TreeParser {
                             pushFollow(FOLLOW_window_specification_in_window_function532);
                             ws=window_specification();
                             _fsp--;
-
+                            if (failed) return wFn;
 
                             }
                             break;
@@ -1389,23 +1436,25 @@ public class QSpecBuilder2 extends TreeParser {
                     }
 
 
-                    match(input, Token.UP, null); 
-                    wFn.setName(input.getTokenStream().toString(
-                      input.getTreeAdaptor().getTokenStartIndex(functionName1.start),
-                      input.getTreeAdaptor().getTokenStopIndex(functionName1.start))); wFn.setWindowSpec(ws); wFn.setStar(true);
+                    match(input, Token.UP, null); if (failed) return wFn;
+                    if ( backtracking==0 ) {
+                      wFn.setName(input.getTokenStream().toString(
+                        input.getTreeAdaptor().getTokenStartIndex(functionName1.start),
+                        input.getTreeAdaptor().getTokenStopIndex(functionName1.start))); wFn.setWindowSpec(ws); wFn.setStar(true);
+                    }
 
                     }
                     break;
                 case 2 :
                     // QSpecBuilder2.g:139:3: ^( WDW_FUNCTION functionName ( (e= expression )+ )? (ws= window_specification )? )
                     {
-                    match(input,WDW_FUNCTION,FOLLOW_WDW_FUNCTION_in_window_function543); 
+                    match(input,WDW_FUNCTION,FOLLOW_WDW_FUNCTION_in_window_function543); if (failed) return wFn;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return wFn;
                     pushFollow(FOLLOW_functionName_in_window_function545);
                     functionName2=functionName();
                     _fsp--;
-
+                    if (failed) return wFn;
                     // QSpecBuilder2.g:139:31: ( (e= expression )+ )?
                     int alt22=2;
                     int LA22_0 = input.LA(1);
@@ -1436,14 +1485,17 @@ public class QSpecBuilder2 extends TreeParser {
                             	    pushFollow(FOLLOW_expression_in_window_function551);
                             	    e=expression();
                             	    _fsp--;
-
-                            	    wFn.addArg(e);
+                            	    if (failed) return wFn;
+                            	    if ( backtracking==0 ) {
+                            	      wFn.addArg(e);
+                            	    }
 
                             	    }
                             	    break;
 
                             	default :
                             	    if ( cnt21 >= 1 ) break loop21;
+                            	    if (backtracking>0) {failed=true; return wFn;}
                                         EarlyExitException eee =
                                             new EarlyExitException(21, input);
                                         throw eee;
@@ -1471,7 +1523,7 @@ public class QSpecBuilder2 extends TreeParser {
                             pushFollow(FOLLOW_window_specification_in_window_function560);
                             ws=window_specification();
                             _fsp--;
-
+                            if (failed) return wFn;
 
                             }
                             break;
@@ -1479,23 +1531,25 @@ public class QSpecBuilder2 extends TreeParser {
                     }
 
 
-                    match(input, Token.UP, null); 
-                    wFn.setName(input.getTokenStream().toString(
-                      input.getTreeAdaptor().getTokenStartIndex(functionName2.start),
-                      input.getTreeAdaptor().getTokenStopIndex(functionName2.start))); wFn.setWindowSpec(ws); 
+                    match(input, Token.UP, null); if (failed) return wFn;
+                    if ( backtracking==0 ) {
+                      wFn.setName(input.getTokenStream().toString(
+                        input.getTreeAdaptor().getTokenStartIndex(functionName2.start),
+                        input.getTreeAdaptor().getTokenStopIndex(functionName2.start))); wFn.setWindowSpec(ws); 
+                    }
 
                     }
                     break;
                 case 3 :
                     // QSpecBuilder2.g:140:3: ^( WDW_FUNCTIONDIST functionName ( (e= expression )+ )? (ws= window_specification )? )
                     {
-                    match(input,WDW_FUNCTIONDIST,FOLLOW_WDW_FUNCTIONDIST_in_window_function571); 
+                    match(input,WDW_FUNCTIONDIST,FOLLOW_WDW_FUNCTIONDIST_in_window_function571); if (failed) return wFn;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return wFn;
                     pushFollow(FOLLOW_functionName_in_window_function573);
                     functionName3=functionName();
                     _fsp--;
-
+                    if (failed) return wFn;
                     // QSpecBuilder2.g:140:35: ( (e= expression )+ )?
                     int alt25=2;
                     int LA25_0 = input.LA(1);
@@ -1526,14 +1580,17 @@ public class QSpecBuilder2 extends TreeParser {
                             	    pushFollow(FOLLOW_expression_in_window_function579);
                             	    e=expression();
                             	    _fsp--;
-
-                            	    wFn.addArg(e);
+                            	    if (failed) return wFn;
+                            	    if ( backtracking==0 ) {
+                            	      wFn.addArg(e);
+                            	    }
 
                             	    }
                             	    break;
 
                             	default :
                             	    if ( cnt24 >= 1 ) break loop24;
+                            	    if (backtracking>0) {failed=true; return wFn;}
                                         EarlyExitException eee =
                                             new EarlyExitException(24, input);
                                         throw eee;
@@ -1561,7 +1618,7 @@ public class QSpecBuilder2 extends TreeParser {
                             pushFollow(FOLLOW_window_specification_in_window_function588);
                             ws=window_specification();
                             _fsp--;
-
+                            if (failed) return wFn;
 
                             }
                             break;
@@ -1569,10 +1626,12 @@ public class QSpecBuilder2 extends TreeParser {
                     }
 
 
-                    match(input, Token.UP, null); 
-                    wFn.setName(input.getTokenStream().toString(
-                      input.getTreeAdaptor().getTokenStartIndex(functionName3.start),
-                      input.getTreeAdaptor().getTokenStopIndex(functionName3.start))); wFn.setWindowSpec(ws); wFn.setDistinct(true); 
+                    match(input, Token.UP, null); if (failed) return wFn;
+                    if ( backtracking==0 ) {
+                      wFn.setName(input.getTokenStream().toString(
+                        input.getTreeAdaptor().getTokenStartIndex(functionName3.start),
+                        input.getTreeAdaptor().getTokenStopIndex(functionName3.start))); wFn.setWindowSpec(ws); wFn.setDistinct(true); 
+                    }
 
                     }
                     break;
@@ -1597,9 +1656,9 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:143:29: ( ^( WINDOW ( window_defn[qs] )+ ) )
             // QSpecBuilder2.g:144:3: ^( WINDOW ( window_defn[qs] )+ )
             {
-            match(input,WINDOW,FOLLOW_WINDOW_in_window_clause607); 
+            match(input,WINDOW,FOLLOW_WINDOW_in_window_clause607); if (failed) return ;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return ;
             // QSpecBuilder2.g:144:12: ( window_defn[qs] )+
             int cnt28=0;
             loop28:
@@ -1619,13 +1678,14 @@ public class QSpecBuilder2 extends TreeParser {
             	    pushFollow(FOLLOW_window_defn_in_window_clause609);
             	    window_defn(qs);
             	    _fsp--;
-
+            	    if (failed) return ;
 
             	    }
             	    break;
 
             	default :
             	    if ( cnt28 >= 1 ) break loop28;
+            	    if (backtracking>0) {failed=true; return ;}
                         EarlyExitException eee =
                             new EarlyExitException(28, input);
                         throw eee;
@@ -1634,7 +1694,7 @@ public class QSpecBuilder2 extends TreeParser {
             } while (true);
 
 
-            match(input, Token.UP, null); 
+            match(input, Token.UP, null); if (failed) return ;
 
             }
 
@@ -1661,18 +1721,20 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:147:27: ( ^( WINDOWDEF i= Identifier ws= window_specification ) )
             // QSpecBuilder2.g:148:3: ^( WINDOWDEF i= Identifier ws= window_specification )
             {
-            match(input,WINDOWDEF,FOLLOW_WINDOWDEF_in_window_defn627); 
+            match(input,WINDOWDEF,FOLLOW_WINDOWDEF_in_window_defn627); if (failed) return ;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return ;
             i=(CommonTree)input.LT(1);
-            match(input,Identifier,FOLLOW_Identifier_in_window_defn631); 
+            match(input,Identifier,FOLLOW_Identifier_in_window_defn631); if (failed) return ;
             pushFollow(FOLLOW_window_specification_in_window_defn635);
             ws=window_specification();
             _fsp--;
+            if (failed) return ;
 
-
-            match(input, Token.UP, null); 
-             qs.addWindowSpec(i.getText(), ws);
+            match(input, Token.UP, null); if (failed) return ;
+            if ( backtracking==0 ) {
+               qs.addWindowSpec(i.getText(), ws);
+            }
 
             }
 
@@ -1705,10 +1767,10 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:151:45: ( ^( WINDOWSPEC (i= Identifier )? (p= partitionby )? (o= orderby )? (wf= window_frame )? ) )
             // QSpecBuilder2.g:152:3: ^( WINDOWSPEC (i= Identifier )? (p= partitionby )? (o= orderby )? (wf= window_frame )? )
             {
-            match(input,WINDOWSPEC,FOLLOW_WINDOWSPEC_in_window_specification655); 
+            match(input,WINDOWSPEC,FOLLOW_WINDOWSPEC_in_window_specification655); if (failed) return ws;
 
             if ( input.LA(1)==Token.DOWN ) {
-                match(input, Token.DOWN, null); 
+                match(input, Token.DOWN, null); if (failed) return ws;
                 // QSpecBuilder2.g:152:17: (i= Identifier )?
                 int alt29=2;
                 int LA29_0 = input.LA(1);
@@ -1721,7 +1783,7 @@ public class QSpecBuilder2 extends TreeParser {
                         // QSpecBuilder2.g:152:17: i= Identifier
                         {
                         i=(CommonTree)input.LT(1);
-                        match(input,Identifier,FOLLOW_Identifier_in_window_specification659); 
+                        match(input,Identifier,FOLLOW_Identifier_in_window_specification659); if (failed) return ws;
 
                         }
                         break;
@@ -1742,7 +1804,7 @@ public class QSpecBuilder2 extends TreeParser {
                         pushFollow(FOLLOW_partitionby_in_window_specification664);
                         p=partitionby();
                         _fsp--;
-
+                        if (failed) return ws;
 
                         }
                         break;
@@ -1763,7 +1825,7 @@ public class QSpecBuilder2 extends TreeParser {
                         pushFollow(FOLLOW_orderby_in_window_specification669);
                         o=orderby();
                         _fsp--;
-
+                        if (failed) return ws;
 
                         }
                         break;
@@ -1784,7 +1846,7 @@ public class QSpecBuilder2 extends TreeParser {
                         pushFollow(FOLLOW_window_frame_in_window_specification674);
                         wf=window_frame();
                         _fsp--;
-
+                        if (failed) return ws;
 
                         }
                         break;
@@ -1792,9 +1854,11 @@ public class QSpecBuilder2 extends TreeParser {
                 }
 
 
-                match(input, Token.UP, null); 
+                match(input, Token.UP, null); if (failed) return ws;
             }
-             ws = new WindowSpec(i != null ? i.getText() : null, p, o, wf);
+            if ( backtracking==0 ) {
+               ws = new WindowSpec(i != null ? i.getText() : null, p, o, wf);
+            }
 
             }
 
@@ -1825,9 +1889,9 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:159:2: ( ^( ORDER (o= ordercolumn )+ ) )
             // QSpecBuilder2.g:160:2: ^( ORDER (o= ordercolumn )+ )
             {
-            match(input,ORDER,FOLLOW_ORDER_in_orderby699); 
+            match(input,ORDER,FOLLOW_ORDER_in_orderby699); if (failed) return os;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return os;
             // QSpecBuilder2.g:160:10: (o= ordercolumn )+
             int cnt33=0;
             loop33:
@@ -1847,14 +1911,17 @@ public class QSpecBuilder2 extends TreeParser {
             	    pushFollow(FOLLOW_ordercolumn_in_orderby704);
             	    o=ordercolumn();
             	    _fsp--;
-
-            	    os.addColumn(o);
+            	    if (failed) return os;
+            	    if ( backtracking==0 ) {
+            	      os.addColumn(o);
+            	    }
 
             	    }
             	    break;
 
             	default :
             	    if ( cnt33 >= 1 ) break loop33;
+            	    if (backtracking>0) {failed=true; return os;}
                         EarlyExitException eee =
                             new EarlyExitException(33, input);
                         throw eee;
@@ -1863,7 +1930,7 @@ public class QSpecBuilder2 extends TreeParser {
             } while (true);
 
 
-            match(input, Token.UP, null); 
+            match(input, Token.UP, null); if (failed) return os;
 
             }
 
@@ -1908,36 +1975,16 @@ public class QSpecBuilder2 extends TreeParser {
                             if ( (LA34_4==Identifier) ) {
                                 int LA34_5 = input.LA(6);
 
-                                if ( (LA34_5==UP) ) {
-                                    switch ( input.LA(7) ) {
-                                    case ASC:
-                                        {
-                                        alt34=1;
-                                        }
-                                        break;
-                                    case DESC:
-                                        {
-                                        alt34=2;
-                                        }
-                                        break;
-                                    case UP:
-                                        {
-                                        alt34=3;
-                                        }
-                                        break;
-                                    default:
-                                        NoViableAltException nvae =
-                                            new NoViableAltException("163:1: ordercolumn returns [OrderColumnSpec ocs] : ( ^( ORDERCOLUMN cr= columnReference o= ASC ) | ^( ORDERCOLUMN cr= columnReference DESC ) | ^( ORDERCOLUMN cr= columnReference ) );", 34, 6, input);
+                                if ( (LA34_5==Identifier) ) {
+                                    int LA34_6 = input.LA(7);
 
-                                        throw nvae;
-                                    }
-
-                                }
-                                else if ( (LA34_5==Identifier) ) {
-                                    int LA34_7 = input.LA(7);
-
-                                    if ( (LA34_7==UP) ) {
+                                    if ( (LA34_6==UP) ) {
                                         switch ( input.LA(8) ) {
+                                        case ASC:
+                                            {
+                                            alt34=1;
+                                            }
+                                            break;
                                         case DESC:
                                             {
                                             alt34=2;
@@ -1948,27 +1995,51 @@ public class QSpecBuilder2 extends TreeParser {
                                             alt34=3;
                                             }
                                             break;
-                                        case ASC:
-                                            {
-                                            alt34=1;
-                                            }
-                                            break;
                                         default:
+                                            if (backtracking>0) {failed=true; return ocs;}
                                             NoViableAltException nvae =
-                                                new NoViableAltException("163:1: ordercolumn returns [OrderColumnSpec ocs] : ( ^( ORDERCOLUMN cr= columnReference o= ASC ) | ^( ORDERCOLUMN cr= columnReference DESC ) | ^( ORDERCOLUMN cr= columnReference ) );", 34, 11, input);
+                                                new NoViableAltException("163:1: ordercolumn returns [OrderColumnSpec ocs] : ( ^( ORDERCOLUMN cr= columnReference o= ASC ) | ^( ORDERCOLUMN cr= columnReference DESC ) | ^( ORDERCOLUMN cr= columnReference ) );", 34, 8, input);
 
                                             throw nvae;
                                         }
 
                                     }
                                     else {
+                                        if (backtracking>0) {failed=true; return ocs;}
+                                        NoViableAltException nvae =
+                                            new NoViableAltException("163:1: ordercolumn returns [OrderColumnSpec ocs] : ( ^( ORDERCOLUMN cr= columnReference o= ASC ) | ^( ORDERCOLUMN cr= columnReference DESC ) | ^( ORDERCOLUMN cr= columnReference ) );", 34, 6, input);
+
+                                        throw nvae;
+                                    }
+                                }
+                                else if ( (LA34_5==UP) ) {
+                                    switch ( input.LA(7) ) {
+                                    case DESC:
+                                        {
+                                        alt34=2;
+                                        }
+                                        break;
+                                    case UP:
+                                        {
+                                        alt34=3;
+                                        }
+                                        break;
+                                    case ASC:
+                                        {
+                                        alt34=1;
+                                        }
+                                        break;
+                                    default:
+                                        if (backtracking>0) {failed=true; return ocs;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("163:1: ordercolumn returns [OrderColumnSpec ocs] : ( ^( ORDERCOLUMN cr= columnReference o= ASC ) | ^( ORDERCOLUMN cr= columnReference DESC ) | ^( ORDERCOLUMN cr= columnReference ) );", 34, 7, input);
 
                                         throw nvae;
                                     }
+
                                 }
                                 else {
+                                    if (backtracking>0) {failed=true; return ocs;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("163:1: ordercolumn returns [OrderColumnSpec ocs] : ( ^( ORDERCOLUMN cr= columnReference o= ASC ) | ^( ORDERCOLUMN cr= columnReference DESC ) | ^( ORDERCOLUMN cr= columnReference ) );", 34, 5, input);
 
@@ -1976,6 +2047,7 @@ public class QSpecBuilder2 extends TreeParser {
                                 }
                             }
                             else {
+                                if (backtracking>0) {failed=true; return ocs;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("163:1: ordercolumn returns [OrderColumnSpec ocs] : ( ^( ORDERCOLUMN cr= columnReference o= ASC ) | ^( ORDERCOLUMN cr= columnReference DESC ) | ^( ORDERCOLUMN cr= columnReference ) );", 34, 4, input);
 
@@ -1983,6 +2055,7 @@ public class QSpecBuilder2 extends TreeParser {
                             }
                         }
                         else {
+                            if (backtracking>0) {failed=true; return ocs;}
                             NoViableAltException nvae =
                                 new NoViableAltException("163:1: ordercolumn returns [OrderColumnSpec ocs] : ( ^( ORDERCOLUMN cr= columnReference o= ASC ) | ^( ORDERCOLUMN cr= columnReference DESC ) | ^( ORDERCOLUMN cr= columnReference ) );", 34, 3, input);
 
@@ -1990,6 +2063,7 @@ public class QSpecBuilder2 extends TreeParser {
                         }
                     }
                     else {
+                        if (backtracking>0) {failed=true; return ocs;}
                         NoViableAltException nvae =
                             new NoViableAltException("163:1: ordercolumn returns [OrderColumnSpec ocs] : ( ^( ORDERCOLUMN cr= columnReference o= ASC ) | ^( ORDERCOLUMN cr= columnReference DESC ) | ^( ORDERCOLUMN cr= columnReference ) );", 34, 2, input);
 
@@ -1997,6 +2071,7 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                 }
                 else {
+                    if (backtracking>0) {failed=true; return ocs;}
                     NoViableAltException nvae =
                         new NoViableAltException("163:1: ordercolumn returns [OrderColumnSpec ocs] : ( ^( ORDERCOLUMN cr= columnReference o= ASC ) | ^( ORDERCOLUMN cr= columnReference DESC ) | ^( ORDERCOLUMN cr= columnReference ) );", 34, 1, input);
 
@@ -2004,6 +2079,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
             }
             else {
+                if (backtracking>0) {failed=true; return ocs;}
                 NoViableAltException nvae =
                     new NoViableAltException("163:1: ordercolumn returns [OrderColumnSpec ocs] : ( ^( ORDERCOLUMN cr= columnReference o= ASC ) | ^( ORDERCOLUMN cr= columnReference DESC ) | ^( ORDERCOLUMN cr= columnReference ) );", 34, 0, input);
 
@@ -2013,51 +2089,57 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:164:2: ^( ORDERCOLUMN cr= columnReference o= ASC )
                     {
-                    match(input,ORDERCOLUMN,FOLLOW_ORDERCOLUMN_in_ordercolumn724); 
+                    match(input,ORDERCOLUMN,FOLLOW_ORDERCOLUMN_in_ordercolumn724); if (failed) return ocs;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return ocs;
                     pushFollow(FOLLOW_columnReference_in_ordercolumn728);
                     cr=columnReference();
                     _fsp--;
-
+                    if (failed) return ocs;
                     o=(CommonTree)input.LT(1);
-                    match(input,ASC,FOLLOW_ASC_in_ordercolumn732); 
+                    match(input,ASC,FOLLOW_ASC_in_ordercolumn732); if (failed) return ocs;
 
-                    match(input, Token.UP, null); 
-                    ocs = new OrderColumnSpec(cr.getTableName(), cr.getColumnName(), Order.ASC); 
+                    match(input, Token.UP, null); if (failed) return ocs;
+                    if ( backtracking==0 ) {
+                      ocs = new OrderColumnSpec(cr.getTableName(), cr.getColumnName(), Order.ASC); 
+                    }
 
                     }
                     break;
                 case 2 :
                     // QSpecBuilder2.g:165:2: ^( ORDERCOLUMN cr= columnReference DESC )
                     {
-                    match(input,ORDERCOLUMN,FOLLOW_ORDERCOLUMN_in_ordercolumn740); 
+                    match(input,ORDERCOLUMN,FOLLOW_ORDERCOLUMN_in_ordercolumn740); if (failed) return ocs;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return ocs;
                     pushFollow(FOLLOW_columnReference_in_ordercolumn744);
                     cr=columnReference();
                     _fsp--;
+                    if (failed) return ocs;
+                    match(input,DESC,FOLLOW_DESC_in_ordercolumn746); if (failed) return ocs;
 
-                    match(input,DESC,FOLLOW_DESC_in_ordercolumn746); 
-
-                    match(input, Token.UP, null); 
-                    ocs = new OrderColumnSpec(cr.getTableName(), cr.getColumnName(), Order.DESC); 
+                    match(input, Token.UP, null); if (failed) return ocs;
+                    if ( backtracking==0 ) {
+                      ocs = new OrderColumnSpec(cr.getTableName(), cr.getColumnName(), Order.DESC); 
+                    }
 
                     }
                     break;
                 case 3 :
                     // QSpecBuilder2.g:166:2: ^( ORDERCOLUMN cr= columnReference )
                     {
-                    match(input,ORDERCOLUMN,FOLLOW_ORDERCOLUMN_in_ordercolumn754); 
+                    match(input,ORDERCOLUMN,FOLLOW_ORDERCOLUMN_in_ordercolumn754); if (failed) return ocs;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return ocs;
                     pushFollow(FOLLOW_columnReference_in_ordercolumn758);
                     cr=columnReference();
                     _fsp--;
+                    if (failed) return ocs;
 
-
-                    match(input, Token.UP, null); 
-                    ocs = new OrderColumnSpec(cr.getTableName(), cr.getColumnName(), Order.ASC); 
+                    match(input, Token.UP, null); if (failed) return ocs;
+                    if ( backtracking==0 ) {
+                      ocs = new OrderColumnSpec(cr.getTableName(), cr.getColumnName(), Order.ASC); 
+                    }
 
                     }
                     break;
@@ -2090,9 +2172,9 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:173:3: ( ^( PARTITION (cr= columnReference )+ ) )
             // QSpecBuilder2.g:174:2: ^( PARTITION (cr= columnReference )+ )
             {
-            match(input,PARTITION,FOLLOW_PARTITION_in_partitionby784); 
+            match(input,PARTITION,FOLLOW_PARTITION_in_partitionby784); if (failed) return ps;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return ps;
             // QSpecBuilder2.g:174:14: (cr= columnReference )+
             int cnt35=0;
             loop35:
@@ -2112,14 +2194,17 @@ public class QSpecBuilder2 extends TreeParser {
             	    pushFollow(FOLLOW_columnReference_in_partitionby789);
             	    cr=columnReference();
             	    _fsp--;
-
-            	    ps.addColumn(cr);
+            	    if (failed) return ps;
+            	    if ( backtracking==0 ) {
+            	      ps.addColumn(cr);
+            	    }
 
             	    }
             	    break;
 
             	default :
             	    if ( cnt35 >= 1 ) break loop35;
+            	    if (backtracking>0) {failed=true; return ps;}
                         EarlyExitException eee =
                             new EarlyExitException(35, input);
                         throw eee;
@@ -2128,7 +2213,7 @@ public class QSpecBuilder2 extends TreeParser {
             } while (true);
 
 
-            match(input, Token.UP, null); 
+            match(input, Token.UP, null); if (failed) return ps;
 
             }
 
@@ -2164,6 +2249,7 @@ public class QSpecBuilder2 extends TreeParser {
                 alt36=2;
             }
             else {
+                if (backtracking>0) {failed=true; return wf;}
                 NoViableAltException nvae =
                     new NoViableAltException("177:1: window_frame returns [WindowFrameSpec wf] : (w= window_range_expression | w= window_value_expression );", 36, 0, input);
 
@@ -2176,8 +2262,10 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_window_range_expression_in_window_frame809);
                     w=window_range_expression();
                     _fsp--;
-
-                    wf = w;
+                    if (failed) return wf;
+                    if ( backtracking==0 ) {
+                      wf = w;
+                    }
 
                     }
                     break;
@@ -2187,8 +2275,10 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_window_value_expression_in_window_frame818);
                     w=window_value_expression();
                     _fsp--;
-
-                    wf = w;
+                    if (failed) return wf;
+                    if ( backtracking==0 ) {
+                      wf = w;
+                    }
 
                     }
                     break;
@@ -2220,20 +2310,22 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:182:54: ( ^( WINDOWRANGE s= rowsboundary e= rowsboundary ) )
             // QSpecBuilder2.g:183:2: ^( WINDOWRANGE s= rowsboundary e= rowsboundary )
             {
-            match(input,WINDOWRANGE,FOLLOW_WINDOWRANGE_in_window_range_expression835); 
+            match(input,WINDOWRANGE,FOLLOW_WINDOWRANGE_in_window_range_expression835); if (failed) return wf;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return wf;
             pushFollow(FOLLOW_rowsboundary_in_window_range_expression839);
             s=rowsboundary();
             _fsp--;
-
+            if (failed) return wf;
             pushFollow(FOLLOW_rowsboundary_in_window_range_expression843);
             e=rowsboundary();
             _fsp--;
+            if (failed) return wf;
 
-
-            match(input, Token.UP, null); 
-            wf = new WindowFrameSpec(s,e);
+            match(input, Token.UP, null); if (failed) return wf;
+            if ( backtracking==0 ) {
+              wf = new WindowFrameSpec(s,e);
+            }
 
             }
 
@@ -2271,13 +2363,14 @@ public class QSpecBuilder2 extends TreeParser {
                 if ( (LA37_1==DOWN) ) {
                     int LA37_4 = input.LA(3);
 
-                    if ( (LA37_4==UNBOUNDED) ) {
-                        alt37=1;
-                    }
-                    else if ( (LA37_4==Number) ) {
+                    if ( (LA37_4==Number) ) {
                         alt37=4;
                     }
+                    else if ( (LA37_4==UNBOUNDED) ) {
+                        alt37=1;
+                    }
                     else {
+                        if (backtracking>0) {failed=true; return bs;}
                         NoViableAltException nvae =
                             new NoViableAltException("186:1: rowsboundary returns [BoundarySpec bs] : ( ^( PRECEDING UNBOUNDED ) | ^( FOLLOWING UNBOUNDED ) | CURRENT | ^( PRECEDING n= Number ) | ^( FOLLOWING n= Number ) );", 37, 4, input);
 
@@ -2285,6 +2378,7 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                 }
                 else {
+                    if (backtracking>0) {failed=true; return bs;}
                     NoViableAltException nvae =
                         new NoViableAltException("186:1: rowsboundary returns [BoundarySpec bs] : ( ^( PRECEDING UNBOUNDED ) | ^( FOLLOWING UNBOUNDED ) | CURRENT | ^( PRECEDING n= Number ) | ^( FOLLOWING n= Number ) );", 37, 1, input);
 
@@ -2306,6 +2400,7 @@ public class QSpecBuilder2 extends TreeParser {
                         alt37=2;
                     }
                     else {
+                        if (backtracking>0) {failed=true; return bs;}
                         NoViableAltException nvae =
                             new NoViableAltException("186:1: rowsboundary returns [BoundarySpec bs] : ( ^( PRECEDING UNBOUNDED ) | ^( FOLLOWING UNBOUNDED ) | CURRENT | ^( PRECEDING n= Number ) | ^( FOLLOWING n= Number ) );", 37, 5, input);
 
@@ -2313,6 +2408,7 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                 }
                 else {
+                    if (backtracking>0) {failed=true; return bs;}
                     NoViableAltException nvae =
                         new NoViableAltException("186:1: rowsboundary returns [BoundarySpec bs] : ( ^( PRECEDING UNBOUNDED ) | ^( FOLLOWING UNBOUNDED ) | CURRENT | ^( PRECEDING n= Number ) | ^( FOLLOWING n= Number ) );", 37, 2, input);
 
@@ -2326,6 +2422,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
                 break;
             default:
+                if (backtracking>0) {failed=true; return bs;}
                 NoViableAltException nvae =
                     new NoViableAltException("186:1: rowsboundary returns [BoundarySpec bs] : ( ^( PRECEDING UNBOUNDED ) | ^( FOLLOWING UNBOUNDED ) | CURRENT | ^( PRECEDING n= Number ) | ^( FOLLOWING n= Number ) );", 37, 0, input);
 
@@ -2336,62 +2433,72 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:192:3: ^( PRECEDING UNBOUNDED )
                     {
-                    match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary870); 
+                    match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary870); if (failed) return bs;
 
-                    match(input, Token.DOWN, null); 
-                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_rowsboundary872); 
+                    match(input, Token.DOWN, null); if (failed) return bs;
+                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_rowsboundary872); if (failed) return bs;
 
-                    match(input, Token.UP, null); 
-                    rbs.setDirection(Direction.PRECEDING); rbs.setAmt(BoundarySpec.UNBOUNDED_AMOUNT);
+                    match(input, Token.UP, null); if (failed) return bs;
+                    if ( backtracking==0 ) {
+                      rbs.setDirection(Direction.PRECEDING); rbs.setAmt(BoundarySpec.UNBOUNDED_AMOUNT);
+                    }
 
                     }
                     break;
                 case 2 :
                     // QSpecBuilder2.g:193:3: ^( FOLLOWING UNBOUNDED )
                     {
-                    match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary883); 
+                    match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary883); if (failed) return bs;
 
-                    match(input, Token.DOWN, null); 
-                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_rowsboundary885); 
+                    match(input, Token.DOWN, null); if (failed) return bs;
+                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_rowsboundary885); if (failed) return bs;
 
-                    match(input, Token.UP, null); 
-                    rbs.setDirection(Direction.FOLLOWING); rbs.setAmt(BoundarySpec.UNBOUNDED_AMOUNT);
+                    match(input, Token.UP, null); if (failed) return bs;
+                    if ( backtracking==0 ) {
+                      rbs.setDirection(Direction.FOLLOWING); rbs.setAmt(BoundarySpec.UNBOUNDED_AMOUNT);
+                    }
 
                     }
                     break;
                 case 3 :
                     // QSpecBuilder2.g:194:3: CURRENT
                     {
-                    match(input,CURRENT,FOLLOW_CURRENT_in_rowsboundary894); 
-                    bs = new CurrentRowSpec();
+                    match(input,CURRENT,FOLLOW_CURRENT_in_rowsboundary894); if (failed) return bs;
+                    if ( backtracking==0 ) {
+                      bs = new CurrentRowSpec();
+                    }
 
                     }
                     break;
                 case 4 :
                     // QSpecBuilder2.g:195:3: ^( PRECEDING n= Number )
                     {
-                    match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary903); 
+                    match(input,PRECEDING,FOLLOW_PRECEDING_in_rowsboundary903); if (failed) return bs;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return bs;
                     n=(CommonTree)input.LT(1);
-                    match(input,Number,FOLLOW_Number_in_rowsboundary907); 
+                    match(input,Number,FOLLOW_Number_in_rowsboundary907); if (failed) return bs;
 
-                    match(input, Token.UP, null); 
-                    rbs.setDirection(Direction.PRECEDING); rbs.setAmt(Integer.parseInt(n.getText()));
+                    match(input, Token.UP, null); if (failed) return bs;
+                    if ( backtracking==0 ) {
+                      rbs.setDirection(Direction.PRECEDING); rbs.setAmt(Integer.parseInt(n.getText()));
+                    }
 
                     }
                     break;
                 case 5 :
                     // QSpecBuilder2.g:196:3: ^( FOLLOWING n= Number )
                     {
-                    match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary917); 
+                    match(input,FOLLOWING,FOLLOW_FOLLOWING_in_rowsboundary917); if (failed) return bs;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return bs;
                     n=(CommonTree)input.LT(1);
-                    match(input,Number,FOLLOW_Number_in_rowsboundary921); 
+                    match(input,Number,FOLLOW_Number_in_rowsboundary921); if (failed) return bs;
 
-                    match(input, Token.UP, null); 
-                    rbs.setDirection(Direction.FOLLOWING); rbs.setAmt(Integer.parseInt(n.getText()));
+                    match(input, Token.UP, null); if (failed) return bs;
+                    if ( backtracking==0 ) {
+                      rbs.setDirection(Direction.FOLLOWING); rbs.setAmt(Integer.parseInt(n.getText()));
+                    }
 
                     }
                     break;
@@ -2423,20 +2530,22 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:199:54: ( ^( WINDOWVALUES s= valuesboundary e= valuesboundary ) )
             // QSpecBuilder2.g:200:2: ^( WINDOWVALUES s= valuesboundary e= valuesboundary )
             {
-            match(input,WINDOWVALUES,FOLLOW_WINDOWVALUES_in_window_value_expression939); 
+            match(input,WINDOWVALUES,FOLLOW_WINDOWVALUES_in_window_value_expression939); if (failed) return wf;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return wf;
             pushFollow(FOLLOW_valuesboundary_in_window_value_expression943);
             s=valuesboundary();
             _fsp--;
-
+            if (failed) return wf;
             pushFollow(FOLLOW_valuesboundary_in_window_value_expression947);
             e=valuesboundary();
             _fsp--;
+            if (failed) return wf;
 
-
-            match(input, Token.UP, null); 
-            wf = new WindowFrameSpec(s,e);
+            match(input, Token.UP, null); if (failed) return wf;
+            if ( backtracking==0 ) {
+              wf = new WindowFrameSpec(s,e);
+            }
 
             }
 
@@ -2491,6 +2600,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
                 break;
             default:
+                if (backtracking>0) {failed=true; return bs;}
                 NoViableAltException nvae =
                     new NoViableAltException("203:1: valuesboundary returns [BoundarySpec bs] : ( ^( PRECEDING UNBOUNDED ) | ^( FOLLOWING UNBOUNDED ) | CURRENT | ^( LESS e= expression n= Number ) | ^( MORE e= expression n= Number ) );", 38, 0, input);
 
@@ -2501,70 +2611,80 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:204:3: ^( PRECEDING UNBOUNDED )
                     {
-                    match(input,PRECEDING,FOLLOW_PRECEDING_in_valuesboundary966); 
+                    match(input,PRECEDING,FOLLOW_PRECEDING_in_valuesboundary966); if (failed) return bs;
 
-                    match(input, Token.DOWN, null); 
-                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_valuesboundary968); 
+                    match(input, Token.DOWN, null); if (failed) return bs;
+                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_valuesboundary968); if (failed) return bs;
 
-                    match(input, Token.UP, null); 
-                    bs = new ValueBoundarySpec(Direction.PRECEDING, null, BoundarySpec.UNBOUNDED_AMOUNT);
+                    match(input, Token.UP, null); if (failed) return bs;
+                    if ( backtracking==0 ) {
+                      bs = new ValueBoundarySpec(Direction.PRECEDING, null, BoundarySpec.UNBOUNDED_AMOUNT);
+                    }
 
                     }
                     break;
                 case 2 :
                     // QSpecBuilder2.g:205:3: ^( FOLLOWING UNBOUNDED )
                     {
-                    match(input,FOLLOWING,FOLLOW_FOLLOWING_in_valuesboundary979); 
+                    match(input,FOLLOWING,FOLLOW_FOLLOWING_in_valuesboundary979); if (failed) return bs;
 
-                    match(input, Token.DOWN, null); 
-                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_valuesboundary981); 
+                    match(input, Token.DOWN, null); if (failed) return bs;
+                    match(input,UNBOUNDED,FOLLOW_UNBOUNDED_in_valuesboundary981); if (failed) return bs;
 
-                    match(input, Token.UP, null); 
-                    bs = new ValueBoundarySpec(Direction.FOLLOWING, null, BoundarySpec.UNBOUNDED_AMOUNT);
+                    match(input, Token.UP, null); if (failed) return bs;
+                    if ( backtracking==0 ) {
+                      bs = new ValueBoundarySpec(Direction.FOLLOWING, null, BoundarySpec.UNBOUNDED_AMOUNT);
+                    }
 
                     }
                     break;
                 case 3 :
                     // QSpecBuilder2.g:206:3: CURRENT
                     {
-                    match(input,CURRENT,FOLLOW_CURRENT_in_valuesboundary990); 
-                    bs = new CurrentRowSpec();
+                    match(input,CURRENT,FOLLOW_CURRENT_in_valuesboundary990); if (failed) return bs;
+                    if ( backtracking==0 ) {
+                      bs = new CurrentRowSpec();
+                    }
 
                     }
                     break;
                 case 4 :
                     // QSpecBuilder2.g:207:3: ^( LESS e= expression n= Number )
                     {
-                    match(input,LESS,FOLLOW_LESS_in_valuesboundary999); 
+                    match(input,LESS,FOLLOW_LESS_in_valuesboundary999); if (failed) return bs;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return bs;
                     pushFollow(FOLLOW_expression_in_valuesboundary1003);
                     e=expression();
                     _fsp--;
-
+                    if (failed) return bs;
                     n=(CommonTree)input.LT(1);
-                    match(input,Number,FOLLOW_Number_in_valuesboundary1007); 
+                    match(input,Number,FOLLOW_Number_in_valuesboundary1007); if (failed) return bs;
 
-                    match(input, Token.UP, null); 
-                    bs = new ValueBoundarySpec(Direction.PRECEDING, e, Integer.parseInt(n.getText()));
+                    match(input, Token.UP, null); if (failed) return bs;
+                    if ( backtracking==0 ) {
+                      bs = new ValueBoundarySpec(Direction.PRECEDING, e, Integer.parseInt(n.getText()));
+                    }
 
                     }
                     break;
                 case 5 :
                     // QSpecBuilder2.g:208:3: ^( MORE e= expression n= Number )
                     {
-                    match(input,MORE,FOLLOW_MORE_in_valuesboundary1017); 
+                    match(input,MORE,FOLLOW_MORE_in_valuesboundary1017); if (failed) return bs;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return bs;
                     pushFollow(FOLLOW_expression_in_valuesboundary1021);
                     e=expression();
                     _fsp--;
-
+                    if (failed) return bs;
                     n=(CommonTree)input.LT(1);
-                    match(input,Number,FOLLOW_Number_in_valuesboundary1025); 
+                    match(input,Number,FOLLOW_Number_in_valuesboundary1025); if (failed) return bs;
 
-                    match(input, Token.UP, null); 
-                    bs = new ValueBoundarySpec(Direction.PRECEDING, e, Integer.parseInt(n.getText()));
+                    match(input, Token.UP, null); if (failed) return bs;
+                    if ( backtracking==0 ) {
+                      bs = new ValueBoundarySpec(Direction.PRECEDING, e, Integer.parseInt(n.getText()));
+                    }
 
                     }
                     break;
@@ -2611,6 +2731,7 @@ public class QSpecBuilder2 extends TreeParser {
                             alt39=1;
                         }
                         else {
+                            if (backtracking>0) {failed=true; return cs;}
                             NoViableAltException nvae =
                                 new NoViableAltException("211:1: columnReference returns [ColumnSpec cs] : ( ^( COLUMNREF t= Identifier c= Identifier ) | ^( COLUMNREF t= Identifier ) );", 39, 3, input);
 
@@ -2618,6 +2739,7 @@ public class QSpecBuilder2 extends TreeParser {
                         }
                     }
                     else {
+                        if (backtracking>0) {failed=true; return cs;}
                         NoViableAltException nvae =
                             new NoViableAltException("211:1: columnReference returns [ColumnSpec cs] : ( ^( COLUMNREF t= Identifier c= Identifier ) | ^( COLUMNREF t= Identifier ) );", 39, 2, input);
 
@@ -2625,6 +2747,7 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                 }
                 else {
+                    if (backtracking>0) {failed=true; return cs;}
                     NoViableAltException nvae =
                         new NoViableAltException("211:1: columnReference returns [ColumnSpec cs] : ( ^( COLUMNREF t= Identifier c= Identifier ) | ^( COLUMNREF t= Identifier ) );", 39, 1, input);
 
@@ -2632,6 +2755,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
             }
             else {
+                if (backtracking>0) {failed=true; return cs;}
                 NoViableAltException nvae =
                     new NoViableAltException("211:1: columnReference returns [ColumnSpec cs] : ( ^( COLUMNREF t= Identifier c= Identifier ) | ^( COLUMNREF t= Identifier ) );", 39, 0, input);
 
@@ -2641,30 +2765,34 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:212:3: ^( COLUMNREF t= Identifier c= Identifier )
                     {
-                    match(input,COLUMNREF,FOLLOW_COLUMNREF_in_columnReference1043); 
+                    match(input,COLUMNREF,FOLLOW_COLUMNREF_in_columnReference1043); if (failed) return cs;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return cs;
                     t=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_columnReference1047); 
+                    match(input,Identifier,FOLLOW_Identifier_in_columnReference1047); if (failed) return cs;
                     c=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_columnReference1051); 
+                    match(input,Identifier,FOLLOW_Identifier_in_columnReference1051); if (failed) return cs;
 
-                    match(input, Token.UP, null); 
-                    cs = new ColumnSpec(t.getText(),c.getText());
+                    match(input, Token.UP, null); if (failed) return cs;
+                    if ( backtracking==0 ) {
+                      cs = new ColumnSpec(t.getText(),c.getText());
+                    }
 
                     }
                     break;
                 case 2 :
                     // QSpecBuilder2.g:213:3: ^( COLUMNREF t= Identifier )
                     {
-                    match(input,COLUMNREF,FOLLOW_COLUMNREF_in_columnReference1061); 
+                    match(input,COLUMNREF,FOLLOW_COLUMNREF_in_columnReference1061); if (failed) return cs;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return cs;
                     t=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_columnReference1065); 
+                    match(input,Identifier,FOLLOW_Identifier_in_columnReference1065); if (failed) return cs;
 
-                    match(input, Token.UP, null); 
-                    cs = new ColumnSpec(null,t.getText());
+                    match(input, Token.UP, null); if (failed) return cs;
+                    if ( backtracking==0 ) {
+                      cs = new ColumnSpec(null,t.getText());
+                    }
 
                     }
                     break;
@@ -2694,13 +2822,15 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:219:3: ^(tc= TABLEORCOL Identifier )
             {
             tc=(CommonTree)input.LT(1);
-            match(input,TABLEORCOL,FOLLOW_TABLEORCOL_in_tableOrColumn1090); 
+            match(input,TABLEORCOL,FOLLOW_TABLEORCOL_in_tableOrColumn1090); if (failed) return tr;
 
-            match(input, Token.DOWN, null); 
-            match(input,Identifier,FOLLOW_Identifier_in_tableOrColumn1092); 
+            match(input, Token.DOWN, null); if (failed) return tr;
+            match(input,Identifier,FOLLOW_Identifier_in_tableOrColumn1092); if (failed) return tr;
 
-            match(input, Token.UP, null); 
-            tr =tc;
+            match(input, Token.UP, null); if (failed) return tr;
+            if ( backtracking==0 ) {
+              tr =tc;
+            }
 
             }
 
@@ -2745,6 +2875,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
                 break;
             default:
+                if (backtracking>0) {failed=true; return tr;}
                 NoViableAltException nvae =
                     new NoViableAltException("223:1: function returns [CommonTree tr] : ( ^(fs= FUNCTIONSTAR functionName ) | ^(f= FUNCTION functionName ( ( expression )+ )? ) | ^(fd= FUNCTIONDIST functionName ( ( expression )+ )? ) );", 44, 0, input);
 
@@ -2756,16 +2887,18 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:225:3: ^(fs= FUNCTIONSTAR functionName )
                     {
                     fs=(CommonTree)input.LT(1);
-                    match(input,FUNCTIONSTAR,FOLLOW_FUNCTIONSTAR_in_function1116); 
+                    match(input,FUNCTIONSTAR,FOLLOW_FUNCTIONSTAR_in_function1116); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return tr;
                     pushFollow(FOLLOW_functionName_in_function1118);
                     functionName();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =fs;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =fs;
+                    }
 
                     }
                     break;
@@ -2773,13 +2906,13 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:226:3: ^(f= FUNCTION functionName ( ( expression )+ )? )
                     {
                     f=(CommonTree)input.LT(1);
-                    match(input,FUNCTION,FOLLOW_FUNCTION_in_function1131); 
+                    match(input,FUNCTION,FOLLOW_FUNCTION_in_function1131); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return tr;
                     pushFollow(FOLLOW_functionName_in_function1133);
                     functionName();
                     _fsp--;
-
+                    if (failed) return tr;
                     // QSpecBuilder2.g:226:29: ( ( expression )+ )?
                     int alt41=2;
                     int LA41_0 = input.LA(1);
@@ -2810,13 +2943,14 @@ public class QSpecBuilder2 extends TreeParser {
                             	    pushFollow(FOLLOW_expression_in_function1136);
                             	    expression();
                             	    _fsp--;
-
+                            	    if (failed) return tr;
 
                             	    }
                             	    break;
 
                             	default :
                             	    if ( cnt40 >= 1 ) break loop40;
+                            	    if (backtracking>0) {failed=true; return tr;}
                                         EarlyExitException eee =
                                             new EarlyExitException(40, input);
                                         throw eee;
@@ -2831,8 +2965,10 @@ public class QSpecBuilder2 extends TreeParser {
                     }
 
 
-                    match(input, Token.UP, null); 
-                    tr =f;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =f;
+                    }
 
                     }
                     break;
@@ -2840,13 +2976,13 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:227:3: ^(fd= FUNCTIONDIST functionName ( ( expression )+ )? )
                     {
                     fd=(CommonTree)input.LT(1);
-                    match(input,FUNCTIONDIST,FOLLOW_FUNCTIONDIST_in_function1151); 
+                    match(input,FUNCTIONDIST,FOLLOW_FUNCTIONDIST_in_function1151); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return tr;
                     pushFollow(FOLLOW_functionName_in_function1153);
                     functionName();
                     _fsp--;
-
+                    if (failed) return tr;
                     // QSpecBuilder2.g:227:34: ( ( expression )+ )?
                     int alt43=2;
                     int LA43_0 = input.LA(1);
@@ -2877,13 +3013,14 @@ public class QSpecBuilder2 extends TreeParser {
                             	    pushFollow(FOLLOW_expression_in_function1156);
                             	    expression();
                             	    _fsp--;
-
+                            	    if (failed) return tr;
 
                             	    }
                             	    break;
 
                             	default :
                             	    if ( cnt42 >= 1 ) break loop42;
+                            	    if (backtracking>0) {failed=true; return tr;}
                                         EarlyExitException eee =
                                             new EarlyExitException(42, input);
                                         throw eee;
@@ -2898,8 +3035,10 @@ public class QSpecBuilder2 extends TreeParser {
                     }
 
 
-                    match(input, Token.UP, null); 
-                    tr =fd;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =fd;
+                    }
 
                     }
                     break;
@@ -2931,9 +3070,10 @@ public class QSpecBuilder2 extends TreeParser {
             {
             if ( input.LA(1)==Identifier||(input.LA(1)>=IF && input.LA(1)<=UNION) ) {
                 input.consume();
-                errorRecovery=false;
+                errorRecovery=false;failed=false;
             }
             else {
+                if (backtracking>0) {failed=true; return retval;}
                 MismatchedSetException mse =
                     new MismatchedSetException(null,input);
                 recoverFromMismatchedSet(input,mse,FOLLOW_set_in_functionName0);    throw mse;
@@ -2966,20 +3106,22 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:236:3: ^(f= FUNCTION primitiveType expression )
             {
             f=(CommonTree)input.LT(1);
-            match(input,FUNCTION,FOLLOW_FUNCTION_in_castExpr1240); 
+            match(input,FUNCTION,FOLLOW_FUNCTION_in_castExpr1240); if (failed) return tr;
 
-            match(input, Token.DOWN, null); 
+            match(input, Token.DOWN, null); if (failed) return tr;
             pushFollow(FOLLOW_primitiveType_in_castExpr1242);
             primitiveType();
             _fsp--;
-
+            if (failed) return tr;
             pushFollow(FOLLOW_expression_in_castExpr1244);
             expression();
             _fsp--;
+            if (failed) return tr;
 
-
-            match(input, Token.UP, null); 
-            tr = f;
+            match(input, Token.UP, null); if (failed) return tr;
+            if ( backtracking==0 ) {
+              tr = f;
+            }
 
             }
 
@@ -3007,10 +3149,10 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:240:3: ^(f= FUNCTION CASE ( expression )* )
             {
             f=(CommonTree)input.LT(1);
-            match(input,FUNCTION,FOLLOW_FUNCTION_in_caseExpr1265); 
+            match(input,FUNCTION,FOLLOW_FUNCTION_in_caseExpr1265); if (failed) return tr;
 
-            match(input, Token.DOWN, null); 
-            match(input,CASE,FOLLOW_CASE_in_caseExpr1267); 
+            match(input, Token.DOWN, null); if (failed) return tr;
+            match(input,CASE,FOLLOW_CASE_in_caseExpr1267); if (failed) return tr;
             // QSpecBuilder2.g:240:21: ( expression )*
             loop45:
             do {
@@ -3029,7 +3171,7 @@ public class QSpecBuilder2 extends TreeParser {
             	    pushFollow(FOLLOW_expression_in_caseExpr1269);
             	    expression();
             	    _fsp--;
-
+            	    if (failed) return tr;
 
             	    }
             	    break;
@@ -3040,8 +3182,10 @@ public class QSpecBuilder2 extends TreeParser {
             } while (true);
 
 
-            match(input, Token.UP, null); 
-            tr = f;
+            match(input, Token.UP, null); if (failed) return tr;
+            if ( backtracking==0 ) {
+              tr = f;
+            }
 
             }
 
@@ -3069,10 +3213,10 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:244:3: ^(f= FUNCTION WHEN ( expression )* )
             {
             f=(CommonTree)input.LT(1);
-            match(input,FUNCTION,FOLLOW_FUNCTION_in_whenExpr1293); 
+            match(input,FUNCTION,FOLLOW_FUNCTION_in_whenExpr1293); if (failed) return tr;
 
-            match(input, Token.DOWN, null); 
-            match(input,WHEN,FOLLOW_WHEN_in_whenExpr1295); 
+            match(input, Token.DOWN, null); if (failed) return tr;
+            match(input,WHEN,FOLLOW_WHEN_in_whenExpr1295); if (failed) return tr;
             // QSpecBuilder2.g:244:21: ( expression )*
             loop46:
             do {
@@ -3091,7 +3235,7 @@ public class QSpecBuilder2 extends TreeParser {
             	    pushFollow(FOLLOW_expression_in_whenExpr1297);
             	    expression();
             	    _fsp--;
-
+            	    if (failed) return tr;
 
             	    }
             	    break;
@@ -3102,8 +3246,10 @@ public class QSpecBuilder2 extends TreeParser {
             } while (true);
 
 
-            match(input, Token.UP, null); 
-            tr = f;
+            match(input, Token.UP, null); if (failed) return tr;
+            if ( backtracking==0 ) {
+              tr = f;
+            }
 
             }
 
@@ -3182,6 +3328,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
                 break;
             default:
+                if (backtracking>0) {failed=true; return tr;}
                 NoViableAltException nvae =
                     new NoViableAltException("247:1: constant returns [CommonTree tr] : (n= Number | s= StringLiteral | sls= stringLiteralSequence | bl= BigintLiteral | sl= SmallintLiteral | tl= TinyintLiteral | csl= charSetStringLiteral | bv= booleanValue );", 47, 0, input);
 
@@ -3193,8 +3340,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:248:3: n= Number
                     {
                     n=(CommonTree)input.LT(1);
-                    match(input,Number,FOLLOW_Number_in_constant1318); 
-                     tr = n; 
+                    match(input,Number,FOLLOW_Number_in_constant1318); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                       tr = n; 
+                    }
 
                     }
                     break;
@@ -3202,8 +3351,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:249:5: s= StringLiteral
                     {
                     s=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_constant1328); 
-                     tr = s; 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_constant1328); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                       tr = s; 
+                    }
 
                     }
                     break;
@@ -3213,8 +3364,10 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_stringLiteralSequence_in_constant1338);
                     sls=stringLiteralSequence();
                     _fsp--;
-
-                     tr = sls; 
+                    if (failed) return tr;
+                    if ( backtracking==0 ) {
+                       tr = sls; 
+                    }
 
                     }
                     break;
@@ -3222,8 +3375,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:251:5: bl= BigintLiteral
                     {
                     bl=(CommonTree)input.LT(1);
-                    match(input,BigintLiteral,FOLLOW_BigintLiteral_in_constant1348); 
-                     tr = bl; 
+                    match(input,BigintLiteral,FOLLOW_BigintLiteral_in_constant1348); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                       tr = bl; 
+                    }
 
                     }
                     break;
@@ -3231,8 +3386,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:252:5: sl= SmallintLiteral
                     {
                     sl=(CommonTree)input.LT(1);
-                    match(input,SmallintLiteral,FOLLOW_SmallintLiteral_in_constant1358); 
-                     tr = sl; 
+                    match(input,SmallintLiteral,FOLLOW_SmallintLiteral_in_constant1358); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                       tr = sl; 
+                    }
 
                     }
                     break;
@@ -3240,8 +3397,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:253:5: tl= TinyintLiteral
                     {
                     tl=(CommonTree)input.LT(1);
-                    match(input,TinyintLiteral,FOLLOW_TinyintLiteral_in_constant1368); 
-                     tr = tl; 
+                    match(input,TinyintLiteral,FOLLOW_TinyintLiteral_in_constant1368); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                       tr = tl; 
+                    }
 
                     }
                     break;
@@ -3251,8 +3410,10 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_charSetStringLiteral_in_constant1378);
                     csl=charSetStringLiteral();
                     _fsp--;
-
-                     tr = csl; 
+                    if (failed) return tr;
+                    if ( backtracking==0 ) {
+                       tr = csl; 
+                    }
 
                     }
                     break;
@@ -3262,8 +3423,10 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_booleanValue_in_constant1388);
                     bv=booleanValue();
                     _fsp--;
-
-                     tr = bv; 
+                    if (failed) return tr;
+                    if ( backtracking==0 ) {
+                       tr = bv; 
+                    }
 
                     }
                     break;
@@ -3293,10 +3456,10 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:259:5: ^(s= STRINGLITERALSEQUENCE StringLiteral ( StringLiteral )+ )
             {
             s=(CommonTree)input.LT(1);
-            match(input,STRINGLITERALSEQUENCE,FOLLOW_STRINGLITERALSEQUENCE_in_stringLiteralSequence1410); 
+            match(input,STRINGLITERALSEQUENCE,FOLLOW_STRINGLITERALSEQUENCE_in_stringLiteralSequence1410); if (failed) return tr;
 
-            match(input, Token.DOWN, null); 
-            match(input,StringLiteral,FOLLOW_StringLiteral_in_stringLiteralSequence1412); 
+            match(input, Token.DOWN, null); if (failed) return tr;
+            match(input,StringLiteral,FOLLOW_StringLiteral_in_stringLiteralSequence1412); if (failed) return tr;
             // QSpecBuilder2.g:259:45: ( StringLiteral )+
             int cnt48=0;
             loop48:
@@ -3313,13 +3476,14 @@ public class QSpecBuilder2 extends TreeParser {
             	case 1 :
             	    // QSpecBuilder2.g:259:45: StringLiteral
             	    {
-            	    match(input,StringLiteral,FOLLOW_StringLiteral_in_stringLiteralSequence1414); 
+            	    match(input,StringLiteral,FOLLOW_StringLiteral_in_stringLiteralSequence1414); if (failed) return tr;
 
             	    }
             	    break;
 
             	default :
             	    if ( cnt48 >= 1 ) break loop48;
+            	    if (backtracking>0) {failed=true; return tr;}
                         EarlyExitException eee =
                             new EarlyExitException(48, input);
                         throw eee;
@@ -3328,8 +3492,10 @@ public class QSpecBuilder2 extends TreeParser {
             } while (true);
 
 
-            match(input, Token.UP, null); 
-             tr = s; 
+            match(input, Token.UP, null); if (failed) return tr;
+            if ( backtracking==0 ) {
+               tr = s; 
+            }
 
             }
 
@@ -3357,14 +3523,16 @@ public class QSpecBuilder2 extends TreeParser {
             // QSpecBuilder2.g:263:5: ^(c= CHARSETLITERAL CharSetName CharSetLiteral )
             {
             c=(CommonTree)input.LT(1);
-            match(input,CHARSETLITERAL,FOLLOW_CHARSETLITERAL_in_charSetStringLiteral1438); 
+            match(input,CHARSETLITERAL,FOLLOW_CHARSETLITERAL_in_charSetStringLiteral1438); if (failed) return tr;
 
-            match(input, Token.DOWN, null); 
-            match(input,CharSetName,FOLLOW_CharSetName_in_charSetStringLiteral1440); 
-            match(input,CharSetLiteral,FOLLOW_CharSetLiteral_in_charSetStringLiteral1442); 
+            match(input, Token.DOWN, null); if (failed) return tr;
+            match(input,CharSetName,FOLLOW_CharSetName_in_charSetStringLiteral1440); if (failed) return tr;
+            match(input,CharSetLiteral,FOLLOW_CharSetLiteral_in_charSetStringLiteral1442); if (failed) return tr;
 
-            match(input, Token.UP, null); 
-             tr = c; 
+            match(input, Token.UP, null); if (failed) return tr;
+            if ( backtracking==0 ) {
+               tr = c; 
+            }
 
             }
 
@@ -3405,7 +3573,7 @@ public class QSpecBuilder2 extends TreeParser {
             	    pushFollow(FOLLOW_expression_in_expressions1456);
             	    expression();
             	    _fsp--;
-
+            	    if (failed) return ;
 
             	    }
             	    break;
@@ -3459,6 +3627,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
                 break;
             default:
+                if (backtracking>0) {failed=true; return tr;}
                 NoViableAltException nvae =
                     new NoViableAltException("270:1: negatableOperator returns [CommonTree tr] : (l= LIKE | rl= RLIKE | rexp= REGEXP );", 50, 0, input);
 
@@ -3470,8 +3639,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:271:3: l= LIKE
                     {
                     l=(CommonTree)input.LT(1);
-                    match(input,LIKE,FOLLOW_LIKE_in_negatableOperator1474); 
-                    tr =l;
+                    match(input,LIKE,FOLLOW_LIKE_in_negatableOperator1474); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =l;
+                    }
 
                     }
                     break;
@@ -3479,8 +3650,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:272:3: rl= RLIKE
                     {
                     rl=(CommonTree)input.LT(1);
-                    match(input,RLIKE,FOLLOW_RLIKE_in_negatableOperator1485); 
-                    tr =rl;
+                    match(input,RLIKE,FOLLOW_RLIKE_in_negatableOperator1485); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =rl;
+                    }
 
                     }
                     break;
@@ -3488,8 +3661,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:273:3: rexp= REGEXP
                     {
                     rexp=(CommonTree)input.LT(1);
-                    match(input,REGEXP,FOLLOW_REGEXP_in_negatableOperator1496); 
-                    tr =rexp;
+                    match(input,REGEXP,FOLLOW_REGEXP_in_negatableOperator1496); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =rexp;
+                    }
 
                     }
                     break;
@@ -3569,6 +3744,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
                 break;
             default:
+                if (backtracking>0) {failed=true; return tr;}
                 NoViableAltException nvae =
                     new NoViableAltException("276:1: compareOperator returns [CommonTree tr] : (n= negatableOperator | e= EQUAL | en= EQUAL_NS | nte= NOTEQUAL | lte= LESSTHANOREQUALTO | lt= LESSTHAN | gte= GREATERTHANOREQUALTO | gt= GREATERTHAN );", 51, 0, input);
 
@@ -3582,8 +3758,10 @@ public class QSpecBuilder2 extends TreeParser {
                     pushFollow(FOLLOW_negatableOperator_in_compareOperator1516);
                     n=negatableOperator();
                     _fsp--;
-
-                    tr =n;
+                    if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =n;
+                    }
 
                     }
                     break;
@@ -3591,8 +3769,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:278:3: e= EQUAL
                     {
                     e=(CommonTree)input.LT(1);
-                    match(input,EQUAL,FOLLOW_EQUAL_in_compareOperator1527); 
-                    tr =e;
+                    match(input,EQUAL,FOLLOW_EQUAL_in_compareOperator1527); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =e;
+                    }
 
                     }
                     break;
@@ -3600,8 +3780,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:279:3: en= EQUAL_NS
                     {
                     en=(CommonTree)input.LT(1);
-                    match(input,EQUAL_NS,FOLLOW_EQUAL_NS_in_compareOperator1538); 
-                    tr =en;
+                    match(input,EQUAL_NS,FOLLOW_EQUAL_NS_in_compareOperator1538); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =en;
+                    }
 
                     }
                     break;
@@ -3609,8 +3791,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:280:3: nte= NOTEQUAL
                     {
                     nte=(CommonTree)input.LT(1);
-                    match(input,NOTEQUAL,FOLLOW_NOTEQUAL_in_compareOperator1549); 
-                    tr =nte;
+                    match(input,NOTEQUAL,FOLLOW_NOTEQUAL_in_compareOperator1549); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =nte;
+                    }
 
                     }
                     break;
@@ -3618,8 +3802,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:281:3: lte= LESSTHANOREQUALTO
                     {
                     lte=(CommonTree)input.LT(1);
-                    match(input,LESSTHANOREQUALTO,FOLLOW_LESSTHANOREQUALTO_in_compareOperator1560); 
-                    tr =lte;
+                    match(input,LESSTHANOREQUALTO,FOLLOW_LESSTHANOREQUALTO_in_compareOperator1560); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =lte;
+                    }
 
                     }
                     break;
@@ -3627,8 +3813,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:282:3: lt= LESSTHAN
                     {
                     lt=(CommonTree)input.LT(1);
-                    match(input,LESSTHAN,FOLLOW_LESSTHAN_in_compareOperator1571); 
-                    tr =lt;
+                    match(input,LESSTHAN,FOLLOW_LESSTHAN_in_compareOperator1571); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =lt;
+                    }
 
                     }
                     break;
@@ -3636,8 +3824,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:283:3: gte= GREATERTHANOREQUALTO
                     {
                     gte=(CommonTree)input.LT(1);
-                    match(input,GREATERTHANOREQUALTO,FOLLOW_GREATERTHANOREQUALTO_in_compareOperator1582); 
-                    tr =gte;
+                    match(input,GREATERTHANOREQUALTO,FOLLOW_GREATERTHANOREQUALTO_in_compareOperator1582); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =gte;
+                    }
 
                     }
                     break;
@@ -3645,8 +3835,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:284:3: gt= GREATERTHAN
                     {
                     gt=(CommonTree)input.LT(1);
-                    match(input,GREATERTHAN,FOLLOW_GREATERTHAN_in_compareOperator1593); 
-                    tr =gt;
+                    match(input,GREATERTHAN,FOLLOW_GREATERTHAN_in_compareOperator1593); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =gt;
+                    }
 
                     }
                     break;
@@ -3673,9 +3865,10 @@ public class QSpecBuilder2 extends TreeParser {
             {
             if ( input.LA(1)==NOTNULL||input.LA(1)==NULL ) {
                 input.consume();
-                errorRecovery=false;
+                errorRecovery=false;failed=false;
             }
             else {
+                if (backtracking>0) {failed=true; return ;}
                 MismatchedSetException mse =
                     new MismatchedSetException(null,input);
                 recoverFromMismatchedSet(input,mse,FOLLOW_set_in_nullCondition0);    throw mse;
@@ -3697,14 +3890,15 @@ public class QSpecBuilder2 extends TreeParser {
 
 
     // $ANTLR start expression
-    // QSpecBuilder2.g:292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );
+    // QSpecBuilder2.g:292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ( NOT DOWN negatableOperator )=> ^(nOp= NOT ^( negatableOperator expression expression ) ) | ( NOT DOWN FUNCTION )=> ^(fInF= NOT ^( FUNCTION IN expression expressions ) ) | ^(nt= NOT expression ) | ^(cOp= compareOperator expression expression ) | ^(fInT= FUNCTION IN expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );
     public final CommonTree expression() throws RecognitionException {
         CommonTree tr = null;
 
         CommonTree or=null;
         CommonTree ad=null;
-        CommonTree nt=null;
+        CommonTree nOp=null;
         CommonTree fInF=null;
+        CommonTree nt=null;
         CommonTree fInT=null;
         CommonTree fBtF=null;
         CommonTree fBtT=null;
@@ -3722,8 +3916,6 @@ public class QSpecBuilder2 extends TreeParser {
         CommonTree arry=null;
         CommonTree dot=null;
         CommonTree nl=null;
-        CommonTree nOp = null;
-
         CommonTree cOp = null;
 
         CommonTree c = null;
@@ -3740,334 +3932,30 @@ public class QSpecBuilder2 extends TreeParser {
 
 
         try {
-            // QSpecBuilder2.g:292:36: ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn )
+            // QSpecBuilder2.g:292:36: ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ( NOT DOWN negatableOperator )=> ^(nOp= NOT ^( negatableOperator expression expression ) ) | ( NOT DOWN FUNCTION )=> ^(fInF= NOT ^( FUNCTION IN expression expressions ) ) | ^(nt= NOT expression ) | ^(cOp= compareOperator expression expression ) | ^(fInT= FUNCTION IN expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn )
             int alt54=29;
-            switch ( input.LA(1) ) {
-            case OR:
-                {
-                alt54=1;
-                }
-                break;
-            case AND:
-                {
-                alt54=2;
-                }
-                break;
-            case NOT:
-                {
-                alt54=3;
-                }
-                break;
-            case LIKE:
-                {
-                int LA54_4 = input.LA(2);
-
-                if ( (LA54_4==DOWN) ) {
-                    int LA54_25 = input.LA(3);
-
-                    if ( (LA54_25==TRUE) ) {
-                        alt54=5;
-                    }
-                    else if ( (LA54_25==FALSE) ) {
-                        alt54=4;
-                    }
-                    else {
-                        NoViableAltException nvae =
-                            new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 25, input);
-
-                        throw nvae;
-                    }
-                }
-                else {
-                    NoViableAltException nvae =
-                        new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 4, input);
-
-                    throw nvae;
-                }
-                }
-                break;
-            case RLIKE:
-                {
-                int LA54_5 = input.LA(2);
-
-                if ( (LA54_5==DOWN) ) {
-                    int LA54_25 = input.LA(3);
-
-                    if ( (LA54_25==TRUE) ) {
-                        alt54=5;
-                    }
-                    else if ( (LA54_25==FALSE) ) {
-                        alt54=4;
-                    }
-                    else {
-                        NoViableAltException nvae =
-                            new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 25, input);
-
-                        throw nvae;
-                    }
-                }
-                else {
-                    NoViableAltException nvae =
-                        new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 5, input);
-
-                    throw nvae;
-                }
-                }
-                break;
-            case REGEXP:
-                {
-                int LA54_6 = input.LA(2);
-
-                if ( (LA54_6==DOWN) ) {
-                    int LA54_25 = input.LA(3);
-
-                    if ( (LA54_25==TRUE) ) {
-                        alt54=5;
-                    }
-                    else if ( (LA54_25==FALSE) ) {
-                        alt54=4;
-                    }
-                    else {
-                        NoViableAltException nvae =
-                            new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 25, input);
-
-                        throw nvae;
-                    }
-                }
-                else {
-                    NoViableAltException nvae =
-                        new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 6, input);
-
-                    throw nvae;
-                }
-                }
-                break;
-            case EQUAL:
-            case EQUAL_NS:
-            case NOTEQUAL:
-            case LESSTHANOREQUALTO:
-            case LESSTHAN:
-            case GREATERTHANOREQUALTO:
-            case GREATERTHAN:
-                {
-                alt54=5;
-                }
-                break;
-            case FUNCTION:
-                {
-                int LA54_8 = input.LA(2);
-
-                if ( (LA54_8==DOWN) ) {
-                    switch ( input.LA(3) ) {
-                    case CASE:
-                        {
-                        alt54=27;
-                        }
-                        break;
-                    case WHEN:
-                        {
-                        alt54=28;
-                        }
-                        break;
-                    case IN:
-                        {
-                        int LA54_30 = input.LA(4);
-
-                        if ( (LA54_30==FALSE) ) {
-                            alt54=6;
-                        }
-                        else if ( (LA54_30==TRUE) ) {
-                            alt54=7;
-                        }
-                        else {
-                            NoViableAltException nvae =
-                                new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 30, input);
-
-                            throw nvae;
-                        }
-                        }
-                        break;
-                    case BETWEEN:
-                        {
-                        int LA54_31 = input.LA(4);
-
-                        if ( (LA54_31==FALSE) ) {
-                            alt54=8;
-                        }
-                        else if ( (LA54_31==TRUE) ) {
-                            alt54=9;
-                        }
-                        else {
-                            NoViableAltException nvae =
-                                new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 31, input);
-
-                            throw nvae;
-                        }
-                        }
-                        break;
-                    case Identifier:
-                    case IF:
-                    case ARRAY:
-                    case MAP:
-                    case STRUCT:
-                    case UNION:
-                        {
-                        alt54=25;
-                        }
-                        break;
-                    case NOTNULL:
-                    case NULL:
-                        {
-                        alt54=19;
-                        }
-                        break;
-                    case TINYINT:
-                    case SMALLINT:
-                    case INT:
-                    case BIGINT:
-                    case BOOLEAN:
-                    case FLOAT:
-                    case DOUBLE:
-                    case DATE:
-                    case DATETIME:
-                    case TIMESTAMP:
-                    case STRING:
-                    case BINARY:
-                        {
-                        alt54=26;
-                        }
-                        break;
-                    default:
-                        NoViableAltException nvae =
-                            new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 26, input);
-
-                        throw nvae;
-                    }
-
-                }
-                else {
-                    NoViableAltException nvae =
-                        new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 8, input);
-
-                    throw nvae;
-                }
-                }
-                break;
-            case BITWISEOR:
-                {
-                alt54=10;
-                }
-                break;
-            case AMPERSAND:
-                {
-                alt54=11;
-                }
-                break;
-            case PLUS:
-                {
-                alt54=12;
-                }
-                break;
-            case MINUS:
-                {
-                alt54=13;
-                }
-                break;
-            case STAR:
-                {
-                alt54=14;
-                }
-                break;
-            case DIVIDE:
-                {
-                alt54=15;
-                }
-                break;
-            case MOD:
-                {
-                alt54=16;
-                }
-                break;
-            case DIV:
-                {
-                alt54=17;
-                }
-                break;
-            case BITWISEXOR:
-                {
-                alt54=18;
-                }
-                break;
-            case TILDE:
-                {
-                alt54=20;
-                }
-                break;
-            case LSQUARE:
-                {
-                alt54=21;
-                }
-                break;
-            case DOT:
-                {
-                alt54=22;
-                }
-                break;
-            case NULL:
-                {
-                alt54=23;
-                }
-                break;
-            case STRINGLITERALSEQUENCE:
-            case CHARSETLITERAL:
-            case StringLiteral:
-            case Number:
-            case BigintLiteral:
-            case SmallintLiteral:
-            case TinyintLiteral:
-            case TRUE:
-            case FALSE:
-                {
-                alt54=24;
-                }
-                break;
-            case FUNCTIONSTAR:
-            case FUNCTIONDIST:
-                {
-                alt54=25;
-                }
-                break;
-            case TABLEORCOL:
-                {
-                alt54=29;
-                }
-                break;
-            default:
-                NoViableAltException nvae =
-                    new NoViableAltException("292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ^(nt= NOT expression ) | ^(nOp= negatableOperator FALSE expression expression ) | ^(cOp= compareOperator TRUE expression expression ) | ^(fInF= FUNCTION IN FALSE expression expressions ) | ^(fInT= FUNCTION IN TRUE expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );", 54, 0, input);
-
-                throw nvae;
-            }
-
+            alt54 = dfa54.predict(input);
             switch (alt54) {
                 case 1 :
                     // QSpecBuilder2.g:293:3: ^(or= OR expression expression )
                     {
                     or=(CommonTree)input.LT(1);
-                    match(input,OR,FOLLOW_OR_in_expression1631); 
+                    match(input,OR,FOLLOW_OR_in_expression1631); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return tr;
                     pushFollow(FOLLOW_expression_in_expression1633);
                     expression();
                     _fsp--;
-
+                    if (failed) return tr;
                     pushFollow(FOLLOW_expression_in_expression1635);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =or;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =or;
+                    }
 
                     }
                     break;
@@ -4075,131 +3963,150 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:294:3: ^(ad= AND expression expression )
                     {
                     ad=(CommonTree)input.LT(1);
-                    match(input,AND,FOLLOW_AND_in_expression1646); 
+                    match(input,AND,FOLLOW_AND_in_expression1646); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return tr;
                     pushFollow(FOLLOW_expression_in_expression1648);
                     expression();
                     _fsp--;
-
+                    if (failed) return tr;
                     pushFollow(FOLLOW_expression_in_expression1650);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =ad;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =ad;
+                    }
 
                     }
                     break;
                 case 3 :
-                    // QSpecBuilder2.g:295:3: ^(nt= NOT expression )
+                    // QSpecBuilder2.g:295:3: ( NOT DOWN negatableOperator )=> ^(nOp= NOT ^( negatableOperator expression expression ) )
                     {
-                    nt=(CommonTree)input.LT(1);
-                    match(input,NOT,FOLLOW_NOT_in_expression1661); 
+                    nOp=(CommonTree)input.LT(1);
+                    match(input,NOT,FOLLOW_NOT_in_expression1670); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1663);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_negatableOperator_in_expression1674);
+                    negatableOperator();
+                    _fsp--;
+                    if (failed) return tr;
+
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1676);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1679);
+                    expression();
+                    _fsp--;
+                    if (failed) return tr;
 
+                    match(input, Token.UP, null); if (failed) return tr;
 
-                    match(input, Token.UP, null); 
-                    tr =nt;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =nOp;
+                    }
 
                     }
                     break;
                 case 4 :
-                    // QSpecBuilder2.g:296:3: ^(nOp= negatableOperator FALSE expression expression )
+                    // QSpecBuilder2.g:296:3: ( NOT DOWN FUNCTION )=> ^(fInF= NOT ^( FUNCTION IN expression expressions ) )
                     {
-                    pushFollow(FOLLOW_negatableOperator_in_expression1674);
-                    nOp=negatableOperator();
-                    _fsp--;
+                    fInF=(CommonTree)input.LT(1);
+                    match(input,NOT,FOLLOW_NOT_in_expression1702); if (failed) return tr;
 
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1706); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    match(input,FALSE,FOLLOW_FALSE_in_expression1676); 
-                    pushFollow(FOLLOW_expression_in_expression1678);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    match(input,IN,FOLLOW_IN_in_expression1708); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1711);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1681);
-                    expression();
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expressions_in_expression1713);
+                    expressions();
                     _fsp--;
+                    if (failed) return tr;
 
+                    match(input, Token.UP, null); if (failed) return tr;
 
-                    match(input, Token.UP, null); 
-                    tr =nOp;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =fInF;
+                    }
 
                     }
                     break;
                 case 5 :
-                    // QSpecBuilder2.g:297:3: ^(cOp= compareOperator TRUE expression expression )
+                    // QSpecBuilder2.g:297:3: ^(nt= NOT expression )
                     {
-                    pushFollow(FOLLOW_compareOperator_in_expression1694);
-                    cOp=compareOperator();
-                    _fsp--;
+                    nt=(CommonTree)input.LT(1);
+                    match(input,NOT,FOLLOW_NOT_in_expression1726); if (failed) return tr;
 
-
-                    match(input, Token.DOWN, null); 
-                    match(input,TRUE,FOLLOW_TRUE_in_expression1696); 
-                    pushFollow(FOLLOW_expression_in_expression1698);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1728);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-                    pushFollow(FOLLOW_expression_in_expression1700);
-                    expression();
-                    _fsp--;
-
-
-                    match(input, Token.UP, null); 
-                    tr =cOp;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =nt;
+                    }
 
                     }
                     break;
                 case 6 :
-                    // QSpecBuilder2.g:298:3: ^(fInF= FUNCTION IN FALSE expression expressions )
+                    // QSpecBuilder2.g:298:3: ^(cOp= compareOperator expression expression )
                     {
-                    fInF=(CommonTree)input.LT(1);
-                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1712); 
+                    pushFollow(FOLLOW_compareOperator_in_expression1741);
+                    cOp=compareOperator();
+                    _fsp--;
+                    if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    match(input,IN,FOLLOW_IN_in_expression1714); 
-                    match(input,FALSE,FOLLOW_FALSE_in_expression1716); 
-                    pushFollow(FOLLOW_expression_in_expression1718);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1743);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expressions_in_expression1720);
-                    expressions();
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1745);
+                    expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =fInF;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =cOp;
+                    }
 
                     }
                     break;
                 case 7 :
-                    // QSpecBuilder2.g:299:3: ^(fInT= FUNCTION IN TRUE expression expressions )
+                    // QSpecBuilder2.g:299:3: ^(fInT= FUNCTION IN expression expressions )
                     {
                     fInT=(CommonTree)input.LT(1);
-                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1732); 
+                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1758); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    match(input,IN,FOLLOW_IN_in_expression1734); 
-                    match(input,TRUE,FOLLOW_TRUE_in_expression1736); 
-                    pushFollow(FOLLOW_expression_in_expression1738);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    match(input,IN,FOLLOW_IN_in_expression1760); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1763);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expressions_in_expression1740);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expressions_in_expression1765);
                     expressions();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =fInT;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =fInT;
+                    }
 
                     }
                     break;
@@ -4207,26 +4114,28 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:300:3: ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression )
                     {
                     fBtF=(CommonTree)input.LT(1);
-                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1752); 
+                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1777); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    match(input,BETWEEN,FOLLOW_BETWEEN_in_expression1754); 
-                    match(input,FALSE,FOLLOW_FALSE_in_expression1756); 
-                    pushFollow(FOLLOW_expression_in_expression1758);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    match(input,BETWEEN,FOLLOW_BETWEEN_in_expression1779); if (failed) return tr;
+                    match(input,FALSE,FOLLOW_FALSE_in_expression1781); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1783);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1760);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1785);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1762);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1787);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =fBtF;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =fBtF;
+                    }
 
                     }
                     break;
@@ -4234,26 +4143,28 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:301:3: ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression )
                     {
                     fBtT=(CommonTree)input.LT(1);
-                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1774); 
+                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1799); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    match(input,BETWEEN,FOLLOW_BETWEEN_in_expression1776); 
-                    match(input,TRUE,FOLLOW_TRUE_in_expression1778); 
-                    pushFollow(FOLLOW_expression_in_expression1780);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    match(input,BETWEEN,FOLLOW_BETWEEN_in_expression1801); if (failed) return tr;
+                    match(input,TRUE,FOLLOW_TRUE_in_expression1803); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1805);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1782);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1807);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1784);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1809);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =fBtT;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =fBtT;
+                    }
 
                     }
                     break;
@@ -4261,20 +4172,22 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:302:3: ^(bitOr= BITWISEOR expression expression )
                     {
                     bitOr=(CommonTree)input.LT(1);
-                    match(input,BITWISEOR,FOLLOW_BITWISEOR_in_expression1796); 
+                    match(input,BITWISEOR,FOLLOW_BITWISEOR_in_expression1821); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1798);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1823);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1800);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1825);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =bitOr;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =bitOr;
+                    }
 
                     }
                     break;
@@ -4282,20 +4195,22 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:303:3: ^(amp= AMPERSAND expression expression )
                     {
                     amp=(CommonTree)input.LT(1);
-                    match(input,AMPERSAND,FOLLOW_AMPERSAND_in_expression1812); 
+                    match(input,AMPERSAND,FOLLOW_AMPERSAND_in_expression1837); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1814);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1839);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1816);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1841);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =amp;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =amp;
+                    }
 
                     }
                     break;
@@ -4303,13 +4218,13 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:304:3: ^(plus= PLUS expression ( expression )? )
                     {
                     plus=(CommonTree)input.LT(1);
-                    match(input,PLUS,FOLLOW_PLUS_in_expression1828); 
+                    match(input,PLUS,FOLLOW_PLUS_in_expression1853); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1830);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1855);
                     expression();
                     _fsp--;
-
+                    if (failed) return tr;
                     // QSpecBuilder2.g:304:26: ( expression )?
                     int alt52=2;
                     int LA52_0 = input.LA(1);
@@ -4321,10 +4236,10 @@ public class QSpecBuilder2 extends TreeParser {
                         case 1 :
                             // QSpecBuilder2.g:304:26: expression
                             {
-                            pushFollow(FOLLOW_expression_in_expression1832);
+                            pushFollow(FOLLOW_expression_in_expression1857);
                             expression();
                             _fsp--;
-
+                            if (failed) return tr;
 
                             }
                             break;
@@ -4332,8 +4247,10 @@ public class QSpecBuilder2 extends TreeParser {
                     }
 
 
-                    match(input, Token.UP, null); 
-                    tr =plus;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =plus;
+                    }
 
                     }
                     break;
@@ -4341,13 +4258,13 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:305:3: ^(minus= MINUS expression ( expression )? )
                     {
                     minus=(CommonTree)input.LT(1);
-                    match(input,MINUS,FOLLOW_MINUS_in_expression1845); 
+                    match(input,MINUS,FOLLOW_MINUS_in_expression1870); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1847);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1872);
                     expression();
                     _fsp--;
-
+                    if (failed) return tr;
                     // QSpecBuilder2.g:305:28: ( expression )?
                     int alt53=2;
                     int LA53_0 = input.LA(1);
@@ -4359,10 +4276,10 @@ public class QSpecBuilder2 extends TreeParser {
                         case 1 :
                             // QSpecBuilder2.g:305:28: expression
                             {
-                            pushFollow(FOLLOW_expression_in_expression1849);
+                            pushFollow(FOLLOW_expression_in_expression1874);
                             expression();
                             _fsp--;
-
+                            if (failed) return tr;
 
                             }
                             break;
@@ -4370,8 +4287,10 @@ public class QSpecBuilder2 extends TreeParser {
                     }
 
 
-                    match(input, Token.UP, null); 
-                    tr =minus;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =minus;
+                    }
 
                     }
                     break;
@@ -4379,20 +4298,22 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:306:3: ^(star= STAR expression expression )
                     {
                     star=(CommonTree)input.LT(1);
-                    match(input,STAR,FOLLOW_STAR_in_expression1862); 
+                    match(input,STAR,FOLLOW_STAR_in_expression1887); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1864);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1889);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1866);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1891);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =star;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =star;
+                    }
 
                     }
                     break;
@@ -4400,20 +4321,22 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:307:3: ^(divide= DIVIDE expression expression )
                     {
                     divide=(CommonTree)input.LT(1);
-                    match(input,DIVIDE,FOLLOW_DIVIDE_in_expression1878); 
+                    match(input,DIVIDE,FOLLOW_DIVIDE_in_expression1903); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1880);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1905);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1882);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1907);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =divide;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =divide;
+                    }
 
                     }
                     break;
@@ -4421,20 +4344,22 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:308:3: ^(mod= MOD expression expression )
                     {
                     mod=(CommonTree)input.LT(1);
-                    match(input,MOD,FOLLOW_MOD_in_expression1894); 
+                    match(input,MOD,FOLLOW_MOD_in_expression1919); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1896);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1921);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1898);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1923);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =mod;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =mod;
+                    }
 
                     }
                     break;
@@ -4442,20 +4367,22 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:309:3: ^(div= DIV expression expression )
                     {
                     div=(CommonTree)input.LT(1);
-                    match(input,DIV,FOLLOW_DIV_in_expression1910); 
+                    match(input,DIV,FOLLOW_DIV_in_expression1935); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1912);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1937);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1914);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1939);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =div;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =div;
+                    }
 
                     }
                     break;
@@ -4463,20 +4390,22 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:310:3: ^(bitxor= BITWISEXOR expression expression )
                     {
                     bitxor=(CommonTree)input.LT(1);
-                    match(input,BITWISEXOR,FOLLOW_BITWISEXOR_in_expression1927); 
+                    match(input,BITWISEXOR,FOLLOW_BITWISEXOR_in_expression1952); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1929);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1954);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1931);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1956);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =bitxor;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =bitxor;
+                    }
 
                     }
                     break;
@@ -4484,20 +4413,22 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:311:3: ^(fnNull= FUNCTION nullCondition expression )
                     {
                     fnNull=(CommonTree)input.LT(1);
-                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1943); 
+                    match(input,FUNCTION,FOLLOW_FUNCTION_in_expression1968); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_nullCondition_in_expression1945);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_nullCondition_in_expression1970);
                     nullCondition();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1947);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1972);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =fnNull;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =fnNull;
+                    }
 
                     }
                     break;
@@ -4505,16 +4436,18 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:314:3: ^(tilde= TILDE expression )
                     {
                     tilde=(CommonTree)input.LT(1);
-                    match(input,TILDE,FOLLOW_TILDE_in_expression1961); 
+                    match(input,TILDE,FOLLOW_TILDE_in_expression1986); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1963);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression1988);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =tilde;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =tilde;
+                    }
 
                     }
                     break;
@@ -4522,20 +4455,22 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:315:3: ^(arry= LSQUARE expression expression )
                     {
                     arry=(CommonTree)input.LT(1);
-                    match(input,LSQUARE,FOLLOW_LSQUARE_in_expression1976); 
+                    match(input,LSQUARE,FOLLOW_LSQUARE_in_expression2001); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1978);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression2003);
                     expression();
                     _fsp--;
-
-                    pushFollow(FOLLOW_expression_in_expression1980);
+                    if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression2005);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
 
-
-                    match(input, Token.UP, null); 
-                    tr =arry;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =arry;
+                    }
 
                     }
                     break;
@@ -4543,17 +4478,19 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:316:3: ^(dot= DOT expression Identifier )
                     {
                     dot=(CommonTree)input.LT(1);
-                    match(input,DOT,FOLLOW_DOT_in_expression1992); 
+                    match(input,DOT,FOLLOW_DOT_in_expression2017); if (failed) return tr;
 
-                    match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression1994);
+                    match(input, Token.DOWN, null); if (failed) return tr;
+                    pushFollow(FOLLOW_expression_in_expression2019);
                     expression();
                     _fsp--;
+                    if (failed) return tr;
+                    match(input,Identifier,FOLLOW_Identifier_in_expression2021); if (failed) return tr;
 
-                    match(input,Identifier,FOLLOW_Identifier_in_expression1996); 
-
-                    match(input, Token.UP, null); 
-                    tr =dot;
+                    match(input, Token.UP, null); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =dot;
+                    }
 
                     }
                     break;
@@ -4561,74 +4498,88 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:317:3: nl= NULL
                     {
                     nl=(CommonTree)input.LT(1);
-                    match(input,NULL,FOLLOW_NULL_in_expression2008); 
-                    tr =nl;
+                    match(input,NULL,FOLLOW_NULL_in_expression2033); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =nl;
+                    }
 
                     }
                     break;
                 case 24 :
                     // QSpecBuilder2.g:318:3: c= constant
                     {
-                    pushFollow(FOLLOW_constant_in_expression2018);
+                    pushFollow(FOLLOW_constant_in_expression2043);
                     c=constant();
                     _fsp--;
-
-                    tr = c;
+                    if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr = c;
+                    }
 
                     }
                     break;
                 case 25 :
                     // QSpecBuilder2.g:319:3: f= function
                     {
-                    pushFollow(FOLLOW_function_in_expression2029);
+                    pushFollow(FOLLOW_function_in_expression2054);
                     f=function();
                     _fsp--;
-
-                    tr = f;
+                    if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr = f;
+                    }
 
                     }
                     break;
                 case 26 :
                     // QSpecBuilder2.g:320:3: cs= castExpr
                     {
-                    pushFollow(FOLLOW_castExpr_in_expression2040);
+                    pushFollow(FOLLOW_castExpr_in_expression2065);
                     cs=castExpr();
                     _fsp--;
-
-                    tr = cs;
+                    if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr = cs;
+                    }
 
                     }
                     break;
                 case 27 :
                     // QSpecBuilder2.g:321:3: cse= caseExpr
                     {
-                    pushFollow(FOLLOW_caseExpr_in_expression2051);
+                    pushFollow(FOLLOW_caseExpr_in_expression2076);
                     cse=caseExpr();
                     _fsp--;
-
-                    tr = cse;
+                    if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr = cse;
+                    }
 
                     }
                     break;
                 case 28 :
                     // QSpecBuilder2.g:322:3: whn= whenExpr
                     {
-                    pushFollow(FOLLOW_whenExpr_in_expression2062);
+                    pushFollow(FOLLOW_whenExpr_in_expression2087);
                     whn=whenExpr();
                     _fsp--;
-
-                    tr = whn;
+                    if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr = whn;
+                    }
 
                     }
                     break;
                 case 29 :
                     // QSpecBuilder2.g:323:3: tc= tableOrColumn
                     {
-                    pushFollow(FOLLOW_tableOrColumn_in_expression2073);
+                    pushFollow(FOLLOW_tableOrColumn_in_expression2098);
                     tc=tableOrColumn();
                     _fsp--;
-
-                    tr =tc;
+                    if (failed) return tr;
+                    if ( backtracking==0 ) {
+                      tr =tc;
+                    }
 
                     }
                     break;
@@ -4666,6 +4617,7 @@ public class QSpecBuilder2 extends TreeParser {
                 alt55=2;
             }
             else {
+                if (backtracking>0) {failed=true; return tr;}
                 NoViableAltException nvae =
                     new NoViableAltException("326:1: booleanValue returns [CommonTree tr] : (t= TRUE | f= FALSE );", 55, 0, input);
 
@@ -4676,8 +4628,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:328:5: t= TRUE
                     {
                     t=(CommonTree)input.LT(1);
-                    match(input,TRUE,FOLLOW_TRUE_in_booleanValue2098); 
-                     tr = t; 
+                    match(input,TRUE,FOLLOW_TRUE_in_booleanValue2123); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                       tr = t; 
+                    }
 
                     }
                     break;
@@ -4685,8 +4639,10 @@ public class QSpecBuilder2 extends TreeParser {
                     // QSpecBuilder2.g:329:5: f= FALSE
                     {
                     f=(CommonTree)input.LT(1);
-                    match(input,FALSE,FOLLOW_FALSE_in_booleanValue2111); 
-                     tr = f; 
+                    match(input,FALSE,FOLLOW_FALSE_in_booleanValue2136); if (failed) return tr;
+                    if ( backtracking==0 ) {
+                       tr = f; 
+                    }
 
                     }
                     break;
@@ -4713,9 +4669,10 @@ public class QSpecBuilder2 extends TreeParser {
             {
             if ( (input.LA(1)>=TINYINT && input.LA(1)<=BINARY) ) {
                 input.consume();
-                errorRecovery=false;
+                errorRecovery=false;failed=false;
             }
             else {
+                if (backtracking>0) {failed=true; return ;}
                 MismatchedSetException mse =
                     new MismatchedSetException(null,input);
                 recoverFromMismatchedSet(input,mse,FOLLOW_set_in_primitiveType0);    throw mse;
@@ -4753,13 +4710,14 @@ public class QSpecBuilder2 extends TreeParser {
                 if ( (LA56_1==DOWN) ) {
                     int LA56_2 = input.LA(3);
 
-                    if ( (LA56_2==StringLiteral) ) {
-                        alt56=2;
-                    }
-                    else if ( (LA56_2==Identifier) ) {
+                    if ( (LA56_2==Identifier) ) {
                         alt56=1;
                     }
+                    else if ( (LA56_2==StringLiteral) ) {
+                        alt56=2;
+                    }
                     else {
+                        if (backtracking>0) {failed=true; return ;}
                         NoViableAltException nvae =
                             new NoViableAltException("347:1: namevalue[INameValueList properties] : ( ^( PARAM n= Identifier v= StringLiteral ) | ^( PARAM n= StringLiteral v= StringLiteral ) );", 56, 2, input);
 
@@ -4767,6 +4725,7 @@ public class QSpecBuilder2 extends TreeParser {
                     }
                 }
                 else {
+                    if (backtracking>0) {failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("347:1: namevalue[INameValueList properties] : ( ^( PARAM n= Identifier v= StringLiteral ) | ^( PARAM n= StringLiteral v= StringLiteral ) );", 56, 1, input);
 
@@ -4774,6 +4733,7 @@ public class QSpecBuilder2 extends TreeParser {
                 }
             }
             else {
+                if (backtracking>0) {failed=true; return ;}
                 NoViableAltException nvae =
                     new NoViableAltException("347:1: namevalue[INameValueList properties] : ( ^( PARAM n= Identifier v= StringLiteral ) | ^( PARAM n= StringLiteral v= StringLiteral ) );", 56, 0, input);
 
@@ -4783,32 +4743,36 @@ public class QSpecBuilder2 extends TreeParser {
                 case 1 :
                     // QSpecBuilder2.g:348:2: ^( PARAM n= Identifier v= StringLiteral )
                     {
-                    match(input,PARAM,FOLLOW_PARAM_in_namevalue2236); 
+                    match(input,PARAM,FOLLOW_PARAM_in_namevalue2261); if (failed) return ;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return ;
                     n=(CommonTree)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_namevalue2240); 
+                    match(input,Identifier,FOLLOW_Identifier_in_namevalue2265); if (failed) return ;
                     v=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue2244); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue2269); if (failed) return ;
 
-                    match(input, Token.UP, null); 
-                    properties.add(n.getText(), v.getText());
+                    match(input, Token.UP, null); if (failed) return ;
+                    if ( backtracking==0 ) {
+                      properties.add(n.getText(), v.getText());
+                    }
 
                     }
                     break;
                 case 2 :
                     // QSpecBuilder2.g:349:2: ^( PARAM n= StringLiteral v= StringLiteral )
                     {
-                    match(input,PARAM,FOLLOW_PARAM_in_namevalue2253); 
+                    match(input,PARAM,FOLLOW_PARAM_in_namevalue2278); if (failed) return ;
 
-                    match(input, Token.DOWN, null); 
+                    match(input, Token.DOWN, null); if (failed) return ;
                     n=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue2257); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue2282); if (failed) return ;
                     v=(CommonTree)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue2261); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_namevalue2286); if (failed) return ;
 
-                    match(input, Token.UP, null); 
-                    properties.add(n.getText(), v.getText());
+                    match(input, Token.UP, null); if (failed) return ;
+                    if ( backtracking==0 ) {
+                      properties.add(n.getText(), v.getText());
+                    }
 
                     }
                     break;
@@ -4825,7 +4789,2046 @@ public class QSpecBuilder2 extends TreeParser {
     }
     // $ANTLR end namevalue
 
+    // $ANTLR start synpred1
+    public final void synpred1_fragment() throws RecognitionException {   
+        // QSpecBuilder2.g:295:3: ( NOT DOWN negatableOperator )
+        // QSpecBuilder2.g:295:4: NOT DOWN negatableOperator
+        {
+        match(input,NOT,FOLLOW_NOT_in_synpred11659); if (failed) return ;
+        match(input,DOWN,FOLLOW_DOWN_in_synpred11661); if (failed) return ;
+        pushFollow(FOLLOW_negatableOperator_in_synpred11663);
+        negatableOperator();
+        _fsp--;
+        if (failed) return ;
 
+        }
+    }
+    // $ANTLR end synpred1
+
+    // $ANTLR start synpred2
+    public final void synpred2_fragment() throws RecognitionException {   
+        // QSpecBuilder2.g:296:3: ( NOT DOWN FUNCTION )
+        // QSpecBuilder2.g:296:4: NOT DOWN FUNCTION
+        {
+        match(input,NOT,FOLLOW_NOT_in_synpred21691); if (failed) return ;
+        match(input,DOWN,FOLLOW_DOWN_in_synpred21693); if (failed) return ;
+        match(input,FUNCTION,FOLLOW_FUNCTION_in_synpred21695); if (failed) return ;
+
+        }
+    }
+    // $ANTLR end synpred2
+
+    public final boolean synpred1() {
+        backtracking++;
+        int start = input.mark();
+        try {
+            synpred1_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !failed;
+        input.rewind(start);
+        backtracking--;
+        failed=false;
+        return success;
+    }
+    public final boolean synpred2() {
+        backtracking++;
+        int start = input.mark();
+        try {
+            synpred2_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !failed;
+        input.rewind(start);
+        backtracking--;
+        failed=false;
+        return success;
+    }
+
+
+    protected DFA54 dfa54 = new DFA54(this);
+    static final String DFA54_eotS =
+        "\u061b\uffff";
+    static final String DFA54_eofS =
+        "\u061b\uffff";
+    static final String DFA54_minS =
+        "\1\11\2\uffff\1\2\1\uffff\1\2\20\uffff\1\11\1\26\4\2\1\uffff\1\171"+
+        "\5\uffff\1\26\1\11\2\uffff\1\11\32\2\3\11\1\2\3\11\1\2\2\11\35\2"+
+        "\3\3\1\2\3\3\1\2\2\3\3\2\4\11\1\26\14\11\32\2\3\3\1\2\3\3\1\2\2"+
+        "\3\3\2\1\62\1\136\3\50\4\11\1\26\14\11\32\2\3\3\1\2\3\3\1\2\2\3"+
+        "\3\2\1\3\1\62\1\136\3\50\5\2\u0525\0";
+    static final String DFA54_maxS =
+        "\1\172\2\uffff\1\2\1\uffff\1\2\20\uffff\1\172\1\u0086\4\2\1\uffff"+
+        "\1\172\5\uffff\1\u0086\1\172\2\uffff\1\172\32\2\3\172\1\2\3\172"+
+        "\1\2\2\172\35\2\3\172\1\2\3\172\1\2\2\172\3\2\4\172\1\u0086\14\172"+
+        "\32\2\3\3\1\2\3\3\1\2\2\3\3\2\1\62\1\136\2\124\1\50\4\172\1\u0086"+
+        "\14\172\32\2\3\172\1\2\3\172\1\2\2\172\3\2\1\3\1\62\1\136\2\124"+
+        "\1\50\5\2\u0525\0";
+    static final String DFA54_acceptS =
+        "\1\uffff\1\1\1\2\1\uffff\1\6\1\uffff\1\12\1\13\1\14\1\15\1\16\1"+
+        "\17\1\20\1\21\1\22\1\24\1\25\1\26\1\27\1\30\1\31\1\35\6\uffff\1"+
+        "\5\1\uffff\1\33\1\34\1\7\1\23\1\32\2\uffff\1\11\1\10\u05f4\uffff";
+    static final String DFA54_specialS =
+        "\u061b\uffff}>";
+    static final String[] DFA54_transitionS = {
+            "\1\5\12\uffff\2\23\1\uffff\2\24\2\uffff\1\25\16\uffff\1\21\6"+
+            "\uffff\1\4\1\23\11\uffff\1\12\11\uffff\1\2\5\uffff\1\23\16\uffff"+
+            "\3\23\2\uffff\1\1\1\3\11\4\1\uffff\1\6\1\7\1\10\1\11\1\13\1"+
+            "\14\1\15\1\16\1\22\1\uffff\1\17\1\20\1\uffff\2\23",
+            "",
+            "",
+            "\1\26",
+            "",
+            "\1\27",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "\1\30\12\uffff\2\34\1\uffff\2\34\2\uffff\1\34\16\uffff\1\34"+
+            "\6\uffff\2\34\11\uffff\1\34\11\uffff\1\34\5\uffff\1\34\16\uffff"+
+            "\3\34\2\uffff\2\34\1\31\1\32\1\33\6\34\1\uffff\11\34\1\uffff"+
+            "\2\34\1\uffff\2\34",
+            "\1\41\21\uffff\1\24\34\uffff\1\35\12\uffff\5\24\1\uffff\1\36"+
+            "\1\37\23\uffff\1\40\10\uffff\1\41\6\uffff\14\42",
+            "\1\43",
+            "\1\44",
+            "\1\44",
+            "\1\44",
+            "",
+            "\1\45\1\46",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "\1\34\21\uffff\1\34\34\uffff\1\34\12\uffff\5\34\1\uffff\2\34"+
+            "\23\uffff\1\47\10\uffff\1\34\6\uffff\14\34",
+            "\1\65\12\uffff\1\105\1\111\1\uffff\1\114\1\115\2\uffff\1\116"+
+            "\16\uffff\1\101\6\uffff\1\56\1\104\11\uffff\1\72\11\uffff\1"+
+            "\51\5\uffff\1\103\16\uffff\1\106\1\107\1\110\2\uffff\1\50\1"+
+            "\52\1\53\1\54\1\55\1\57\1\60\1\61\1\62\1\63\1\64\1\uffff\1\66"+
+            "\1\67\1\70\1\71\1\73\1\74\1\75\1\76\1\102\1\uffff\1\77\1\100"+
+            "\1\uffff\1\112\1\113",
+            "",
+            "",
+            "\1\134\12\uffff\1\154\1\160\1\uffff\1\163\1\164\2\uffff\1\165"+
+            "\16\uffff\1\150\6\uffff\1\125\1\153\11\uffff\1\141\11\uffff"+
+            "\1\120\5\uffff\1\152\16\uffff\1\155\1\156\1\157\2\uffff\1\117"+
+            "\1\121\1\122\1\123\1\124\1\126\1\127\1\130\1\131\1\132\1\133"+
+            "\1\uffff\1\135\1\136\1\137\1\140\1\142\1\143\1\144\1\145\1\151"+
+            "\1\uffff\1\146\1\147\1\uffff\1\161\1\162",
+            "\1\166",
+            "\1\167",
+            "\1\170",
+            "\1\171",
+            "\1\171",
+            "\1\171",
+            "\1\171",
+            "\1\171",
+            "\1\171",
+            "\1\171",
+            "\1\171",
+            "\1\171",
+            "\1\171",
+            "\1\172",
+            "\1\173",
+            "\1\174",
+            "\1\175",
+            "\1\176",
+            "\1\177",
+            "\1\u0080",
+            "\1\u0081",
+            "\1\u0082",
+            "\1\u0083",
+            "\1\u0084",
+            "\1\u0085",
+            "\1\u0086",
+            "\1\u0094\12\uffff\1\u00a4\1\u00a8\1\uffff\1\u00ab\1\u00ac\2"+
+            "\uffff\1\u00ad\16\uffff\1\u00a0\6\uffff\1\u008d\1\u00a3\11\uffff"+
+            "\1\u0099\11\uffff\1\u0088\5\uffff\1\u00a2\16\uffff\1\u00a5\1"+
+            "\u00a6\1\u00a7\2\uffff\1\u0087\1\u0089\1\u008a\1\u008b\1\u008c"+
+            "\1\u008e\1\u008f\1\u0090\1\u0091\1\u0092\1\u0093\1\uffff\1\u0095"+
+            "\1\u0096\1\u0097\1\u0098\1\u009a\1\u009b\1\u009c\1\u009d\1\u00a1"+
+            "\1\uffff\1\u009e\1\u009f\1\uffff\1\u00a9\1\u00aa",
+            "\1\u0094\12\uffff\1\u00a4\1\u00a8\1\uffff\1\u00ab\1\u00ac\2"+
+            "\uffff\1\u00ad\16\uffff\1\u00a0\6\uffff\1\u008d\1\u00a3\11\uffff"+
+            "\1\u0099\11\uffff\1\u0088\5\uffff\1\u00a2\16\uffff\1\u00a5\1"+
+            "\u00a6\1\u00a7\2\uffff\1\u0087\1\u0089\1\u008a\1\u008b\1\u008c"+
+            "\1\u008e\1\u008f\1\u0090\1\u0091\1\u0092\1\u0093\1\uffff\1\u0095"+
+            "\1\u0096\1\u0097\1\u0098\1\u009a\1\u009b\1\u009c\1\u009d\1\u00a1"+
+            "\1\uffff\1\u009e\1\u009f\1\uffff\1\u00a9\1\u00aa",
+            "\1\u0094\12\uffff\1\u00a4\1\u00a8\1\uffff\1\u00ab\1\u00ac\2"+
+            "\uffff\1\u00ad\16\uffff\1\u00a0\6\uffff\1\u008d\1\u00a3\11\uffff"+
+            "\1\u0099\11\uffff\1\u0088\5\uffff\1\u00a2\16\uffff\1\u00a5\1"+
+            "\u00a6\1\u00a7\2\uffff\1\u0087\1\u0089\1\u008a\1\u008b\1\u008c"+
+            "\1\u008e\1\u008f\1\u0090\1\u0091\1\u0092\1\u0093\1\uffff\1\u0095"+
+            "\1\u0096\1\u0097\1\u0098\1\u009a\1\u009b\1\u009c\1\u009d\1\u00a1"+
+            "\1\uffff\1\u009e\1\u009f\1\uffff\1\u00a9\1\u00aa",
+            "\1\u00ae",
+            "\1\u0094\12\uffff\1\u00a4\1\u00a8\1\uffff\1\u00ab\1\u00ac\2"+
+            "\uffff\1\u00ad\16\uffff\1\u00a0\6\uffff\1\u008d\1\u00a3\11\uffff"+
+            "\1\u0099\11\uffff\1\u0088\5\uffff\1\u00a2\16\uffff\1\u00a5\1"+
+            "\u00a6\1\u00a7\2\uffff\1\u0087\1\u0089\1\u008a\1\u008b\1\u008c"+
+            "\1\u008e\1\u008f\1\u0090\1\u0091\1\u0092\1\u0093\1\uffff\1\u0095"+
+            "\1\u0096\1\u0097\1\u0098\1\u009a\1\u009b\1\u009c\1\u009d\1\u00a1"+
+            "\1\uffff\1\u009e\1\u009f\1\uffff\1\u00a9\1\u00aa",
+            "\1\u0094\12\uffff\1\u00a4\1\u00a8\1\uffff\1\u00ab\1\u00ac\2"+
+            "\uffff\1\u00ad\16\uffff\1\u00a0\6\uffff\1\u008d\1\u00a3\11\uffff"+
+            "\1\u0099\11\uffff\1\u0088\5\uffff\1\u00a2\16\uffff\1\u00a5\1"+
+            "\u00a6\1\u00a7\2\uffff\1\u0087\1\u0089\1\u008a\1\u008b\1\u008c"+
+            "\1\u008e\1\u008f\1\u0090\1\u0091\1\u0092\1\u0093\1\uffff\1\u0095"+
+            "\1\u0096\1\u0097\1\u0098\1\u009a\1\u009b\1\u009c\1\u009d\1\u00a1"+
+            "\1\uffff\1\u009e\1\u009f\1\uffff\1\u00a9\1\u00aa",
+            "\1\u0094\12\uffff\1\u00a4\1\u00a8\1\uffff\1\u00ab\1\u00ac\2"+
+            "\uffff\1\u00ad\16\uffff\1\u00a0\6\uffff\1\u008d\1\u00a3\11\uffff"+
+            "\1\u0099\11\uffff\1\u0088\5\uffff\1\u00a2\16\uffff\1\u00a5\1"+
+            "\u00a6\1\u00a7\2\uffff\1\u0087\1\u0089\1\u008a\1\u008b\1\u008c"+
+            "\1\u008e\1\u008f\1\u0090\1\u0091\1\u0092\1\u0093\1\uffff\1\u0095"+
+            "\1\u0096\1\u0097\1\u0098\1\u009a\1\u009b\1\u009c\1\u009d\1\u00a1"+
+            "\1\uffff\1\u009e\1\u009f\1\uffff\1\u00a9\1\u00aa",
+            "\1\u00af",
+            "\1\u0094\12\uffff\1\u00a4\1\u00a8\1\uffff\1\u00ab\1\u00ac\2"+
+            "\uffff\1\u00ad\16\uffff\1\u00a0\6\uffff\1\u008d\1\u00a3\11\uffff"+
+            "\1\u0099\11\uffff\1\u0088\5\uffff\1\u00a2\16\uffff\1\u00a5\1"+
+            "\u00a6\1\u00a7\2\uffff\1\u0087\1\u0089\1\u008a\1\u008b\1\u008c"+
+            "\1\u008e\1\u008f\1\u0090\1\u0091\1\u0092\1\u0093\1\uffff\1\u0095"+
+            "\1\u0096\1\u0097\1\u0098\1\u009a\1\u009b\1\u009c\1\u009d\1\u00a1"+
+            "\1\uffff\1\u009e\1\u009f\1\uffff\1\u00a9\1\u00aa",
+            "\1\u0094\12\uffff\1\u00a4\1\u00a8\1\uffff\1\u00ab\1\u00ac\2"+
+            "\uffff\1\u00ad\16\uffff\1\u00a0\6\uffff\1\u008d\1\u00a3\11\uffff"+
+            "\1\u0099\11\uffff\1\u0088\5\uffff\1\u00a2\16\uffff\1\u00a5\1"+
+            "\u00a6\1\u00a7\2\uffff\1\u0087\1\u0089\1\u008a\1\u008b\1\u008c"+
+            "\1\u008e\1\u008f\1\u0090\1\u0091\1\u0092\1\u0093\1\uffff\1\u0095"+
+            "\1\u0096\1\u0097\1\u0098\1\u009a\1\u009b\1\u009c\1\u009d\1\u00a1"+
+            "\1\uffff\1\u009e\1\u009f\1\uffff\1\u00a9\1\u00aa",
+            "\1\u00b0",
+            "\1\u00b1",
+            "\1\u00b2",
+            "\1\u00b3",
+            "\1\u00b4",
+            "\1\u00b5",
+            "\1\u00b6",
+            "\1\u00b6",
+            "\1\u00b6",
+            "\1\u00b6",
+            "\1\u00b6",
+            "\1\u00b6",
+            "\1\u00b6",
+            "\1\u00b6",
+            "\1\u00b6",
+            "\1\u00b6",
+            "\1\u00b7",
+            "\1\u00b8",
+            "\1\u00b9",
+            "\1\u00ba",
+            "\1\u00bb",
+            "\1\u00bc",
+            "\1\u00bd",
+            "\1\u00be",
+            "\1\u00bf",
+            "\1\u00c0",
+            "\1\u00c1",
+            "\1\u00c2",
+            "\1\u00c3",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u00ec",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u00ed",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u00ee",
+            "\1\u00ef",
+            "\1\u00f0",
+            "\1\u00fe\12\uffff\1\u010e\1\u0112\1\uffff\1\u0115\1\u0116\2"+
+            "\uffff\1\u0117\16\uffff\1\u010a\6\uffff\1\u00f7\1\u010d\11\uffff"+
+            "\1\u0103\11\uffff\1\u00f2\5\uffff\1\u010c\16\uffff\1\u010f\1"+
+            "\u0110\1\u0111\2\uffff\1\u00f1\1\u00f3\1\u00f4\1\u00f5\1\u00f6"+
+            "\1\u00f8\1\u00f9\1\u00fa\1\u00fb\1\u00fc\1\u00fd\1\uffff\1\u00ff"+
+            "\1\u0100\1\u0101\1\u0102\1\u0104\1\u0105\1\u0106\1\u0107\1\u010b"+
+            "\1\uffff\1\u0108\1\u0109\1\uffff\1\u0113\1\u0114",
+            "\1\u0125\12\uffff\1\u0135\1\u0139\1\uffff\1\u013c\1\u013d\2"+
+            "\uffff\1\u013e\16\uffff\1\u0131\6\uffff\1\u011e\1\u0134\11\uffff"+
+            "\1\u012a\11\uffff\1\u0119\5\uffff\1\u0133\16\uffff\1\u0136\1"+
+            "\u0137\1\u0138\2\uffff\1\u0118\1\u011a\1\u011b\1\u011c\1\u011d"+
+            "\1\u011f\1\u0120\1\u0121\1\u0122\1\u0123\1\u0124\1\uffff\1\u0126"+
+            "\1\u0127\1\u0128\1\u0129\1\u012b\1\u012c\1\u012d\1\u012e\1\u0132"+
+            "\1\uffff\1\u012f\1\u0130\1\uffff\1\u013a\1\u013b",
+            "\1\u013f\12\uffff\1\u015c\1\u0160\1\uffff\1\u0163\1\u0164\2"+
+            "\uffff\1\u0165\16\uffff\1\u0158\6\uffff\1\u0146\1\u015b\11\uffff"+
+            "\1\u0151\11\uffff\1\u0144\5\uffff\1\u015a\16\uffff\1\u015d\1"+
+            "\u015e\1\u015f\2\uffff\1\u0143\1\u0145\1\u0140\1\u0141\1\u0142"+
+            "\1\u0147\1\u0148\1\u0149\1\u014a\1\u014b\1\u014c\1\uffff\1\u014d"+
+            "\1\u014e\1\u014f\1\u0150\1\u0152\1\u0153\1\u0154\1\u0155\1\u0159"+
+            "\1\uffff\1\u0156\1\u0157\1\uffff\1\u0161\1\u0162",
+            "\1\u0173\12\uffff\1\u0183\1\u0187\1\uffff\1\u018a\1\u018b\2"+
+            "\uffff\1\u018c\16\uffff\1\u017f\6\uffff\1\u016c\1\u0182\11\uffff"+
+            "\1\u0178\11\uffff\1\u0167\5\uffff\1\u0181\16\uffff\1\u0184\1"+
+            "\u0185\1\u0186\2\uffff\1\u0166\1\u0168\1\u0169\1\u016a\1\u016b"+
+            "\1\u016d\1\u016e\1\u016f\1\u0170\1\u0171\1\u0172\1\uffff\1\u0174"+
+            "\1\u0175\1\u0176\1\u0177\1\u0179\1\u017a\1\u017b\1\u017c\1\u0180"+
+            "\1\uffff\1\u017d\1\u017e\1\uffff\1\u0188\1\u0189",
+            "\1\u0191\21\uffff\1\u0193\34\uffff\1\u018f\12\uffff\5\u0193"+
+            "\1\uffff\1\u018e\1\u018d\23\uffff\1\u0190\10\uffff\1\u0191\6"+
+            "\uffff\14\u0192",
+            "\1\u01a1\12\uffff\1\u01b1\1\u01b5\1\uffff\1\u01b8\1\u01b9\2"+
+            "\uffff\1\u01ba\16\uffff\1\u01ad\6\uffff\1\u019a\1\u01b0\11\uffff"+
+            "\1\u01a6\11\uffff\1\u0195\5\uffff\1\u01af\16\uffff\1\u01b2\1"+
+            "\u01b3\1\u01b4\2\uffff\1\u0194\1\u0196\1\u0197\1\u0198\1\u0199"+
+            "\1\u019b\1\u019c\1\u019d\1\u019e\1\u019f\1\u01a0\1\uffff\1\u01a2"+
+            "\1\u01a3\1\u01a4\1\u01a5\1\u01a7\1\u01a8\1\u01a9\1\u01aa\1\u01ae"+
+            "\1\uffff\1\u01ab\1\u01ac\1\uffff\1\u01b6\1\u01b7",
+            "\1\u01c8\12\uffff\1\u01d8\1\u01dc\1\uffff\1\u01df\1\u01e0\2"+
+            "\uffff\1\u01e1\16\uffff\1\u01d4\6\uffff\1\u01c1\1\u01d7\11\uffff"+
+            "\1\u01cd\11\uffff\1\u01bc\5\uffff\1\u01d6\16\uffff\1\u01d9\1"+
+            "\u01da\1\u01db\2\uffff\1\u01bb\1\u01bd\1\u01be\1\u01bf\1\u01c0"+
+            "\1\u01c2\1\u01c3\1\u01c4\1\u01c5\1\u01c6\1\u01c7\1\uffff\1\u01c9"+
+            "\1\u01ca\1\u01cb\1\u01cc\1\u01ce\1\u01cf\1\u01d0\1\u01d1\1\u01d5"+
+            "\1\uffff\1\u01d2\1\u01d3\1\uffff\1\u01dd\1\u01de",
+            "\1\u01ef\12\uffff\1\u01ff\1\u0203\1\uffff\1\u0206\1\u0207\2"+
+            "\uffff\1\u0208\16\uffff\1\u01fb\6\uffff\1\u01e8\1\u01fe\11\uffff"+
+            "\1\u01f4\11\uffff\1\u01e3\5\uffff\1\u01fd\16\uffff\1\u0200\1"+
+            "\u0201\1\u0202\2\uffff\1\u01e2\1\u01e4\1\u01e5\1\u01e6\1\u01e7"+
+            "\1\u01e9\1\u01ea\1\u01eb\1\u01ec\1\u01ed\1\u01ee\1\uffff\1\u01f0"+
+            "\1\u01f1\1\u01f2\1\u01f3\1\u01f5\1\u01f6\1\u01f7\1\u01f8\1\u01fc"+
+            "\1\uffff\1\u01f9\1\u01fa\1\uffff\1\u0204\1\u0205",
+            "\1\u0216\12\uffff\1\u0226\1\u022a\1\uffff\1\u022d\1\u022e\2"+
+            "\uffff\1\u022f\16\uffff\1\u0222\6\uffff\1\u020f\1\u0225\11\uffff"+
+            "\1\u021b\11\uffff\1\u020a\5\uffff\1\u0224\16\uffff\1\u0227\1"+
+            "\u0228\1\u0229\2\uffff\1\u0209\1\u020b\1\u020c\1\u020d\1\u020e"+
+            "\1\u0210\1\u0211\1\u0212\1\u0213\1\u0214\1\u0215\1\uffff\1\u0217"+
+            "\1\u0218\1\u0219\1\u021a\1\u021c\1\u021d\1\u021e\1\u021f\1\u0223"+
+            "\1\uffff\1\u0220\1\u0221\1\uffff\1\u022b\1\u022c",
+            "\1\u023d\12\uffff\1\u024d\1\u0251\1\uffff\1\u0254\1\u0255\2"+
+            "\uffff\1\u0256\16\uffff\1\u0249\6\uffff\1\u0236\1\u024c\11\uffff"+
+            "\1\u0242\11\uffff\1\u0231\5\uffff\1\u024b\16\uffff\1\u024e\1"+
+            "\u024f\1\u0250\2\uffff\1\u0230\1\u0232\1\u0233\1\u0234\1\u0235"+
+            "\1\u0237\1\u0238\1\u0239\1\u023a\1\u023b\1\u023c\1\uffff\1\u023e"+
+            "\1\u023f\1\u0240\1\u0241\1\u0243\1\u0244\1\u0245\1\u0246\1\u024a"+
+            "\1\uffff\1\u0247\1\u0248\1\uffff\1\u0252\1\u0253",
+            "\1\u0264\12\uffff\1\u0274\1\u0278\1\uffff\1\u027b\1\u027c\2"+
+            "\uffff\1\u027d\16\uffff\1\u0270\6\uffff\1\u025d\1\u0273\11\uffff"+
+            "\1\u0269\11\uffff\1\u0258\5\uffff\1\u0272\16\uffff\1\u0275\1"+
+            "\u0276\1\u0277\2\uffff\1\u0257\1\u0259\1\u025a\1\u025b\1\u025c"+
+            "\1\u025e\1\u025f\1\u0260\1\u0261\1\u0262\1\u0263\1\uffff\1\u0265"+
+            "\1\u0266\1\u0267\1\u0268\1\u026a\1\u026b\1\u026c\1\u026d\1\u0271"+
+            "\1\uffff\1\u026e\1\u026f\1\uffff\1\u0279\1\u027a",
+            "\1\u028b\12\uffff\1\u029b\1\u029f\1\uffff\1\u02a2\1\u02a3\2"+
+            "\uffff\1\u02a4\16\uffff\1\u0297\6\uffff\1\u0284\1\u029a\11\uffff"+
+            "\1\u0290\11\uffff\1\u027f\5\uffff\1\u0299\16\uffff\1\u029c\1"+
+            "\u029d\1\u029e\2\uffff\1\u027e\1\u0280\1\u0281\1\u0282\1\u0283"+
+            "\1\u0285\1\u0286\1\u0287\1\u0288\1\u0289\1\u028a\1\uffff\1\u028c"+
+            "\1\u028d\1\u028e\1\u028f\1\u0291\1\u0292\1\u0293\1\u0294\1\u0298"+
+            "\1\uffff\1\u0295\1\u0296\1\uffff\1\u02a0\1\u02a1",
+            "\1\u02b2\12\uffff\1\u02c2\1\u02c6\1\uffff\1\u02c9\1\u02ca\2"+
+            "\uffff\1\u02cb\16\uffff\1\u02be\6\uffff\1\u02ab\1\u02c1\11\uffff"+
+            "\1\u02b7\11\uffff\1\u02a6\5\uffff\1\u02c0\16\uffff\1\u02c3\1"+
+            "\u02c4\1\u02c5\2\uffff\1\u02a5\1\u02a7\1\u02a8\1\u02a9\1\u02aa"+
+            "\1\u02ac\1\u02ad\1\u02ae\1\u02af\1\u02b0\1\u02b1\1\uffff\1\u02b3"+
+            "\1\u02b4\1\u02b5\1\u02b6\1\u02b8\1\u02b9\1\u02ba\1\u02bb\1\u02bf"+
+            "\1\uffff\1\u02bc\1\u02bd\1\uffff\1\u02c7\1\u02c8",
+            "\1\u02d9\12\uffff\1\u02e9\1\u02ed\1\uffff\1\u02f0\1\u02f1\2"+
+            "\uffff\1\u02f2\16\uffff\1\u02e5\6\uffff\1\u02d2\1\u02e8\11\uffff"+
+            "\1\u02de\11\uffff\1\u02cd\5\uffff\1\u02e7\16\uffff\1\u02ea\1"+
+            "\u02eb\1\u02ec\2\uffff\1\u02cc\1\u02ce\1\u02cf\1\u02d0\1\u02d1"+
+            "\1\u02d3\1\u02d4\1\u02d5\1\u02d6\1\u02d7\1\u02d8\1\uffff\1\u02da"+
+            "\1\u02db\1\u02dc\1\u02dd\1\u02df\1\u02e0\1\u02e1\1\u02e2\1\u02e6"+
+            "\1\uffff\1\u02e3\1\u02e4\1\uffff\1\u02ee\1\u02ef",
+            "\1\u0300\12\uffff\1\u0310\1\u0314\1\uffff\1\u0317\1\u0318\2"+
+            "\uffff\1\u0319\16\uffff\1\u030c\6\uffff\1\u02f9\1\u030f\11\uffff"+
+            "\1\u0305\11\uffff\1\u02f4\5\uffff\1\u030e\16\uffff\1\u0311\1"+
+            "\u0312\1\u0313\2\uffff\1\u02f3\1\u02f5\1\u02f6\1\u02f7\1\u02f8"+
+            "\1\u02fa\1\u02fb\1\u02fc\1\u02fd\1\u02fe\1\u02ff\1\uffff\1\u0301"+
+            "\1\u0302\1\u0303\1\u0304\1\u0306\1\u0307\1\u0308\1\u0309\1\u030d"+
+            "\1\uffff\1\u030a\1\u030b\1\uffff\1\u0315\1\u0316",
+            "\1\u0327\12\uffff\1\u0337\1\u033b\1\uffff\1\u033e\1\u033f\2"+
+            "\uffff\1\u0340\16\uffff\1\u0333\6\uffff\1\u0320\1\u0336\11\uffff"+
+            "\1\u032c\11\uffff\1\u031b\5\uffff\1\u0335\16\uffff\1\u0338\1"+
+            "\u0339\1\u033a\2\uffff\1\u031a\1\u031c\1\u031d\1\u031e\1\u031f"+
+            "\1\u0321\1\u0322\1\u0323\1\u0324\1\u0325\1\u0326\1\uffff\1\u0328"+
+            "\1\u0329\1\u032a\1\u032b\1\u032d\1\u032e\1\u032f\1\u0330\1\u0334"+
+            "\1\uffff\1\u0331\1\u0332\1\uffff\1\u033c\1\u033d",
+            "\1\u034e\12\uffff\1\u035e\1\u0362\1\uffff\1\u0365\1\u0366\2"+
+            "\uffff\1\u0367\16\uffff\1\u035a\6\uffff\1\u0347\1\u035d\11\uffff"+
+            "\1\u0353\11\uffff\1\u0342\5\uffff\1\u035c\16\uffff\1\u035f\1"+
+            "\u0360\1\u0361\2\uffff\1\u0341\1\u0343\1\u0344\1\u0345\1\u0346"+
+            "\1\u0348\1\u0349\1\u034a\1\u034b\1\u034c\1\u034d\1\uffff\1\u034f"+
+            "\1\u0350\1\u0351\1\u0352\1\u0354\1\u0355\1\u0356\1\u0357\1\u035b"+
+            "\1\uffff\1\u0358\1\u0359\1\uffff\1\u0363\1\u0364",
+            "\1\u0368",
+            "\1\u0369",
+            "\1\u036a",
+            "\1\u036b",
+            "\1\u036b",
+            "\1\u036b",
+            "\1\u036b",
+            "\1\u036b",
+            "\1\u036b",
+            "\1\u036b",
+            "\1\u036b",
+            "\1\u036b",
+            "\1\u036b",
+            "\1\u036c",
+            "\1\u036d",
+            "\1\u036e",
+            "\1\u036f",
+            "\1\u0370",
+            "\1\u0371",
+            "\1\u0372",
+            "\1\u0373",
+            "\1\u0374",
+            "\1\u0375",
+            "\1\u0376",
+            "\1\u0377",
+            "\1\u0378",
+            "\1\u0379",
+            "\1\u0379",
+            "\1\u0379",
+            "\1\u037a",
+            "\1\u0379",
+            "\1\u0379",
+            "\1\u0379",
+            "\1\u037b",
+            "\1\u0379",
+            "\1\u0379",
+            "\1\u037c",
+            "\1\u037d",
+            "\1\u037e",
+            "\1\u037f",
+            "\1\u0380",
+            "\1\u0381\47\uffff\5\u0381",
+            "\1\u0382\47\uffff\5\u0382",
+            "\1\u0383",
+            "\1\u0391\12\uffff\1\u03a1\1\u03a5\1\uffff\1\u03a8\1\u03a9\2"+
+            "\uffff\1\u03aa\16\uffff\1\u039d\6\uffff\1\u038a\1\u03a0\11\uffff"+
+            "\1\u0396\11\uffff\1\u0385\5\uffff\1\u039f\16\uffff\1\u03a2\1"+
+            "\u03a3\1\u03a4\2\uffff\1\u0384\1\u0386\1\u0387\1\u0388\1\u0389"+
+            "\1\u038b\1\u038c\1\u038d\1\u038e\1\u038f\1\u0390\1\uffff\1\u0392"+
+            "\1\u0393\1\u0394\1\u0395\1\u0397\1\u0398\1\u0399\1\u039a\1\u039e"+
+            "\1\uffff\1\u039b\1\u039c\1\uffff\1\u03a6\1\u03a7",
+            "\1\u03b8\12\uffff\1\u03c8\1\u03cc\1\uffff\1\u03cf\1\u03d0\2"+
+            "\uffff\1\u03d1\16\uffff\1\u03c4\6\uffff\1\u03b1\1\u03c7\11\uffff"+
+            "\1\u03bd\11\uffff\1\u03ac\5\uffff\1\u03c6\16\uffff\1\u03c9\1"+
+            "\u03ca\1\u03cb\2\uffff\1\u03ab\1\u03ad\1\u03ae\1\u03af\1\u03b0"+
+            "\1\u03b2\1\u03b3\1\u03b4\1\u03b5\1\u03b6\1\u03b7\1\uffff\1\u03b9"+
+            "\1\u03ba\1\u03bb\1\u03bc\1\u03be\1\u03bf\1\u03c0\1\u03c1\1\u03c5"+
+            "\1\uffff\1\u03c2\1\u03c3\1\uffff\1\u03cd\1\u03ce",
+            "\1\u03d2\12\uffff\1\u03ef\1\u03f3\1\uffff\1\u03f6\1\u03f7\2"+
+            "\uffff\1\u03f8\16\uffff\1\u03eb\6\uffff\1\u03d9\1\u03ee\11\uffff"+
+            "\1\u03e4\11\uffff\1\u03d7\5\uffff\1\u03ed\16\uffff\1\u03f0\1"+
+            "\u03f1\1\u03f2\2\uffff\1\u03d6\1\u03d8\1\u03d3\1\u03d4\1\u03d5"+
+            "\1\u03da\1\u03db\1\u03dc\1\u03dd\1\u03de\1\u03df\1\uffff\1\u03e0"+
+            "\1\u03e1\1\u03e2\1\u03e3\1\u03e5\1\u03e6\1\u03e7\1\u03e8\1\u03ec"+
+            "\1\uffff\1\u03e9\1\u03ea\1\uffff\1\u03f4\1\u03f5",
+            "\1\u0406\12\uffff\1\u0416\1\u041a\1\uffff\1\u041d\1\u041e\2"+
+            "\uffff\1\u041f\16\uffff\1\u0412\6\uffff\1\u03ff\1\u0415\11\uffff"+
+            "\1\u040b\11\uffff\1\u03fa\5\uffff\1\u0414\16\uffff\1\u0417\1"+
+            "\u0418\1\u0419\2\uffff\1\u03f9\1\u03fb\1\u03fc\1\u03fd\1\u03fe"+
+            "\1\u0400\1\u0401\1\u0402\1\u0403\1\u0404\1\u0405\1\uffff\1\u0407"+
+            "\1\u0408\1\u0409\1\u040a\1\u040c\1\u040d\1\u040e\1\u040f\1\u0413"+
+            "\1\uffff\1\u0410\1\u0411\1\uffff\1\u041b\1\u041c",
+            "\1\u0425\21\uffff\1\u0424\34\uffff\1\u0420\12\uffff\5\u0424"+
+            "\1\uffff\1\u0423\1\u0421\23\uffff\1\u0422\10\uffff\1\u0425\6"+
+            "\uffff\14\u0426",
+            "\1\u0434\12\uffff\1\u0444\1\u0448\1\uffff\1\u044b\1\u044c\2"+
+            "\uffff\1\u044d\16\uffff\1\u0440\6\uffff\1\u042d\1\u0443\11\uffff"+
+            "\1\u0439\11\uffff\1\u0428\5\uffff\1\u0442\16\uffff\1\u0445\1"+
+            "\u0446\1\u0447\2\uffff\1\u0427\1\u0429\1\u042a\1\u042b\1\u042c"+
+            "\1\u042e\1\u042f\1\u0430\1\u0431\1\u0432\1\u0433\1\uffff\1\u0435"+
+            "\1\u0436\1\u0437\1\u0438\1\u043a\1\u043b\1\u043c\1\u043d\1\u0441"+
+            "\1\uffff\1\u043e\1\u043f\1\uffff\1\u0449\1\u044a",
+            "\1\u045b\12\uffff\1\u046b\1\u046f\1\uffff\1\u0472\1\u0473\2"+
+            "\uffff\1\u0474\16\uffff\1\u0467\6\uffff\1\u0454\1\u046a\11\uffff"+
+            "\1\u0460\11\uffff\1\u044f\5\uffff\1\u0469\16\uffff\1\u046c\1"+
+            "\u046d\1\u046e\2\uffff\1\u044e\1\u0450\1\u0451\1\u0452\1\u0453"+
+            "\1\u0455\1\u0456\1\u0457\1\u0458\1\u0459\1\u045a\1\uffff\1\u045c"+
+            "\1\u045d\1\u045e\1\u045f\1\u0461\1\u0462\1\u0463\1\u0464\1\u0468"+
+            "\1\uffff\1\u0465\1\u0466\1\uffff\1\u0470\1\u0471",
+            "\1\u0482\12\uffff\1\u0492\1\u0496\1\uffff\1\u0499\1\u049a\2"+
+            "\uffff\1\u049b\16\uffff\1\u048e\6\uffff\1\u047b\1\u0491\11\uffff"+
+            "\1\u0487\11\uffff\1\u0476\5\uffff\1\u0490\16\uffff\1\u0493\1"+
+            "\u0494\1\u0495\2\uffff\1\u0475\1\u0477\1\u0478\1\u0479\1\u047a"+
+            "\1\u047c\1\u047d\1\u047e\1\u047f\1\u0480\1\u0481\1\uffff\1\u0483"+
+            "\1\u0484\1\u0485\1\u0486\1\u0488\1\u0489\1\u048a\1\u048b\1\u048f"+
+            "\1\uffff\1\u048c\1\u048d\1\uffff\1\u0497\1\u0498",
+            "\1\u04a9\12\uffff\1\u04b9\1\u04bd\1\uffff\1\u04c0\1\u04c1\2"+
+            "\uffff\1\u04c2\16\uffff\1\u04b5\6\uffff\1\u04a2\1\u04b8\11\uffff"+
+            "\1\u04ae\11\uffff\1\u049d\5\uffff\1\u04b7\16\uffff\1\u04ba\1"+
+            "\u04bb\1\u04bc\2\uffff\1\u049c\1\u049e\1\u049f\1\u04a0\1\u04a1"+
+            "\1\u04a3\1\u04a4\1\u04a5\1\u04a6\1\u04a7\1\u04a8\1\uffff\1\u04aa"+
+            "\1\u04ab\1\u04ac\1\u04ad\1\u04af\1\u04b0\1\u04b1\1\u04b2\1\u04b6"+
+            "\1\uffff\1\u04b3\1\u04b4\1\uffff\1\u04be\1\u04bf",
+            "\1\u04d0\12\uffff\1\u04e0\1\u04e4\1\uffff\1\u04e7\1\u04e8\2"+
+            "\uffff\1\u04e9\16\uffff\1\u04dc\6\uffff\1\u04c9\1\u04df\11\uffff"+
+            "\1\u04d5\11\uffff\1\u04c4\5\uffff\1\u04de\16\uffff\1\u04e1\1"+
+            "\u04e2\1\u04e3\2\uffff\1\u04c3\1\u04c5\1\u04c6\1\u04c7\1\u04c8"+
+            "\1\u04ca\1\u04cb\1\u04cc\1\u04cd\1\u04ce\1\u04cf\1\uffff\1\u04d1"+
+            "\1\u04d2\1\u04d3\1\u04d4\1\u04d6\1\u04d7\1\u04d8\1\u04d9\1\u04dd"+
+            "\1\uffff\1\u04da\1\u04db\1\uffff\1\u04e5\1\u04e6",
+            "\1\u04f7\12\uffff\1\u0507\1\u050b\1\uffff\1\u050e\1\u050f\2"+
+            "\uffff\1\u0510\16\uffff\1\u0503\6\uffff\1\u04f0\1\u0506\11\uffff"+
+            "\1\u04fc\11\uffff\1\u04eb\5\uffff\1\u0505\16\uffff\1\u0508\1"+
+            "\u0509\1\u050a\2\uffff\1\u04ea\1\u04ec\1\u04ed\1\u04ee\1\u04ef"+
+            "\1\u04f1\1\u04f2\1\u04f3\1\u04f4\1\u04f5\1\u04f6\1\uffff\1\u04f8"+
+            "\1\u04f9\1\u04fa\1\u04fb\1\u04fd\1\u04fe\1\u04ff\1\u0500\1\u0504"+
+            "\1\uffff\1\u0501\1\u0502\1\uffff\1\u050c\1\u050d",
+            "\1\u051e\12\uffff\1\u052e\1\u0532\1\uffff\1\u0535\1\u0536\2"+
+            "\uffff\1\u0537\16\uffff\1\u052a\6\uffff\1\u0517\1\u052d\11\uffff"+
+            "\1\u0523\11\uffff\1\u0512\5\uffff\1\u052c\16\uffff\1\u052f\1"+
+            "\u0530\1\u0531\2\uffff\1\u0511\1\u0513\1\u0514\1\u0515\1\u0516"+
+            "\1\u0518\1\u0519\1\u051a\1\u051b\1\u051c\1\u051d\1\uffff\1\u051f"+
+            "\1\u0520\1\u0521\1\u0522\1\u0524\1\u0525\1\u0526\1\u0527\1\u052b"+
+            "\1\uffff\1\u0528\1\u0529\1\uffff\1\u0533\1\u0534",
+            "\1\u0545\12\uffff\1\u0555\1\u0559\1\uffff\1\u055c\1\u055d\2"+
+            "\uffff\1\u055e\16\uffff\1\u0551\6\uffff\1\u053e\1\u0554\11\uffff"+
+            "\1\u054a\11\uffff\1\u0539\5\uffff\1\u0553\16\uffff\1\u0556\1"+
+            "\u0557\1\u0558\2\uffff\1\u0538\1\u053a\1\u053b\1\u053c\1\u053d"+
+            "\1\u053f\1\u0540\1\u0541\1\u0542\1\u0543\1\u0544\1\uffff\1\u0546"+
+            "\1\u0547\1\u0548\1\u0549\1\u054b\1\u054c\1\u054d\1\u054e\1\u0552"+
+            "\1\uffff\1\u054f\1\u0550\1\uffff\1\u055a\1\u055b",
+            "\1\u056c\12\uffff\1\u057c\1\u0580\1\uffff\1\u0583\1\u0584\2"+
+            "\uffff\1\u0585\16\uffff\1\u0578\6\uffff\1\u0565\1\u057b\11\uffff"+
+            "\1\u0571\11\uffff\1\u0560\5\uffff\1\u057a\16\uffff\1\u057d\1"+
+            "\u057e\1\u057f\2\uffff\1\u055f\1\u0561\1\u0562\1\u0563\1\u0564"+
+            "\1\u0566\1\u0567\1\u0568\1\u0569\1\u056a\1\u056b\1\uffff\1\u056d"+
+            "\1\u056e\1\u056f\1\u0570\1\u0572\1\u0573\1\u0574\1\u0575\1\u0579"+
+            "\1\uffff\1\u0576\1\u0577\1\uffff\1\u0581\1\u0582",
+            "\1\u0593\12\uffff\1\u05a3\1\u05a7\1\uffff\1\u05aa\1\u05ab\2"+
+            "\uffff\1\u05ac\16\uffff\1\u059f\6\uffff\1\u058c\1\u05a2\11\uffff"+
+            "\1\u0598\11\uffff\1\u0587\5\uffff\1\u05a1\16\uffff\1\u05a4\1"+
+            "\u05a5\1\u05a6\2\uffff\1\u0586\1\u0588\1\u0589\1\u058a\1\u058b"+
+            "\1\u058d\1\u058e\1\u058f\1\u0590\1\u0591\1\u0592\1\uffff\1\u0594"+
+            "\1\u0595\1\u0596\1\u0597\1\u0599\1\u059a\1\u059b\1\u059c\1\u05a0"+
+            "\1\uffff\1\u059d\1\u059e\1\uffff\1\u05a8\1\u05a9",
+            "\1\u05ba\12\uffff\1\u05ca\1\u05ce\1\uffff\1\u05d1\1\u05d2\2"+
+            "\uffff\1\u05d3\16\uffff\1\u05c6\6\uffff\1\u05b3\1\u05c9\11\uffff"+
+            "\1\u05bf\11\uffff\1\u05ae\5\uffff\1\u05c8\16\uffff\1\u05cb\1"+
+            "\u05cc\1\u05cd\2\uffff\1\u05ad\1\u05af\1\u05b0\1\u05b1\1\u05b2"+
+            "\1\u05b4\1\u05b5\1\u05b6\1\u05b7\1\u05b8\1\u05b9\1\uffff\1\u05bb"+
+            "\1\u05bc\1\u05bd\1\u05be\1\u05c0\1\u05c1\1\u05c2\1\u05c3\1\u05c7"+
+            "\1\uffff\1\u05c4\1\u05c5\1\uffff\1\u05cf\1\u05d0",
+            "\1\u05e1\12\uffff\1\u05f1\1\u05f5\1\uffff\1\u05f8\1\u05f9\2"+
+            "\uffff\1\u05fa\16\uffff\1\u05ed\6\uffff\1\u05da\1\u05f0\11\uffff"+
+            "\1\u05e6\11\uffff\1\u05d5\5\uffff\1\u05ef\16\uffff\1\u05f2\1"+
+            "\u05f3\1\u05f4\2\uffff\1\u05d4\1\u05d6\1\u05d7\1\u05d8\1\u05d9"+
+            "\1\u05db\1\u05dc\1\u05dd\1\u05de\1\u05df\1\u05e0\1\uffff\1\u05e2"+
+            "\1\u05e3\1\u05e4\1\u05e5\1\u05e7\1\u05e8\1\u05e9\1\u05ea\1\u05ee"+
+            "\1\uffff\1\u05eb\1\u05ec\1\uffff\1\u05f6\1\u05f7",
+            "\1\u05fb",
+            "\1\u05fc",
+            "\1\u05fd",
+            "\1\u05fe",
+            "\1\u05fe",
+            "\1\u05fe",
+            "\1\u05fe",
+            "\1\u05fe",
+            "\1\u05fe",
+            "\1\u05fe",
+            "\1\u05fe",
+            "\1\u05fe",
+            "\1\u05fe",
+            "\1\u05ff",
+            "\1\u0600",
+            "\1\u0601",
+            "\1\u0602",
+            "\1\u0603",
+            "\1\u0604",
+            "\1\u0605",
+            "\1\u0606",
+            "\1\u0607",
+            "\1\u0608",
+            "\1\u0609",
+            "\1\u060a",
+            "\1\u060b",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u060c",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u060d",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u00eb\5\uffff\1\u00d1\12\uffff\1\u00e1\1\u00e5\1\uffff\1"+
+            "\u00e8\1\u00e9\2\uffff\1\u00ea\16\uffff\1\u00dd\6\uffff\1\u00ca"+
+            "\1\u00e0\11\uffff\1\u00d6\11\uffff\1\u00c5\5\uffff\1\u00df\16"+
+            "\uffff\1\u00e2\1\u00e3\1\u00e4\2\uffff\1\u00c4\1\u00c6\1\u00c7"+
+            "\1\u00c8\1\u00c9\1\u00cb\1\u00cc\1\u00cd\1\u00ce\1\u00cf\1\u00d0"+
+            "\1\uffff\1\u00d2\1\u00d3\1\u00d4\1\u00d5\1\u00d7\1\u00d8\1\u00d9"+
+            "\1\u00da\1\u00de\1\uffff\1\u00db\1\u00dc\1\uffff\1\u00e6\1\u00e7",
+            "\1\u060e",
+            "\1\u060f",
+            "\1\u0610",
+            "\1\u0611",
+            "\1\u0612",
+            "\1\u0613",
+            "\1\u0614\47\uffff\5\u0614",
+            "\1\u0615\47\uffff\5\u0615",
+            "\1\u0616",
+            "\1\u0617",
+            "\1\u0618",
+            "\1\u0619",
+            "\1\u061a",
+            "\1\u061a",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff"
+    };
+
+    static final short[] DFA54_eot = DFA.unpackEncodedString(DFA54_eotS);
+    static final short[] DFA54_eof = DFA.unpackEncodedString(DFA54_eofS);
+    static final char[] DFA54_min = DFA.unpackEncodedStringToUnsignedChars(DFA54_minS);
+    static final char[] DFA54_max = DFA.unpackEncodedStringToUnsignedChars(DFA54_maxS);
+    static final short[] DFA54_accept = DFA.unpackEncodedString(DFA54_acceptS);
+    static final short[] DFA54_special = DFA.unpackEncodedString(DFA54_specialS);
+    static final short[][] DFA54_transition;
+
+    static {
+        int numStates = DFA54_transitionS.length;
+        DFA54_transition = new short[numStates][];
+        for (int i=0; i<numStates; i++) {
+            DFA54_transition[i] = DFA.unpackEncodedString(DFA54_transitionS[i]);
+        }
+    }
+
+    class DFA54 extends DFA {
+
+        public DFA54(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 54;
+            this.eot = DFA54_eot;
+            this.eof = DFA54_eof;
+            this.min = DFA54_min;
+            this.max = DFA54_max;
+            this.accept = DFA54_accept;
+            this.special = DFA54_special;
+            this.transition = DFA54_transition;
+        }
+        public String getDescription() {
+            return "292:1: expression returns [CommonTree tr] : ( ^(or= OR expression expression ) | ^(ad= AND expression expression ) | ( NOT DOWN negatableOperator )=> ^(nOp= NOT ^( negatableOperator expression expression ) ) | ( NOT DOWN FUNCTION )=> ^(fInF= NOT ^( FUNCTION IN expression expressions ) ) | ^(nt= NOT expression ) | ^(cOp= compareOperator expression expression ) | ^(fInT= FUNCTION IN expression expressions ) | ^(fBtF= FUNCTION BETWEEN FALSE expression expression expression ) | ^(fBtT= FUNCTION BETWEEN TRUE expression expression expression ) | ^(bitOr= BITWISEOR expression expression ) | ^(amp= AMPERSAND expression expression ) | ^(plus= PLUS expression ( expression )? ) | ^(minus= MINUS expression ( expression )? ) | ^(star= STAR expression expression ) | ^(divide= DIVIDE expression expression ) | ^(mod= MOD expression expression ) | ^(div= DIV expression expression ) | ^(bitxor= BITWISEXOR expression expression ) | ^(fnNull= FUNCTION nullCondition expression ) | ^(tilde= TILDE expression ) | ^(arry= LSQUARE expression expression ) | ^(dot= DOT expression Identifier ) | nl= NULL | c= constant | f= function | cs= castExpr | cse= caseExpr | whn= whenExpr | tc= tableOrColumn );";
+        }
+    }
  
 
     public static final BitSet FOLLOW_QUERY_in_query66 = new BitSet(new long[]{0x0000000000000004L});
@@ -5000,91 +7003,95 @@ public class QSpecBuilder2 extends TreeParser {
     public static final BitSet FOLLOW_AND_in_expression1646 = new BitSet(new long[]{0x0000000000000004L});
     public static final BitSet FOLLOW_expression_in_expression1648 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
     public static final BitSet FOLLOW_expression_in_expression1650 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_NOT_in_expression1661 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1663 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_NOT_in_expression1670 = new BitSet(new long[]{0x0000000000000004L});
     public static final BitSet FOLLOW_negatableOperator_in_expression1674 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_FALSE_in_expression1676 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1678 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1681 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_compareOperator_in_expression1694 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_TRUE_in_expression1696 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1698 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1700 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FUNCTION_in_expression1712 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_IN_in_expression1714 = new BitSet(new long[]{0x0000000000000000L,0x0400000000000000L});
-    public static final BitSet FOLLOW_FALSE_in_expression1716 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1718 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expressions_in_expression1720 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FUNCTION_in_expression1732 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_IN_in_expression1734 = new BitSet(new long[]{0x0000000000000000L,0x0200000000000000L});
-    public static final BitSet FOLLOW_TRUE_in_expression1736 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1738 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expressions_in_expression1740 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FUNCTION_in_expression1752 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_BETWEEN_in_expression1754 = new BitSet(new long[]{0x0000000000000000L,0x0400000000000000L});
-    public static final BitSet FOLLOW_FALSE_in_expression1756 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1758 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1760 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1762 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FUNCTION_in_expression1774 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_BETWEEN_in_expression1776 = new BitSet(new long[]{0x0000000000000000L,0x0200000000000000L});
-    public static final BitSet FOLLOW_TRUE_in_expression1778 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1780 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1782 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1784 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_BITWISEOR_in_expression1796 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1798 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1800 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_AMPERSAND_in_expression1812 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1814 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1816 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_PLUS_in_expression1828 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1830 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1832 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_MINUS_in_expression1845 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1847 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1849 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_STAR_in_expression1862 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1864 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1866 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_DIVIDE_in_expression1878 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1880 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1882 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_MOD_in_expression1894 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1896 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1898 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_DIV_in_expression1910 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1912 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1914 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_BITWISEXOR_in_expression1927 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1929 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1931 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_FUNCTION_in_expression1943 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_nullCondition_in_expression1945 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1947 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_TILDE_in_expression1961 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1963 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_LSQUARE_in_expression1976 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1978 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
-    public static final BitSet FOLLOW_expression_in_expression1980 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_DOT_in_expression1992 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression1994 = new BitSet(new long[]{0x0000010000000000L});
-    public static final BitSet FOLLOW_Identifier_in_expression1996 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_NULL_in_expression2008 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_constant_in_expression2018 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_function_in_expression2029 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_castExpr_in_expression2040 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_caseExpr_in_expression2051 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_whenExpr_in_expression2062 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_tableOrColumn_in_expression2073 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_TRUE_in_booleanValue2098 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FALSE_in_booleanValue2111 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_expression_in_expression1676 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1679 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_NOT_in_expression1702 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_FUNCTION_in_expression1706 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_IN_in_expression1708 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1711 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expressions_in_expression1713 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_NOT_in_expression1726 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1728 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_compareOperator_in_expression1741 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1743 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1745 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FUNCTION_in_expression1758 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_IN_in_expression1760 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1763 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expressions_in_expression1765 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FUNCTION_in_expression1777 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_BETWEEN_in_expression1779 = new BitSet(new long[]{0x0000000000000000L,0x0400000000000000L});
+    public static final BitSet FOLLOW_FALSE_in_expression1781 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1783 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1785 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1787 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FUNCTION_in_expression1799 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_BETWEEN_in_expression1801 = new BitSet(new long[]{0x0000000000000000L,0x0200000000000000L});
+    public static final BitSet FOLLOW_TRUE_in_expression1803 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1805 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1807 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1809 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_BITWISEOR_in_expression1821 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1823 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1825 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_AMPERSAND_in_expression1837 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1839 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1841 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_PLUS_in_expression1853 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1855 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1857 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_MINUS_in_expression1870 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1872 = new BitSet(new long[]{0x1006040009B00208L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1874 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_STAR_in_expression1887 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1889 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1891 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_DIVIDE_in_expression1903 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1905 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1907 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_MOD_in_expression1919 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1921 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1923 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_DIV_in_expression1935 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1937 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1939 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_BITWISEXOR_in_expression1952 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1954 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1956 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_FUNCTION_in_expression1968 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_nullCondition_in_expression1970 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression1972 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_TILDE_in_expression1986 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression1988 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_LSQUARE_in_expression2001 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression2003 = new BitSet(new long[]{0x1006040009B00200L,0x06DFF7FF38001040L});
+    public static final BitSet FOLLOW_expression_in_expression2005 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_DOT_in_expression2017 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression2019 = new BitSet(new long[]{0x0000010000000000L});
+    public static final BitSet FOLLOW_Identifier_in_expression2021 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_NULL_in_expression2033 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_constant_in_expression2043 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_function_in_expression2054 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_castExpr_in_expression2065 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_caseExpr_in_expression2076 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_whenExpr_in_expression2087 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_tableOrColumn_in_expression2098 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_TRUE_in_booleanValue2123 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FALSE_in_booleanValue2136 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_primitiveType0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_PARAM_in_namevalue2236 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_Identifier_in_namevalue2240 = new BitSet(new long[]{0x0004000000000000L});
-    public static final BitSet FOLLOW_StringLiteral_in_namevalue2244 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_PARAM_in_namevalue2253 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_StringLiteral_in_namevalue2257 = new BitSet(new long[]{0x0004000000000000L});
-    public static final BitSet FOLLOW_StringLiteral_in_namevalue2261 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_PARAM_in_namevalue2261 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_Identifier_in_namevalue2265 = new BitSet(new long[]{0x0004000000000000L});
+    public static final BitSet FOLLOW_StringLiteral_in_namevalue2269 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_PARAM_in_namevalue2278 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_StringLiteral_in_namevalue2282 = new BitSet(new long[]{0x0004000000000000L});
+    public static final BitSet FOLLOW_StringLiteral_in_namevalue2286 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_NOT_in_synpred11659 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_DOWN_in_synpred11661 = new BitSet(new long[]{0x0000000000000000L,0x0000001C00000000L});
+    public static final BitSet FOLLOW_negatableOperator_in_synpred11663 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NOT_in_synpred21691 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_DOWN_in_synpred21693 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_FUNCTION_in_synpred21695 = new BitSet(new long[]{0x0000000000000002L});
 
 }

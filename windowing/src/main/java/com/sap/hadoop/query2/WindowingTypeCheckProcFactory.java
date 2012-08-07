@@ -142,6 +142,7 @@ public class WindowingTypeCheckProcFactory
 				+ Windowing2Parser.IF + "%|" + Windowing2Parser.CASE + "%|"
 				+ Windowing2Parser.WHEN + "%|" + Windowing2Parser.IN + "%|"
 				+ Windowing2Parser.ARRAY + "%|" + Windowing2Parser.MAP + "%|"
+				+ Windowing2Parser.BETWEEN + "%|"
 				+ Windowing2Parser.STRUCT + "%"), getStrExprProcessor());
 		opRules.put(new RuleRegExp("R4", Windowing2Parser.TRUE + "%|"
 				+ Windowing2Parser.FALSE + "%"), getBoolExprProcessor());

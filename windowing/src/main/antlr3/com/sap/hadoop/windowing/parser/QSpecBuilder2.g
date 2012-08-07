@@ -292,11 +292,11 @@ nullCondition :
 expression returns [CommonTree tr] :
   ^(or=OR expression expression) {$tr=$or;}|
   ^(ad=AND expression expression) {$tr=$ad;}|
-  ^(nt=NOT expression) {$tr=$nt;}|
-  ^(nOp=negatableOperator FALSE expression  expression ) {$tr=nOp;} |
-  ^(cOp=compareOperator TRUE expression expression) {$tr=cOp;} |
-  ^(fInF=FUNCTION IN FALSE expression expressions) {$tr=$fInF;} |
-  ^(fInT=FUNCTION IN TRUE expression expressions) {$tr=$fInT;} |
+  (NOT DOWN negatableOperator)=> ^(nOp=NOT  ^(negatableOperator expression  expression )) {$tr=nOp;} |
+  (NOT DOWN FUNCTION)=> ^(fInF=NOT  ^(FUNCTION IN  expression expressions)) {$tr=$fInF;} |
+  ^(nt=NOT expression) {$tr=$nt;}  |
+  ^(cOp=compareOperator expression expression)  {$tr=cOp;} |
+  ^(fInT=FUNCTION IN  expression expressions) {$tr=$fInT;} |
   ^(fBtF=FUNCTION BETWEEN FALSE expression expression expression) {$tr=$fBtF;} |
   ^(fBtT=FUNCTION BETWEEN TRUE expression expression expression) {$tr=$fBtT;} |
   ^(bitOr=BITWISEOR expression expression) {$tr=$bitOr;} |

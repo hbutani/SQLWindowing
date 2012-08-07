@@ -165,6 +165,7 @@ serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 with serdeproperties('field.delim'=',')
 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
+		String s = qSpec.toString()
 //		println qSpec
 		assert qSpec.toString().replaceAll(QuerySpec.NL, "\n") == """select 
   (TABLEORCOL p_mfgr),

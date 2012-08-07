@@ -538,9 +538,9 @@ BITWISEXOR : '^';
 QUESTION : '?';
 DOLLAR : '$';
 
-HIVEQUERY : '<' 
-		(HiveQueryEscapeSequence | ~('>'))*
-		'>' {setText(getText().substring(1, getText().length()-1).replaceAll("\\\\>", ">"));}
+HIVEQUERY : '<<' 
+    ( options {greedy=false;} : . )*
+    '>>' {setText(getText().substring(2, getText().length()-2));}
 ;
 
 fragment

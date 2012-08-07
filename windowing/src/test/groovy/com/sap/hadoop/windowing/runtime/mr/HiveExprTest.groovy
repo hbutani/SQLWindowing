@@ -147,7 +147,7 @@ class HiveExprTest extends MRBaseTest
 		ArrayList<ASTNode> exprs = [
 			build("L_COMMENT"),
 			build("L_EXTENDEDPRICE"),
-//			build("L_EXTENDEDPRICE > 10000 and L_EXTENDEDPRICE < 30000"),
+			build("L_EXTENDEDPRICE > 10000 and L_EXTENDEDPRICE < 30000"),
 			build("L_EXTENDEDPRICE between 10000 and 30000"),
 			build("l_comment regexp '.*y.*'")
 		]

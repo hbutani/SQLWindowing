@@ -264,9 +264,9 @@ from npath(
 	void testFlights()
 	{
 		QuerySpec qSpec = build("""
-from <select origin_city_name, year, month, day_of_month, dep_time
+from << select origin_city_name, year, month, day_of_month, dep_time
 	  from flightsdata
-	  where dest_city_name = 'New York' and dep_time != '' and day_of_week = 1>
+	  where dest_city_name = 'New York' and dep_time != '' and day_of_week = 1 >>
 partition by origin_city_name, year, month, day_of_month
 order by dep_time
 select origin_city_name, year, month, day_of_month, dep_time, lag('dep_time', 1) as lastdep
@@ -276,7 +276,7 @@ serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 with serdeproperties('field.delim'=',')
 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
-//		println qSpec
+		println qSpec
 		assert qSpec.toString().replaceAll(QuerySpec.NL, "\n") == """select 
   (TABLEORCOL origin_city_name),
   (TABLEORCOL year),
@@ -328,9 +328,9 @@ into output('/tmp/wout', serde = 'org.apache.hadoop.hive.serde2.lazy.LazySimpleS
 	{
 		QuerySpec qSpec = build("""
 from candidateFrequentItemSets(
-	<select * from basketdata
+	<<select * from basketdata
 	 distribute by basketName
-	 sort by basketName, itemName>
+	 sort by basketName, itemName>>
 partition by itemset order by itemset,
 'basketName', 'itemName', 0.15)
 select itemset

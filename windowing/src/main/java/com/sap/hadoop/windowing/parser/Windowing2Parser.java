@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 Windowing2.g 2012-08-07 09:43:22
+// $ANTLR 3.0.1 Windowing2.g 2012-08-07 13:23:33
 
 package com.sap.hadoop.windowing.parser;
 
@@ -455,7 +455,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: outputClause, window_clause, where, select, tableSpec
+            // elements: outputClause, select, window_clause, tableSpec, where
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -637,7 +637,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: select, tableSpec, where, window_clause, outputClause
+            // elements: select, window_clause, where, outputClause, tableSpec
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -774,7 +774,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: SELECT, selectColumn
+            // elements: selectColumn, SELECT
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -1785,7 +1785,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: expression, Identifier
+                    // elements: Identifier, expression
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -1837,7 +1837,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: window_function, Identifier
+                    // elements: Identifier, window_function
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -2055,9 +2055,9 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: o, o, o, p, hq, p, p, tf, p, hvT, hdf, o
+            // elements: p, p, tf, hvT, p, o, hdf, o, hq, o, o, p
             // token labels: 
-            // rule labels: retval, hq, hvT, p, hdf, tf, o
+            // rule labels: retval, hq, hvT, p, hdf, o, tf
             // token list labels: 
             // rule list labels: 
             if ( backtracking==0 ) {
@@ -2067,8 +2067,8 @@ public class Windowing2Parser extends Parser {
             RewriteRuleSubtreeStream stream_hvT=new RewriteRuleSubtreeStream(adaptor,"token hvT",hvT!=null?hvT.tree:null);
             RewriteRuleSubtreeStream stream_p=new RewriteRuleSubtreeStream(adaptor,"token p",p!=null?p.tree:null);
             RewriteRuleSubtreeStream stream_hdf=new RewriteRuleSubtreeStream(adaptor,"token hdf",hdf!=null?hdf.tree:null);
-            RewriteRuleSubtreeStream stream_tf=new RewriteRuleSubtreeStream(adaptor,"token tf",tf!=null?tf.tree:null);
             RewriteRuleSubtreeStream stream_o=new RewriteRuleSubtreeStream(adaptor,"token o",o!=null?o.tree:null);
+            RewriteRuleSubtreeStream stream_tf=new RewriteRuleSubtreeStream(adaptor,"token tf",tf!=null?tf.tree:null);
 
             root_0 = (Object)adaptor.nil();
             // 130:2: -> {tf != null}? ^( INPUT $tf ( $p)? ( $o)? )
@@ -2300,7 +2300,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: i1, i2, i1
+            // elements: i1, i1, i2
             // token labels: i2, i1
             // rule labels: retval
             // token list labels: 
@@ -2449,7 +2449,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: name, tableSpec, expression
+            // elements: expression, tableSpec, name
             // token labels: name
             // rule labels: retval
             // token list labels: 
@@ -2840,7 +2840,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: lc, s, p
+            // elements: p, s, lc
             // token labels: p
             // rule labels: retval, s, lc
             // token list labels: 
@@ -2967,7 +2967,7 @@ public class Windowing2Parser extends Parser {
             if ( backtracking==0 ) stream_outputFormatOrWriter.add(o.getTree());
 
             // AST REWRITE
-            // elements: o, s, SERDE, p
+            // elements: p, o, SERDE, s
             // token labels: s
             // rule labels: retval, p, o
             // token list labels: 
@@ -3241,7 +3241,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: RECORDWRITER, StringLiteral
+                    // elements: StringLiteral, RECORDWRITER
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -3433,7 +3433,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: ov, l, t
+            // elements: t, ov, l
             // token labels: ov, t, l
             // rule labels: retval
             // token list labels: 
@@ -3704,7 +3704,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: ws, functionName, expression, functionName, expression, ws, functionName, ws
+            // elements: expression, ws, ws, functionName, functionName, functionName, expression, ws
             // token labels: 
             // rule labels: retval, ws
             // token list labels: 
@@ -3893,7 +3893,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: WINDOW, window_defn
+            // elements: window_defn, WINDOW
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -3987,7 +3987,7 @@ public class Windowing2Parser extends Parser {
             if ( backtracking==0 ) stream_window_specification.add(window_specification73.getTree());
 
             // AST REWRITE
-            // elements: window_specification, Identifier
+            // elements: Identifier, window_specification
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -4152,7 +4152,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: partitionby, window_frame, orderby, Identifier
+            // elements: window_frame, partitionby, orderby, Identifier
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -4312,7 +4312,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: ORDER, ordercolumn
+            // elements: ordercolumn, ORDER
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -4430,7 +4430,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: columnReference, o
+            // elements: o, columnReference
             // token labels: o
             // rule labels: retval
             // token list labels: 
@@ -4765,7 +4765,7 @@ public class Windowing2Parser extends Parser {
             if ( backtracking==0 ) stream_rowsboundary.add(e.getTree());
 
             // AST REWRITE
-            // elements: s, e
+            // elements: e, s
             // token labels: 
             // rule labels: retval, e, s
             // token list labels: 
@@ -5453,7 +5453,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: d, rngExp, rowExp
+                    // elements: rngExp, rowExp, d
                     // token labels: d, rngExp
                     // rule labels: retval, rowExp
                     // token list labels: 
@@ -5562,7 +5562,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: i1, i1, i2
+            // elements: i2, i1, i1
             // token labels: i2, i1
             // rule labels: retval
             // token list labels: 
@@ -5871,7 +5871,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: functionName, expression, functionName, expression, functionName
+            // elements: expression, functionName, expression, functionName, functionName
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -6088,7 +6088,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: primitiveType, expression
+            // elements: expression, primitiveType
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -6440,7 +6440,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: WHEN, expression
+            // elements: expression, WHEN
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -6865,7 +6865,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: csLiteral, csName
+            // elements: csName, csLiteral
             // token labels: csName, csLiteral
             // rule labels: retval
             // token list labels: 
@@ -7780,7 +7780,7 @@ public class Windowing2Parser extends Parser {
             	    if ( backtracking==0 ) stream_bitOrExpr.add(r.getTree());
 
             	    // AST REWRITE
-            	    // elements: r, compareExpr, nO, NOT
+            	    // elements: nO, r, compareExpr, NOT
             	    // token labels: 
             	    // rule labels: nO, retval, r
             	    // token list labels: 
@@ -7840,7 +7840,7 @@ public class Windowing2Parser extends Parser {
             	    if ( backtracking==0 ) stream_bitOrExpr.add(r.getTree());
 
             	    // AST REWRITE
-            	    // elements: r, compareExpr, cO
+            	    // elements: compareExpr, cO, r
             	    // token labels: 
             	    // rule labels: cO, retval, r
             	    // token list labels: 
@@ -7895,7 +7895,7 @@ public class Windowing2Parser extends Parser {
             	    if ( backtracking==0 ) stream_expressions.add(el.getTree());
 
             	    // AST REWRITE
-            	    // elements: el, IN, NOT, compareExpr
+            	    // elements: IN, el, compareExpr, NOT
             	    // token labels: 
             	    // rule labels: retval, el
             	    // token list labels: 
@@ -7954,7 +7954,7 @@ public class Windowing2Parser extends Parser {
             	    if ( backtracking==0 ) stream_expressions.add(expressions173.getTree());
 
             	    // AST REWRITE
-            	    // elements: el, compareExpr, IN
+            	    // elements: compareExpr, el, IN
             	    // token labels: 
             	    // rule labels: retval, el
             	    // token list labels: 
@@ -8018,7 +8018,7 @@ public class Windowing2Parser extends Parser {
             	    if ( backtracking==0 ) stream_bitOrExpr.add(max.getTree());
 
             	    // AST REWRITE
-            	    // elements: max, compareExpr, BETWEEN, min
+            	    // elements: compareExpr, max, min, BETWEEN
             	    // token labels: 
             	    // rule labels: min, retval, max
             	    // token list labels: 
@@ -8081,7 +8081,7 @@ public class Windowing2Parser extends Parser {
             	    if ( backtracking==0 ) stream_bitOrExpr.add(max.getTree());
 
             	    // AST REWRITE
-            	    // elements: max, min, BETWEEN, compareExpr
+            	    // elements: min, BETWEEN, max, compareExpr
             	    // token labels: 
             	    // rule labels: min, retval, max
             	    // token list labels: 
@@ -8877,7 +8877,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: unaryExpr, nullCondition, unaryExpr
+            // elements: nullCondition, unaryExpr, unaryExpr
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -9646,7 +9646,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: i, v
+            // elements: v, i
             // token labels: v, i
             // rule labels: retval
             // token list labels: 

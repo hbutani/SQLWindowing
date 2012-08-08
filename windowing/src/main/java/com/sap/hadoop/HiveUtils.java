@@ -62,12 +62,17 @@ public class HiveUtils
 		    //	- get inputSplits
 		    //	- instantiate Reader for the 1st split
 		    //	- get valueClass from reader
-			InputFormat<? extends Writable, ? extends Writable> iFmt = inputFormatClass.newInstance();
-			if (iFmt instanceof TextInputFormat)
-				((TextInputFormat)iFmt).configure(job);
-			InputSplit[] iSplits = iFmt.getSplits(job, 1);
-			org.apache.hadoop.mapred.RecordReader<Writable, Writable> rdr = 
-				(org.apache.hadoop.mapred.RecordReader<Writable, Writable>) iFmt.getRecordReader(iSplits[0], job, Reporter.NULL);
+		    
+		    
+		    /*
+		     * Creating a namespace and reading the Splits is not needed here anymore
+		     */
+//			InputFormat<? extends Writable, ? extends Writable> iFmt = inputFormatClass.newInstance();
+//			if (iFmt instanceof TextInputFormat)
+//				((TextInputFormat)iFmt).configure(job);
+//			InputSplit[] iSplits = iFmt.getSplits(job, 1);
+//			org.apache.hadoop.mapred.RecordReader<Writable, Writable> rdr = 
+//				(org.apache.hadoop.mapred.RecordReader<Writable, Writable>) iFmt.getRecordReader(iSplits[0], job, Reporter.NULL);
 		    
 			/*
 			 * this is no more always valid. The MapOutput Value calss is dictated by the query.input.deserializer

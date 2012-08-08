@@ -62,4 +62,19 @@ select r, department_id, employee_id, salary,
 < lag('salary',1) - salary > as salary_gap[int]
 into path='/tmp/wout'""")
 	}
+	
+	/*
+	* 
+	*/
+   @Test
+   void testIssue17()
+   {
+	   wshell.execute("""
+	   from uuid_testtable
+partition by uuid
+order by uuid
+with count('uuid') as uuid_cnt
+select uuid, uuid_cnt
+into path='/user/hadoop/wout'""")
+   }
 }

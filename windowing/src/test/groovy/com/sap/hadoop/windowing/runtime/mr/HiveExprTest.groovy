@@ -119,7 +119,8 @@ class HiveExprTest extends MRBaseTest
 			build("L_EXTENDEDPRICE > 10000"),
 			build("not L_EXTENDEDPRICE > 10000"),
 			build("L_EXTENDEDPRICE between 10000 and 30000"),
-			build("regexp_replace(l_comment,'e','+')")
+			build("regexp_replace(l_comment,'e','+')"),
+			build("if(l_comment regexp '.*e.*', regexp_replace(l_comment,'e','+'), l_comment)")
 		]
 		
 		select("testCompareExprs", exprs)
@@ -148,8 +149,23 @@ class HiveExprTest extends MRBaseTest
 			build("L_COMMENT"),
 			build("L_EXTENDEDPRICE"),
 			build("L_EXTENDEDPRICE > 10000 and L_EXTENDEDPRICE < 30000"),
-			build("L_EXTENDEDPRICE between 10000 and 30000"),
-			build("l_comment regexp '.*y.*'")
+//			build("L_EXTENDEDPRICE between 10000 and 30000"),
+			build("l_comment regexp '.*y.*'"),
+			build("(L_EXTENDEDPRICE > 10000 and L_EXTENDEDPRICE < 30000) or (l_comment regexp '.*y.*')")
+		]
+		println exprs[2].toStringTree()
+		
+		select("testDateExprs", exprs)
+	}
+	
+	@Test
+	void testArithmeticExprs()
+	{
+		ArrayList<ASTNode> exprs = [
+			build("L_COMMENT"),
+			build("l_quantity"),
+			build("l_quantity + 5 - 10 - 5 + 10.0"),
+			build("(l_quantity + 5 - 10 - 5 + 10.0)*2 - l_quantity")
 		]
 		println exprs[2].toStringTree()
 		

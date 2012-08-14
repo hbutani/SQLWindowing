@@ -333,8 +333,8 @@ public class ByteBasedList
 	
 	private static final int INCREMENT_SIZE = (int) Math.pow(2, 16); 
 	
-	static final int SMALL_SIZE =  (int) Math.pow(2, 6 +10);                // 64KB
-	static final int MEDIUM_SIZE = (int) Math.pow(2, (10 + 10 + 3));            // 8 MB
-	static final int LARGE_SIZE = (int) Math.pow(2, (6 + 10 + 10));         // 64 MB
+	public static final int SMALL_SIZE =  (int) Math.pow(2, 6 +10);                // 64KB
+	public static final int MEDIUM_SIZE = (int) Math.pow(2, (10 + 10 + 3));            // 8 MB
+	public static final int LARGE_SIZE = (int) Math.pow(2, (6 + 10 + 10));         // 64 MB
 
 }

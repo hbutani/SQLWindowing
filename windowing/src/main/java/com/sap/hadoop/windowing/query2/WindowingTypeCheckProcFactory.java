@@ -1,4 +1,4 @@
-package com.sap.hadoop.query2;
+package com.sap.hadoop.windowing.query2;
 
 import java.util.ArrayList;
 import java.util.Arrays;

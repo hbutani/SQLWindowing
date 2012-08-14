@@ -14,7 +14,7 @@ import org.apache.hadoop.hive.ql.parse.ASTNode;
 
 import org.junit.Test;
 
-import com.sap.hadoop.query2.specification.QuerySpec;
+import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 import com.sap.hadoop.windowing.BaseTest;
 import com.sap.hadoop.windowing.WindowingException;
 

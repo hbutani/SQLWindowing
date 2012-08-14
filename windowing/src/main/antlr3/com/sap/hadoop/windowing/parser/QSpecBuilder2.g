@@ -14,12 +14,12 @@ scope PartOrderScope {
 @header {
 package com.sap.hadoop.windowing.parser;
 
-import com.sap.hadoop.query2.specification.*;
-import com.sap.hadoop.query2.specification.WindowFrameSpec.Direction;
-import com.sap.hadoop.query2.specification.WindowFrameSpec.BoundarySpec;
-import com.sap.hadoop.query2.specification.WindowFrameSpec.RangeBoundarySpec;
-import com.sap.hadoop.query2.specification.WindowFrameSpec.CurrentRowSpec;
-import com.sap.hadoop.query2.specification.WindowFrameSpec.ValueBoundarySpec;
+import com.sap.hadoop.windowing.query2.specification.*;
+import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.Direction;
+import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.BoundarySpec;
+import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.RangeBoundarySpec;
+import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.CurrentRowSpec;
+import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.ValueBoundarySpec;
 import com.sap.hadoop.metadata.Order;
 
 import com.sap.hadoop.windowing.Constants;

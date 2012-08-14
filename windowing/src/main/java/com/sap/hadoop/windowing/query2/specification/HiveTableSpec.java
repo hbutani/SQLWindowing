@@ -1,4 +1,4 @@
-package com.sap.hadoop.query2.specification;
+package com.sap.hadoop.windowing.query2.specification;
 
 public class HiveTableSpec extends QueryInputSpec
 {

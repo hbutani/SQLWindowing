@@ -12,8 +12,8 @@ import org.junit.Test;
 
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.MRBaseTest;
-import com.sap.hadoop.query2.WindowingTypeCheckProcFactory;
-import com.sap.hadoop.query2.specification.QuerySpec;
+import com.sap.hadoop.windowing.query2.WindowingTypeCheckProcFactory;
+import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 import com.sap.hadoop.windowing.io.IOUtils;
 import com.sap.hadoop.windowing.io.WindowingInput;
 

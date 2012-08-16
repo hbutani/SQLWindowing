@@ -265,18 +265,8 @@ public class HiveUtils
 
 			db = validateDB(client, db);
 			org.apache.hadoop.hive.ql.metadata.Table t = Hive.get(conf).getTable(db, table);
-			RowResolver rwsch = new RowResolver();
 			 StructObjectInspector rowObjectInspector = (StructObjectInspector) t.getDeserializer().getObjectInspector();
-			 List<? extends StructField> fields = rowObjectInspector.getAllStructFieldRefs();
-			 for (int i = 0; i < fields.size(); i++)
-			 {
-				 rwsch.put(alias, fields.get(i).getFieldName(), 
-						 	new ColumnInfo(fields.get(i).getFieldName(), 
-						 			TypeInfoUtils.getTypeInfoFromObjectInspector(fields.get(i).getFieldObjectInspector()), 
-						 			alias, 
-						 			false)
-				 );
-			 }
+			RowResolver rwsch = getRowResolver(alias, rowObjectInspector ) ;
 			 
 			 for (FieldSchema part_col : t.getPartCols()) 
 			 {
@@ -314,4 +304,27 @@ public class HiveUtils
 		}
 	}
 
+	public static RowResolver getRowResolver(String tabAlias, StructObjectInspector rowObjectInspector ) throws WindowingException
+	{
+		LOG.info("HiveUtils::getRowResolver invoked on ObjectInspector");
+		try
+		{
+			RowResolver rwsch = new RowResolver();
+			 List<? extends StructField> fields = rowObjectInspector.getAllStructFieldRefs();
+			 for (int i = 0; i < fields.size(); i++)
+			 {
+				 rwsch.put(tabAlias, fields.get(i).getFieldName(), 
+						 	new ColumnInfo(fields.get(i).getFieldName(), 
+						 			TypeInfoUtils.getTypeInfoFromObjectInspector(fields.get(i).getFieldObjectInspector()), 
+						 			tabAlias, 
+						 			false)
+				 );
+			 }
+			return rwsch;
+		}
+		catch(Exception me)
+		{
+			throw new WindowingException(me);
+		}
+	}
 }

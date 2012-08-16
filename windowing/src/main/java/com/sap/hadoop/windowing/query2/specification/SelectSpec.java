@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.antlr.runtime.tree.CommonTree;
+import org.apache.hadoop.hive.ql.parse.ASTNode;
 
 public class SelectSpec implements Iterable<Object>
 {
-	ArrayList<CommonTree> expressions;
+	ArrayList<ASTNode> expressions;
 	ArrayList<WindowFunctionSpec> windowFuncs;
 	ArrayList<Boolean> isWindowFn;
 	ArrayList<String> aliases;
 	
-	public ArrayList<CommonTree> getExpressions()
+	public ArrayList<ASTNode> getExpressions()
 	{
 		return expressions;
 	}
@@ -20,10 +21,10 @@ public class SelectSpec implements Iterable<Object>
 	public void addExpression(CommonTree expr, String alias)
 	{
 		isWindowFn = isWindowFn == null ? new ArrayList<Boolean>() : isWindowFn;
-		expressions = expressions == null ? new ArrayList<CommonTree>() : expressions;
+		expressions = expressions == null ? new ArrayList<ASTNode>() : expressions;
 		aliases = aliases == null ? new ArrayList<String>() : aliases;
 		isWindowFn.add(false);
-		expressions.add(expr);
+		expressions.add((ASTNode) expr);
 		aliases.add(alias);
 	}
 	
@@ -49,7 +50,7 @@ public class SelectSpec implements Iterable<Object>
 	
 	public class It implements Iterator<Object>
 	{
-		Iterator<CommonTree> exprIt;
+		Iterator<ASTNode> exprIt;
 		Iterator<WindowFunctionSpec> wnFnIt;
 		Iterator<Boolean> isWnfnIt;
 		

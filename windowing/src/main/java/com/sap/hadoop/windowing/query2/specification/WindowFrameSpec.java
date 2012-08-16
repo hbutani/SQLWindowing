@@ -3,6 +3,8 @@ package com.sap.hadoop.windowing.query2.specification;
 import static com.sap.hadoop.Utils.sprintf;
 
 import org.antlr.runtime.tree.CommonTree;
+import org.apache.hadoop.hive.ql.parse.ASTNode;
+import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 
 public class WindowFrameSpec
 {
@@ -192,7 +194,8 @@ public class WindowFrameSpec
 	public static class ValueBoundarySpec extends BoundarySpec
 	{
 		Direction direction;
-		CommonTree expression;
+		ASTNode expression;
+		ExprNodeDesc exprNode;
 		int amt;
 		
 		public ValueBoundarySpec() {}
@@ -202,7 +205,7 @@ public class WindowFrameSpec
 		{
 			super();
 			this.direction = direction;
-			this.expression = expression;
+			this.expression = (ASTNode) expression;
 			this.amt = amt;
 		}
 
@@ -216,14 +219,14 @@ public class WindowFrameSpec
 			this.direction = direction;
 		}
 
-		public CommonTree getExpression()
+		public ASTNode getExpression()
 		{
 			return expression;
 		}
 
 		public void setExpression(CommonTree expression)
 		{
-			this.expression = expression;
+			this.expression = (ASTNode) expression;
 		}
 
 		public int getAmt()
@@ -234,6 +237,16 @@ public class WindowFrameSpec
 		public void setAmt(int amt)
 		{
 			this.amt = amt;
+		}
+		
+		public ExprNodeDesc getExprNode()
+		{
+			return exprNode;
+		}
+
+		public void setExprNode(ExprNodeDesc exprNode)
+		{
+			this.exprNode = exprNode;
 		}
 
 		@Override

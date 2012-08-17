@@ -16,26 +16,10 @@ import com.sap.hadoop.windowing.query2.specification.WindowSpec;
  */
 public class WindowDef
 {
-	/*
-	 * this window definition is tied to the following sourc structure.
-	 * In the future this will enable (Partition, Order) specification for a QueryInput to refer to a Window definition. 
-	 * This will require that we accept window definitions on DataSets other then the input to the Windowing Table Function. 
-	 */
-	StructObjectInspector sourceStruct;
 	WindowSpec sourceWSpec;
 	PartitionDef partDef;
 	OrderDef orderDef;
 	WindowFrameSpec window;
-	
-	public StructObjectInspector getSourceStruct()
-	{
-		return sourceStruct;
-	}
-	
-	public void setSourceStruct(StructObjectInspector sourceStruct)
-	{
-		this.sourceStruct = sourceStruct;
-	}
 	
 	public WindowSpec getSourceWSpec()
 	{

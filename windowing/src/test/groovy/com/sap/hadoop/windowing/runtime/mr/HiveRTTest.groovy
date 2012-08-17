@@ -138,33 +138,31 @@ class HiveRTTest extends MRBaseTest
 			this.inOI = inOI
 			ArrayList<ExprNodeDesc> colList = conf.getColList();
 			eval = new ExprNodeEvaluator[colList.size()];
-			for (int i = 0; i < colList.size(); i++) {
-			  assert (colList.get(i) != null);
-			  eval[i] = ExprNodeEvaluatorFactory.get(colList.get(i));
+			for (int i = 0; i < colList.size(); i++) 
+			{
+				assert (colList.get(i) != null);
+				eval[i] = ExprNodeEvaluatorFactory.get(colList.get(i));
 			}
-		
+
 			output = new Object[eval.length];
-			
-			outOI = initEvaluatorsAndReturnStruct(eval, conf
-				.getOutputColumnNames(), inOI);
+
+			outOI = initEvaluatorsAndReturnStruct(eval, conf	.getOutputColumnNames(), inOI);
 		}
 		
-		protected static StructObjectInspector initEvaluatorsAndReturnStruct(
-			ExprNodeEvaluator[] evals, List<String> outputColName,
-			ObjectInspector rowInspector) throws HiveException {
-		  ObjectInspector[] fieldObjectInspectors = initEvaluators(evals,
-			  rowInspector);
-		  return ObjectInspectorFactory.getStandardStructObjectInspector(
-			  outputColName, Arrays.asList(fieldObjectInspectors));
+		protected static StructObjectInspector initEvaluatorsAndReturnStruct(ExprNodeEvaluator[] evals, List<String> outputColName, ObjectInspector rowInspector) throws HiveException 
+		{
+			ObjectInspector[] fieldObjectInspectors = initEvaluators(evals, rowInspector);
+			return ObjectInspectorFactory.getStandardStructObjectInspector(outputColName, Arrays.asList(fieldObjectInspectors));
 		}
 			
-		protected static ObjectInspector[] initEvaluators(ExprNodeEvaluator[] evals,
-			ObjectInspector rowInspector) throws HiveException {
-		  ObjectInspector[] result = new ObjectInspector[evals.length];
-		  for (int i = 0; i < evals.length; i++) {
-			result[i] = evals[i].initialize(rowInspector);
-		  }
-		  return result;
+		protected static ObjectInspector[] initEvaluators(ExprNodeEvaluator[] evals, ObjectInspector rowInspector) throws HiveException
+		{
+			ObjectInspector[] result = new ObjectInspector[evals.length];
+			for (int i = 0; i < evals.length; i++)
+			{
+				result[i] = evals[i].initialize(rowInspector);
+			}
+			return result;
 		}
 			
 		public void process(Object row) throws HiveException

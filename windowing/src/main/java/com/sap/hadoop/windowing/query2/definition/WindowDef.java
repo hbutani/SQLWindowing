@@ -2,8 +2,6 @@ package com.sap.hadoop.windowing.query2.definition;
 
 import static com.sap.hadoop.Utils.sprintf;
 
-import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
-
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec;
 import com.sap.hadoop.windowing.query2.specification.WindowSpec;
 

@@ -8,8 +8,10 @@ import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
 
 public class TableFuncDef extends QueryInputDef
 {
+	String name;
 	ArrayList<ExprNodeDesc> argExprNodes;
 	QueryInputDef input;
+	
 	
 	public TableFuncSpec getTableFuncSpec()
 	{
@@ -35,4 +37,15 @@ public class TableFuncDef extends QueryInputDef
 	{
 		this.input = input;
 	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
 }

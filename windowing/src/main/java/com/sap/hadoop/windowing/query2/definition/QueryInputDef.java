@@ -1,11 +1,14 @@
 package com.sap.hadoop.windowing.query2.definition;
 
+import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
+
 import com.sap.hadoop.windowing.query2.specification.QueryInputSpec;
 
 public class QueryInputDef
 {
 	QueryInputSpec inputSpec;
 	WindowDef window;
+	StructObjectInspector OI;
 	
 	public QueryInputSpec getSpec()
 	{
@@ -25,6 +28,16 @@ public class QueryInputDef
 	public void setWindow(WindowDef window)
 	{
 		this.window = window;
+	}
+
+	public StructObjectInspector getOI()
+	{
+		return OI;
+	}
+
+	public void setOI(StructObjectInspector oI)
+	{
+		OI = oI;
 	}
 	
 }

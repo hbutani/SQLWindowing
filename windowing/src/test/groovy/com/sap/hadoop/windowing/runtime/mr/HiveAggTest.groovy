@@ -24,6 +24,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.io.Writable;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -61,13 +62,56 @@ class HiveAggTest  extends MRBaseTest
 		typeChkCtx.setUnparseTranslator(new UnparseTranslator());
 	}
 	
+	@Before
+	public void setup()
+	{
+		wIn = IOUtils.createTableWindowingInput(null, "lineitem", wshell.cfg)
+	}
+	
 	@Test
 	void test1()
 	{
 		ArrayList<WindowFunctionSpec> exprs = [
-			build("sum(L_EXTENDEDPRICE)")
+			build("sum(L_EXTENDEDPRICE)"),
+			build("min(L_EXTENDEDPRICE)"),
+			build("max(L_EXTENDEDPRICE)"),
+			build("avg(L_EXTENDEDPRICE)"),
 		]
 		aggregate("test1", exprs)
+	}
+	
+	@Test
+	void testCount()
+	{
+		ArrayList<WindowFunctionSpec> exprs = [
+			build("count(*)"),
+			build("count(distinct l_extendedprice)"),
+			build("count(distinct l_extendedprice, l_shipdate)"),
+			build("count(l_shipdate)")
+		]
+		aggregate("testcount", exprs)
+	}
+	
+	@Test
+	void testStat()
+	{
+		ArrayList<WindowFunctionSpec> exprs = [
+			build("stddev(l_extendedprice)"),
+			build("variance(l_extendedprice)"),
+			build("corr(l_discount, l_extendedprice)"),
+			build("covar_pop(l_discount, l_extendedprice)")
+		]
+		aggregate("testStat", exprs)
+	}
+	
+	@Test
+	void testDistribution()
+	{
+		ArrayList<WindowFunctionSpec> exprs = [
+			build("histogram_numeric(l_extendedprice, 5)"),
+			build("percentile(l_linenumber, 0.5)")
+		]
+		aggregate("testDistribution", exprs)
 	}
 
 	public void aggregate(String testName, ArrayList<WindowFunctionSpec> funcSpecs)
@@ -297,11 +341,14 @@ class AggFunc
 	
 	void initEvaluators(ObjectInspector inOI) throws HiveException
 	{
-		funcArgOIs = new ObjectInspector[funcArgNodes.length];
-		int i = 0;
-		for(ExprNodeEvaluator funcArgEval : funcArgEvaluators)
+		if (funcArgNodes != null )
 		{
-			funcArgOIs[i++] = funcArgEval.initialize(inOI);
+			funcArgOIs = new ObjectInspector[funcArgNodes.length];
+			int i = 0;
+			for(ExprNodeEvaluator funcArgEval : funcArgEvaluators)
+			{
+				funcArgOIs[i++] = funcArgEval.initialize(inOI);
+			}
 		}
 		
 		OI = funcEvaluator.init(GenericUDAFEvaluator.Mode.COMPLETE, funcArgOIs)

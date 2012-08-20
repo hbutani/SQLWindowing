@@ -44,6 +44,7 @@ public class WindowFunctionSpec
 
 	public ArrayList<CommonTree> getArgs()
 	{
+		args = args == null ? new ArrayList<CommonTree>() : args;
 		return args;
 	}
 

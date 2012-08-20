@@ -45,7 +45,7 @@ tokens {
 @header {
 package com.sap.hadoop.windowing.parser;
 
-import com.sap.hadoop.windowing.functions.FunctionRegistry;
+import com.sap.hadoop.windowing.functions2.FunctionRegistry;
 }
 
 @lexer::header {
@@ -83,9 +83,9 @@ package com.sap.hadoop.windowing.parser;
     return b;
   }
   
-  public boolean isWindowingFunction(Token t)
+  public boolean isWindowFunction(Token t)
   {
-     return FunctionRegistry.isWindowingFunction(t.getText());
+     return FunctionRegistry.isWindowFunction(t.getText());
   }
   
 }
@@ -180,7 +180,7 @@ loadClause:
 
 window_function 
   : 
-  {isWindowingFunction(input.LT(1))}? functionName 
+  {isWindowFunction(input.LT(1))}? functionName 
     LPAREN 
     (
       (star=STAR)

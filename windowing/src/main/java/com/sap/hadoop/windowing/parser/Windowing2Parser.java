@@ -1,8 +1,8 @@
-// $ANTLR 3.0.1 Windowing2.g 2012-08-07 13:23:33
+// $ANTLR 3.0.1 Windowing2.g 2012-08-17 14:24:20
 
 package com.sap.hadoop.windowing.parser;
 
-import com.sap.hadoop.windowing.functions.FunctionRegistry;
+import com.sap.hadoop.windowing.functions2.FunctionRegistry;
 
 
 import org.antlr.runtime.*;
@@ -238,9 +238,9 @@ public class Windowing2Parser extends Parser {
         return b;
       }
       
-      public boolean isWindowingFunction(Token t)
+      public boolean isWindowFunction(Token t)
       {
-         return FunctionRegistry.isWindowingFunction(t.getText());
+         return FunctionRegistry.isWindowFunction(t.getText());
       }
       
 
@@ -455,7 +455,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: outputClause, select, window_clause, tableSpec, where
+            // elements: select, tableSpec, window_clause, where, outputClause
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -637,7 +637,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: select, window_clause, where, outputClause, tableSpec
+            // elements: tableSpec, where, select, window_clause, outputClause
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -774,7 +774,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: selectColumn, SELECT
+            // elements: SELECT, selectColumn
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -893,10 +893,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_53 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -912,10 +912,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_54 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -931,10 +931,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_55 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -950,10 +950,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_56 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -969,10 +969,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_57 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -988,10 +988,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_58 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1007,10 +1007,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_59 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1026,10 +1026,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_60 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1045,10 +1045,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_61 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1064,10 +1064,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_62 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1083,10 +1083,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_63 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1102,10 +1102,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_64 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1121,10 +1121,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_65 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1140,10 +1140,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_66 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1159,10 +1159,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_67 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1178,10 +1178,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_68 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1197,10 +1197,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_69 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1216,10 +1216,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_70 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1239,10 +1239,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_71 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1258,10 +1258,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_72 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1277,10 +1277,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_73 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1324,10 +1324,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_74 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1343,10 +1343,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_75 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1362,10 +1362,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_76 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1381,10 +1381,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_77 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1400,10 +1400,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_78 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1419,10 +1419,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_79 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1438,10 +1438,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_80 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1457,10 +1457,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_81 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1476,10 +1476,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_82 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1495,10 +1495,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_83 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1514,10 +1514,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_84 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1533,10 +1533,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_85 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1552,10 +1552,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_86 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1571,10 +1571,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_87 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1590,10 +1590,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_88 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1609,10 +1609,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_89 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1628,10 +1628,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_90 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1647,10 +1647,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_91 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1670,10 +1670,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_92 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1689,10 +1689,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_93 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1708,10 +1708,10 @@ public class Windowing2Parser extends Parser {
                         {
                         int LA10_94 = input.LA(4);
 
-                        if ( (!(isWindowingFunction(input.LT(1)))) ) {
+                        if ( (!(isWindowFunction(input.LT(1)))) ) {
                             alt10=1;
                         }
-                        else if ( (isWindowingFunction(input.LT(1))) ) {
+                        else if ( (isWindowFunction(input.LT(1))) ) {
                             alt10=2;
                         }
                         else {
@@ -1785,7 +1785,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: Identifier, expression
+                    // elements: expression, Identifier
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -2055,9 +2055,9 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: p, p, tf, hvT, p, o, hdf, o, hq, o, o, p
+            // elements: hdf, p, o, p, tf, hq, o, p, o, o, hvT, p
             // token labels: 
-            // rule labels: retval, hq, hvT, p, hdf, o, tf
+            // rule labels: retval, hq, hvT, p, tf, o, hdf
             // token list labels: 
             // rule list labels: 
             if ( backtracking==0 ) {
@@ -2066,9 +2066,9 @@ public class Windowing2Parser extends Parser {
             RewriteRuleSubtreeStream stream_hq=new RewriteRuleSubtreeStream(adaptor,"token hq",hq!=null?hq.tree:null);
             RewriteRuleSubtreeStream stream_hvT=new RewriteRuleSubtreeStream(adaptor,"token hvT",hvT!=null?hvT.tree:null);
             RewriteRuleSubtreeStream stream_p=new RewriteRuleSubtreeStream(adaptor,"token p",p!=null?p.tree:null);
-            RewriteRuleSubtreeStream stream_hdf=new RewriteRuleSubtreeStream(adaptor,"token hdf",hdf!=null?hdf.tree:null);
-            RewriteRuleSubtreeStream stream_o=new RewriteRuleSubtreeStream(adaptor,"token o",o!=null?o.tree:null);
             RewriteRuleSubtreeStream stream_tf=new RewriteRuleSubtreeStream(adaptor,"token tf",tf!=null?tf.tree:null);
+            RewriteRuleSubtreeStream stream_o=new RewriteRuleSubtreeStream(adaptor,"token o",o!=null?o.tree:null);
+            RewriteRuleSubtreeStream stream_hdf=new RewriteRuleSubtreeStream(adaptor,"token hdf",hdf!=null?hdf.tree:null);
 
             root_0 = (Object)adaptor.nil();
             // 130:2: -> {tf != null}? ^( INPUT $tf ( $p)? ( $o)? )
@@ -2300,7 +2300,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: i1, i1, i2
+            // elements: i2, i1, i1
             // token labels: i2, i1
             // rule labels: retval
             // token list labels: 
@@ -2449,7 +2449,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: expression, tableSpec, name
+            // elements: name, expression, tableSpec
             // token labels: name
             // rule labels: retval
             // token list labels: 
@@ -2840,7 +2840,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: p, s, lc
+            // elements: p, lc, s
             // token labels: p
             // rule labels: retval, s, lc
             // token list labels: 
@@ -2967,7 +2967,7 @@ public class Windowing2Parser extends Parser {
             if ( backtracking==0 ) stream_outputFormatOrWriter.add(o.getTree());
 
             // AST REWRITE
-            // elements: p, o, SERDE, s
+            // elements: s, p, SERDE, o
             // token labels: s
             // rule labels: retval, p, o
             // token list labels: 
@@ -3133,7 +3133,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: namevalue, SERDEPROPERTIES
+            // elements: SERDEPROPERTIES, namevalue
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -3241,7 +3241,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: StringLiteral, RECORDWRITER
+                    // elements: RECORDWRITER, StringLiteral
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -3433,7 +3433,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: t, ov, l
+            // elements: ov, t, l
             // token labels: ov, t, l
             // rule labels: retval
             // token list labels: 
@@ -3540,9 +3540,9 @@ public class Windowing2Parser extends Parser {
             // Windowing2.g:182:3: ({...}? functionName LPAREN ( (star= STAR ) | (dist= DISTINCT )? ( expression ( COMMA expression )* )? ) RPAREN ( OVER ws= window_specification )? -> {$star != null}? ^( WDW_FUNCTIONSTAR functionName ( $ws)? ) -> {$dist == null}? ^( WDW_FUNCTION functionName ( ( expression )+ )? ( $ws)? ) -> ^( WDW_FUNCTIONDIST functionName ( ( expression )+ )? ( $ws)? ) )
             // Windowing2.g:183:3: {...}? functionName LPAREN ( (star= STAR ) | (dist= DISTINCT )? ( expression ( COMMA expression )* )? ) RPAREN ( OVER ws= window_specification )?
             {
-            if ( !(isWindowingFunction(input.LT(1))) ) {
+            if ( !(isWindowFunction(input.LT(1))) ) {
                 if (backtracking>0) {failed=true; return retval;}
-                throw new FailedPredicateException(input, "window_function", "isWindowingFunction(input.LT(1))");
+                throw new FailedPredicateException(input, "window_function", "isWindowFunction(input.LT(1))");
             }
             pushFollow(FOLLOW_functionName_in_window_function970);
             functionName60=functionName();
@@ -3704,7 +3704,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: expression, ws, ws, functionName, functionName, functionName, expression, ws
+            // elements: functionName, ws, expression, ws, expression, functionName, ws, functionName
             // token labels: 
             // rule labels: retval, ws
             // token list labels: 
@@ -4152,7 +4152,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: window_frame, partitionby, orderby, Identifier
+            // elements: window_frame, partitionby, Identifier, orderby
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -4765,7 +4765,7 @@ public class Windowing2Parser extends Parser {
             if ( backtracking==0 ) stream_rowsboundary.add(e.getTree());
 
             // AST REWRITE
-            // elements: e, s
+            // elements: s, e
             // token labels: 
             // rule labels: retval, e, s
             // token list labels: 
@@ -5042,7 +5042,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: d, Number
+                    // elements: Number, d
                     // token labels: d
                     // rule labels: retval
                     // token list labels: 
@@ -5146,7 +5146,7 @@ public class Windowing2Parser extends Parser {
             if ( backtracking==0 ) stream_valuesboundary.add(e.getTree());
 
             // AST REWRITE
-            // elements: e, s
+            // elements: s, e
             // token labels: 
             // rule labels: retval, e, s
             // token list labels: 
@@ -5453,7 +5453,7 @@ public class Windowing2Parser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: rngExp, rowExp, d
+                    // elements: d, rngExp, rowExp
                     // token labels: d, rngExp
                     // rule labels: retval, rowExp
                     // token list labels: 
@@ -5562,7 +5562,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: i2, i1, i1
+            // elements: i1, i1, i2
             // token labels: i2, i1
             // rule labels: retval
             // token list labels: 
@@ -5871,7 +5871,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: expression, functionName, expression, functionName, functionName
+            // elements: functionName, functionName, expression, functionName, expression
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -6440,7 +6440,7 @@ public class Windowing2Parser extends Parser {
 
 
             // AST REWRITE
-            // elements: expression, WHEN
+            // elements: WHEN, expression
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -7780,7 +7780,7 @@ public class Windowing2Parser extends Parser {
             	    if ( backtracking==0 ) stream_bitOrExpr.add(r.getTree());
 
             	    // AST REWRITE
-            	    // elements: nO, r, compareExpr, NOT
+            	    // elements: r, nO, NOT, compareExpr
             	    // token labels: 
             	    // rule labels: nO, retval, r
             	    // token list labels: 
@@ -7840,7 +7840,7 @@ public class Windowing2Parser extends Parser {
             	    if ( backtracking==0 ) stream_bitOrExpr.add(r.getTree());
 
             	    // AST REWRITE
-            	    // elements: compareExpr, cO, r
+            	    // elements: cO, r, compareExpr
             	    // token labels: 
             	    // rule labels: cO, retval, r
             	    // token list labels: 
@@ -7895,7 +7895,7 @@ public class Windowing2Parser extends Parser {
             	    if ( backtracking==0 ) stream_expressions.add(el.getTree());
 
             	    // AST REWRITE
-            	    // elements: IN, el, compareExpr, NOT
+            	    // elements: el, IN, NOT, compareExpr
             	    // token labels: 
             	    // rule labels: retval, el
             	    // token list labels: 
@@ -7954,7 +7954,7 @@ public class Windowing2Parser extends Parser {
             	    if ( backtracking==0 ) stream_expressions.add(expressions173.getTree());
 
             	    // AST REWRITE
-            	    // elements: compareExpr, el, IN
+            	    // elements: compareExpr, IN, el
             	    // token labels: 
             	    // rule labels: retval, el
             	    // token list labels: 
@@ -8018,7 +8018,7 @@ public class Windowing2Parser extends Parser {
             	    if ( backtracking==0 ) stream_bitOrExpr.add(max.getTree());
 
             	    // AST REWRITE
-            	    // elements: compareExpr, max, min, BETWEEN
+            	    // elements: BETWEEN, min, max, compareExpr
             	    // token labels: 
             	    // rule labels: min, retval, max
             	    // token list labels: 
@@ -8081,7 +8081,7 @@ public class Windowing2Parser extends Parser {
             	    if ( backtracking==0 ) stream_bitOrExpr.add(max.getTree());
 
             	    // AST REWRITE
-            	    // elements: min, BETWEEN, max, compareExpr
+            	    // elements: compareExpr, max, min, BETWEEN
             	    // token labels: 
             	    // rule labels: min, retval, max
             	    // token list labels: 

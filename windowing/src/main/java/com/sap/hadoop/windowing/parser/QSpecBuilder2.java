@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 QSpecBuilder2.g 2012-08-13 17:24:10
+// $ANTLR 3.0.1 QSpecBuilder2.g 2012-08-17 14:24:31
 
 package com.sap.hadoop.windowing.parser;
 

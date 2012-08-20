@@ -3,6 +3,7 @@ package com.sap.hadoop.windowing.query2;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.lib.Node;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.parse.RowResolver;
@@ -14,15 +15,27 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.OrderColumnDef;
+import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.specification.ColumnSpec;
+import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.BoundarySpec;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.ValueBoundarySpec;
+import com.sap.hadoop.windowing.runtime2.WindowingShell;
 
 import static com.sap.hadoop.Utils.sprintf;
 
 public class Translator
 {
+	
+	public QueryDef translate(QuerySpec qSpec, WindowingShell wShell) throws WindowingException
+	{
+		// clone the cfg
+		HiveConf qCfg = new HiveConf(wShell.getCfg());
+		QueryDef qry = new QueryDef();
+		qry.setHiveCfg(qCfg);
+		return null;
+	}
 	
 	OrderColumnDef translateOrderColumnReference(String tabAlias, Map<String, StructField> fieldMap, ColumnSpec cSpec) throws WindowingException
 	{

@@ -2,13 +2,15 @@ package com.sap.hadoop.windowing.query2.definition;
 
 import java.util.Map;
 
+import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 
-import com.sap.hadoop.windowing.query.QuerySpec;
 import com.sap.hadoop.windowing.query2.QueryTranslationInfo;
+import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 
 public class QueryDef
 {
+	HiveConf hCfg;
 	QuerySpec qSpec;
 	transient QueryTranslationInfo qTranslationInfo;
 	Map<String, WindowDef> windowDefs;
@@ -18,7 +20,7 @@ public class QueryDef
 	ReduceInputDef reduceInput;
 	QueryOutputDef output;
 	
-	public QuerySpec getqSpec()
+	public QuerySpec getSpec()
 	{
 		return qSpec;
 	}
@@ -95,5 +97,15 @@ public class QueryDef
 	public void setOutput(QueryOutputDef output)
 	{
 		this.output = output;
+	}
+
+	public HiveConf getHiveCfg()
+	{
+		return hCfg;
+	}
+
+	public void setHiveCfg(HiveConf hCfg)
+	{
+		this.hCfg = hCfg;
 	}
 }

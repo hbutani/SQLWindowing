@@ -1,13 +1,12 @@
 package com.sap.hadoop.windowing.query2.specification;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Properties;
 
 public class QueryOutputSpec implements INameValueList
 {
 	String path;
 	String serDeClass;
-	Map<String, String> serDeProps;
+	Properties serDeProps;
 	String recordWriterClass;
 	String outputFormatClass;
 	String hiveTable;
@@ -29,17 +28,17 @@ public class QueryOutputSpec implements INameValueList
 	{
 		this.serDeClass = serDeClass;
 	}
-	public Map<String, String> getSerDeProps()
+	public Properties getSerDeProps()
 	{
 		return serDeProps;
 	}
-	public void setSerDeProps(Map<String, String> serDeProps)
+	public void setSerDeProps(Properties serDeProps)
 	{
 		this.serDeProps = serDeProps;
 	}
 	public void addSerdeProperty(String name, String value)
 	{
-		serDeProps = serDeProps == null ? new HashMap<String, String>() : serDeProps;
+		serDeProps = serDeProps == null ? new Properties() : serDeProps;
 		serDeProps.put(name, value);
 	}
 	@Override
@@ -191,10 +190,10 @@ public class QueryOutputSpec implements INameValueList
 			{
 				buf.append(" with ");
 				boolean sfirst = true;
-				for(Map.Entry<String, String> entry : serDeProps.entrySet())
+				for(String pName : serDeProps.stringPropertyNames())
 				{
 					if (sfirst ) sfirst=false; else buf.append(", ");
-					buf.append(entry.getKey()).append(" = ").append(entry.getValue());
+					buf.append(pName).append(" = ").append(serDeProps.getProperty(pName));
 				}
 			}
 			

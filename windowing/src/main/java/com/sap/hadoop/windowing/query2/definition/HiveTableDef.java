@@ -60,14 +60,4 @@ public class HiveTableDef extends QueryInputDef
 		this.inputFormatClassName = inputFormatClassName;
 	}
 	
-	public ObjectInspector getOI()
-	{
-		return OI;
-	}
-	
-	public void setOI(ObjectInspector oI)
-	{
-		OI = oI;
-	}
-	
 }

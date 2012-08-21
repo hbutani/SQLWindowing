@@ -113,6 +113,15 @@ class HiveAggTest  extends MRBaseTest
 		]
 		aggregate("testDistribution", exprs)
 	}
+	
+	@Test
+	void testRank()
+	{
+		ArrayList<WindowFunctionSpec> exprs = [
+			build("rownumber()")
+		]
+		aggregate("testDistribution", exprs)
+	}
 
 	public void aggregate(String testName, ArrayList<WindowFunctionSpec> funcSpecs)
 	{

@@ -2,14 +2,12 @@ package com.sap.hadoop.windowing.query2.definition;
 
 import java.util.ArrayList;
 
-import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
-
 import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
 
 public class TableFuncDef extends QueryInputDef
 {
 	String name;
-	ArrayList<ExprNodeDesc> argExprNodes;
+	ArrayList<ArgDef> args;
 	QueryInputDef input;
 	
 	
@@ -18,14 +16,14 @@ public class TableFuncDef extends QueryInputDef
 		return (TableFuncSpec) inputSpec;
 	}
 
-	public ArrayList<ExprNodeDesc> getArgExprNodes()
+	public ArrayList<ArgDef> getArgs()
 	{
-		return argExprNodes;
+		return args;
 	}
 
-	public void setArgExprNodes(ArrayList<ExprNodeDesc> argExprNodes)
+	public void setArgs(ArrayList<ArgDef> args)
 	{
-		this.argExprNodes = argExprNodes;
+		this.args = args;
 	}
 
 	public QueryInputDef getInput()

@@ -7,7 +7,7 @@ import com.sap.hadoop.windowing.query2.specification.WindowFunctionSpec;
 public class WindowFunctionDef
 {
 	WindowFunctionSpec wSpec;
-	ArrayList<WindowDef> argNodes;
+	ArrayList<ArgDef> args;
 	WindowDef window;
 	
 	public WindowFunctionSpec getSpec()
@@ -19,17 +19,17 @@ public class WindowFunctionDef
 	{
 		this.wSpec = wSpec;
 	}
-	
-	public ArrayList<WindowDef> getArgNodes()
+		
+	public ArrayList<ArgDef> getArgs()
 	{
-		return argNodes;
+		return args;
 	}
-	
-	public void setArgNodes(ArrayList<WindowDef> exprNodes)
+
+	public void setArgs(ArrayList<ArgDef> args)
 	{
-		this.argNodes = exprNodes;
+		this.args = args;
 	}
-	
+
 	public WindowDef getWindow()
 	{
 		return window;

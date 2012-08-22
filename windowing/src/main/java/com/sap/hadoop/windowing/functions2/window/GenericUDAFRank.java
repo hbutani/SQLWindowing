@@ -14,6 +14,7 @@ import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator.AggregationBuf
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
@@ -66,7 +67,7 @@ public class GenericUDAFRank extends AbstractGenericUDAFResolver
 		{
 			rowNums = new ArrayList<IntWritable>();
 			currentRowNum = 0;
-			currentRank = 1;
+			currentRank = 0;
 		}
 
 		RankBuffer()
@@ -85,6 +86,7 @@ public class GenericUDAFRank extends AbstractGenericUDAFResolver
 	public static class GenericUDAFRankEvaluator extends GenericUDAFEvaluator
 	{
 		ObjectInspector inputOI;
+		ObjectInspector outputOI;
 		
 		@Override
 		public ObjectInspector init(Mode m, ObjectInspector[] parameters) throws HiveException
@@ -96,6 +98,7 @@ public class GenericUDAFRank extends AbstractGenericUDAFResolver
 						"Only COMPLETE mode supported for Rank function");
 			}
 			inputOI = parameters[0];
+			outputOI = ObjectInspectorUtils.getStandardObjectInspector(inputOI, ObjectInspectorCopyOption.JAVA);
 			return ObjectInspectorFactory.getStandardListObjectInspector(PrimitiveObjectInspectorFactory.writableIntObjectInspector);
 		}
 
@@ -115,11 +118,12 @@ public class GenericUDAFRank extends AbstractGenericUDAFResolver
 		public void iterate(AggregationBuffer agg, Object[] parameters) throws HiveException
 		{
 			RankBuffer rb = (RankBuffer) agg;
-			 int c = ObjectInspectorUtils.compare(rb.currVal, inputOI, parameters[0], inputOI);
+			 int c = ObjectInspectorUtils.compare(rb.currVal, outputOI, parameters[0], inputOI);
 			 rb.incrRowNum();
 			if ( rb.currentRowNum == 1 || c != 0 )
 			{
 				nextRank(rb);
+				rb.currVal = ObjectInspectorUtils.copyToStandardObject(parameters[0], inputOI, ObjectInspectorCopyOption.JAVA);
 			}
 			rb.addRank();
 		}

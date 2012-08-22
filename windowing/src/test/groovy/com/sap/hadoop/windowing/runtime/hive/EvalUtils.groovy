@@ -40,7 +40,7 @@ class EvalUtils
 
 	}
 	
-	public static void aggregate(String testName, EvalContext eCtx, ArrayList<WindowFunctionSpec> funcSpecs)
+	public static AggOp aggregate(String testName, EvalContext eCtx, ArrayList<WindowFunctionSpec> funcSpecs, boolean printRes = true)
 	{
 		println "$testName:\n"
 		
@@ -59,7 +59,8 @@ class EvalUtils
 			agg.process(r)
 		}
 		agg.finishAggregation()
-		println agg.output
+		if (printRes) println agg.output
+		return agg;
 	}
 
 }

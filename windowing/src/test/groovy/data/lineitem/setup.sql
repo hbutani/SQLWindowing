@@ -27,3 +27,10 @@ FIELDS TERMINATED BY '|' AS
 SELECT *
 FROM lineitem
 order BY l_extendedprice;
+
+CREATE TABLE sorted_lineitem2
+   ROW FORMAT DELIMITED                                                                                                            
+FIELDS TERMINATED BY '|' AS
+SELECT *
+FROM lineitem
+order BY l_quantity;

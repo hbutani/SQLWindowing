@@ -112,7 +112,7 @@ class HiveAggTest  extends MRBaseTest
 		aggregate("testDistribution", exprs)
 	}
 
-	public void aggregate(String testName, ArrayList<WindowFunctionSpec> funcSpecs)
+	public static void aggregate(String testName, ArrayList<WindowFunctionSpec> funcSpecs)
 	{
 		EvalUtils.aggregate(testName, eCtx, funcSpecs)
 	}

@@ -20,3 +20,10 @@ FIELDS TERMINATED BY '|';
 
 LOAD DATA LOCAL INPATH '/media/MyPassport/windowing/windowing/src/test/groovy/data/lineitem/lineitem.txt'
 OVERWRITE INTO TABLE lineitem;
+
+CREATE TABLE sorted_lineitem
+   ROW FORMAT DELIMITED                                                                                                            
+FIELDS TERMINATED BY '|' AS
+SELECT *
+FROM lineitem
+order BY l_extendedprice;

@@ -17,11 +17,20 @@ import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectIn
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.io.IntWritable;
 
-@Description(name = "rowNumber", value = "_FUNC_(x) - Returns the row numbers as an array<int>")
+import com.sap.hadoop.windowing.functions2.annotation.WindowFuncDef;
+
+@WindowFuncDef
+(	
+		description = @Description(
+								name = "rowNumber", 
+								value = "_FUNC_() - The ROW_NUMBER function assigns a unique number (sequentially, starting from 1, as defined by ORDER BY) to each row within the partition."
+								),
+		supportsWindow = false,
+		pivotResult = true
+)								
 public class GenericUDAFRowNumber extends AbstractGenericUDAFResolver
 {
-	static final Log LOG = LogFactory.getLog(GenericUDAFRowNumber.class
-			.getName());
+	static final Log LOG = LogFactory.getLog(GenericUDAFRowNumber.class.getName());
 
 	@Override
 	public GenericUDAFEvaluator getEvaluator(TypeInfo[] parameters)

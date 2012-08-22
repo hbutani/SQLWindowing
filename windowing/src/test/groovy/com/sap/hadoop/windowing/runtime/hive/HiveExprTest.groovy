@@ -1,4 +1,4 @@
-package com.sap.hadoop.windowing.runtime.mr
+package com.sap.hadoop.windowing.runtime.hive
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,35 +55,22 @@ import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 
 import org.apache.hadoop.hive.ql.plan.SelectDesc
 
-import com.sap.hadoop.windowing.runtime.mr.HiveRTTest.SelectOp
-
 class HiveExprTest extends MRBaseTest
 {
 
-	static RowResolver rr;
-	static WindowingInput wIn;
-	static Deserializer deS;
-	static ObjectInspector inoI;
-	static Writable w;
-	static TypeCheckCtx typeChkCtx;
+	static EvalContext eCtx;
 	
 	@BeforeClass
 	public static void setupClass()
 	{
 		MRBaseTest.setupClass();
-		wIn = IOUtils.createTableWindowingInput(null, "lineitem", wshell.cfg)
-		deS = wIn.getDeserializer()
-		inoI = deS.getObjectInspector()
-		w = wIn.createRow();
-		rr = HiveUtils.getRowResolver(null, "lineitem", "lineitem", wshell.cfg)
-		typeChkCtx = new TypeCheckCtx(rr);
-		typeChkCtx.setUnparseTranslator(new UnparseTranslator());
+		eCtx = new EvalContext(wshell.cfg)
 	}
 	
 	@Before
 	public void setup()
 	{
-		wIn = IOUtils.createTableWindowingInput(null, "lineitem", wshell.cfg)
+		eCtx.wIn = IOUtils.createTableWindowingInput(null, "lineitem", wshell.cfg)
 	}
 	
 	@Test
@@ -174,91 +161,12 @@ class HiveExprTest extends MRBaseTest
 	
 	public void select(String testName, ArrayList<ASTNode> exprs)
 	{
-		println "$testName:\n"
-		HashMap<Node, Object> map;
-		ArrayList<ExprNodeDesc> cols = []
-		exprs.each { e ->
-			map = WindowingTypeCheckProcFactory.genExprNode(e, typeChkCtx)
-			cols << map.get(e)
-		}
-		
-		
-		ArrayList<String> aliases = []
-		0..<exprs.size().each { i ->
-			aliases << "c${i}".toString()
-		}
-		
-		SelectDesc selectDesc = new SelectDesc(cols, aliases, false)
-		SelectOp select = new SelectOp()
-		select.initialize(selectDesc, inoI)
-				
-		while( wIn.next(w) != -1)
-		{
-			Object r = deS.deserialize(w)
-			select.process(r)
-			println select.output
-		}
-
+		EvalUtils.select(testName, eCtx, exprs);
 	}
 	
 	public static ASTNode build(String expr) throws WindowingException
 	{
-		Windowing2Lexer lexer;
-		CommonTokenStream tokens;
-		Windowing2Parser parser;
-		CommonTree t;
-		CommonTreeNodeStream nodes;
-		QSpecBuilder2 qSpecBldr;
-		String err;
-		
-		try
-		{
-			lexer = new Windowing2Lexer(new ANTLRStringStream(expr));
-			tokens = new CommonTokenStream(lexer);
-			parser = new Windowing2Parser(tokens);
-			parser.setTreeAdaptor(ParserTest2.adaptor);
-			t = parser.expression().getTree()
-			
-			err = parser.getWindowingParseErrors()
-			if ( err != null )
-			{
-				throw new WindowingException(err)
-			}
-		}
-		catch(Throwable te)
-		{
-			err = parser.getWindowingParseErrors()
-			if ( err != null )
-			{
-				throw new WindowingException(err)
-			}
-			throw new WindowingException("Parse Error:" + te.toString(), te)
-		}
-		
-		try
-		{
-			
-			nodes = new CommonTreeNodeStream(t);
-			nodes.setTokenStream(tokens)
-			qSpecBldr = new QSpecBuilder2(nodes);
-			ASTNode node = qSpecBldr.expression()
-	
-			err = qSpecBldr.getWindowingParseErrors()
-			if ( err != null )
-			{
-				throw new WindowingException(err)
-			}
-			
-			return node
-		}
-		catch(Throwable te)
-		{
-			err = qSpecBldr.getWindowingParseErrors()
-			if ( err != null )
-			{
-				throw new WindowingException(err)
-			}
-			throw new WindowingException("Parse Error:" + te.toString(), te)
-		}
+		return ParseUtils.buildExpression(expr);
 	}
+	
 }

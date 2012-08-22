@@ -13,8 +13,6 @@ import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectIn
 import org.apache.hadoop.io.IntWritable;
 
 import com.sap.hadoop.windowing.functions2.annotation.WindowFuncDef;
-import com.sap.hadoop.windowing.functions2.window.GenericUDAFRank.GenericUDAFRankEvaluator;
-import com.sap.hadoop.windowing.functions2.window.GenericUDAFRank.RankBuffer;
 
 @WindowFuncDef
 (	
@@ -29,7 +27,7 @@ import com.sap.hadoop.windowing.functions2.window.GenericUDAFRank.RankBuffer;
 		supportsWindow = false,
 		pivotResult = true
 )
-public class GenericUDAFCumeDist extends GenericUDAFRankEvaluator
+public class GenericUDAFCumeDist extends GenericUDAFRank
 {
 
 	static final Log LOG = LogFactory.getLog(GenericUDAFCumeDist.class.getName());

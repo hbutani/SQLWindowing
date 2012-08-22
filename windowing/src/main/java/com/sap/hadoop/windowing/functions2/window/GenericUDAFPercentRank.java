@@ -27,7 +27,7 @@ import com.sap.hadoop.windowing.functions2.window.GenericUDAFRank.RankBuffer;
 		supportsWindow = false,
 		pivotResult = true
 )
-public class GenericUDAFPercentRank extends GenericUDAFRankEvaluator
+public class GenericUDAFPercentRank extends GenericUDAFRank
 {
 	static final Log LOG = LogFactory.getLog(GenericUDAFPercentRank.class.getName());
 	

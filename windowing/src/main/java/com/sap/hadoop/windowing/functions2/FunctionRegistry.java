@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.hadoop.hive.ql.exec.FunctionInfo;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFResolver;
 
+import com.sap.hadoop.windowing.functions2.annotation.TableFuncDef;
 import com.sap.hadoop.windowing.functions2.annotation.WindowFuncDef;
 import com.sap.hadoop.windowing.functions2.window.GenericUDAFCumeDist;
 import com.sap.hadoop.windowing.functions2.window.GenericUDAFDenseRank;
@@ -15,6 +16,10 @@ import com.sap.hadoop.windowing.functions2.window.GenericUDAFNTile;
 import com.sap.hadoop.windowing.functions2.window.GenericUDAFPercentRank;
 import com.sap.hadoop.windowing.functions2.window.GenericUDAFRank;
 import com.sap.hadoop.windowing.functions2.window.GenericUDAFRowNumber;
+
+import com.sap.hadoop.windowing.functions2.table.Noop.NoopResolver;
+import com.sap.hadoop.windowing.functions2.table.NoopWithMap.NoopWithMapResolver;
+import com.sap.hadoop.windowing.functions2.table.WindowingTableFunction.WindowingTableFunctionResolver;
 
 @SuppressWarnings("deprecation")
 public class FunctionRegistry
@@ -82,5 +87,76 @@ public class FunctionRegistry
 				pivotResult = def.pivotResult();
 			}
 		}
+	}
+	
+	static final String WINDOWING_TABLE_FUNCTION = "windowingtablefunction";
+	
+	static Map<String, TableFunctionInfo> tableFunctions = Collections.synchronizedMap(new LinkedHashMap<String, TableFunctionInfo>());
+	
+	static
+	{
+		registerTableFunction("noop", new NoopResolver());
+		registerTableFunction("noopwithmap", new NoopWithMapResolver());
+		registerTableFunction(WINDOWING_TABLE_FUNCTION, new WindowingTableFunctionResolver());
+	}
+	
+	public static boolean isTableFunction(String name)
+	{
+		TableFunctionInfo tFInfo = tableFunctions.get(name.toLowerCase());
+		 return tFInfo != null && !tFInfo.isInternal();
+	}
+	
+	public static TableFunctionResolver getTableFunctionResolver(String name)
+	{
+		TableFunctionInfo tfInfo = tableFunctions.get(name.toLowerCase());
+		return tfInfo != null ? tfInfo.getFunctionResolver() : null;
+	}
+	
+	public static TableFunctionResolver getWindowingTableFunction()
+	{
+		return getTableFunctionResolver(WINDOWING_TABLE_FUNCTION);
+	}
+	
+	public static void registerTableFunction(String name, TableFunctionResolver tFn)
+	{
+		TableFunctionInfo tInfo = new TableFunctionInfo(name, tFn);
+		tableFunctions.put(name.toLowerCase(), tInfo);
+	}
+	
+	static class TableFunctionInfo
+	{
+		String displayName;
+		TableFunctionResolver functionResolver;
+		boolean isInternal;
+		
+		public TableFunctionInfo(String displayName, TableFunctionResolver functionResolver)
+		{
+			super();
+			this.displayName = displayName;
+			this.functionResolver = functionResolver;
+			isInternal = false;
+			Class<? extends TableFunctionResolver> wfnCls = functionResolver.getClass();
+			TableFuncDef def = wfnCls.getAnnotation(TableFuncDef.class);
+			if ( def != null)
+			{
+				isInternal = def.isInternal();
+			}
+		}
+
+		public String getDisplayName()
+		{
+			return displayName;
+		}
+
+		public TableFunctionResolver getFunctionResolver()
+		{
+			return functionResolver;
+		}
+
+		public boolean isInternal()
+		{
+			return isInternal;
+		} 
+		
 	}
 }

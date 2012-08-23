@@ -20,7 +20,7 @@ public class NoopWithMap extends Noop
 		return iPart;
 	}
 
-	public static class NoopResolver extends TableFunctionResolver
+	public static class NoopWithMapResolver extends TableFunctionResolver
 	{
 
 		@Override

@@ -24,7 +24,7 @@ import com.sap.hadoop.windowing.parser.Windowing2Lexer;
 import com.sap.hadoop.windowing.parser.Windowing2Parser;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
-import com.sap.hadoop.windowing.query2.Translator;
+import com.sap.hadoop.windowing.query2.translate.Translator;
 
 import static com.sap.hadoop.Utils.sprintf;
 

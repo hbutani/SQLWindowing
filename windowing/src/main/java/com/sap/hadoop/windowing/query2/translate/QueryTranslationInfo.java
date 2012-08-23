@@ -1,4 +1,4 @@
-package com.sap.hadoop.windowing.query2;
+package com.sap.hadoop.windowing.query2.translate;
 
 import java.util.Map;
 

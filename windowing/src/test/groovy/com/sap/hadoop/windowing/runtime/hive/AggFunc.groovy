@@ -13,8 +13,8 @@ import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator.AggregationBuf
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
 import com.sap.hadoop.windowing.WindowingException;
-import com.sap.hadoop.windowing.query2.WindowingTypeCheckProcFactory;
 import com.sap.hadoop.windowing.query2.specification.WindowFunctionSpec;
+import com.sap.hadoop.windowing.query2.translate.WindowingTypeCheckProcFactory;
 
 class AggFunc
 {

@@ -6,8 +6,8 @@ import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.ql.plan.SelectDesc;
 
-import com.sap.hadoop.windowing.query2.WindowingTypeCheckProcFactory;
 import com.sap.hadoop.windowing.query2.specification.WindowFunctionSpec;
+import com.sap.hadoop.windowing.query2.translate.WindowingTypeCheckProcFactory;
 
 class EvalUtils
 {

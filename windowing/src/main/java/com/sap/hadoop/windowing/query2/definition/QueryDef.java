@@ -5,8 +5,8 @@ import java.util.Map;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 
-import com.sap.hadoop.windowing.query2.QueryTranslationInfo;
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
+import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo;
 
 public class QueryDef
 {

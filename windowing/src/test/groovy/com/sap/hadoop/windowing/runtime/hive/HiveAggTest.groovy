@@ -37,8 +37,8 @@ import com.sap.hadoop.windowing.parser.ParserTest2;
 import com.sap.hadoop.windowing.parser.QSpecBuilder2;
 import com.sap.hadoop.windowing.parser.Windowing2Lexer;
 import com.sap.hadoop.windowing.parser.Windowing2Parser;
-import com.sap.hadoop.windowing.query2.WindowingTypeCheckProcFactory;
 import com.sap.hadoop.windowing.query2.specification.WindowFunctionSpec;
+import com.sap.hadoop.windowing.query2.translate.WindowingTypeCheckProcFactory;
 
 class HiveAggTest  extends MRBaseTest
 {

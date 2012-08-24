@@ -1,19 +1,15 @@
 package com.sap.hadoop.windowing.query2.definition;
 
-import java.util.Properties;
-
-import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
-
+import java.util.Map;
 import com.sap.hadoop.windowing.query2.specification.HiveTableSpec;
 
 public class HiveTableDef extends QueryInputDef
 {
 	String tableSerdeClassName;
-	Properties tableSerdeProps;
+	Map<String, String> tableSerdeProps;
 	
 	String location;
 	String inputFormatClassName;
-	ObjectInspector OI;
 	
 	public HiveTableSpec getHiveTableSpec()
 	{
@@ -30,12 +26,12 @@ public class HiveTableDef extends QueryInputDef
 		this.tableSerdeClassName = tableSerdeClassName;
 	}
 	
-	public Properties getTableSerdeProps()
+	public Map<String, String> getTableSerdeProps()
 	{
 		return tableSerdeProps;
 	}
 	
-	public void setTableSerdeProps(Properties tableSerdeProps)
+	public void setTableSerdeProps(Map<String, String> tableSerdeProps)
 	{
 		this.tableSerdeProps = tableSerdeProps;
 	}

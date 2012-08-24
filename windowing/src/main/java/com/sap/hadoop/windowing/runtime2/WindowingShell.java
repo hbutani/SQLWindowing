@@ -2,9 +2,6 @@ package com.sap.hadoop.windowing.runtime2;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-
-import groovy.lang.GroovyShell;
 
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Token;

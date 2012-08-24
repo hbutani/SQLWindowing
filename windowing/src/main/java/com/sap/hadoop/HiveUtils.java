@@ -23,6 +23,7 @@ import org.apache.hadoop.hive.metastore.api.StorageDescriptor;
 import org.apache.hadoop.hive.metastore.api.Table;
 import org.apache.hadoop.hive.ql.exec.ColumnInfo;
 import org.apache.hadoop.hive.ql.metadata.Hive;
+import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.metadata.VirtualColumn;
 import org.apache.hadoop.hive.ql.parse.RowResolver;
 import org.apache.hadoop.hive.serde2.Deserializer;
@@ -33,10 +34,10 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapred.FileInputFormat;
 import org.apache.hadoop.mapred.InputFormat;
-import org.apache.hadoop.mapred.InputSplit;
+//import org.apache.hadoop.mapred.InputSplit;
 import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.Reporter;
-import org.apache.hadoop.mapred.TextInputFormat;
+//import org.apache.hadoop.mapred.Reporter;
+//import org.apache.hadoop.mapred.TextInputFormat;
 
 import com.sap.hadoop.metadata.Utils;
 import com.sap.hadoop.windowing.WindowingException;
@@ -44,6 +45,19 @@ import com.sap.hadoop.windowing.WindowingException;
 public class HiveUtils
 {
 	private static final Log LOG = LogFactory.getLog("com.sap.hadoop.windowing");
+	
+	
+	public static Hive getHive(HiveConf hCfg) throws WindowingException
+	{
+		try
+		{
+			return Hive.get(hCfg);
+		}
+		catch(HiveException he)
+		{
+			throw new WindowingException(he);
+		}
+	}
 	
 	@SuppressWarnings("unchecked")
 	public static List<FieldSchema> addTableasJobInput(String db, String table, JobConf job, FileSystem fs) throws WindowingException
@@ -137,6 +151,19 @@ public class HiveUtils
 		catch(WindowingException w)
 		{
 			throw w;
+		}
+		catch(Exception e)
+		{
+			throw new WindowingException(e);
+		}
+	}
+	
+	public static Deserializer getDeserializer(HiveConf conf, Table t) throws WindowingException
+	{
+		LOG.info("HiveUtils::getDeserializer invoked");
+		try
+		{
+			return MetaStoreUtils.getDeserializer(conf, t);
 		}
 		catch(Exception e)
 		{
@@ -246,6 +273,7 @@ public class HiveUtils
 				onestr = StringUtils.substring(onestr, 7);
 			}
 
+			@SuppressWarnings("deprecation")
 			URL oneurl = (new File(onestr)).toURL();
 			if (!curPath.contains(oneurl))
 			{

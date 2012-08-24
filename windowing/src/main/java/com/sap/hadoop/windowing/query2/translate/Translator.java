@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.lib.Node;
+import org.apache.hadoop.hive.ql.metadata.Hive;
+import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.parse.RowResolver;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
@@ -12,6 +14,7 @@ import org.apache.hadoop.hive.ql.parse.TypeCheckCtx;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 
+import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.OrderColumnDef;
@@ -33,10 +36,20 @@ public class Translator
 		// clone the cfg
 		HiveConf qCfg = new HiveConf(wShell.getCfg());
 		QueryDef qry = new QueryDef();
-		qry.setHiveCfg(qCfg);
 		
 		QueryTranslationInfo transInfo = new QueryTranslationInfo();
-		qry.setqTranslationInfo(transInfo);
+		transInfo.setHiveCfg(qCfg);
+		transInfo.setWshell(wShell);
+		try
+		{
+			transInfo.setHive(Hive.get(qCfg));
+			transInfo.setHiveMSClient(HiveUtils.getClient(qCfg));
+		}
+		catch(HiveException he)
+		{
+			throw new WindowingException(he);
+		}
+		qry.setTranslationInfo(transInfo);
 		
 		return qry;
 	}

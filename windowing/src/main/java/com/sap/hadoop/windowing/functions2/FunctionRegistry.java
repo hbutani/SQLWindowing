@@ -89,13 +89,14 @@ public class FunctionRegistry
 		}
 	}
 	
-	static final String WINDOWING_TABLE_FUNCTION = "windowingtablefunction";
+	public static final String WINDOWING_TABLE_FUNCTION = "windowingtablefunction";
+	public static final String NOOP_TABLE_FUNCTION = "noop";
 	
 	static Map<String, TableFunctionInfo> tableFunctions = Collections.synchronizedMap(new LinkedHashMap<String, TableFunctionInfo>());
 	
 	static
 	{
-		registerTableFunction("noop", new NoopResolver());
+		registerTableFunction(NOOP_TABLE_FUNCTION, new NoopResolver());
 		registerTableFunction("noopwithmap", new NoopWithMapResolver());
 		registerTableFunction(WINDOWING_TABLE_FUNCTION, new WindowingTableFunctionResolver());
 	}
@@ -115,6 +116,11 @@ public class FunctionRegistry
 	public static TableFunctionResolver getWindowingTableFunction()
 	{
 		return getTableFunctionResolver(WINDOWING_TABLE_FUNCTION);
+	}
+	
+	public static TableFunctionResolver getNoopTableFunction()
+	{
+		return getTableFunctionResolver(NOOP_TABLE_FUNCTION);
 	}
 	
 	public static void registerTableFunction(String name, TableFunctionResolver tFn)

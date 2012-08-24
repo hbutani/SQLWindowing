@@ -3,9 +3,11 @@ package com.sap.hadoop;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Stack;
 
 import org.apache.hadoop.hive.serde.Constants;
 import org.apache.hadoop.hive.serde2.SerDeException;
@@ -77,5 +79,42 @@ public class Utils
     	buf.append("]");
     	return buf.toString();
     }
+    
+    public static class ReverseIterator<T> implements Iterator<T>
+    {
+    	Stack<T> stack;
+    	
+    	public ReverseIterator(Iterator<T> it)
+    	{
+    		stack = new Stack<T>();
+    		while(it.hasNext())
+    		{
+    			stack.push(it.next());
+    		}
+    	}
+
+		@Override
+		public boolean hasNext()
+		{
+			return !stack.isEmpty();
+		}
+
+		@Override
+		public T next()
+		{
+			return stack.pop();
+		}
+
+		@Override
+		public void remove()
+		{
+			throw new UnsupportedOperationException();
+		}
+    }
+    
+    public static abstract class Predicate<T>
+    {
+    	public abstract boolean apply(T obj);
+    };
 
 }

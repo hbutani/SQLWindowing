@@ -34,7 +34,11 @@ public class Translator
 		HiveConf qCfg = new HiveConf(wShell.getCfg());
 		QueryDef qry = new QueryDef();
 		qry.setHiveCfg(qCfg);
-		return null;
+		
+		QueryTranslationInfo transInfo = new QueryTranslationInfo();
+		qry.setqTranslationInfo(transInfo);
+		
+		return qry;
 	}
 	
 	OrderColumnDef translateOrderColumnReference(String tabAlias, Map<String, StructField> fieldMap, ColumnSpec cSpec) throws WindowingException

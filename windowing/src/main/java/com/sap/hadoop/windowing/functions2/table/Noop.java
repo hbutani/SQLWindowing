@@ -25,7 +25,7 @@ public class Noop extends TableFunctionEvaluator
 		}
 
 		@Override
-		public TableFunctionEvaluator setupEvaluator()
+		protected TableFunctionEvaluator setupEvaluator()
 		{
 			return new Noop();
 		}

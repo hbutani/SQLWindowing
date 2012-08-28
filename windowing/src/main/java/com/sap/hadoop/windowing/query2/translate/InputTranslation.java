@@ -2,22 +2,29 @@ package com.sap.hadoop.windowing.query2.translate;
 
 import static com.sap.hadoop.Utils.sprintf;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
 import org.apache.hadoop.hive.metastore.api.StorageDescriptor;
 import org.apache.hadoop.hive.metastore.api.Table;
 import org.apache.hadoop.hive.ql.metadata.Hive;
+import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.serde2.Deserializer;
+import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions2.FunctionRegistry;
+import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
+import com.sap.hadoop.windowing.functions2.TableFunctionResolver;
+import com.sap.hadoop.windowing.query2.definition.ArgDef;
 import com.sap.hadoop.windowing.query2.definition.HiveQueryDef;
 import com.sap.hadoop.windowing.query2.definition.HiveTableDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
+import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.specification.HiveQuerySpec;
 import com.sap.hadoop.windowing.query2.specification.HiveTableSpec;
 import com.sap.hadoop.windowing.query2.specification.OrderSpec;
@@ -25,6 +32,7 @@ import com.sap.hadoop.windowing.query2.specification.PartitionSpec;
 import com.sap.hadoop.windowing.query2.specification.QueryInputSpec;
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
+import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 import com.sap.hadoop.windowing.runtime2.HiveQueryExecutor;
 
 /*
@@ -44,83 +52,155 @@ public class InputTranslation
 	static ITranslationTask TranslateInputSpecs = new ITranslationTask() {
 		public void execute(QueryDef qDef) throws WindowingException
 		{
+			QueryTranslationInfo tInfo = qDef.getTranslationInfo();
 			QuerySpec qSpec = qDef.getSpec();
 			Iterator<QueryInputSpec> it = TranslateUtils.iterateInputSpecs(qSpec, true);
 			QueryInputDef currentIDef = null;
+			int inputNum = 0;
 			while(it.hasNext())
 			{
 				QueryInputSpec nextSpec = it.next();
 				if (nextSpec instanceof HiveTableSpec)
 				{
-					currentIDef = translate(qDef, (HiveTableSpec) nextSpec, null);
+					currentIDef = InputTranslation.translate(qDef, (HiveTableSpec) nextSpec, (HiveTableDef) null);
 				}
 				else if (nextSpec instanceof HiveQuerySpec)
 				{
-					currentIDef = translate(qDef, (HiveQuerySpec) nextSpec);
+					currentIDef = InputTranslation.translate(qDef, (HiveQuerySpec) nextSpec);
 				}
 				else
 				{
-					//handle a TableFunction.
+					currentIDef = translate(qDef, (TableFuncSpec) nextSpec, currentIDef);
 				}
+				String alias = getTableAlias(qDef, inputNum, currentIDef);
+				tInfo.addInput(alias, currentIDef);
+				inputNum++;
 			}
 			
 			qDef.setInput(currentIDef);
 		}
 		
-		private HiveTableDef translate(QueryDef qDef, HiveTableSpec spec, HiveTableDef def) throws WindowingException
+	};
+	
+	private static String getTableAlias(QueryDef qDef, int inputNum, QueryInputDef inputDef) throws WindowingException
+	{
+		if ( inputDef instanceof HiveTableDef)
 		{
-			def = def == null ? new HiveTableDef() : def;
-			HiveMetaStoreClient hiveMSC = qDef.getTranslationInfo().getHiveMSClient();
-			Hive hive = qDef.getTranslationInfo().getHive();
-			
-			def.setSpec(spec);
-			
-			if ( spec.getDbName() == null )
-			{
-				spec.setDbName(hive.getCurrentDatabase());
-			}
-			
-			try
-			{
-				Table t = hiveMSC.getTable(spec.getDbName(), spec.getTableName());
-				StorageDescriptor sd = t.getSd();
-				def.setInputFormatClassName(sd.getInputFormat());
-				def.setTableSerdeClassName(sd.getSerdeInfo().getSerializationLib());
-				def.setTableSerdeProps(sd.getSerdeInfo().getParameters());
-				def.setLocation(sd.getLocation());
-				
-				Deserializer serde = HiveUtils.getDeserializer(qDef.getTranslationInfo().getHiveCfg(), t);
-				def.setOI((StructObjectInspector)serde.getObjectInspector());
-			}
-			catch(WindowingException we)
-			{
-				throw we;
-			}
-			catch(Exception he)
-			{
-				throw new WindowingException(he);
-			}
-			
-			return def;
+			HiveTableDef hTbldef = (HiveTableDef) inputDef;
+			String db = ((HiveTableSpec)hTbldef.getSpec()).getDbName();
+			String tableName = ((HiveTableSpec)hTbldef.getSpec()).getTableName();
+			return db + "." + tableName;
+		}
+		else if ( inputDef instanceof TableFuncDef)
+		{
+			return "ptf_" + inputNum;
+		}
+		throw new WindowingException(sprintf("Internal Error: attempt to translate %s", inputDef.getSpec()));
+	}
+
+	private static HiveTableDef translate(QueryDef qDef, HiveTableSpec spec, HiveTableDef def) throws WindowingException
+	{
+		def = def == null ? new HiveTableDef() : def;
+		HiveMetaStoreClient hiveMSC = qDef.getTranslationInfo().getHiveMSClient();
+		Hive hive = qDef.getTranslationInfo().getHive();
+		
+		def.setSpec(spec);
+		
+		if ( spec.getDbName() == null )
+		{
+			spec.setDbName(hive.getCurrentDatabase());
 		}
 		
-		private HiveQueryDef translate(QueryDef qDef, HiveQuerySpec spec) throws WindowingException
+		try
 		{
-			HiveQueryDef def = new HiveQueryDef();
-			HiveQueryExecutor hiveQryExec = qDef.getTranslationInfo().getHiveQueryExecutor();
-			Hive hive = qDef.getTranslationInfo().getHive();
+			Table t = hiveMSC.getTable(spec.getDbName(), spec.getTableName());
+			StorageDescriptor sd = t.getSd();
+			def.setInputFormatClassName(sd.getInputFormat());
+			def.setTableSerdeClassName(sd.getSerdeInfo().getSerializationLib());
+			def.setTableSerdeProps(sd.getSerdeInfo().getParameters());
+			def.setLocation(sd.getLocation());
 			
-			String tableName = hiveQryExec.createTableAsQuery(spec.getHiveQuery());
-			HiveTableSpec tSpec = new HiveTableSpec();
-			tSpec.setDbName(hive.getCurrentDatabase());
-			tSpec.setTableName(tableName);
-			tSpec.setPartition(spec.getPartition());
-			tSpec.setOrder(spec.getOrder());
-			def = (HiveQueryDef) translate(qDef, tSpec, (HiveTableDef) def);
-			return def;
+			Deserializer serde = HiveUtils.getDeserializer(qDef.getTranslationInfo().getHiveCfg(), t);
+			def.setOI((StructObjectInspector)serde.getObjectInspector());
+			def.setSerde((SerDe) serde);
 		}
-	};
+		catch(WindowingException we)
+		{
+			throw we;
+		}
+		catch(Exception he)
+		{
+			throw new WindowingException(he);
+		}
+		
+		return def;
+	}
+	
+	private static HiveQueryDef translate(QueryDef qDef, HiveQuerySpec spec) throws WindowingException
+	{
+		HiveQueryDef def = new HiveQueryDef();
+		HiveQueryExecutor hiveQryExec = qDef.getTranslationInfo().getHiveQueryExecutor();
+		Hive hive = qDef.getTranslationInfo().getHive();
+		
+		String tableName = hiveQryExec.createTableAsQuery(spec.getHiveQuery());
+		HiveTableSpec tSpec = new HiveTableSpec();
+		tSpec.setDbName(hive.getCurrentDatabase());
+		tSpec.setTableName(tableName);
+		tSpec.setPartition(spec.getPartition());
+		tSpec.setOrder(spec.getOrder());
+		def = (HiveQueryDef) InputTranslation.translate(qDef, tSpec, (HiveTableDef) def);
+		return def;
+	}
+	
+	private static TableFuncDef translate(QueryDef qDef, TableFuncSpec tSpec, QueryInputDef inputDef) throws WindowingException
+	{
+		QueryTranslationInfo tInfo = qDef.getTranslationInfo();
+		
+		TableFunctionResolver tFn = FunctionRegistry.getTableFunctionResolver(tSpec.getName());
+		if ( tFn == null)
+		{
+			throw new WindowingException(sprintf("Unknown Table Function %s", tSpec.getName()));
+		}
+		
+		TableFuncDef tDef = new TableFuncDef();
+		tDef.setSpec(tSpec);
+		tDef.setInput(inputDef);
+		InputInfo iInfo = tInfo.getInputInfo(inputDef); 
+		
+		/*
+		 * translate args
+		 */
+		ArrayList<ASTNode> args = tSpec.getArgs();
+		if ( args != null)
+		{
+			for(ASTNode expr : args)
+			{
+				ArgDef argDef = translateTableFunctionArg(qDef, tDef, iInfo,  expr);
+				tDef.addArg(argDef);
+			}
+		}
+		
+		TableFunctionEvaluator tEval = tFn.initialize(qDef, tDef);
+		
+		tDef.setFunction(tFn);
+		tDef.setEvaluator(tEval);
+		
+		tDef.setOI(tFn.getOutputOI());
+		
+		/*
+		 * setup the SerDe.
+		 */
+		SerDe serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(), tDef.getOI());
+		tDef.setSerde(serde);
 
+		return tDef;
+	}
+		
+	private static ArgDef translateTableFunctionArg(QueryDef qDef, TableFuncDef tDef, InputInfo iInfo, ASTNode arg) throws WindowingException
+	{
+		return TranslateUtils.buildArgDef(qDef, iInfo, arg);
+	}
+	
 	/*
 	 * If query has no table function, then add one: if query has window functions add the WindowingTableFunc; else add the Noop table function.
 	 */

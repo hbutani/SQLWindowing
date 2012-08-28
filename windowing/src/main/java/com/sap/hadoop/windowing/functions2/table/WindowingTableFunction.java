@@ -26,7 +26,7 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 		}
 
 		@Override
-		public TableFunctionEvaluator setupEvaluator()
+		protected TableFunctionEvaluator setupEvaluator()
 		{
 			// TODO Auto-generated method stub
 			return null;

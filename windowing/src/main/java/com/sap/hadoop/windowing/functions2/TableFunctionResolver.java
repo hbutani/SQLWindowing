@@ -22,11 +22,10 @@ public abstract class TableFunctionResolver
 	protected StructObjectInspector mapOI;
 	protected TableFuncDef tDef;
 	
-	public void initialize(QueryDef qDef, TableFuncDef tDef) throws WindowingException
+	public TableFunctionEvaluator initialize(QueryDef qDef, TableFuncDef tDef) throws WindowingException
 	{
 		setHasMapPhase();
 		setupOI();
-		tDef.setOI(OI);
 		if ( hasMapPhase())
 		{
 			setupMapOI();
@@ -34,8 +33,9 @@ public abstract class TableFunctionResolver
 		/*
 		 * todo: do this as a explicit call; can be deferred to runtime
 		 */
-//		TableFunctionEvaluator tfEval =  setupEvaluator();
-//		tfEval.setResolver(this);
+		TableFunctionEvaluator tfEval =  setupEvaluator();
+		tfEval.setResolver(this);
+		return tfEval;
 	}
 	
 	public boolean hasMapPhase()
@@ -73,6 +73,6 @@ public abstract class TableFunctionResolver
 		}
 	}
 	
-	public abstract TableFunctionEvaluator setupEvaluator();
+	protected abstract TableFunctionEvaluator setupEvaluator();
 	
 }

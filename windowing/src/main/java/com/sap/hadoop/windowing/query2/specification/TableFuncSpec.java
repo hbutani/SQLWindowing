@@ -3,11 +3,12 @@ package com.sap.hadoop.windowing.query2.specification;
 import java.util.ArrayList;
 
 import org.antlr.runtime.tree.CommonTree;
+import org.apache.hadoop.hive.ql.parse.ASTNode;
 
 public class TableFuncSpec extends QueryInputSpec
 {
 	String name;
-	ArrayList<CommonTree> args;
+	ArrayList<ASTNode> args;
 	QueryInputSpec input;
 	
 	public TableFuncSpec() {}
@@ -27,20 +28,20 @@ public class TableFuncSpec extends QueryInputSpec
 		this.name = name;
 	}
 	
-	public ArrayList<CommonTree> getArgs()
+	public ArrayList<ASTNode> getArgs()
 	{
 		return args;
 	}
 	
-	public void setArgs(ArrayList<CommonTree> args)
+	public void setArgs(ArrayList<ASTNode> args)
 	{
 		this.args = args;
 	}
 
 	public void addArg(CommonTree arg)
 	{
-		args = args == null ? new ArrayList<CommonTree>() : args;
-		args.add(arg);
+		args = args == null ? new ArrayList<ASTNode>() : args;
+		args.add((ASTNode)arg);
 	}
 
 	public QueryInputSpec getInput()

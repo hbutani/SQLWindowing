@@ -1,12 +1,18 @@
 package com.sap.hadoop.windowing.query2.translate;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
 import org.apache.hadoop.hive.ql.metadata.Hive;
+import org.apache.hadoop.hive.ql.parse.RowResolver;
+import org.apache.hadoop.hive.ql.parse.TypeCheckCtx;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
+import com.sap.hadoop.HiveUtils;
+import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.definition.WindowDef;
 import com.sap.hadoop.windowing.runtime2.HiveQueryExecutor;
 import com.sap.hadoop.windowing.runtime2.WindowingShell;
@@ -32,7 +38,7 @@ public class QueryTranslationInfo
 	/*
 	 * A map from a QueryInput to its Shape.
 	 */
-	Map<String, StructObjectInspector> OIMap;
+	Map<QueryInputDef, InputInfo> inputInfoMap;
 	
 	public HiveConf getHiveCfg()
 	{
@@ -77,6 +83,32 @@ public class QueryTranslationInfo
 	public HiveQueryExecutor getHiveQueryExecutor()
 	{
 		return getWshell().getHiveQryExec();
+	}
+	
+	void addInput(String alias, QueryInputDef input) throws WindowingException
+	{
+		inputInfoMap = inputInfoMap == null ? new HashMap<QueryInputDef, QueryTranslationInfo.InputInfo>() : inputInfoMap;
+		inputInfoMap.put(input, new InputInfo(alias, input.getOI()));
+	}
+	
+	InputInfo getInputInfo(QueryInputDef input)
+	{
+		return inputInfoMap.get(input);
+	}
+	
+	static class InputInfo
+	{
+		StructObjectInspector OI;
+		RowResolver rr;
+		TypeCheckCtx tCtx;
+		
+		InputInfo(String tabAlias, StructObjectInspector OI) throws WindowingException
+		{
+			this.OI = OI;
+			rr = HiveUtils.getRowResolver(tabAlias, OI);
+			tCtx = new TypeCheckCtx(rr);
+			tCtx.setUnparseTranslator(null);
+		}
 	}
 
 }

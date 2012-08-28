@@ -14,6 +14,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query2.specification.WindowFunctionSpec;
+import com.sap.hadoop.windowing.query2.translate.TranslateUtils;
 import com.sap.hadoop.windowing.query2.translate.WindowingTypeCheckProcFactory;
 
 class AggFunc
@@ -49,8 +50,7 @@ class AggFunc
 		for (int i = 0; i < funcSpec.getArgs().size(); i++) 
 		{
 		  ASTNode paraExpr = (ASTNode) funcSpec.args[i];
-		  map = WindowingTypeCheckProcFactory.genExprNode(paraExpr, eCtx.typeChkCtx)
-		  aggParameters.add(map.get(paraExpr))
+		  aggParameters.add(TranslateUtils.buildExprNode(paraExpr, eCtx.typeChkCtx))
 		}
 		funcArgNodes = aggParameters.toArray(new ExprNodeDesc[aggParameters.size()])
 	}

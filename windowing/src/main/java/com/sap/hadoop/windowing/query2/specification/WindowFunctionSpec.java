@@ -3,13 +3,14 @@ package com.sap.hadoop.windowing.query2.specification;
 import java.util.ArrayList;
 
 import org.antlr.runtime.tree.CommonTree;
+import org.apache.hadoop.hive.ql.parse.ASTNode;
 
 public class WindowFunctionSpec
 {
 	String name;
 	boolean isStar;
 	boolean isDistinct;
-	ArrayList<CommonTree> args;
+	ArrayList<ASTNode> args;
 	WindowSpec windowSpec;
 	
 	public String getName()
@@ -42,21 +43,21 @@ public class WindowFunctionSpec
 		this.isDistinct = isDistinct;
 	}
 
-	public ArrayList<CommonTree> getArgs()
+	public ArrayList<ASTNode> getArgs()
 	{
-		args = args == null ? new ArrayList<CommonTree>() : args;
+		args = args == null ? new ArrayList<ASTNode>() : args;
 		return args;
 	}
 
-	public void setArgs(ArrayList<CommonTree> args)
+	public void setArgs(ArrayList<ASTNode> args)
 	{
 		this.args = args;
 	}
 	
 	public void addArg(CommonTree arg)
 	{
-		args = args == null ? new ArrayList<CommonTree>() : args;
-		args.add(arg);
+		args = args == null ? new ArrayList<ASTNode>() : args;
+		args.add((ASTNode)arg);
 	}
 
 	public WindowSpec getWindowSpec()

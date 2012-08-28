@@ -42,7 +42,7 @@ public class NoopWithMap extends Noop
 		}
 
 		@Override
-		public TableFunctionEvaluator setupEvaluator()
+		protected TableFunctionEvaluator setupEvaluator()
 		{
 			return new NoopWithMap();
 		}

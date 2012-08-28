@@ -1,15 +1,12 @@
 package com.sap.hadoop.windowing.query2.translate;
 
-import java.util.HashMap;
+import static com.sap.hadoop.Utils.sprintf;
+
 import java.util.Map;
 
 import org.apache.hadoop.hive.conf.HiveConf;
-import org.apache.hadoop.hive.ql.lib.Node;
 import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
-import org.apache.hadoop.hive.ql.parse.ASTNode;
-import org.apache.hadoop.hive.ql.parse.RowResolver;
-import org.apache.hadoop.hive.ql.parse.SemanticException;
 import org.apache.hadoop.hive.ql.parse.TypeCheckCtx;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
@@ -25,8 +22,6 @@ import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.BoundarySpec;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.ValueBoundarySpec;
 import com.sap.hadoop.windowing.runtime2.WindowingShell;
-
-import static com.sap.hadoop.Utils.sprintf;
 
 public class Translator
 {
@@ -104,26 +99,10 @@ public class Translator
 		if ( bndSpec instanceof ValueBoundarySpec )
 		{
 			ValueBoundarySpec vBndSpec = (ValueBoundarySpec) bndSpec;
-			ExprNodeDesc exprNode = Translator.buildExprNode(vBndSpec.getExpression(), typeChkCtx);
+			ExprNodeDesc exprNode = TranslateUtils.buildExprNode(vBndSpec.getExpression(), typeChkCtx);
 			vBndSpec.setExprNode(exprNode);
 		}
 	}
 	
 	
-/*
- * utitlity methods	
- */
-	static ExprNodeDesc  buildExprNode(ASTNode expr, TypeCheckCtx typeChkCtx) throws WindowingException
-	{
-		try
-		{
-			HashMap<Node, Object> map = WindowingTypeCheckProcFactory.genExprNode(expr, typeChkCtx);
-			ExprNodeDesc exprNode = (ExprNodeDesc) map.get(expr);
-			return exprNode;
-		}
-		catch(SemanticException se)
-		{
-			throw new WindowingException(se);
-		}
-	}
 }

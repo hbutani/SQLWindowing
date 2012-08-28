@@ -31,6 +31,6 @@ class EvalContext
 		w = wIn.createRow();
 		rr = HiveUtils.getRowResolver(null, "lineitem", "lineitem", cfg)
 		typeChkCtx = new TypeCheckCtx(rr);
-		typeChkCtx.setUnparseTranslator(new UnparseTranslator());
+		//typeChkCtx.setUnparseTranslator(new UnparseTranslator());
 	}
 }

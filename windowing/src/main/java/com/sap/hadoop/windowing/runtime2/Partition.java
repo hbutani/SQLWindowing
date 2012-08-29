@@ -26,10 +26,20 @@ public class Partition implements Iterable<Object>
 	
 	public Partition(HiveConf cfg, SerDe serDe, StructObjectInspector oI) throws WindowingException
 	{
-		this.serDe = serDe;
-		OI = oI;
 		String partitionClass = cfg.get(Constants.WINDOW_PARTITION_CLASS, Constants.DEFAULT_WINDOW_PARTITION_CLASS);
 		int partitionMemSize = cfg.getInt(Constants.WINDOW_PARTITION_MEM_SIZE, ByteBasedList.LARGE_SIZE);
+		init(partitionClass, partitionMemSize, serDe, oI);
+	}
+	
+	public Partition(String partitionClass, int partitionMemSize, SerDe serDe, StructObjectInspector oI) throws WindowingException
+	{
+		init(partitionClass, partitionMemSize, serDe, oI);
+	}
+	
+	private void init(String partitionClass, int partitionMemSize, SerDe serDe, StructObjectInspector oI) throws WindowingException
+	{
+		this.serDe = serDe;
+		OI = oI;
 		elems = ListFactory.createList(partitionClass, partitionMemSize);
 		sz = 0;
 		wRow = createWritable();
@@ -84,6 +94,18 @@ public class Partition implements Iterable<Object>
 		{
 			elems.append(o);
 			sz++;
+		}
+		catch(Exception e)
+		{
+			throw new WindowingException(e);
+		}
+	}
+	
+	public void append(Object o) throws WindowingException 
+	{
+		try
+		{
+			append(serDe.serialize(o, OI));
 		}
 		catch(Exception e)
 		{

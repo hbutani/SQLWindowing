@@ -50,6 +50,7 @@ public class QueryDef
 	
 	public SelectDef getSelectList()
 	{
+		selectList = selectList == null ? new SelectDef() : selectList;
 		return selectList;
 	}
 	

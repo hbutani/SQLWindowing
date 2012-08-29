@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.hadoop.hive.ql.exec.FunctionInfo;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFResolver;
 
+import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions2.annotation.TableFuncDef;
 import com.sap.hadoop.windowing.functions2.annotation.WindowFuncDef;
 import com.sap.hadoop.windowing.functions2.window.GenericUDAFCumeDist;
@@ -45,6 +46,11 @@ public class FunctionRegistry
 		 return wFInfo != null;
 	}
 	
+	public static WindowFunctionInfo getWindowFunctionInfo(String name)
+	{
+		return windowFunctions.get(name.toLowerCase());
+	}
+	
 	@SuppressWarnings("static-access")
 	static void registerHiveUDAFsAsWindowFunctions()
 	{
@@ -69,7 +75,7 @@ public class FunctionRegistry
 		windowFunctions.put(name.toLowerCase(), wInfo);
 	}
 	
-	static class WindowFunctionInfo
+	public static class WindowFunctionInfo
 	{
 		boolean supportsWindow = true;
 		boolean pivotResult = false;
@@ -87,6 +93,21 @@ public class FunctionRegistry
 				pivotResult = def.pivotResult();
 			}
 		}
+
+		public boolean isSupportsWindow()
+		{
+			return supportsWindow;
+		}
+
+		public boolean isPivotResult()
+		{
+			return pivotResult;
+		}
+
+		public FunctionInfo getfInfo()
+		{
+			return fInfo;
+		}
 	}
 	
 	public static final String WINDOWING_TABLE_FUNCTION = "windowingtablefunction";
@@ -96,9 +117,9 @@ public class FunctionRegistry
 	
 	static
 	{
-		registerTableFunction(NOOP_TABLE_FUNCTION, new NoopResolver());
-		registerTableFunction("noopwithmap", new NoopWithMapResolver());
-		registerTableFunction(WINDOWING_TABLE_FUNCTION, new WindowingTableFunctionResolver());
+		registerTableFunction(NOOP_TABLE_FUNCTION, NoopResolver.class);
+		registerTableFunction("noopwithmap", NoopWithMapResolver.class);
+		registerTableFunction(WINDOWING_TABLE_FUNCTION,  WindowingTableFunctionResolver.class);
 	}
 	
 	public static boolean isTableFunction(String name)
@@ -107,42 +128,48 @@ public class FunctionRegistry
 		 return tFInfo != null && !tFInfo.isInternal();
 	}
 	
-	public static TableFunctionResolver getTableFunctionResolver(String name)
+	public static TableFunctionResolver getTableFunctionResolver(String name) throws WindowingException
 	{
 		TableFunctionInfo tfInfo = tableFunctions.get(name.toLowerCase());
-		return tfInfo != null ? tfInfo.getFunctionResolver() : null;
+		try
+		{
+			return tfInfo != null ? tfInfo.getFunctionResolver().newInstance() : null;
+		}
+		catch(Exception e)
+		{
+			throw new WindowingException(e);
+		}
 	}
 	
-	public static TableFunctionResolver getWindowingTableFunction()
+	public static TableFunctionResolver getWindowingTableFunction() throws WindowingException
 	{
 		return getTableFunctionResolver(WINDOWING_TABLE_FUNCTION);
 	}
 	
-	public static TableFunctionResolver getNoopTableFunction()
+	public static TableFunctionResolver getNoopTableFunction() throws WindowingException
 	{
 		return getTableFunctionResolver(NOOP_TABLE_FUNCTION);
 	}
 	
-	public static void registerTableFunction(String name, TableFunctionResolver tFn)
+	public static void registerTableFunction(String name, Class<? extends TableFunctionResolver> tFnCls)
 	{
-		TableFunctionInfo tInfo = new TableFunctionInfo(name, tFn);
+		TableFunctionInfo tInfo = new TableFunctionInfo(name, tFnCls);
 		tableFunctions.put(name.toLowerCase(), tInfo);
 	}
 	
 	static class TableFunctionInfo
 	{
 		String displayName;
-		TableFunctionResolver functionResolver;
+		Class<? extends TableFunctionResolver>  functionResolver;
 		boolean isInternal;
 		
-		public TableFunctionInfo(String displayName, TableFunctionResolver functionResolver)
+		public TableFunctionInfo(String displayName, Class<? extends TableFunctionResolver> tFnCls)
 		{
 			super();
 			this.displayName = displayName;
-			this.functionResolver = functionResolver;
+			this.functionResolver = tFnCls;
 			isInternal = false;
-			Class<? extends TableFunctionResolver> wfnCls = functionResolver.getClass();
-			TableFuncDef def = wfnCls.getAnnotation(TableFuncDef.class);
+			TableFuncDef def = functionResolver.getAnnotation(TableFuncDef.class);
 			if ( def != null)
 			{
 				isInternal = def.isInternal();
@@ -154,7 +181,7 @@ public class FunctionRegistry
 			return displayName;
 		}
 
-		public TableFunctionResolver getFunctionResolver()
+		public Class<? extends TableFunctionResolver> getFunctionResolver()
 		{
 			return functionResolver;
 		}

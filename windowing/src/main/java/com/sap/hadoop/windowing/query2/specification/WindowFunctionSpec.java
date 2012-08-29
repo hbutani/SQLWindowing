@@ -12,6 +12,7 @@ public class WindowFunctionSpec
 	boolean isDistinct;
 	ArrayList<ASTNode> args;
 	WindowSpec windowSpec;
+	String alias;
 	
 	public String getName()
 	{
@@ -68,6 +69,16 @@ public class WindowFunctionSpec
 	public void setWindowSpec(WindowSpec windowSpec)
 	{
 		this.windowSpec = windowSpec;
+	}
+	
+	public String getAlias()
+	{
+		return alias;
+	}
+
+	public void setAlias(String alias)
+	{
+		this.alias = alias;
 	}
 
 	@Override
@@ -152,6 +163,11 @@ public class WindowFunctionSpec
 		if ( windowSpec != null )
 		{
 			buf.append(" ").append(windowSpec.toString());
+		}
+		
+		if ( alias != null )
+		{
+			buf.append(" as ").append(alias);
 		}
 
 		return buf.toString();

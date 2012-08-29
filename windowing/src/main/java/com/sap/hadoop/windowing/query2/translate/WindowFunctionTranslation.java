@@ -18,7 +18,7 @@ import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 
 public class WindowFunctionTranslation
 {
-	static WindowFunctionDef translate(QueryDef qDef, TableFuncDef windowTableFnDef, WindowFunctionSpec wSpec) throws WindowingException
+	public static WindowFunctionDef translate(QueryDef qDef, TableFuncDef windowTableFnDef, WindowFunctionSpec wSpec) throws WindowingException
 	{
 		QueryTranslationInfo tInfo = qDef.getTranslationInfo();
 		InputInfo iInfo = tInfo.getInputInfo(windowTableFnDef); 

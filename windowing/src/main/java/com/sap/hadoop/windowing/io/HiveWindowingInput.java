@@ -1,4 +1,4 @@
-package com.sap.hadoop.windowing.io
+package com.sap.hadoop.windowing.io;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,54 +12,66 @@ import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.Serializer;
 import org.apache.hadoop.io.Writable;
 
-
-public class HiveWindowingInput extends TypedBytesRecordReader implements WindowingInput
+public class HiveWindowingInput extends TypedBytesRecordReader implements
+		WindowingInput
 {
 	private SerDe serDe;
 	Writable value;
 	boolean isValueValid;
 
-	
 	public Deserializer getDeserializer()
 	{
 		return serDe;
 	}
-	
-	Serializer getSerializer()
+
+	public Serializer getSerializer()
 	{
 		throw new UnsupportedOperationException();
 	}
-	
-	public void initialize(InputStream ins, Configuration conf, Properties tbl) throws IOException
+
+	public void initialize(InputStream ins, Configuration conf, Properties tbl)
+			throws IOException
 	{
 		super.initialize(System.in, conf, tbl);
 		setupSerDe(conf, tbl);
 		value = createRow();
 	}
-	
-	private void setupSerDe(Configuration conf, Properties serDeProps) throws IOException
+
+	private void setupSerDe(Configuration conf, Properties serDeProps)
+			throws IOException
 	{
 		try
 		{
 			serDe = new TypedBytesSerDe();
 			serDe.initialize(conf, serDeProps);
 		}
-		catch(Exception e)
+		catch (Exception e)
 		{
 			throw new IOException(e);
 		}
 	}
-	
-	boolean hasNext()
+
+	public boolean hasNext()
 	{
-		int nbytes = next(value)
-		isValueValid = (nbytes >= 0)
-		return isValueValid;
+		try
+		{
+			int nbytes = next(value);
+			isValueValid = (nbytes >= 0);
+			return isValueValid;
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		}
 	}
-	
-	Writable next()
+
+	public Writable next()
 	{
 		return value;
 	}
-	void remove() { throw new UnsupportedOperationException() }
+
+	public void remove()
+	{
+		throw new UnsupportedOperationException();
+	}
 }

@@ -21,7 +21,7 @@ public class WindowFunctionTranslation
 	public static WindowFunctionDef translate(QueryDef qDef, TableFuncDef windowTableFnDef, WindowFunctionSpec wSpec) throws WindowingException
 	{
 		QueryTranslationInfo tInfo = qDef.getTranslationInfo();
-		InputInfo iInfo = tInfo.getInputInfo(windowTableFnDef); 
+		InputInfo iInfo = tInfo.getInputInfo(windowTableFnDef.getInput()); 
 
 		WindowFunctionDef wFnDef = new WindowFunctionDef();
 		wFnDef.setSpec(wSpec);
@@ -34,7 +34,7 @@ public class WindowFunctionTranslation
 		{
 			for(ASTNode expr : args)
 			{
-				ArgDef argDef = translateTableFunctionArg(qDef, windowTableFnDef, iInfo,  expr);
+				ArgDef argDef = translateWindowFunctionArg(qDef, windowTableFnDef, iInfo,  expr);
 				wFnDef.addArg(argDef);
 			}
 		}
@@ -75,7 +75,7 @@ public class WindowFunctionTranslation
 		}
 	}
 	
-	private static ArgDef translateTableFunctionArg(QueryDef qDef, TableFuncDef tDef, InputInfo iInfo, ASTNode arg) throws WindowingException
+	private static ArgDef translateWindowFunctionArg(QueryDef qDef, TableFuncDef tDef, InputInfo iInfo, ASTNode arg) throws WindowingException
 	{
 		return TranslateUtils.buildArgDef(qDef, iInfo, arg);
 	}
@@ -83,10 +83,13 @@ public class WindowFunctionTranslation
 	static ArrayList<ObjectInspector> getWritableObjectInspector(ArrayList<ArgDef> args)
 	{
 		ArrayList<ObjectInspector> result = new ArrayList<ObjectInspector>();
-		for (ArgDef arg : args)
+		if ( args != null)
 		{
-			ExprNodeDesc expr = arg.getExprNode();
-			result.add(expr.getWritableObjectInspector());
+			for (ArgDef arg : args)
+			{
+				ExprNodeDesc expr = arg.getExprNode();
+				result.add(expr.getWritableObjectInspector());
+			}
 		}
 		return result;
 	}

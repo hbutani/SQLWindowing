@@ -40,6 +40,7 @@ public class SelectSpec implements Iterable<Object>
 		aliases = aliases == null ? new ArrayList<String>() : aliases;
 		isWindowFn.add(true);
 		windowFuncs.add(wFn);
+		wFn.setAlias(alias);
 		aliases.add(alias);
 	}
 	

@@ -31,6 +31,7 @@ public class Translator
 		// clone the cfg
 		HiveConf qCfg = new HiveConf(wShell.getCfg());
 		QueryDef qry = new QueryDef();
+		qry.setqSpec(qSpec);
 		
 		QueryTranslationInfo transInfo = new QueryTranslationInfo();
 		transInfo.setHiveCfg(qCfg);
@@ -45,6 +46,8 @@ public class Translator
 			throw new WindowingException(he);
 		}
 		qry.setTranslationInfo(transInfo);
+		
+		InputTranslation.translate(qry);
 		
 		return qry;
 	}

@@ -252,7 +252,7 @@ public class InputTranslation
 				prevPSpec = nextPSpec;
 				prevOSpec = nextOSpec;
 			}
-			validateLast(curr);
+			validateLast(prevPSpec, curr);
 		}
 		
 		void validateFirst(QueryInputSpec qInSpec) throws WindowingException
@@ -263,11 +263,11 @@ public class InputTranslation
 			}
 		}
 		
-		void validateLast(QueryInputSpec qInSpec) throws WindowingException
+		void validateLast(PartitionSpec pSpec, QueryInputSpec inSpec) throws WindowingException
 		{
-			if ( qInSpec.getPartition() != null )
+			if ( pSpec != null )
 			{
-				throw new WindowingException(sprintf("Last Function in Chain cannot have a Partitioning specified: %s", qInSpec));
+				throw new WindowingException(sprintf("Last Function in Chain cannot have a Partitioning specified: %s", inSpec));
 			}
 		}
 	};

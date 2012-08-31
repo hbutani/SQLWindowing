@@ -88,6 +88,19 @@ public class Partition implements Iterable<Object>
 		}
 	}
 	
+	public Object getWritableAt(int i) throws WindowingException 
+	{
+		try
+		{
+			elems.get(i, wRow);
+			return wRow;
+		}
+		catch(Exception  se)
+		{
+			throw new WindowingException(se);
+		}
+	}
+	
 	public void append(Writable o) throws WindowingException 
 	{
 		try

@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator.AggregationBuffer;
+import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 
@@ -70,7 +71,7 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 				ArrayList oRow = new ArrayList();
 				for(int j=0; j < oColumns.size(); j++)
 				{
-					oRow.add(oColumns.get(j));
+					oRow.add(oColumns.get(j).get(i));
 				}
 				outP.append(oRow);
 			}
@@ -99,9 +100,18 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 			for(WindowFunctionSpec wFnS : wFnSpecs)
 			{
 					WindowFunctionDef wFnDef = WindowFunctionTranslation.translate(qDef, getDef(), wFnS);
+					WindowFunctionInfo wFnInfo = FunctionRegistry.getWindowFunctionInfo(wFnS.getName());
 					wFnDefs.add(wFnDef);
 					aliases.add(wFnS.getAlias());
-					fnOIs.add(wFnDef.getOI());
+					if ( wFnInfo.isPivotResult())
+					{
+						ListObjectInspector lOI = (ListObjectInspector) wFnDef.getOI();
+						fnOIs.add(lOI.getListElementObjectInspector());
+					}
+					else
+					{
+						fnOIs.add(wFnDef.getOI());
+					}
 			}
 			select.setWindowFuncs(wFnDefs);
 			

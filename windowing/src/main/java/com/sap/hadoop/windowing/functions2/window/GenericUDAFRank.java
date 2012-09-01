@@ -21,6 +21,7 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 import org.apache.hadoop.io.IntWritable;
 
 import com.sap.hadoop.windowing.functions2.annotation.WindowFuncDef;
+import com.sap.hadoop.windowing.runtime2.RuntimeUtils;
 
 @WindowFuncDef
 (	
@@ -38,15 +39,18 @@ public class GenericUDAFRank extends AbstractGenericUDAFResolver
 	@Override
 	public GenericUDAFEvaluator getEvaluator(TypeInfo[] parameters) throws SemanticException
 	{
-		if (parameters.length != 1)
+		if (parameters.length < 1)
 		{
 			throw new UDFArgumentTypeException(parameters.length - 1, "Exactly one argument is expected.");
 		}
-		ObjectInspector oi = TypeInfoUtils.getStandardJavaObjectInspectorFromTypeInfo(parameters[0]);
-		if (!ObjectInspectorUtils.compareSupported(oi))
+		for(int i=0; i<parameters.length; i++)
 		{
-			throw new UDFArgumentTypeException(parameters.length - 1, 
+			ObjectInspector oi = TypeInfoUtils.getStandardJavaObjectInspectorFromTypeInfo(parameters[i]);
+			if (!ObjectInspectorUtils.compareSupported(oi))
+			{
+				throw new UDFArgumentTypeException(i, 
 					"Cannot support comparison of map<> type or complex type containing map<>.");
+			}
 		}
 		return createEvaluator();
 	}
@@ -60,21 +64,24 @@ public class GenericUDAFRank extends AbstractGenericUDAFResolver
 	{
 		ArrayList<IntWritable> rowNums;
 		int currentRowNum;
-		Object currVal;
+		Object[] currVal;
 		int currentRank;
+		int numParams;
+		
+		RankBuffer(int numParams)
+		{
+			this.numParams = numParams;
+			init();
+		}
 
 		void init()
 		{
 			rowNums = new ArrayList<IntWritable>();
 			currentRowNum = 0;
 			currentRank = 0;
+			currVal = new Object[numParams];
 		}
 
-		RankBuffer()
-		{
-			init();
-		}
-		
 		void incrRowNum() { currentRowNum++; }
 
 		void addRank()
@@ -85,8 +92,8 @@ public class GenericUDAFRank extends AbstractGenericUDAFResolver
 	
 	public static class GenericUDAFRankEvaluator extends GenericUDAFEvaluator
 	{
-		ObjectInspector inputOI;
-		ObjectInspector outputOI;
+		ObjectInspector[] inputOI;
+		ObjectInspector[] outputOI;
 		
 		@Override
 		public ObjectInspector init(Mode m, ObjectInspector[] parameters) throws HiveException
@@ -97,15 +104,19 @@ public class GenericUDAFRank extends AbstractGenericUDAFResolver
 				throw new HiveException(
 						"Only COMPLETE mode supported for Rank function");
 			}
-			inputOI = parameters[0];
-			outputOI = ObjectInspectorUtils.getStandardObjectInspector(inputOI, ObjectInspectorCopyOption.JAVA);
+			inputOI = parameters;
+			outputOI = new ObjectInspector[inputOI.length];
+			for(int i=0; i < inputOI.length; i++)
+			{
+				outputOI[i] = ObjectInspectorUtils.getStandardObjectInspector(inputOI[i], ObjectInspectorCopyOption.JAVA);
+			}
 			return ObjectInspectorFactory.getStandardListObjectInspector(PrimitiveObjectInspectorFactory.writableIntObjectInspector);
 		}
 
 		@Override
 		public AggregationBuffer getNewAggregationBuffer() throws HiveException
 		{
-			return new RankBuffer();
+			return new RankBuffer(inputOI.length);
 		}
 
 		@Override
@@ -118,12 +129,12 @@ public class GenericUDAFRank extends AbstractGenericUDAFResolver
 		public void iterate(AggregationBuffer agg, Object[] parameters) throws HiveException
 		{
 			RankBuffer rb = (RankBuffer) agg;
-			 int c = ObjectInspectorUtils.compare(rb.currVal, outputOI, parameters[0], inputOI);
+			 int c = RuntimeUtils.compare(rb.currVal, outputOI, parameters, inputOI);
 			 rb.incrRowNum();
 			if ( rb.currentRowNum == 1 || c != 0 )
 			{
 				nextRank(rb);
-				rb.currVal = ObjectInspectorUtils.copyToStandardObject(parameters[0], inputOI, ObjectInspectorCopyOption.JAVA);
+				rb.currVal = RuntimeUtils.copyToStandardObject(parameters, inputOI, ObjectInspectorCopyOption.JAVA);
 			}
 			rb.addRank();
 		}

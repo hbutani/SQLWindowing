@@ -40,10 +40,11 @@ class Execute2Test extends MRBase2Test
 	{
 		QueryDef qDef = wshell.translate("""
 select  p_mfgr,p_name, p_size,
-	rank(p_mfgr) as r
+	rank() as r,
+	denserank() as dr
 from part
 partition by p_mfgr
-order by p_mfgr, p_name
+order by p_mfgr
 window w1 as rows between 2 preceding and 2 following
 into path='/tmp/wout2'
 serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'

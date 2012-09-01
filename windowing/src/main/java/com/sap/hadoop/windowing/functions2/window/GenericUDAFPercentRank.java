@@ -42,12 +42,6 @@ public class GenericUDAFPercentRank extends GenericUDAFRank
 		public ObjectInspector init(Mode m, ObjectInspector[] parameters) throws HiveException
 		{
 			super.init(m, parameters);
-			if (m != Mode.COMPLETE)
-			{
-				throw new HiveException(
-						"Only COMPLETE mode supported for Rank function");
-			}
-			inputOI = parameters[0];
 			return ObjectInspectorFactory.getStandardListObjectInspector(PrimitiveObjectInspectorFactory.writableDoubleObjectInspector);
 		}
 		

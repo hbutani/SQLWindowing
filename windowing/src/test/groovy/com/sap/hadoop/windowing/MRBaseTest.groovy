@@ -27,7 +27,7 @@ abstract class MRBaseTest
 	{
 		outStream = new ByteArrayOutputStream()
 		
-		Configuration conf = HOME();
+		Configuration conf = WORK_LOCALMR();
 		conf.setBoolean(Constants.WINDOWING_TEST_MODE, true)
 		HiveConf hCfg = new HiveConf(conf, conf.getClass())
 		
@@ -117,17 +117,22 @@ abstract class MRBaseTest
 	public static Configuration WORK_LOCALMR()
 	{
 		Configuration conf = new Configuration();
-		conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
+		//conf.set("fs.default.name", "hdfs://hbserver1.dhcp.pal.sap.corp:8020");
 		//conf.set("mapred.job.tracker", "hbserver1.dhcp.pal.sap.corp:8021");
+		conf.set("fs.default.name", "hdfs://localhost:9000");
+		conf.set("mapred.job.tracker", "localhost:9001");
 		
-		conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
-		//conf.set("hive.metastore.uris", "thrift://localhost:9083");
+		//conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
+		conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
-		conf.set("windowing.jar.file", "e:/windowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
+		//conf.set("windowing.jar.file", "e:/windowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
+		conf.set("windowing.jar.file", "/home/pkalmegh/Projects/SQLWindowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
 		
-		conf.set(Constants.HIVE_THRIFTSERVER, "hbserver7.dhcp.pal.sap.corp")
+		//conf.set(Constants.HIVE_THRIFTSERVER, "hbserver7.dhcp.pal.sap.corp")
+		conf.set(Constants.HIVE_THRIFTSERVER, "localhost");
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
-		conf.set("HIVE_HOME", "e:/hadoop/hive2/hive/build/dist")
+		//conf.set("HIVE_HOME", "e:/hadoop/hive2/hive/build/dist")
+		conf.set("HIVE_HOME", "/home/pkalmegh/Projects/hive/build/dist");
 		
 		return conf;
 	}

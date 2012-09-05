@@ -131,7 +131,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 	<dependency>
 		<groupId>org.apache.hadoop</groupId>
 		<artifactId>hadoop-core</artifactId>
-		<version>0.20.2-cdh3u1</version>
+		<version>1.0.3</version>
 	    <!-- <scope>provided</scope>-->
 	</dependency>
 	<dependency>
@@ -167,11 +167,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 	</dependency>
   </dependencies>
   <repositories>
-    <repository>
+<!--     <repository>
       <id>cloudera</id>
       <url>https://repository.cloudera.com/content/repositories/releases/</url>
     </repository>
-	<repository>  
+ -->	<repository>  
 	              <id>nexus.codehaus</id>  
 	              <name>Nexus Codehaus Repository</name>  
 	              <url>https://nexus.codehaus.org/content/repositories/snapshots/</url>  

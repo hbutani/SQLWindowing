@@ -1,9 +1,9 @@
 package com.sap.hadoop.windowing.query2.definition;
 
+import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 
 import com.sap.hadoop.windowing.query2.specification.ColumnSpec;
 
@@ -15,25 +15,33 @@ public class ColumnDef
 	/*
 	 * non-null if this is a Column reference in a Partition or Order Spec.
 	 */
-	ColumnSpec colSpec;
+	ColumnSpec spec;
 	
 	String alias;
 	
 	ASTNode expression;
 	ExprNodeDesc exprNode;
-	
-	StructField field;
+	ExprNodeEvaluator exprEvaluator;
 	ObjectInspector OI;
 	
-	public ColumnSpec getColSpec()
+	public ColumnDef(ColumnSpec spec)
 	{
-		return colSpec;
+		this.spec = spec;
 	}
 	
-	public void setColSpec(ColumnSpec colSpec)
+	public ColumnDef(ColumnDef cDef)
 	{
-		this.colSpec = colSpec;
-		setAlias(colSpec.getColumnName());
+		spec = cDef.getSpec();
+		alias = cDef.getAlias();
+		expression = cDef.getExpression();
+		exprNode = cDef.getExprNode();
+		exprEvaluator = cDef.getExprEvaluator();
+		OI = cDef.getOI();
+	}
+	
+	public ColumnSpec getSpec()
+	{
+		return spec;
 	}
 	
 	public String getAlias()
@@ -66,17 +74,6 @@ public class ColumnDef
 		this.exprNode = exprNode;
 	}
 	
-	public StructField getField()
-	{
-		return field;
-	}
-	
-	public void setField(StructField field)
-	{
-		this.field = field;
-		this.OI = field.getFieldObjectInspector();
-	}
-	
 	public ObjectInspector getOI()
 	{
 		return OI;
@@ -85,7 +82,16 @@ public class ColumnDef
 	public void setOI(ObjectInspector oI)
 	{
 		OI = oI;
-		this.field = null;
+	}
+
+	public ExprNodeEvaluator getExprEvaluator()
+	{
+		return exprEvaluator;
+	}
+
+	public void setExprEvaluator(ExprNodeEvaluator exprEvaluator)
+	{
+		this.exprEvaluator = exprEvaluator;
 	}
 
 }

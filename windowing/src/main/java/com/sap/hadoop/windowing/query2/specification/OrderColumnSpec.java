@@ -10,6 +10,12 @@ public class OrderColumnSpec extends ColumnSpec
 	
 	public OrderColumnSpec() {}
 	
+	public OrderColumnSpec(ColumnSpec cSpec)
+	{
+		super(cSpec);
+		order = Order.ASC;
+	}
+	
 	public OrderColumnSpec(String tableName, String columnName, Order order)
 	{
 		super(tableName, columnName);

@@ -2,17 +2,13 @@ package com.sap.hadoop.windowing.query2.translate;
 
 import java.util.ArrayList;
 
-import org.antlr.runtime.CommonToken;
-import org.apache.hadoop.hive.ql.exec.ColumnInfo;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
-
 import com.sap.hadoop.windowing.WindowingException;
-import com.sap.hadoop.windowing.parser.Windowing2Parser;
 import com.sap.hadoop.windowing.query2.definition.ArgDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
@@ -131,8 +127,7 @@ public class WindowFunctionTranslation
 		{
 			String cName = oCol.getColumnName();
 			//ColumnInfo cInfo = inpInfo.rr.get(null, cName);
-			ASTNode aNode = new ASTNode(new CommonToken(Windowing2Parser.TABLEORCOL));
-			aNode.addChild(new ASTNode(new CommonToken(Windowing2Parser.Identifier, cName)));
+			ASTNode aNode = TranslateUtils.buildASTNode(cName);
 			wFnDef.addArg(TranslateUtils.buildArgDef(qDef, inpInfo, aNode));
 		}
 	}

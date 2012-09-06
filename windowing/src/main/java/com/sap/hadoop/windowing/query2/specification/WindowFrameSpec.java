@@ -93,7 +93,7 @@ public class WindowFrameSpec
 	{
 		public static int UNBOUNDED_AMOUNT = Integer.MAX_VALUE;
 		
-		abstract Direction getDirection();
+		public abstract Direction getDirection();
 		
 	}
 	
@@ -182,7 +182,7 @@ public class WindowFrameSpec
 			return sprintf( "currentRow");
 		}
 		
-		Direction getDirection() { return Direction.CURRENT; }
+		public Direction getDirection() { return Direction.CURRENT; }
 		
 		public int compareTo(BoundarySpec other)
 		{
@@ -195,7 +195,6 @@ public class WindowFrameSpec
 	{
 		Direction direction;
 		ASTNode expression;
-		ExprNodeDesc exprNode;
 		int amt;
 		
 		public ValueBoundarySpec() {}
@@ -239,16 +238,6 @@ public class WindowFrameSpec
 			this.amt = amt;
 		}
 		
-		public ExprNodeDesc getExprNode()
-		{
-			return exprNode;
-		}
-
-		public void setExprNode(ExprNodeDesc exprNode)
-		{
-			this.exprNode = exprNode;
-		}
-
 		@Override
 		public int hashCode()
 		{

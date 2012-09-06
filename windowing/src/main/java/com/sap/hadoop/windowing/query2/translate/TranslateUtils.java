@@ -3,9 +3,12 @@ package com.sap.hadoop.windowing.query2.translate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 
+import org.antlr.runtime.Token;
+import org.antlr.runtime.tree.CommonTreeAdaptor;
+import org.antlr.runtime.tree.TreeAdaptor;
+import org.antlr.runtime.tree.TreeWizard;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluatorFactory;
@@ -19,12 +22,14 @@ import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.lazybinary.LazyBinarySerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.hive.serde2.typeinfo.StructTypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.parser.Windowing2Parser;
 import com.sap.hadoop.windowing.query2.definition.ArgDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.specification.QueryInputSpec;
@@ -35,6 +40,8 @@ import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.Que
 import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.ReverseQueryInputSpecIterator;
 import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.ReverseTableFunctionSpecIterator;
 import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.TableFunctionSpecIterator;
+
+import static com.sap.hadoop.Utils.sprintf;
 
 public class TranslateUtils
 {
@@ -73,22 +80,25 @@ public class TranslateUtils
 		}
 	}
 	
+	public static ObjectInspector initExprNodeEvaluator(ExprNodeEvaluator exprEval, InputInfo iInfo) throws WindowingException
+	{
+		try
+		{
+			return exprEval.initialize(iInfo.OI);
+		}
+		catch(HiveException he)
+		{
+			throw new WindowingException(he);
+		}
+	}
+	
 	public static ArgDef buildArgDef(QueryDef qDef, InputInfo iInfo, ASTNode arg) throws WindowingException
 	{
 		ArgDef argDef = new ArgDef();
 		
 		ExprNodeDesc exprNode = TranslateUtils.buildExprNode(arg, iInfo.tCtx);
 		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(exprNode);
-		ObjectInspector oi;
-		
-		try
-		{
-			oi = exprEval.initialize(iInfo.OI);
-		}
-		catch(HiveException he)
-		{
-			throw new WindowingException(he);
-		}
+		ObjectInspector oi = initExprNodeEvaluator(exprEval, iInfo);
 		
 		argDef.setExpression(arg);
 		argDef.setExprNode(exprNode);
@@ -138,4 +148,37 @@ public class TranslateUtils
 			throw new WindowingException(se);
 		}
 	}
+	
+	public static ASTNode buildASTNode(String colName)
+	{
+		TreeWizard tw = new TreeWizard(adaptor, Windowing2Parser.tokenNames);
+		Object o = tw.create(sprintf("(TABLEORCOL Identifier[%s])", colName));
+		return (ASTNode) o;
+	}
+	
+	public static void validateComparable(ObjectInspector OI, String errMsg) throws WindowingException
+	{
+		if ( !ObjectInspectorUtils.compareSupported(OI))
+		{
+			throw new WindowingException(errMsg);
+		}
+	}
+	
+	/**
+	* Copied from Hive ParserDriver.
+	*/
+   public static final TreeAdaptor adaptor = new CommonTreeAdaptor() {
+	 /**
+	  * Creates an ASTNode for the given token. The ASTNode is a wrapper around
+	  * antlr's CommonTree class that implements the Node interface.
+	  *
+	  * @param payload
+	  *          The token.
+	  * @return Object (which is actually an ASTNode) for the token.
+	  */
+	 @Override
+	 public Object create(Token payload) {
+	   return new ASTNode(payload);
+	 }
+   };
 }

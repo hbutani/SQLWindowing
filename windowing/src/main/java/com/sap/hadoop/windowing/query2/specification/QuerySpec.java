@@ -44,6 +44,11 @@ public class QuerySpec
 		windowSpecs.put(name, wdwSpec);
 	}
 	
+	public WindowSpec getWindowSpec(String name)
+	{
+		return windowSpecs == null ? null : windowSpecs.get(name);
+	}
+	
 	public QueryOutputSpec getOutput()
 	{
 		return output;

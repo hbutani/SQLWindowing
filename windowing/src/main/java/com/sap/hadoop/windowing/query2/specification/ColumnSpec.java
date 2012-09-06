@@ -15,6 +15,11 @@ public class ColumnSpec
 		setTableName(tableName);
 		setColumnName(columnName);
 	}
+	
+	public ColumnSpec(ColumnSpec cSpec)
+	{
+		this(cSpec.getTableName(), cSpec.getColumnName());
+	}
 
 	public String getTableName()
 	{

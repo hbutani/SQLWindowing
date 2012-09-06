@@ -12,7 +12,9 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.functions2.TableFunctionResolver;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
+import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.definition.WindowDef;
 import com.sap.hadoop.windowing.runtime2.HiveQueryExecutor;
 import com.sap.hadoop.windowing.runtime2.WindowingShell;
@@ -39,6 +41,17 @@ public class QueryTranslationInfo
 	 * A map from a QueryInput to its Shape.
 	 */
 	Map<QueryInputDef, InputInfo> inputInfoMap;
+	
+	/*
+	 * InputInfos for table functions that rehape the input map-side.
+	 */
+	Map<TableFuncDef, InputInfo> mapReshapeInfoMap;
+	
+	/*
+	 * A mapping from a name to WindowDef. A Window Defintion specified at the Query level can be used in multiple Inputs. Hence the
+	 * 2 level map.
+	 */
+	Map<String, Map<QueryInputDef, WindowDef>> nameToWindowDef;
 	
 	public HiveConf getHiveCfg()
 	{
@@ -91,6 +104,23 @@ public class QueryTranslationInfo
 		inputInfoMap.put(input, new InputInfo(alias, input.getOI()));
 	}
 	
+	InputInfo getMapInputInfo(TableFuncDef tDef) throws WindowingException
+	{
+		TableFunctionResolver tFn = tDef.getFunction();
+		if ( !tFn.hasMapPhase() )
+		{
+			return null;
+		}
+		mapReshapeInfoMap = mapReshapeInfoMap == null ? new HashMap<TableFuncDef, InputInfo>() : mapReshapeInfoMap;
+		InputInfo ii = mapReshapeInfoMap.get(tDef);
+		if ( ii == null )
+		{
+			ii = new InputInfo(tDef.getName(), tFn.getMapOutputOI());
+			mapReshapeInfoMap.put(tDef, ii);
+		}
+		return ii;
+	}
+	
 	InputInfo getInputInfo(QueryInputDef input)
 	{
 		return inputInfoMap.get(input);
@@ -98,17 +128,38 @@ public class QueryTranslationInfo
 	
 	static class InputInfo
 	{
+		String tabAlias;
 		StructObjectInspector OI;
 		RowResolver rr;
 		TypeCheckCtx tCtx;
 		
 		InputInfo(String tabAlias, StructObjectInspector OI) throws WindowingException
 		{
+			this.tabAlias = tabAlias;
 			this.OI = OI;
 			rr = HiveUtils.getRowResolver(tabAlias, OI);
 			tCtx = new TypeCheckCtx(rr);
 			tCtx.setUnparseTranslator(null);
 		}
+	}
+	
+	WindowDef getWindowDef(String name, QueryInputDef iDef)
+	{
+		Map<QueryInputDef, WindowDef> inpDefMap = nameToWindowDef == null ? null : nameToWindowDef.get(name);
+		WindowDef wDef = inpDefMap == null ? null : inpDefMap.get(iDef);
+		return wDef;
+	}
+	
+	void addWindowDef(String name, QueryInputDef iDef, WindowDef wDef)
+	{
+		nameToWindowDef = nameToWindowDef == null ? new HashMap<String, Map<QueryInputDef,WindowDef>>() : nameToWindowDef;
+		Map<QueryInputDef, WindowDef> inpDefMap = nameToWindowDef.get(name);
+		if ( inpDefMap == null)
+		{
+			inpDefMap = new HashMap<QueryInputDef, WindowDef>();
+			nameToWindowDef.put(name, inpDefMap);
+		}
+		inpDefMap.put(iDef, wDef);
 	}
 
 }

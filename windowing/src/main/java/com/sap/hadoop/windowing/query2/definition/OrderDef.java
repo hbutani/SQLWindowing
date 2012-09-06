@@ -6,17 +6,17 @@ import com.sap.hadoop.windowing.query2.specification.OrderSpec;
 
 public class OrderDef
 {
-	OrderSpec oSpec;
+	OrderSpec spec;
 	ArrayList<OrderColumnDef> columns;
 	
-	public OrderSpec getoSpec()
+	public OrderDef(OrderSpec spec)
 	{
-		return oSpec;
+		this.spec = spec;
 	}
 	
-	public void setoSpec(OrderSpec oSpec)
+	public OrderSpec getSpec()
 	{
-		this.oSpec = oSpec;
+		return spec;
 	}
 	
 	public ArrayList<OrderColumnDef> getColumns()
@@ -29,48 +29,9 @@ public class OrderDef
 		this.columns = columns;
 	}
 	
-	public void addColumn(OrderColumnDef ocDef)
+	public void addColumn(OrderColumnDef c)
 	{
 		columns = columns == null ? new ArrayList<OrderColumnDef>() : columns;
-		columns.add(ocDef);
+		columns.add(c);
 	}
-
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((columns == null) ? 0 : columns.hashCode());
-		result = prime * result + ((oSpec == null) ? 0 : oSpec.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		OrderDef other = (OrderDef) obj;
-		if (columns == null)
-		{
-			if (other.columns != null)
-				return false;
-		}
-		else if (!columns.equals(other.columns))
-			return false;
-		if (oSpec == null)
-		{
-			if (other.oSpec != null)
-				return false;
-		}
-		else if (!oSpec.equals(other.oSpec))
-			return false;
-		return true;
-	}
-	
-	public String toString() { return oSpec.toString(); }
 }

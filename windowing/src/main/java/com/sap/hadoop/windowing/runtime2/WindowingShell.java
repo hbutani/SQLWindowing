@@ -21,6 +21,7 @@ import com.sap.hadoop.windowing.parser.Windowing2Lexer;
 import com.sap.hadoop.windowing.parser.Windowing2Parser;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
+import com.sap.hadoop.windowing.query2.translate.TranslateUtils;
 import com.sap.hadoop.windowing.query2.translate.Translator;
 
 import static com.sap.hadoop.Utils.sprintf;
@@ -95,7 +96,7 @@ public class WindowingShell
 			lexer = new Windowing2Lexer(new ANTLRStringStream(query));
 			tokens = new CommonTokenStream(lexer);
 			parser = new Windowing2Parser(tokens);
-			parser.setTreeAdaptor(adaptor);
+			parser.setTreeAdaptor(TranslateUtils.adaptor);
 			t = (CommonTree) parser.query().getTree();
 			
 			err = parser.getWindowingParseErrors();
@@ -131,7 +132,7 @@ public class WindowingShell
 			lexer = new Windowing2Lexer(new ANTLRStringStream(query));
 			tokens = new CommonTokenStream(lexer);
 			parser = new Windowing2Parser(tokens);
-			parser.setTreeAdaptor(adaptor);
+			parser.setTreeAdaptor(TranslateUtils.adaptor);
 			t = (CommonTree)  parser.query().getTree();
 			
 			err = parser.getWindowingParseErrors();
@@ -309,23 +310,4 @@ public class WindowingShell
 			throw new WindowingException("cannot execute hive Query: hiveQryExec not setup");
 		hiveQryExec.executeHiveQuery(hQry);
 	}
-
-
-	/**
-	* Copied from Hive ParserDriver.
-	*/
-   public static final TreeAdaptor adaptor = new CommonTreeAdaptor() {
-	 /**
-	  * Creates an ASTNode for the given token. The ASTNode is a wrapper around
-	  * antlr's CommonTree class that implements the Node interface.
-	  *
-	  * @param payload
-	  *          The token.
-	  * @return Object (which is actually an ASTNode) for the token.
-	  */
-	 @Override
-	 public Object create(Token payload) {
-	   return new ASTNode(payload);
-	 }
-   };
 }

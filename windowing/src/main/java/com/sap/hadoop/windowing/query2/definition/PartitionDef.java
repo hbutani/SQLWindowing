@@ -6,17 +6,17 @@ import com.sap.hadoop.windowing.query2.specification.PartitionSpec;
 
 public class PartitionDef
 {
-	PartitionSpec pSpec;
+	PartitionSpec spec;
 	ArrayList<ColumnDef> columns;
 	
-	public PartitionSpec getpSpec()
+	public PartitionDef(PartitionSpec spec)
 	{
-		return pSpec;
+		this.spec = spec;
 	}
 	
-	public void setpSpec(PartitionSpec pSpec)
+	public PartitionSpec getSpec()
 	{
-		this.pSpec = pSpec;
+		return spec;
 	}
 	
 	public ArrayList<ColumnDef> getColumns()
@@ -35,45 +35,4 @@ public class PartitionDef
 		columns.add(c);
 	}
 
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((columns == null) ? 0 : columns.hashCode());
-		result = prime * result + ((pSpec == null) ? 0 : pSpec.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PartitionDef other = (PartitionDef) obj;
-		if (columns == null)
-		{
-			if (other.columns != null)
-				return false;
-		}
-		else if (!columns.equals(other.columns))
-			return false;
-		if (pSpec == null)
-		{
-			if (other.pSpec != null)
-				return false;
-		}
-		else if (!pSpec.equals(other.pSpec))
-			return false;
-		return true;
-	}
-	
-	public String toString()
-	{
-		return pSpec.toString();
-	}
 }

@@ -8,7 +8,6 @@ import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
 
 public class TableFuncDef extends QueryInputDef
 {
-	String name;
 	ArrayList<ArgDef> args;
 	QueryInputDef input;
 	TableFunctionResolver tFunction;
@@ -47,12 +46,7 @@ public class TableFuncDef extends QueryInputDef
 
 	public String getName()
 	{
-		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
+		return getTableFuncSpec().getName();
 	}
 
 	public TableFunctionResolver getFunction()

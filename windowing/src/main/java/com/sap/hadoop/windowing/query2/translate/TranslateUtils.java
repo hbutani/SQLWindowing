@@ -84,7 +84,7 @@ public class TranslateUtils
 	{
 		try
 		{
-			return exprEval.initialize(iInfo.OI);
+			return exprEval.initialize(iInfo.getOI());
 		}
 		catch(HiveException he)
 		{
@@ -96,7 +96,7 @@ public class TranslateUtils
 	{
 		ArgDef argDef = new ArgDef();
 		
-		ExprNodeDesc exprNode = TranslateUtils.buildExprNode(arg, iInfo.tCtx);
+		ExprNodeDesc exprNode = TranslateUtils.buildExprNode(arg, iInfo.getTypeCheckCtx());
 		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(exprNode);
 		ObjectInspector oi = initExprNodeEvaluator(exprEval, iInfo);
 		

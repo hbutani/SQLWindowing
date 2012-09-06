@@ -31,6 +31,7 @@ public class QuerySpec
 	}
 	public Map<String, WindowSpec> getWindowSpecs()
 	{
+		windowSpecs = windowSpecs == null ? new HashMap<String, WindowSpec>() : windowSpecs;
 		return windowSpecs;
 	}
 	public void setWindowSpecs(Map<String, WindowSpec> windowSpecs)

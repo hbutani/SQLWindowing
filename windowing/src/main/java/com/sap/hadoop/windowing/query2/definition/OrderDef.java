@@ -14,6 +14,15 @@ public class OrderDef
 		this.spec = spec;
 	}
 	
+	public OrderDef(PartitionDef pDef)
+	{
+		this.spec = new OrderSpec(pDef.getSpec());
+		for(ColumnDef cDef : pDef.getColumns())
+		{
+			addColumn(new OrderColumnDef(cDef));
+		}
+	}
+	
 	public OrderSpec getSpec()
 	{
 		return spec;

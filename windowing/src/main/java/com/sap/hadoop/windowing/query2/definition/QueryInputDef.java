@@ -11,6 +11,7 @@ public class QueryInputDef
 	WindowDef window;
 	StructObjectInspector OI;
 	SerDe serde;
+	String alias;
 	
 	public QueryInputSpec getSpec()
 	{
@@ -50,5 +51,15 @@ public class QueryInputDef
 	public void setSerde(SerDe serde)
 	{
 		this.serde = serde;
+	}
+
+	public String getAlias()
+	{
+		return alias;
+	}
+
+	public void setAlias(String alias)
+	{
+		this.alias = alias;
 	}
 }

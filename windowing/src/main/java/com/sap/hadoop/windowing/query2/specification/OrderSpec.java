@@ -8,6 +8,16 @@ public class OrderSpec
 {
 	ArrayList<OrderColumnSpec> columns;
 	
+	public OrderSpec() {}
+	
+	public OrderSpec(PartitionSpec pSpec)
+	{
+		for(ColumnSpec cSpec : pSpec.getColumns())
+		{
+			addColumn(new OrderColumnSpec(cSpec));
+		}
+	}
+	
 	public ArrayList<OrderColumnSpec> getColumns()
 	{
 		return columns;

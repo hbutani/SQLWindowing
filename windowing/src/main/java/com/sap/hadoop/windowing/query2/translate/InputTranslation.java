@@ -73,7 +73,8 @@ public class InputTranslation
 					currentIDef = translate(qDef, (TableFuncSpec) nextSpec, currentIDef);
 				}
 				String alias = getTableAlias(qDef, inputNum, currentIDef);
-				tInfo.addInput(alias, currentIDef);
+				currentIDef.setAlias(alias);
+				tInfo.addInput(currentIDef);
 				inputNum++;
 			}
 			

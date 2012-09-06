@@ -8,7 +8,7 @@ import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
 import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.ql.parse.RowResolver;
 import org.apache.hadoop.hive.ql.parse.TypeCheckCtx;
-import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.WindowingException;
@@ -40,18 +40,12 @@ public class QueryTranslationInfo
 	/*
 	 * A map from a QueryInput to its Shape.
 	 */
-	Map<QueryInputDef, InputInfo> inputInfoMap;
+	Map<String, InputInfo> inputInfoMap;
 	
 	/*
 	 * InputInfos for table functions that rehape the input map-side.
 	 */
-	Map<TableFuncDef, InputInfo> mapReshapeInfoMap;
-	
-	/*
-	 * A mapping from a name to WindowDef. A Window Defintion specified at the Query level can be used in multiple Inputs. Hence the
-	 * 2 level map.
-	 */
-	Map<String, Map<QueryInputDef, WindowDef>> nameToWindowDef;
+	Map<String, InputInfo> mapReshapeInfoMap;
 	
 	public HiveConf getHiveCfg()
 	{
@@ -98,10 +92,10 @@ public class QueryTranslationInfo
 		return getWshell().getHiveQryExec();
 	}
 	
-	void addInput(String alias, QueryInputDef input) throws WindowingException
+	void addInput(QueryInputDef input) throws WindowingException
 	{
-		inputInfoMap = inputInfoMap == null ? new HashMap<QueryInputDef, QueryTranslationInfo.InputInfo>() : inputInfoMap;
-		inputInfoMap.put(input, new InputInfo(alias, input.getOI()));
+		inputInfoMap = inputInfoMap == null ? new HashMap<String, QueryTranslationInfo.InputInfo>() : inputInfoMap;
+		inputInfoMap.put(input.getAlias(), new InputInfo(input));
 	}
 	
 	InputInfo getMapInputInfo(TableFuncDef tDef) throws WindowingException
@@ -111,55 +105,59 @@ public class QueryTranslationInfo
 		{
 			return null;
 		}
-		mapReshapeInfoMap = mapReshapeInfoMap == null ? new HashMap<TableFuncDef, InputInfo>() : mapReshapeInfoMap;
-		InputInfo ii = mapReshapeInfoMap.get(tDef);
+		mapReshapeInfoMap = mapReshapeInfoMap == null ? new HashMap<String, InputInfo>() : mapReshapeInfoMap;
+		InputInfo ii = mapReshapeInfoMap.get(tDef.getAlias());
 		if ( ii == null )
 		{
-			ii = new InputInfo(tDef.getName(), tFn.getMapOutputOI());
-			mapReshapeInfoMap.put(tDef, ii);
+			ii = new InputInfo(tDef);
+			mapReshapeInfoMap.put(tDef.getAlias(), ii);
 		}
 		return ii;
 	}
 	
 	InputInfo getInputInfo(QueryInputDef input)
 	{
-		return inputInfoMap.get(input);
+		return inputInfoMap.get(input.getAlias());
 	}
 	
 	static class InputInfo
 	{
-		String tabAlias;
-		StructObjectInspector OI;
-		RowResolver rr;
-		TypeCheckCtx tCtx;
+		private QueryInputDef inpDef;
+		private RowResolver rr;
+		private TypeCheckCtx tCtx;
 		
-		InputInfo(String tabAlias, StructObjectInspector OI) throws WindowingException
+		InputInfo(QueryInputDef input) throws WindowingException
 		{
-			this.tabAlias = tabAlias;
-			this.OI = OI;
-			rr = HiveUtils.getRowResolver(tabAlias, OI);
+			this.inpDef = input;
+			rr = HiveUtils.getRowResolver(inpDef.getAlias(), inpDef.getOI());
 			tCtx = new TypeCheckCtx(rr);
 			tCtx.setUnparseTranslator(null);
 		}
-	}
-	
-	WindowDef getWindowDef(String name, QueryInputDef iDef)
-	{
-		Map<QueryInputDef, WindowDef> inpDefMap = nameToWindowDef == null ? null : nameToWindowDef.get(name);
-		WindowDef wDef = inpDefMap == null ? null : inpDefMap.get(iDef);
-		return wDef;
-	}
-	
-	void addWindowDef(String name, QueryInputDef iDef, WindowDef wDef)
-	{
-		nameToWindowDef = nameToWindowDef == null ? new HashMap<String, Map<QueryInputDef,WindowDef>>() : nameToWindowDef;
-		Map<QueryInputDef, WindowDef> inpDefMap = nameToWindowDef.get(name);
-		if ( inpDefMap == null)
-		{
-			inpDefMap = new HashMap<QueryInputDef, WindowDef>();
-			nameToWindowDef.put(name, inpDefMap);
-		}
-		inpDefMap.put(iDef, wDef);
-	}
 
+		public RowResolver getRowResolver()
+		{
+			return rr;
+		}
+
+		public TypeCheckCtx getTypeCheckCtx()
+		{
+			return tCtx;
+		}
+		
+		public String getAlias()
+		{
+			return inpDef.getAlias();
+		}
+		
+		public QueryInputDef getInputDef()
+		{
+			return inpDef;
+		}
+		
+		public ObjectInspector getOI()
+		{
+			return inpDef.getOI();
+		}
+	}
+	
 }

@@ -4,7 +4,6 @@ import static com.sap.hadoop.Utils.sprintf;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
-import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 
 public class WindowFrameSpec
 {

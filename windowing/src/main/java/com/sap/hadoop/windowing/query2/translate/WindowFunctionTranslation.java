@@ -10,6 +10,8 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query2.definition.ArgDef;
+import com.sap.hadoop.windowing.query2.definition.OrderColumnDef;
+import com.sap.hadoop.windowing.query2.definition.OrderDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
@@ -121,14 +123,11 @@ public class WindowFunctionTranslation
 		
 		QueryInputDef inpDef = windowTableFnDef.getInput();
 		InputInfo inpInfo = qDef.getTranslationInfo().getInputInfo(inpDef);
-		OrderSpec oSpec = inpDef.getSpec().getOrder();
-		ArrayList<OrderColumnSpec> oCols = oSpec.getColumns();
-		for(OrderColumnSpec oCol : oCols)
+		OrderDef oDef = windowTableFnDef.getWindow().getOrderDef();
+		ArrayList<OrderColumnDef> oCols = oDef.getColumns();
+		for(OrderColumnDef oCol : oCols)
 		{
-			String cName = oCol.getColumnName();
-			//ColumnInfo cInfo = inpInfo.rr.get(null, cName);
-			ASTNode aNode = TranslateUtils.buildASTNode(cName);
-			wFnDef.addArg(TranslateUtils.buildArgDef(qDef, inpInfo, aNode));
+			wFnDef.addArg(TranslateUtils.buildArgDef(qDef, inpInfo, oCol.getExpression()));
 		}
 	}
 }

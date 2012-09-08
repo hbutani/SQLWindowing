@@ -9,10 +9,11 @@ import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.ql.parse.RowResolver;
 import org.apache.hadoop.hive.ql.parse.TypeCheckCtx;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.WindowingException;
-import com.sap.hadoop.windowing.functions2.TableFunctionResolver;
+import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.definition.WindowDef;
@@ -95,12 +96,12 @@ public class QueryTranslationInfo
 	void addInput(QueryInputDef input) throws WindowingException
 	{
 		inputInfoMap = inputInfoMap == null ? new HashMap<String, QueryTranslationInfo.InputInfo>() : inputInfoMap;
-		inputInfoMap.put(input.getAlias(), new InputInfo(input));
+		inputInfoMap.put(input.getAlias(), new InputInfo(input, null));
 	}
 	
 	InputInfo getMapInputInfo(TableFuncDef tDef) throws WindowingException
 	{
-		TableFunctionResolver tFn = tDef.getFunction();
+		TableFunctionEvaluator tFn = tDef.getFunction();
 		if ( !tFn.hasMapPhase() )
 		{
 			return null;
@@ -109,7 +110,7 @@ public class QueryTranslationInfo
 		InputInfo ii = mapReshapeInfoMap.get(tDef.getAlias());
 		if ( ii == null )
 		{
-			ii = new InputInfo(tDef);
+			ii = new InputInfo(tDef, tFn.getMapOutputOI());
 			mapReshapeInfoMap.put(tDef.getAlias(), ii);
 		}
 		return ii;
@@ -122,14 +123,18 @@ public class QueryTranslationInfo
 	
 	static class InputInfo
 	{
+		private boolean forMapPhase;
 		private QueryInputDef inpDef;
+		private StructObjectInspector OI;
 		private RowResolver rr;
 		private TypeCheckCtx tCtx;
 		
-		InputInfo(QueryInputDef input) throws WindowingException
+		InputInfo(QueryInputDef input, StructObjectInspector mapOI) throws WindowingException
 		{
 			this.inpDef = input;
-			rr = HiveUtils.getRowResolver(inpDef.getAlias(), inpDef.getOI());
+			this.forMapPhase = mapOI != null;
+			OI = forMapPhase ? mapOI : inpDef.getOI();
+			rr = HiveUtils.getRowResolver(inpDef.getAlias(), OI);
 			tCtx = new TypeCheckCtx(rr);
 			tCtx.setUnparseTranslator(null);
 		}
@@ -156,7 +161,7 @@ public class QueryTranslationInfo
 		
 		public ObjectInspector getOI()
 		{
-			return inpDef.getOI();
+			return OI;
 		}
 	}
 	

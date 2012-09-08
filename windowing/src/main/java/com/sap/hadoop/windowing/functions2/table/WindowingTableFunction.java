@@ -27,17 +27,45 @@ import com.sap.hadoop.windowing.runtime2.Partition;
 
 public class WindowingTableFunction extends TableFunctionEvaluator
 {
+	@Override
+	public void setupOI() throws WindowingException
+	{
+		ArrayList<WindowFunctionDef> wFnDefs = new ArrayList<WindowFunctionDef>();
+		QueryDef qDef = getQueryDef();
+		SelectDef select = qDef.getSelectList();
+		ArrayList<WindowFunctionSpec> wFnSpecs = qDef.getSpec().getSelectList().getWindowFuncs();
+		ArrayList<String> aliases = new ArrayList<String>();
+		ArrayList<ObjectInspector> fnOIs = new ArrayList<ObjectInspector>();
+		
+		for(WindowFunctionSpec wFnS : wFnSpecs)
+		{
+				WindowFunctionDef wFnDef = WindowFunctionTranslation.translate(qDef, getTableDef(), wFnS);
+				WindowFunctionInfo wFnInfo = FunctionRegistry.getWindowFunctionInfo(wFnS.getName());
+				wFnDefs.add(wFnDef);
+				aliases.add(wFnS.getAlias());
+				if ( wFnInfo.isPivotResult())
+				{
+					ListObjectInspector lOI = (ListObjectInspector) wFnDef.getOI();
+					fnOIs.add(lOI.getListElementObjectInspector());
+				}
+				else
+				{
+					fnOIs.add(wFnDef.getOI());
+				}
+		}
+		select.setWindowFuncs(wFnDefs);
+		
+		OI = ObjectInspectorFactory.getStandardStructObjectInspector(aliases, fnOIs);
+	}
 
-	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Partition execute(Partition iPart) throws WindowingException
 	{
-		TableFunctionResolver resolver = getResolver();
-		TableFuncDef tabDef = resolver.getDef();
-		QueryDef qDef = resolver.getQueryDef();
-		Partition outP = new Partition(resolver.getPartitionClass(), resolver.getPartitionMemSize(), tabDef.getSerde(), tabDef.getOI());
+		TableFuncDef tabDef = getTableDef();
+		QueryDef qDef = getQueryDef();
+		Partition outP = new Partition(getPartitionClass(), getPartitionMemSize(), tabDef.getSerde(), tabDef.getOI());
 		ArrayList<WindowFunctionDef> wFns = qDef.getSelectList().getWindowFuncs();
 		ArrayList<List<?>> oColumns = new ArrayList<List<?>>();
 		
@@ -88,38 +116,7 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 	{
 
 		@Override
-		protected void setupOI() throws WindowingException
-		{
-			ArrayList<WindowFunctionDef> wFnDefs = new ArrayList<WindowFunctionDef>();
-			QueryDef qDef = getQueryDef();
-			SelectDef select = qDef.getSelectList();
-			ArrayList<WindowFunctionSpec> wFnSpecs = qDef.getSpec().getSelectList().getWindowFuncs();
-			ArrayList<String> aliases = new ArrayList<String>();
-			ArrayList<ObjectInspector> fnOIs = new ArrayList<ObjectInspector>();
-			
-			for(WindowFunctionSpec wFnS : wFnSpecs)
-			{
-					WindowFunctionDef wFnDef = WindowFunctionTranslation.translate(qDef, getDef(), wFnS);
-					WindowFunctionInfo wFnInfo = FunctionRegistry.getWindowFunctionInfo(wFnS.getName());
-					wFnDefs.add(wFnDef);
-					aliases.add(wFnS.getAlias());
-					if ( wFnInfo.isPivotResult())
-					{
-						ListObjectInspector lOI = (ListObjectInspector) wFnDef.getOI();
-						fnOIs.add(lOI.getListElementObjectInspector());
-					}
-					else
-					{
-						fnOIs.add(wFnDef.getOI());
-					}
-			}
-			select.setWindowFuncs(wFnDefs);
-			
-			OI = ObjectInspectorFactory.getStandardStructObjectInspector(aliases, fnOIs);
-		}
-
-		@Override
-		protected TableFunctionEvaluator setupEvaluator()
+		protected TableFunctionEvaluator createEvaluator(QueryDef qDef, TableFuncDef tDef)
 		{
 			
 			return new WindowingTableFunction();

@@ -12,11 +12,15 @@ import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.functions2.FunctionRegistry;
+import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.OrderColumnDef;
 import com.sap.hadoop.windowing.query2.definition.OrderDef;
 import com.sap.hadoop.windowing.query2.definition.PartitionDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
+import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
+import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.definition.WindowDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFrameDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.BoundaryDef;
@@ -28,6 +32,7 @@ import com.sap.hadoop.windowing.query2.specification.OrderColumnSpec;
 import com.sap.hadoop.windowing.query2.specification.OrderSpec;
 import com.sap.hadoop.windowing.query2.specification.PartitionSpec;
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
+import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.BoundarySpec;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.CurrentRowSpec;
@@ -38,6 +43,47 @@ import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 
 public class WindowSpecTranslation
 {
+	/*
+	 * compute the Description to use for the Input.
+	 * get the inputInfo for the input: if the function has a MapPhase use the Map Inputfo. 
+	 * invoke translateWindowSpecOnInput on WdwSpec of TblFunc
+	 * If TableFunc is the FunctionRegistry.WINDOWING_TABLE_FUNCTION:
+	 * - 
+	 */
+	static WindowDef translateWindow(QueryDef qDef, TableFuncDef tFnDef) throws WindowingException
+	{
+		QueryTranslationInfo tInfo = qDef.getTranslationInfo();
+		TableFuncSpec tFnSpec = tFnDef.getTableFuncSpec();
+		
+		/*
+		 * for now the Language only allows explicit specification of Partition & Order clauses.
+		 * Easy to allow references to a Global Window Spec.
+		 */
+		WindowSpec wSpec = new WindowSpec();
+		wSpec.setPartition(tFnSpec.getPartition());
+		wSpec.setOrder(tFnSpec.getOrder());
+		QueryInputDef iDef = tFnDef.getInput();
+		
+		if ( wSpec.getPartition() == null )
+		{
+			return null;
+		}
+		
+		String desc = getInputDescription(qDef, tFnDef);
+		TableFunctionEvaluator tFn = tFnDef.getFunction();
+		InputInfo iInfo = null;
+		if ( tFn.hasMapPhase() )
+		{
+			iInfo = tInfo.getMapInputInfo(tFnDef);
+		}
+		else
+		{
+			iInfo = tInfo.getInputInfo(iDef);
+		}
+		
+		return translateWindowSpecOnInput(qDef, wSpec, iInfo, desc);
+	}
+	
 	/*
 	 * <ol>
 	 * <li> If wSpec points to a source WindowSpec. Validate that it is valid. If it hasn't been already translated then translate it.
@@ -155,7 +201,7 @@ public class WindowSpecTranslation
 				break;
 		}
 		
-		if ( numOfPartColumns != 0 || numOfPartColumns != orderCols.size())
+		if ( numOfPartColumns != 0 && numOfPartColumns != orderCols.size())
 		{
 			throw new WindowingException(
 					sprintf("For Input %s:n all partition columns must be in order clause or none should be specified", 
@@ -217,6 +263,11 @@ public class WindowSpecTranslation
 	
 	static WindowFrameDef translateWindowFrame(WindowFrameSpec wfSpec, InputInfo iInfo) throws WindowingException
 	{
+		if ( wfSpec == null )
+		{
+			return null;
+		}
+		
 		BoundarySpec s = wfSpec.getStart();
 		BoundarySpec e = wfSpec.getEnd();
 		WindowFrameDef wfDef = new WindowFrameDef(wfSpec);
@@ -258,6 +309,19 @@ public class WindowSpecTranslation
 			return cbDef;
 		}
 		throw new WindowingException("Unknown Boundary: " + bndSpec);
+	}
+	
+	static String getInputDescription(QueryDef qDef, TableFuncDef tDef)
+	{
+		if ( qDef.getInput() == tDef && 
+				(tDef.getName().equals(FunctionRegistry.NOOP_TABLE_FUNCTION) ||
+				 tDef.getName().equals(FunctionRegistry.WINDOWING_TABLE_FUNCTION))
+			)
+		{
+			return "Query";
+		}
+		return sprintf("TableFunction %s[alias:%s]", tDef.getName(), tDef.getAlias());
+		
 	}
 	
 

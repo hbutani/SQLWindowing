@@ -153,6 +153,21 @@ public class InputTranslation
 		return def;
 	}
 	
+	/*
+	 * <ol>
+	 * <li> Get the <code>TableFunctionResolver</code> for this Function from the FunctionRegistry.
+	 * <li> Create the TableFuncDef object.
+	 * <li> Get the InputInfo for the input to this function.
+	 * <li> Translate the Arguments to this Function in the Context of the InputInfo.
+	 * <li> ask the  TableFunctionResolver to create a TableFunctionEvaluator based on the Args passed in.
+	 * <li> ask the TableFunctionEvaluator to setup the Map-side ObjectInspector. Gives a chance to functions that 
+	 * reshape the Input before it is partitioned to define the Shape after raw data is transformed.
+	 * <li> Setup the Window Definition for this Function. The Window Definition is resolved wrt to the InputDef's
+	 * Shape or the MapOI, for Functions that reshape the raw input.
+	 * <li> ask the TableFunctionEvaluator to setup the Output ObjectInspector for this Function.
+	 * <li> setup a Serde for the Output partition based on the OutputOI. 
+	 * </ol> 
+	 */
 	private static TableFuncDef translate(QueryDef qDef, TableFuncSpec tSpec, QueryInputDef inputDef) throws WindowingException
 	{
 		QueryTranslationInfo tInfo = qDef.getTranslationInfo();
@@ -182,11 +197,12 @@ public class InputTranslation
 		}
 		
 		TableFunctionEvaluator tEval = tFn.initialize(qDef, tDef);
+		tDef.setFunction(tEval);
 		
-		tDef.setFunction(tFn);
-		tDef.setEvaluator(tEval);
-		
-		tDef.setOI(tFn.getOutputOI());
+		tEval.setupMapOI();
+		tDef.setWindow(WindowSpecTranslation.translateWindow(qDef, tDef));
+		tEval.setupOI();
+		tDef.setOI(tEval.getOutputOI());
 		
 		/*
 		 * setup the SerDe.

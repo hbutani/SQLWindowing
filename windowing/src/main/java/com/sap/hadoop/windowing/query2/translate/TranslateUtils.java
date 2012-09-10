@@ -31,7 +31,13 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.parser.Windowing2Parser;
 import com.sap.hadoop.windowing.query2.definition.ArgDef;
+import com.sap.hadoop.windowing.query2.definition.ColumnDef;
+import com.sap.hadoop.windowing.query2.definition.OrderColumnDef;
+import com.sap.hadoop.windowing.query2.definition.OrderDef;
+import com.sap.hadoop.windowing.query2.definition.PartitionDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
+import com.sap.hadoop.windowing.query2.specification.ColumnSpec;
+import com.sap.hadoop.windowing.query2.specification.OrderColumnSpec;
 import com.sap.hadoop.windowing.query2.specification.QueryInputSpec;
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
@@ -162,6 +168,96 @@ public class TranslateUtils
 		{
 			throw new WindowingException(errMsg);
 		}
+	}
+	
+	/*
+	 * - equal if there columnName & tableName match
+	 * - a null tableName is interpreted as matching the other tableName
+	 */
+	public static boolean isEqual(ColumnSpec spec1, ColumnSpec spec2)
+	{
+		if ( spec1 == null && spec2 == null ) return false;
+		if ( spec1 == null && spec2 != null ) return false;
+		if ( spec1 != null && spec2 == null ) return false;
+		
+		if ( !spec1.getColumnName().equals(spec2.getColumnName()) ) return false;
+		
+		String t1 = spec1.getTableName();
+		String t2 = spec2.getTableName();
+		if ( t1 == null || t2 == null ) return true;
+		
+		return t1.equals(t2);
+	}
+	
+	public static boolean isEqual(ColumnDef def1, ColumnDef def2)
+	{
+		if ( def1 == null && def2 == null ) return false;
+		if ( def1 == null && def2 != null ) return false;
+		if ( def1 != null && def2 == null ) return false;
+		
+		return isEqual(def1.getSpec(), def2.getSpec());
+	}
+	
+	/*
+	 * A Window Function's partition clause must exactly match that of the associated tableFn.
+	 */
+	public static boolean isCompatible(PartitionDef tFnPartDef, PartitionDef wFnPartDef)
+	{
+		if ( tFnPartDef == null && wFnPartDef == null ) return true;
+		if ( tFnPartDef == null && wFnPartDef != null ) return false;
+		if ( tFnPartDef != null && wFnPartDef == null ) return true;
+		
+		ArrayList<ColumnDef> cols1 = tFnPartDef.getColumns();
+		ArrayList<ColumnDef> cols2 = wFnPartDef.getColumns();
+		if ( cols1.size() != cols2.size()) return false;
+		for(int i=0; i< cols1.size(); i++)
+		{
+			boolean e = isEqual(cols1.get(i), cols2.get(i));
+			if (!e) return false;
+		}
+		return true;
+	}
+	
+	public static boolean isEqual(OrderColumnSpec spec1, OrderColumnSpec spec2)
+	{
+		if ( spec1 == null && spec2 == null ) return false;
+		if ( spec1 == null && spec2 != null ) return false;
+		if ( spec1 != null && spec2 == null ) return false;
+		
+		if ( !spec1.getColumnName().equals(spec2.getColumnName()) ) return false;
+		if ( !spec1.getOrder().equals(spec2.getOrder())) return false;
+		
+		String t1 = spec1.getTableName();
+		String t2 = spec2.getTableName();
+		if ( t1 == null || t2 == null ) return true;
+		
+		return t1.equals(t2);
+	}
+	
+	public static boolean isEqual(OrderColumnDef def1, OrderColumnDef def2)
+	{
+		if ( def1 == null && def2 == null ) return false;
+		if ( def1 == null && def2 != null ) return false;
+		if ( def1 != null && def2 == null ) return false;
+		
+		return isEqual((OrderColumnSpec)def1.getSpec(), (OrderColumnSpec)def2.getSpec());
+	}
+	
+	public static boolean isCompatible(OrderDef tFnPartDef, OrderDef wFnPartDef)
+	{
+		if ( tFnPartDef == null && wFnPartDef == null ) return true;
+		if ( tFnPartDef == null && wFnPartDef != null ) return false;
+		if ( tFnPartDef != null && wFnPartDef == null ) return true;
+		
+		ArrayList<OrderColumnDef> cols1 = tFnPartDef.getColumns();
+		ArrayList<OrderColumnDef> cols2 = wFnPartDef.getColumns();
+		if ( cols1.size() != cols2.size()) return false;
+		for(int i=0; i< cols1.size(); i++)
+		{
+			boolean e = isEqual(cols1.get(i), cols2.get(i));
+			if (!e) return false;
+		}
+		return true;
 	}
 	
 	/**

@@ -9,32 +9,37 @@ import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.functions2.FunctionRegistry;
+import com.sap.hadoop.windowing.functions2.FunctionRegistry.WindowFunctionInfo;
 import com.sap.hadoop.windowing.query2.definition.ArgDef;
 import com.sap.hadoop.windowing.query2.definition.OrderColumnDef;
 import com.sap.hadoop.windowing.query2.definition.OrderDef;
+import com.sap.hadoop.windowing.query2.definition.PartitionDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
+import com.sap.hadoop.windowing.query2.definition.WindowDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFunctionDef;
-import com.sap.hadoop.windowing.query2.specification.OrderColumnSpec;
-import com.sap.hadoop.windowing.query2.specification.OrderSpec;
 import com.sap.hadoop.windowing.query2.specification.WindowFunctionSpec;
+import com.sap.hadoop.windowing.query2.specification.WindowSpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
+
+import static com.sap.hadoop.Utils.sprintf;
 
 public class WindowFunctionTranslation
 {
-	public static WindowFunctionDef translate(QueryDef qDef, TableFuncDef windowTableFnDef, WindowFunctionSpec wSpec) throws WindowingException
+	public static WindowFunctionDef translate(QueryDef qDef, TableFuncDef windowTableFnDef, WindowFunctionSpec wFnSpec) throws WindowingException
 	{
 		QueryTranslationInfo tInfo = qDef.getTranslationInfo();
 		InputInfo iInfo = tInfo.getInputInfo(windowTableFnDef.getInput()); 
 
 		WindowFunctionDef wFnDef = new WindowFunctionDef();
-		wFnDef.setSpec(wSpec);
+		wFnDef.setSpec(wFnSpec);
 		
 		/*
 		 * translate args
 		 */
-		ArrayList<ASTNode> args = wSpec.getArgs();
+		ArrayList<ASTNode> args = wFnSpec.getArgs();
 		if ( args != null)
 		{
 			for(ASTNode expr : args)
@@ -44,10 +49,14 @@ public class WindowFunctionTranslation
 			}
 		}
 		
-		if ( RANKING_FUNCS.contains(wSpec.getName()))
+		if ( RANKING_FUNCS.contains(wFnSpec.getName()))
 		{
-			setupRankingArgs(qDef, windowTableFnDef, wFnDef, wSpec);
+			setupRankingArgs(qDef, windowTableFnDef, wFnDef, wFnSpec);
 		}
+		
+		WindowDef wDef = translateWindowSpec(qDef, iInfo, wFnSpec);
+		wFnDef.setWindow(wDef);
+		validateWindowDefForWFn(windowTableFnDef, wFnDef);
 		
 		setupEvaluator(wFnDef);
 		
@@ -128,6 +137,46 @@ public class WindowFunctionTranslation
 		for(OrderColumnDef oCol : oCols)
 		{
 			wFnDef.addArg(TranslateUtils.buildArgDef(qDef, inpInfo, oCol.getExpression()));
+		}
+	}
+	
+	public static WindowDef translateWindowSpec(QueryDef qDef, InputInfo iInfo, WindowFunctionSpec wFnSpec) throws WindowingException
+	{
+		WindowSpec wSpec = wFnSpec.getWindowSpec();
+		
+		if ( wSpec == null ) return null;
+		
+		WindowFunctionInfo wFnInfo = FunctionRegistry.getWindowFunctionInfo(wFnSpec.getName());
+		String desc = wFnSpec.toString();
+		
+		if ( wSpec != null && !wFnInfo.isSupportsWindow() )
+		{
+			throw new WindowingException(sprintf("Function %s doesn't support windowing", desc));
+		}
+		return WindowSpecTranslation.translateWindowSpecOnInput(qDef, wSpec, iInfo, desc);
+	}
+	
+	public static void validateWindowDefForWFn(TableFuncDef tFnDef, WindowFunctionDef wFnDef)
+		throws WindowingException
+	{
+		WindowDef tWindow = tFnDef.getWindow();
+		WindowDef fWindow = wFnDef.getWindow();
+		
+		PartitionDef tPart = tWindow == null ? null : tWindow.getPartDef();
+		PartitionDef fPart = fWindow == null ? null : fWindow.getPartDef();
+		
+		if ( !TranslateUtils.isCompatible(tPart, fPart))
+		{
+			throw new WindowingException(
+					sprintf("Window Function '%s' has an incompatible partition clause", wFnDef.getSpec()));
+		}
+		
+		OrderDef tOrder = tWindow == null ? null : tWindow.getOrderDef();
+		OrderDef fOrder = fWindow == null ? null : fWindow.getOrderDef();
+		if ( !TranslateUtils.isCompatible(tOrder, fOrder))
+		{
+			throw new WindowingException(
+					sprintf("Window Function '%s' has an incompatible order clause", wFnDef.getSpec()));
 		}
 	}
 }

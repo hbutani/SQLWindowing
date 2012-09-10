@@ -23,7 +23,7 @@ class MRBase2Test
 	{
 		outStream = new ByteArrayOutputStream()
 		
-		Configuration conf = MRBaseTest.HOME();
+		Configuration conf = MRBaseTest.WORK_LOCALMR();
 		conf.setBoolean(Constants.WINDOWING_TEST_MODE, true)
 		HiveConf hCfg = new HiveConf(conf, conf.getClass())
 		

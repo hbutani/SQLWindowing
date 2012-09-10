@@ -167,6 +167,25 @@ serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 with serdeproperties('field.delim'=',')
 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	}
+	
+	@Test
+	void testInvalidValueBoundary()
+	{
+		expectedEx.expect(WindowingException.class);
+		expectedEx.expectMessage("Primitve type STRING not supported in Value Boundary expression");
+		
+		QueryDef qDef = wshell.translate("""
+select  p_mfgr,p_name, p_size,
+	sum(p_size) over w1 as s,
+	denserank() as dr
+from part
+partition by p_mfgr
+window w1 as range between p_name 2 less and current row
+into path='/tmp/wout2'
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+with serdeproperties('field.delim'=',')
+format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+	}
 }
 
 class EL implements ExceptionListener

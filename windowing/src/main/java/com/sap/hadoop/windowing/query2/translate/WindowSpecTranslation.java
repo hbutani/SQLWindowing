@@ -292,8 +292,10 @@ public class WindowSpecTranslation
 			ExprNodeDesc exprNode = TranslateUtils.buildExprNode(vBndSpec.getExpression(), iInfo.getTypeCheckCtx());
 			vbDef.setExprNode(exprNode);
 			ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(exprNode);
-			TranslateUtils.initExprNodeEvaluator(exprEval, iInfo);
+			ObjectInspector OI = TranslateUtils.initExprNodeEvaluator(exprEval, iInfo);
+			TranslateUtils.validateValueBoundaryExprType(OI);
 			vbDef.setExprEvaluator(exprEval);
+			vbDef.setOI(OI);
 			return vbDef;
 		}
 		else if ( bndSpec instanceof RangeBoundarySpec)

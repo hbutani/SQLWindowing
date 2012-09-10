@@ -22,6 +22,9 @@ import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.lazybinary.LazyBinarySerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
+import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector.PrimitiveCategory;
+import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.hive.serde2.typeinfo.StructTypeInfo;
@@ -258,6 +261,32 @@ public class TranslateUtils
 			if (!e) return false;
 		}
 		return true;
+	}
+	
+	public static void validateValueBoundaryExprType(ObjectInspector OI) throws WindowingException
+	{
+		if ( !OI.getCategory().equals(Category.PRIMITIVE) )
+		{
+			throw new WindowingException("Value Boundary expression must be of primitve type");
+		}
+		
+		PrimitiveObjectInspector pOI = (PrimitiveObjectInspector) OI;
+		PrimitiveCategory pC = pOI.getPrimitiveCategory();
+		
+		switch(pC)
+		{
+		case BYTE:
+		case DOUBLE:
+		case FLOAT:
+		case INT:
+		case LONG:
+		case SHORT:
+		case TIMESTAMP:
+			break;
+		default:
+			throw new WindowingException(sprintf("Primitve type %s not supported in Value Boundary expression", pC));
+		}
+		
 	}
 	
 	/**

@@ -2,6 +2,7 @@ package com.sap.hadoop.windowing.query2.definition;
 
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.BoundarySpec;
@@ -83,6 +84,7 @@ public class WindowFrameDef
 	{
 		ExprNodeDesc exprNode;
 		ExprNodeEvaluator exprEvaluator;
+		ObjectInspector OI;
 		
 		public ValueBoundaryDef(ValueBoundarySpec spec) { super(spec);}
 
@@ -111,6 +113,17 @@ public class WindowFrameDef
 		public void setExprEvaluator(ExprNodeEvaluator exprEvaluator)
 		{
 			this.exprEvaluator = exprEvaluator;
+		}
+
+		public ObjectInspector getOI()
+		{
+			return OI;
+		}
+
+
+		public void setOI(ObjectInspector oI)
+		{
+			OI = oI;
 		}
 
 		public int compareTo(BoundaryDef other)

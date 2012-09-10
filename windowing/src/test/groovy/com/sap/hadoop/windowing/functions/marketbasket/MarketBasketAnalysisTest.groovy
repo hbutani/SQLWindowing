@@ -18,10 +18,10 @@ class MarketBasketAnalysisTest extends MRBaseTest
 	
 	@Test
 	void test1() {
-		String reds = wshell.cfg.get(" mapred.reduce.tasks");
+		String reds = wshell.cfg.get("mapred.reduce.tasks");
 		try
 		{			
-			wshell.cfg.set(" mapred.reduce.tasks", "1");
+			wshell.cfg.set("mapred.reduce.tasks", "1");
 			wshell.execute("""
 				from candidateFrequentItemSets(
 				   <select * from basketdata 
@@ -37,16 +37,17 @@ class MarketBasketAnalysisTest extends MRBaseTest
 		}
 		finally
 		{
-			wshell.cfg.set(" mapred.reduce.tasks", reds);
+				wshell.cfg.set("mapred.reduce.tasks", reds);
+
 		}
 	}
 	
 	@Test
 	void testDb1000() {
-		String reds = wshell.cfg.get(" mapred.reduce.tasks");
+		String reds = wshell.cfg.get("mapred.reduce.tasks");
 		try
 		{
-			wshell.cfg.set(" mapred.reduce.tasks", "1");
+			wshell.cfg.set("mapred.reduce.tasks", "1");
 			wshell.execute("""
 				from candidateFrequentItemSets(
 				   <select * from basketdata_db10000
@@ -62,7 +63,7 @@ class MarketBasketAnalysisTest extends MRBaseTest
 		}
 		finally
 		{
-			wshell.cfg.set(" mapred.reduce.tasks", reds);
+				wshell.cfg.set("mapred.reduce.tasks", reds);
 		}
 	}
 }

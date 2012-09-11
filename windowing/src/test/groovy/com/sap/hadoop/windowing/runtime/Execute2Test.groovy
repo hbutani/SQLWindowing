@@ -223,6 +223,26 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
 		execute(qDef)
 	}
+	
+	@Test
+	void testFirstLastValue()
+	{
+		QueryDef qDef = wshell.translate("""
+select  p_mfgr,p_name, p_size,
+    sum(p_size) over rows between current row and current row as s2,
+	first_value(p_size) over w1 as f,
+	last_value(p_size, false) over w1 as l
+from part
+partition by p_mfgr
+order by p_mfgr
+window w1 as rows between 2 preceding and 2 following
+into path='/tmp/wout2'
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+with serdeproperties('field.delim'=',')
+format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+		execute(qDef)
+	}
 }
 
 class EL implements ExceptionListener

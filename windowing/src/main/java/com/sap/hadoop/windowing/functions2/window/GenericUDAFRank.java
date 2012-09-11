@@ -41,7 +41,7 @@ public class GenericUDAFRank extends AbstractGenericUDAFResolver
 	{
 		if (parameters.length < 1)
 		{
-			throw new UDFArgumentTypeException(parameters.length - 1, "Exactly one argument is expected.");
+			throw new UDFArgumentTypeException(parameters.length - 1, "One or more arguments are expected.");
 		}
 		for(int i=0; i<parameters.length; i++)
 		{

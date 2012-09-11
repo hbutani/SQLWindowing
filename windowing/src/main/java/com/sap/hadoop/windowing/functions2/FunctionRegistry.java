@@ -13,6 +13,8 @@ import com.sap.hadoop.windowing.functions2.annotation.TableFuncDef;
 import com.sap.hadoop.windowing.functions2.annotation.WindowFuncDef;
 import com.sap.hadoop.windowing.functions2.window.GenericUDAFCumeDist;
 import com.sap.hadoop.windowing.functions2.window.GenericUDAFDenseRank;
+import com.sap.hadoop.windowing.functions2.window.GenericUDAFFirstValue;
+import com.sap.hadoop.windowing.functions2.window.GenericUDAFLastValue;
 import com.sap.hadoop.windowing.functions2.window.GenericUDAFNTile;
 import com.sap.hadoop.windowing.functions2.window.GenericUDAFPercentRank;
 import com.sap.hadoop.windowing.functions2.window.GenericUDAFRank;
@@ -38,6 +40,8 @@ public class FunctionRegistry
 		registerWindowFunction("percentrank", new GenericUDAFPercentRank());
 		registerWindowFunction("cumedist", new GenericUDAFCumeDist());
 		registerWindowFunction("ntile", new GenericUDAFNTile());
+		registerWindowFunction("first_value", new GenericUDAFFirstValue());
+		registerWindowFunction("last_value", new GenericUDAFLastValue());
 	}
 
 	public static boolean isWindowFunction(String name)

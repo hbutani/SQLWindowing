@@ -170,7 +170,7 @@ public class SelectSpec implements Iterable<Object>
 				buf.append(o.toString());
 			}
 			String alias = aIt.next();
-			if (alias != null )
+			if (alias != null && (o instanceof CommonTree) )
 			{
 				buf.append(" as ").append(alias);
 			}

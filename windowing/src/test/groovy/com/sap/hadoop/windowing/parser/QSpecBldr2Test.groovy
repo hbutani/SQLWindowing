@@ -40,7 +40,7 @@ select p_mfgr,p_name, p_size,
 		count(p_size, 'distinct') as cd,
 		avg(p_size) as avg, stddev(p_size) as st,
 		first_value(p_size) as fv, last_value(p_size) as lv,
-		first_value(p_size, 'true') over rows between 2 preceding and 2 following as fv2
+		first_value(p_size, true) over rows between 2 preceding and 2 following as fv2
 		into path='/tmp/wout2'
 		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 		with serdeproperties('field.delim'=',')
@@ -63,7 +63,7 @@ select p_mfgr,p_name, p_size,
   stddev((TABLEORCOL p_size)) as st,
   first_value((TABLEORCOL p_size)) as fv,
   last_value((TABLEORCOL p_size)) as lv,
-  first_value((TABLEORCOL p_size), 'true') window(start=range(2 PRECEDING), end=range(2 FOLLOWING))  as fv2
+  first_value((TABLEORCOL p_size), true) window(start=range(2 PRECEDING), end=range(2 FOLLOWING))  as fv2
 from part partitionColumns=[p_mfgr] orderColumns=[p_mfgr ASC, p_name ASC]
 into output('/tmp/wout2', serde = 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' with 'field.delim' = ',' format'org.apache.hadoop.mapred.TextOutputFormat')
 """
@@ -85,7 +85,7 @@ select  p_mfgr,p_name, p_size,
 	avg(p_size) as avg, stddev(p_size) as st,
 	first_value(p_size) as fv,
 	last_value(p_size) as lv,
-	first_value(p_size, 'true') over w1 as fv2
+	first_value(p_size, true) over w1 as fv2
 from part
 partition by p_mfgr
 order by p_mfgr, p_name
@@ -112,7 +112,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
   stddev((TABLEORCOL p_size)) as st,
   first_value((TABLEORCOL p_size)) as fv,
   last_value((TABLEORCOL p_size)) as lv,
-  first_value((TABLEORCOL p_size), 'true') w1  as fv2
+  first_value((TABLEORCOL p_size), true) w1  as fv2
 from part partitionColumns=[p_mfgr] orderColumns=[p_mfgr ASC, p_name ASC]
 window 
   w1 as window(start=range(2 PRECEDING), end=range(2 FOLLOWING)) 
@@ -154,7 +154,7 @@ into output('/tmp/wout2', serde = 'org.apache.hadoop.hive.serde2.lazy.LazySimple
 		QuerySpec qSpec = build("""
 select  p_mfgr,p_name, p_size,
 	rank(p_size / 2 + 7) as r,
-	first_value(p_size, 'true') over w1 as fv1
+	first_value(p_size, true) over w1 as fv1
 from part
 partition by p_mfgr
 order by p_mfgr, p_name
@@ -172,9 +172,9 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
   (TABLEORCOL p_name),
   (TABLEORCOL p_size),
   rank((+ (/ (TABLEORCOL p_size) 2) 7)) as r,
-  first_value((TABLEORCOL p_size), 'true') w1  as fv1
+  first_value((TABLEORCOL p_size), true) w1  as fv1
 from part partitionColumns=[p_mfgr] orderColumns=[p_mfgr ASC, p_name ASC]
-where (and (> TRUE (TABLEORCOL p_size) 5) (like TRUE (TABLEORCOL p_mfgr) 'abc%'))
+where (and (> (TABLEORCOL p_size) 5) (like (TABLEORCOL p_mfgr) 'abc%'))
 window 
   w1 as window(start=range(2 PRECEDING), end=range(2 FOLLOWING)) 
 into output('/tmp/wout2', serde = 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' with 'field.delim' = ',' format'org.apache.hadoop.mapred.TextOutputFormat')
@@ -191,7 +191,7 @@ select  p_mfgr,p_name, p_size,
 	cumedist() as cud,
 	sum(p_size) over rows between unbounded preceding and current row as s1,
 	sum(p_size) over range between p_size 5 less and current row as s2,
-	first_value(p_size, 'true') over w1 as fv1
+	first_value(p_size, true) over w1 as fv1
 from part
 partition by p_mfgr
 order by p_mfgr, p_name
@@ -212,9 +212,9 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
   cumedist() as cud,
   sum((TABLEORCOL p_size)) window(start=range(Unbounded PRECEDING), end=currentRow)  as s1,
   sum((TABLEORCOL p_size)) window(start=value((TABLEORCOL p_size) 5 PRECEDING), end=currentRow)  as s2,
-  first_value((TABLEORCOL p_size), 'true') w1  as fv1
+  first_value((TABLEORCOL p_size), true) w1  as fv1
 from part partitionColumns=[p_mfgr] orderColumns=[p_mfgr ASC, p_name ASC]
-where (and (> TRUE (TABLEORCOL p_size) 5) (like TRUE (TABLEORCOL p_mfgr) 'abc%'))
+where (and (> (TABLEORCOL p_size) 5) (like (TABLEORCOL p_mfgr) 'abc%'))
 window 
   w1 as window(start=range(2 PRECEDING), end=range(2 FOLLOWING)) 
 into output('/tmp/wout2', serde = 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' with 'field.delim' = ',' format'org.apache.hadoop.mapred.TextOutputFormat')
@@ -284,10 +284,10 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
   (TABLEORCOL day_of_month),
   (TABLEORCOL dep_time),
   (FUNCTION lag 'dep_time' 1) as lastdep
-from <select origin_city_name, year, month, day_of_month, dep_time
+from < select origin_city_name, year, month, day_of_month, dep_time
 	  from flightsdata
-	  where dest_city_name = 'New York' and dep_time != '' and day_of_week = 1> partitionColumns=[origin_city_name, year, month, day_of_month] orderColumns=[dep_time ASC]
-where (> TRUE (- (TABLEORCOL dep_time) (FUNCTION lag 'dep_time' 1)) 60)
+	  where dest_city_name = 'New York' and dep_time != '' and day_of_week = 1 > partitionColumns=[origin_city_name, year, month, day_of_month] orderColumns=[dep_time ASC]
+where (> (- (TABLEORCOL dep_time) (FUNCTION lag 'dep_time' 1)) 60)
 into output('/tmp/wout', serde = 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' with 'field.delim' = ',' format'org.apache.hadoop.mapred.TextOutputFormat')
 """
 	}

@@ -1,6 +1,7 @@
 package com.sap.hadoop.windowing.functions2.table;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.hadoop.hive.ql.metadata.HiveException;
@@ -9,6 +10,8 @@ import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator.AggregationBuf
 import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
 
 import com.sap.hadoop.ds.SameList;
 import com.sap.hadoop.windowing.WindowingException;
@@ -20,10 +23,17 @@ import com.sap.hadoop.windowing.query2.definition.ArgDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.SelectDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
+import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.CurrentRowDef;
+import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.RangeBoundaryDef;
+import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.ValueBoundaryDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFunctionDef;
+import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.BoundaryDef;
+import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.BoundarySpec;
+import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.Direction;
 import com.sap.hadoop.windowing.query2.specification.WindowFunctionSpec;
 import com.sap.hadoop.windowing.query2.translate.WindowFunctionTranslation;
 import com.sap.hadoop.windowing.runtime2.Partition;
+import com.sap.hadoop.windowing.runtime2.ValueBoundaryScanner;
 
 public class WindowingTableFunction extends TableFunctionEvaluator
 {
@@ -73,25 +83,34 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 		{
 			for(WindowFunctionDef wFn : wFns)
 			{
-				GenericUDAFEvaluator fEval = wFn.getEvaluator();
-				Object[] args = new Object[wFn.getArgs().size()];
-				AggregationBuffer aggBuffer = fEval.getNewAggregationBuffer();
-				for(Object row: iPart)
+				boolean processWindow = wFn.getWindow() != null;
+				
+				if ( !processWindow )
 				{
-					int i =0;
-					for(ArgDef arg : wFn.getArgs())
+					GenericUDAFEvaluator fEval = wFn.getEvaluator();
+					Object[] args = new Object[wFn.getArgs().size()];
+					AggregationBuffer aggBuffer = fEval.getNewAggregationBuffer();
+					for(Object row: iPart)
 					{
-						args[i++] = arg.getExprEvaluator().evaluate(row);
+						int i =0;
+						for(ArgDef arg : wFn.getArgs())
+						{
+							args[i++] = arg.getExprEvaluator().evaluate(row);
+						}
+						fEval.aggregate(aggBuffer, args);
 					}
-					fEval.aggregate(aggBuffer, args);
+					Object out = fEval.evaluate(aggBuffer);
+					WindowFunctionInfo wFnInfo = FunctionRegistry.getWindowFunctionInfo(wFn.getSpec().getName());
+					if ( !wFnInfo.isPivotResult())
+					{
+						out = new SameList(iPart.size(), out);
+					}
+					oColumns.add((List<?>)out);
 				}
-				Object out = fEval.evaluate(aggBuffer);
-				WindowFunctionInfo wFnInfo = FunctionRegistry.getWindowFunctionInfo(wFn.getSpec().getName());
-				if ( !wFnInfo.isPivotResult())
+				else
 				{
-					out = new SameList(iPart.size(), out);
+					oColumns.add(executeFnwithWindow(wFn, iPart));
 				}
-				oColumns.add((List<?>)out);
 			}
 			
 			for(int i=0; i < iPart.size(); i++)
@@ -122,6 +141,93 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 			return new WindowingTableFunction();
 		}
 		
+	}
+	
+	static ArrayList<Object> executeFnwithWindow(WindowFunctionDef wFnDef, Partition iPart) 
+		throws HiveException, WindowingException
+	{
+		ArrayList<Object> vals = new ArrayList<Object>();
+		
+		GenericUDAFEvaluator fEval = wFnDef.getEvaluator();
+		Object[] args = new Object[wFnDef.getArgs().size()];
+		for(int i=0; i < iPart.size(); i++)
+		{
+			AggregationBuffer aggBuffer = fEval.getNewAggregationBuffer();
+			Range rng = getRange(wFnDef, i, iPart); 
+			for(Object row : rng)
+			{
+				int j = 0;
+				for(ArgDef arg : wFnDef.getArgs())
+				{
+					args[j++] = arg.getExprEvaluator().evaluate(row);
+				}
+				fEval.aggregate(aggBuffer, args);
+			}
+			Object out = fEval.evaluate(aggBuffer);
+			out = ObjectInspectorUtils.copyToStandardObject(out, wFnDef.getOI(), ObjectInspectorCopyOption.WRITABLE);
+			vals.add(out);
+		}
+		return vals;
+	}
+	
+	static Range getRange(WindowFunctionDef wFnDef, int currRow, Partition p) throws WindowingException
+	{
+		BoundaryDef startB = wFnDef.getWindow().getWindow().getStart();
+		BoundaryDef endB = wFnDef.getWindow().getWindow().getEnd();
+		
+		int start = getIndex(startB, currRow, p, false);
+		int end = getIndex(endB, currRow, p, true);
+		
+		return new Range(start, end, p);
+	}
+	
+	static int getIndex(BoundaryDef bDef, int currRow, Partition p, boolean end) throws WindowingException
+	{
+		if ( bDef instanceof CurrentRowDef)
+		{
+			return currRow + (end ? 1 : 0);
+		}
+		else if ( bDef instanceof RangeBoundaryDef)
+		{
+			RangeBoundaryDef rbDef = (RangeBoundaryDef) bDef;
+			int amt = rbDef.getAmt();
+			
+			if ( amt == BoundarySpec.UNBOUNDED_AMOUNT )
+			{
+				return rbDef.getDirection() == Direction.PRECEDING ? 0 : p.size();
+			}
+			
+			amt = rbDef.getDirection() == Direction.PRECEDING ?  -amt : amt;
+			int idx = currRow + amt;
+			idx = idx < 0 ? 0 : (idx > p.size() ? p.size() : idx);
+			return idx + (end && idx < p.size() ? 1 : 0);
+		}
+		else
+		{
+			ValueBoundaryScanner vbs = ValueBoundaryScanner.getScanner((ValueBoundaryDef)bDef);
+			return vbs.computeBoundaryRange(currRow, p);
+		}
+	}
+	
+	static class Range implements Iterable<Object>
+	{
+		int start;
+		int end;
+		Partition p;
+		
+		public Range(int start, int end, Partition p)
+		{
+			super();
+			this.start = start;
+			this.end = end;
+			this.p = p;
+		}
+
+		@Override
+		public Iterator<Object> iterator()
+		{
+			return p.range(start, end);
+		}
 	}
 
 }

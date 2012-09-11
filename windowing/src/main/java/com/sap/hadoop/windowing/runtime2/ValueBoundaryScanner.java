@@ -6,6 +6,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectIn
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.ValueBoundaryDef;
+import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.BoundarySpec;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.Direction;
 
 /*
@@ -33,6 +34,11 @@ public abstract class ValueBoundaryScanner
 		int r = rowIdx;
 		Object rowValue = computeValue(p.getAt(r));
 		int amt = bndDef.getAmt();
+		
+		if ( amt == BoundarySpec.UNBOUNDED_AMOUNT )
+		{
+			return bndDef.getDirection() == Direction.PRECEDING ? 0 : p.size();
+		}
 		
 		Direction d = bndDef.getDirection();
 		boolean scanNext = rowValue != null;
@@ -63,7 +69,7 @@ public abstract class ValueBoundaryScanner
 				r++;
 			}
 		}
-		r = r < 0 ? 0 : (r >= p.size() ? p.size() - 1 : r);
+		r = r < 0 ? 0 : (r >= p.size() ? p.size() : r);
 		return r;
 	}
 	

@@ -56,20 +56,6 @@ class Execute2Test extends MRBase2Test
 		IOUtils.dumpPartition(oP, System.out);
 	}
 	
-	public static void serialize(QueryDef qDef)
-	{
-		// TODO: revisit persistence of QueryDef.
-		//		File f = File.createTempFile("SQW-", null);
-		//		FileOutputStream out = new FileOutputStream(f);
-		//
-		//		XMLEncoder e = new XMLEncoder(out);
-		//		e.setExceptionListener( new EL());
-		//		// workaround for java 1.5
-		//
-		//		e.writeObject(qDef);
-		//		e.close();
-	}
-	
 	@Test
 	void test1()
 	{
@@ -244,10 +230,3 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		execute(qDef)
 	}
 }
-
-class EL implements ExceptionListener
-{
-      public void exceptionThrown(Exception e) {
-        throw new RuntimeException("Cannot serialize the query plan", e);
-      }
-    }

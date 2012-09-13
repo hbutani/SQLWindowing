@@ -52,7 +52,7 @@ public class OrderSpec
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PartitionSpec other = (PartitionSpec) obj;
+		OrderSpec other = (OrderSpec) obj;
 		if (columns == null)
 		{
 			if (other.columns != null)

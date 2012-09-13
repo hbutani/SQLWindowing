@@ -127,6 +127,7 @@ public class SelectSpec implements Iterable<Object>
 		}
 		else if (!expressions.equals(other.expressions))
 			return false;
+		
 		if (isWindowFn == null)
 		{
 			if (other.isWindowFn != null)
@@ -176,6 +177,31 @@ public class SelectSpec implements Iterable<Object>
 			}
 		}
 		return buf.toString();
+	}
+	
+	public void setExpressions(ArrayList<ASTNode> expressions)
+	{
+		this.expressions = expressions;
+	}
+
+	public void setWindowFuncs(ArrayList<WindowFunctionSpec> windowFuncs)
+	{
+		this.windowFuncs = windowFuncs;
+	}
+
+	public void setIsWindowFn(ArrayList<Boolean> isWindowFn)
+	{
+		this.isWindowFn = isWindowFn;
+	}
+
+	public void setAliases(ArrayList<String> aliases)
+	{
+		this.aliases = aliases;
+	}
+
+	public ArrayList<String> getAliases()
+	{
+		return aliases;
 	}
 	
 }

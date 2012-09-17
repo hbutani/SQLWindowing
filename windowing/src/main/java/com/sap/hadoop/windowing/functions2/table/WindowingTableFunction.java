@@ -12,6 +12,8 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
+import org.apache.hadoop.hive.serde2.objectinspector.StructField;
+import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.ds.SameList;
 import com.sap.hadoop.windowing.WindowingException;
@@ -45,7 +47,9 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 		SelectDef select = qDef.getSelectList();
 		ArrayList<WindowFunctionSpec> wFnSpecs = qDef.getSpec().getSelectList().getWindowFuncs();
 		ArrayList<String> aliases = new ArrayList<String>();
-		ArrayList<ObjectInspector> fnOIs = new ArrayList<ObjectInspector>();
+		ArrayList<ObjectInspector> fieldOIs = new ArrayList<ObjectInspector>();
+		
+		WindowFunctionTranslation.addInputColumnsToList(qDef, getTableDef(), aliases, fieldOIs);
 		
 		for(WindowFunctionSpec wFnS : wFnSpecs)
 		{
@@ -56,16 +60,16 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 				if ( wFnInfo.isPivotResult())
 				{
 					ListObjectInspector lOI = (ListObjectInspector) wFnDef.getOI();
-					fnOIs.add(lOI.getListElementObjectInspector());
+					fieldOIs.add(lOI.getListElementObjectInspector());
 				}
 				else
 				{
-					fnOIs.add(wFnDef.getOI());
+					fieldOIs.add(wFnDef.getOI());
 				}
 		}
 		select.setWindowFuncs(wFnDefs);
 		
-		OI = ObjectInspectorFactory.getStandardStructObjectInspector(aliases, fnOIs);
+		OI = ObjectInspectorFactory.getStandardStructObjectInspector(aliases, fieldOIs);
 	}
 
 	
@@ -78,6 +82,8 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 		Partition outP = new Partition(getPartitionClass(), getPartitionMemSize(), tabDef.getSerde(), tabDef.getOI());
 		ArrayList<WindowFunctionDef> wFns = qDef.getSelectList().getWindowFuncs();
 		ArrayList<List<?>> oColumns = new ArrayList<List<?>>();
+		
+		StructObjectInspector inputOI = iPart.getOI();
 		
 		try
 		{
@@ -116,6 +122,13 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 			for(int i=0; i < iPart.size(); i++)
 			{
 				ArrayList oRow = new ArrayList();
+				Object iRow = iPart.getAt(i);
+				
+				for(StructField f : inputOI.getAllStructFieldRefs())
+				{
+					oRow.add(inputOI.getStructFieldData(iRow, f));
+				}
+				
 				for(int j=0; j < oColumns.size(); j++)
 				{
 					oRow.add(oColumns.get(j).get(i));

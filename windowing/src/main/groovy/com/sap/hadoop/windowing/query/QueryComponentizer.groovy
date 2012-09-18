@@ -8,7 +8,7 @@ import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions.AbstractTableFunction;
 import com.sap.hadoop.windowing.functions.WindowingTableFunction;
-import com.sap.hadoop.windowing.parser.ParseErrorTest;
+//import com.sap.hadoop.windowing.parser.ParseErrorTest;
 import com.sap.hadoop.windowing.parser.QSpecBuilder.typeName_return;
 import com.sap.hadoop.windowing.runtime.WindowingShell;
 

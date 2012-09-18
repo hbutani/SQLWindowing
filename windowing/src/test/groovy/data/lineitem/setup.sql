@@ -18,7 +18,7 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|';
 
 
-LOAD DATA LOCAL INPATH '/media/MyPassport/windowing/windowing/src/test/groovy/data/lineitem/lineitem.txt'
+LOAD DATA LOCAL INPATH '/home/saplabs/Projects/SQLWindowing/windowing/src/test/groovy/data/lineitem/lineitem.txt'
 OVERWRITE INTO TABLE lineitem;
 
 CREATE TABLE sorted_lineitem

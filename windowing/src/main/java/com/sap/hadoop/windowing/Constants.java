@@ -49,5 +49,9 @@ public class Constants
 	public static final String WINDOWING_TEST_MODE = "windowing.test.mode";
 	
 	public static final String WINDOWING_OUTPUT_QUERY_RESULT = "windowing.output.query.result";
+	
+	public static final String DEFAULT_SERDE_CLASSNAME = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe";
+	public static final String DEFAULT_OUTPUTFORMAT_CLASSNAME = "org.apache.hadoop.mapred.TextOutputFormat";
+	public static final String DEFAULT_RECORDWRITER_CLASSNAME = "org.apache.hadoop.hive.contrib.util.typedbytes.TypedBytesRecordWriter";
 
 }

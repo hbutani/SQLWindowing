@@ -22,6 +22,11 @@ public abstract class QueryInputSpec
 		this.order = order;
 	}
 	
+	/*
+	 * is the starting point of this Input Chain a Hive Query or Table.
+	 */
+	public abstract boolean sourcedFromHive();
+	
 	@Override
 	public int hashCode()
 	{

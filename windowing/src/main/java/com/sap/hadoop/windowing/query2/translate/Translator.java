@@ -36,6 +36,8 @@ public class Translator
 		
 		InputTranslation.translate(qry);
 		
+		OutputTranslation.translate(qry);
+		
 		return qry;
 	}
 	

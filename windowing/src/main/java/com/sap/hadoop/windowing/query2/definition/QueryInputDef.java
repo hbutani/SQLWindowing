@@ -3,9 +3,10 @@ package com.sap.hadoop.windowing.query2.definition;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
+import com.sap.hadoop.windowing.query2.specification.HiveTableSpec;
 import com.sap.hadoop.windowing.query2.specification.QueryInputSpec;
 
-public class QueryInputDef
+public abstract class QueryInputDef
 {
 	QueryInputSpec inputSpec;
 	WindowDef window;
@@ -62,4 +63,9 @@ public class QueryInputDef
 	{
 		this.alias = alias;
 	}
+	
+	/*
+	 * get the Hive Table associated with this input chain.
+	 */
+	public abstract HiveTableSpec getHiveTableSpec();
 }

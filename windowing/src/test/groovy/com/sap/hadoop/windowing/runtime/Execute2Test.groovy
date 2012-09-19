@@ -44,7 +44,7 @@ class Execute2Test extends MRBase2Test
 	
 	public static void execute(QueryDef qDef)
 	{
-		TableFuncDef tabDef = (TableFuncDef) qDef.getInput();
+		/*TableFuncDef tabDef = (TableFuncDef) qDef.getInput();
 		TableFunctionEvaluator tEval = tabDef.getFunction();
 		TableFunctionResolver tResolver = tEval.getResolver();
 		String partClassName = tEval.getPartitionClass();
@@ -53,7 +53,8 @@ class Execute2Test extends MRBase2Test
 		Partition p = IOUtils.createPartition(partClassName, partMemSize, eCtx.wIn);
 		
 		Partition oP = tEval.execute(p);
-		IOUtils.dumpPartition(oP, System.out);
+		IOUtils.dumpPartition(oP, System.out);*/
+		wshell.executor.execute(qDef, wshell);
 	}
 	
 	@Test

@@ -34,7 +34,7 @@ import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.runtime2.Partition;
 
-class IOUtils
+public class IOUtils
 {
 	private static final Log LOG = LogFactory.getLog("com.sap.hadoop.windowing.io");
 	

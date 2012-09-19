@@ -2,7 +2,10 @@ package com.sap.hadoop.windowing.query2.definition;
 
 import java.util.ArrayList;
 
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+
 import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
+import com.sap.hadoop.windowing.query2.specification.HiveTableSpec;
 import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
 
 public class TableFuncDef extends QueryInputDef
@@ -10,6 +13,7 @@ public class TableFuncDef extends QueryInputDef
 	ArrayList<ArgDef> args;
 	QueryInputDef input;
 	TableFunctionEvaluator tFunction;
+	ObjectInspector mapOI;
 	
 	public TableFuncSpec getTableFuncSpec()
 	{
@@ -56,5 +60,19 @@ public class TableFuncDef extends QueryInputDef
 	{
 		this.tFunction = tFunction;
 	}
+	
+	public HiveTableSpec getHiveTableSpec()
+	{
+		return input.getHiveTableSpec();
+	}
 
+	public ObjectInspector getMapOI()
+	{
+		return mapOI;
+	}
+
+	public void setMapOI(ObjectInspector mapOI)
+	{
+		this.mapOI = mapOI;
+	}
 }

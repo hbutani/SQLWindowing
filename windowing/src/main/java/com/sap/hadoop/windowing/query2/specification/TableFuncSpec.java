@@ -53,6 +53,11 @@ public class TableFuncSpec extends QueryInputSpec
 		this.input = input;
 	}
 	
+	public boolean sourcedFromHive()
+	{
+		return input.sourcedFromHive();
+	}
+	
 	@Override
 	public int hashCode()
 	{

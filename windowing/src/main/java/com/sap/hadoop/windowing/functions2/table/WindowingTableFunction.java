@@ -75,11 +75,9 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Partition execute(Partition iPart) throws WindowingException
+	public void execute(Partition iPart, Partition outP) throws WindowingException
 	{
-		TableFuncDef tabDef = getTableDef();
 		QueryDef qDef = getQueryDef();
-		Partition outP = new Partition(getPartitionClass(), getPartitionMemSize(), tabDef.getSerde(), tabDef.getOI());
 		ArrayList<WindowFunctionDef> wFns = qDef.getSelectList().getWindowFuncs();
 		ArrayList<List<?>> oColumns = new ArrayList<List<?>>();
 		
@@ -141,7 +139,6 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 			throw new WindowingException(he);
 		}
 		
-		return outP;
 	}
 	
 	public static class WindowingTableFunctionResolver extends TableFunctionResolver

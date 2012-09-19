@@ -3,18 +3,21 @@ package com.sap.hadoop.windowing.query2.translate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
 import org.antlr.runtime.tree.TreeAdaptor;
 import org.antlr.runtime.tree.TreeWizard;
+import org.antlr.runtime.tree.TreeWizard.ContextVisitor;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluatorFactory;
 import org.apache.hadoop.hive.ql.lib.Node;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
+import org.apache.hadoop.hive.ql.parse.BaseSemanticAnalyzer;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
 import org.apache.hadoop.hive.ql.parse.TypeCheckCtx;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
@@ -306,4 +309,25 @@ public class TranslateUtils
 	   return new ASTNode(payload);
 	 }
    };
+   
+   public static void unescapeStringLiterals(ASTNode node)
+   {
+	   TreeWizard tw = new TreeWizard(adaptor, Windowing2Parser.tokenNames);
+	   tw.visit(node, Windowing2Parser.StringLiteral, new UnescapeStringLiterals());
+   }
+   
+   public static class UnescapeStringLiterals implements ContextVisitor
+   {
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void visit(Object t, Object parent, int childIndex, Map labels)
+	{
+		ASTNode expr = (ASTNode) t;
+		String text = expr.getText();
+		text = BaseSemanticAnalyzer.unescapeSQLString(text);
+		expr.getToken().setText(text);
+	}
+	   
+   }
 }

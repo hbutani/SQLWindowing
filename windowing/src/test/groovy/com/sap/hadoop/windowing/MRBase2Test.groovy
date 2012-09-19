@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 
 import com.sap.hadoop.windowing.query2.translate.Translator;
 import com.sap.hadoop.windowing.runtime2.Executor;
+import com.sap.hadoop.windowing.runtime2.LocalExecutor;
 import com.sap.hadoop.windowing.runtime2.ThriftBasedHiveQueryExecutor;
 import com.sap.hadoop.windowing.runtime2.WindowingShell;
 
@@ -27,7 +28,7 @@ class MRBase2Test
 		conf.setBoolean(Constants.WINDOWING_TEST_MODE, true)
 		HiveConf hCfg = new HiveConf(conf, conf.getClass())
 		
-		wshell = new WindowingShell(hCfg, new Translator(), new Executor())
+		wshell = new WindowingShell(hCfg, new Translator(), new LocalExecutor())
 		wshell.hiveQryExec = new ThriftBasedHiveQueryExecutor(conf)
 	}
 	

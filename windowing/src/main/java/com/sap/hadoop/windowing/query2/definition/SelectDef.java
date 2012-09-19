@@ -2,7 +2,7 @@ package com.sap.hadoop.windowing.query2.definition;
 
 import java.util.ArrayList;
 
-import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
+import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.windowing.query2.specification.SelectSpec;
 
@@ -10,7 +10,8 @@ public class SelectDef
 {
 	SelectSpec selectSpec;
 	ArrayList<WindowFunctionDef> windowFuncs;
-	ArrayList<ExprNodeDesc> exprNodes;
+	ArrayList<ColumnDef> columns;
+	StructObjectInspector OI;
 	
 	public SelectSpec getSelectSpec()
 	{
@@ -31,15 +32,30 @@ public class SelectDef
 	{
 		this.windowFuncs = windowFuncs;
 	}
-	
-	public ArrayList<ExprNodeDesc> getExprNodes()
+
+	public ArrayList<ColumnDef> getColumns()
 	{
-		return exprNodes;
+		return columns;
+	}
+
+	public void setColumns(ArrayList<ColumnDef> columns)
+	{
+		this.columns = columns;
 	}
 	
-	public void setExprNodes(ArrayList<ExprNodeDesc> exprNodes)
+	public void addColumn(ColumnDef cDef)
 	{
-		this.exprNodes = exprNodes;
+		columns = columns == null ? new ArrayList<ColumnDef>() : columns;
+		columns.add(cDef);
 	}
-	
+
+	public StructObjectInspector getOI()
+	{
+		return OI;
+	}
+
+	public void setOI(StructObjectInspector oI)
+	{
+		OI = oI;
+	}
 }

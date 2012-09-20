@@ -151,6 +151,8 @@ public class WindowingShell
 			throw new WindowingException("Parse Error:" + te.toString(), te);
 		}
 		
+		TranslateUtils.unescapeStringLiterals((ASTNode) t);
+		
 		try
 		{
 			

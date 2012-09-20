@@ -33,6 +33,11 @@ public class HiveTableSpec extends QueryInputSpec
 	{
 		this.tableName = tableName;
 	}
+	
+	public boolean sourcedFromHive()
+	{
+		return true;
+	}
 
 	@Override
 	public int hashCode()

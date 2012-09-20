@@ -226,6 +226,11 @@ public class WindowFrameSpec
 		{
 			this.expression = (ASTNode) expression;
 		}
+		
+		public void setExpression(ASTNode expression)
+		{
+			this.expression = expression;
+		}
 
 		public int getAmt()
 		{

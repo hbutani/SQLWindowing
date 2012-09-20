@@ -2,6 +2,8 @@ package com.sap.hadoop.windowing.query2.definition;
 
 import java.util.Properties;
 
+import com.sap.hadoop.windowing.query2.specification.HiveTableSpec;
+
 public class HdfsLocationDef extends QueryInputDef
 {
 	String serdeClassName;
@@ -60,6 +62,11 @@ public class HdfsLocationDef extends QueryInputDef
 	public void setInputFormatClassName(String inputFormatClassName)
 	{
 		this.inputFormatClassName = inputFormatClassName;
+	}
+	
+	public HiveTableSpec getHiveTableSpec()
+	{
+		return null;
 	}
 	
 }

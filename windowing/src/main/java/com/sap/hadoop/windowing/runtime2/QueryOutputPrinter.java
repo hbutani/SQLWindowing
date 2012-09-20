@@ -134,7 +134,7 @@ class QueryOutputPrinter
 	RowSchema getQueryOutputRowSchema(QueryDef qry, JobConf jcfg) throws WindowingException
 	{
 		String tabAlias = qry.getOutput().getSpec().getHiveTable();
-		StructObjectInspector rowObjectInspector = qry.getOutput().getOI();
+		StructObjectInspector rowObjectInspector = qry.getSelectList().getOI();
 		RowResolver rr = HiveUtils.getRowResolver(tabAlias, rowObjectInspector );
 		return rr.getRowSchema();
 	}

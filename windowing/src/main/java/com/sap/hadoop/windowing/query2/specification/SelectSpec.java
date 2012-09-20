@@ -127,6 +127,7 @@ public class SelectSpec implements Iterable<Object>
 		}
 		else if (!expressions.equals(other.expressions))
 			return false;
+		
 		if (isWindowFn == null)
 		{
 			if (other.isWindowFn != null)
@@ -176,6 +177,82 @@ public class SelectSpec implements Iterable<Object>
 			}
 		}
 		return buf.toString();
+	}
+	
+	public void setExpressions(ArrayList<ASTNode> expressions)
+	{
+		this.expressions = expressions;
+	}
+
+	public void setWindowFuncs(ArrayList<WindowFunctionSpec> windowFuncs)
+	{
+		this.windowFuncs = windowFuncs;
+	}
+
+	public void setIsWindowFn(ArrayList<Boolean> isWindowFn)
+	{
+		this.isWindowFn = isWindowFn;
+	}
+
+	public void setAliases(ArrayList<String> aliases)
+	{
+		this.aliases = aliases;
+	}
+
+	public ArrayList<String> getAliases()
+	{
+		return aliases;
+	}
+	
+	public Iterator<Object> getColumnListAndAlias()
+	{
+		return new ColumnListAndAliasItr();
+	}
+	
+	class ColumnListAndAliasItr implements Iterator<Object>
+	{
+		int cnt;
+		int exprIdx;
+		int wdwFnIdx;
+		int idx;
+		
+		ColumnListAndAliasItr()
+		{
+			cnt = SelectSpec.this.isWindowFn.size();
+			idx = 0;
+			exprIdx = 0;
+			wdwFnIdx = 0;
+		}
+
+		@Override
+		public boolean hasNext()
+		{
+			return idx < cnt;
+		}
+
+		@Override
+		public Object next()
+		{
+			boolean isWnFn = SelectSpec.this.isWindowFn.get(idx);
+			Object alias = SelectSpec.this.aliases.get(idx);
+			idx++;
+			
+			if ( isWnFn )
+			{
+				return new Object[] { isWnFn, alias, SelectSpec.this.windowFuncs.get(wdwFnIdx++)};
+			}
+			else
+			{
+				return new Object[] { isWnFn, alias, SelectSpec.this.expressions.get(exprIdx++)};
+			}
+		}
+
+		@Override
+		public void remove()
+		{
+			throw new UnsupportedOperationException();
+		}
+		
 	}
 	
 }

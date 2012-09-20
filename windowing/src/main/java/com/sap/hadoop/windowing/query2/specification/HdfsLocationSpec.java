@@ -29,6 +29,11 @@ public class HdfsLocationSpec extends QueryInputSpec implements INameValueList
 		addProperty(name, value);
 		
 	}
+	
+	public boolean sourcedFromHive()
+	{
+		return false;
+	}
 
 	@Override
 	public int hashCode()

@@ -101,7 +101,17 @@ public abstract class TableFunctionEvaluator
 		return resolver.hasMapPhase();
 	}
 	
-	public abstract Partition execute(Partition iPart) throws WindowingException;
+	public Partition execute(Partition iPart) throws WindowingException
+	{
+		Partition outP = new Partition(getPartitionClass(), getPartitionMemSize(), tDef.getSerde(), OI);
+		execute(iPart, outP);
+		return outP;
+	}
+	
+	protected void execute(Partition iPart, Partition oPart) throws WindowingException
+	{
+		
+	}
 
 	public Partition mapExecute(Partition iPart) throws WindowingException
 	{

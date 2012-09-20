@@ -21,6 +21,11 @@ public class HiveQuerySpec  extends QueryInputSpec
 	{
 		this.hiveQuery = hiveQuery;
 	}
+	
+	public boolean sourcedFromHive()
+	{
+		return true;
+	}
 
 	@Override
 	public int hashCode()

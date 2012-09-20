@@ -7,6 +7,8 @@ import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.StructField;
+import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions2.FunctionRegistry;
@@ -177,6 +179,20 @@ public class WindowFunctionTranslation
 		{
 			throw new WindowingException(
 					sprintf("Window Function '%s' has an incompatible order clause", wFnDef.getSpec()));
+		}
+	}
+	
+	public static void addInputColumnsToList(QueryDef qDef, TableFuncDef windowTableFnDef, 
+			ArrayList<String> fieldNames, ArrayList<ObjectInspector> fieldOIs)
+	{
+		QueryTranslationInfo tInfo = qDef.getTranslationInfo();
+		InputInfo iInfo = tInfo.getInputInfo(windowTableFnDef.getInput()); 
+		
+		StructObjectInspector OI = (StructObjectInspector) iInfo.getOI();
+		for(StructField f : OI.getAllStructFieldRefs() )
+		{
+			fieldNames.add(f.getFieldName());
+			fieldOIs.add(f.getFieldObjectInspector());
 		}
 	}
 }

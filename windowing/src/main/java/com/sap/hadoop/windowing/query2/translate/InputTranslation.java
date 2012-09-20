@@ -12,6 +12,7 @@ import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDe;
+import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.HiveUtils;
@@ -43,6 +44,16 @@ public class InputTranslation
 	
 	public static void translate(QueryDef qDef) throws WindowingException
 	{
+		QuerySpec spec = qDef.getSpec();
+		
+		/*
+		 * validate that input chain ends in a Hive Query or TAble.
+		 */
+		if ( !spec.getInput().sourcedFromHive() )
+		{
+			throw new WindowingException("Translation not supported for HdfsLocation based queries");
+		}
+		
 		EnsureTableFunctionInQuery.execute(qDef);
 		SlidePartitionAndOrderSpecs.execute(qDef);
 		TranslateInputSpecs.execute(qDef);
@@ -202,13 +213,35 @@ public class InputTranslation
 		tEval.setupMapOI();
 		tDef.setWindow(WindowSpecTranslation.translateWindow(qDef, tDef));
 		tEval.setupOI();
-		tDef.setOI(tEval.getOutputOI());
+		
 		
 		/*
 		 * setup the SerDe.
 		 */
-		SerDe serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(), tDef.getOI());
+		SerDe serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(), tEval.getOutputOI());
 		tDef.setSerde(serde);
+		
+		try
+		{
+			tDef.setOI((StructObjectInspector) serde.getObjectInspector());
+		}
+		catch(SerDeException se)
+		{
+			throw new WindowingException(se);
+		}
+		
+		if ( tEval.hasMapPhase() )
+		{
+			serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(), tEval.getMapOutputOI());
+			try
+			{
+				tDef.setMapOI((StructObjectInspector) serde.getObjectInspector());
+			}
+			catch(SerDeException se)
+			{
+				throw new WindowingException(se);
+			}
+		}
 
 		return tDef;
 	}

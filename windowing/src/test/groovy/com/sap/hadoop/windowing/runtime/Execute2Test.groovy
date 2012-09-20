@@ -44,7 +44,7 @@ class Execute2Test extends MRBase2Test
 	
 	public static void execute(QueryDef qDef)
 	{
-		TableFuncDef tabDef = (TableFuncDef) qDef.getInput();
+		/*TableFuncDef tabDef = (TableFuncDef) qDef.getInput();
 		TableFunctionEvaluator tEval = tabDef.getFunction();
 		TableFunctionResolver tResolver = tEval.getResolver();
 		String partClassName = tEval.getPartitionClass();
@@ -53,21 +53,8 @@ class Execute2Test extends MRBase2Test
 		Partition p = IOUtils.createPartition(partClassName, partMemSize, eCtx.wIn);
 		
 		Partition oP = tEval.execute(p);
-		IOUtils.dumpPartition(oP, System.out);
-	}
-	
-	public static void serialize(QueryDef qDef)
-	{
-		// TODO: revisit persistence of QueryDef.
-		//		File f = File.createTempFile("SQW-", null);
-		//		FileOutputStream out = new FileOutputStream(f);
-		//
-		//		XMLEncoder e = new XMLEncoder(out);
-		//		e.setExceptionListener( new EL());
-		//		// workaround for java 1.5
-		//
-		//		e.writeObject(qDef);
-		//		e.close();
+		IOUtils.dumpPartition(oP, System.out);*/
+		wshell.executor.execute(qDef, wshell);
 	}
 	
 	@Test
@@ -244,10 +231,3 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		execute(qDef)
 	}
 }
-
-class EL implements ExceptionListener
-{
-      public void exceptionThrown(Exception e) {
-        throw new RuntimeException("Cannot serialize the query plan", e);
-      }
-    }

@@ -201,7 +201,7 @@ public class WindowSpecTranslation
 				break;
 		}
 		
-		if ( numOfPartColumns != 0 && numOfPartColumns != orderCols.size())
+		if ( numOfPartColumns != 0 && numOfPartColumns != partCols.size())
 		{
 			throw new WindowingException(
 					sprintf("For Input %s:n all partition columns must be in order clause or none should be specified", 

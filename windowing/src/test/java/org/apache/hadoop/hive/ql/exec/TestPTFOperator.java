@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -13,13 +13,14 @@ import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.conf.HiveConf;
-import org.apache.hadoop.hive.metastore.MetaStoreUtils;
 import org.apache.hadoop.hive.ql.DriverContext;
-import org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat;
 import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.ql.metadata.Table;
+import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
 import org.apache.hadoop.hive.ql.plan.ExprNodeColumnDesc;
+import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
+import org.apache.hadoop.hive.ql.plan.ExprNodeFieldDesc;
 import org.apache.hadoop.hive.ql.plan.ExtractDesc;
 import org.apache.hadoop.hive.ql.plan.FileSinkDesc;
 import org.apache.hadoop.hive.ql.plan.MapredWork;
@@ -27,7 +28,6 @@ import org.apache.hadoop.hive.ql.plan.PlanUtils;
 import org.apache.hadoop.hive.ql.plan.ReduceSinkDesc;
 import org.apache.hadoop.hive.ql.plan.SelectDesc;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
-import org.apache.hadoop.mapred.TextInputFormat;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -35,6 +35,10 @@ import org.junit.rules.ExpectedException;
 import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
+import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
+import com.sap.hadoop.windowing.query2.specification.QueryOutputSpec;
+import com.sap.hadoop.windowing.query2.specification.SelectSpec;
+import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
 import com.sap.hadoop.windowing.query2.translate.Translator;
 import com.sap.hadoop.windowing.runtime.hive.EvalContext;
 import com.sap.hadoop.windowing.runtime2.Executor;
@@ -48,7 +52,7 @@ public class TestPTFOperator extends TestCase {
 	  static WindowingShell wshell;
       static ByteArrayOutputStream outStream;
 
-	  private static String tmpdir = "/tmp/" + System.getProperty("user.name")
+	  private static String tmpdir = "/home/pkalmegh/Projects/SQLWindowing/" + System.getProperty("user.name")
 	      + "/";
 	  private static Path tmppath = new Path(tmpdir);
 	  private static Hive db;
@@ -57,65 +61,6 @@ public class TestPTFOperator extends TestCase {
 	  @Rule
 	  public ExpectedException expectedEx = ExpectedException.none();
 	  static EvalContext eCtx;
-
-	  static {
-	    try {
-	      hiveConf = new HiveConf(ExecDriver.class);
-	      hiveConf.set("hive.metastore.warehouse.dir", "/tmp");
-	      hiveConf.set("test.data.files","/home/saplabs/Projects/hive/build/dist/examples/files");
-	      fs = FileSystem.get(hiveConf);
-	      if (fs.exists(tmppath) && !fs.getFileStatus(tmppath).isDir()) {
-	        throw new RuntimeException(tmpdir + " exists but is not a directory");
-	      }
-
-	      if (!fs.exists(tmppath)) {
-	        if (!fs.mkdirs(tmppath)) {
-	          throw new RuntimeException("Could not make scratch directory "
-	              + tmpdir);
-	        }
-	      }
-
-	      for (Object one : Utilities.makeList("mapplan1.out", "mapplan2.out",
-	          "mapredplan1.out", "mapredplan2.out", "mapredplan3.out",
-	          "mapredplan4.out", "mapredplan5.out", "mapredplan6.out")) {
-	        Path onedir = new Path(tmppath, (String) one);
-	        if (fs.exists(onedir)) {
-	          fs.delete(onedir, true);
-	        }
-	      }
-
-	      // copy the test files into hadoop if required.
-	      int i = 0;
-	      Path[] hadoopDataFile = new Path[2];
-	      String[] testFiles = {"kv1.txt", "kv2.txt"};
-	      String testFileDir = new Path(hiveConf.get("test.data.files")).toUri().getPath();
-	      for (String oneFile : testFiles) {
-	        Path localDataFile = new Path(testFileDir, oneFile);
-	        hadoopDataFile[i] = new Path(tmppath, oneFile);
-	        fs.copyFromLocalFile(false, true, localDataFile, hadoopDataFile[i]);
-	        i++;
-	      }
-
-	      // load the test files into tables
-	      i = 0;
-	      db = Hive.get(hiveConf);
-	      String[] srctables = {"src", "src2"};
-	      LinkedList<String> cols = new LinkedList<String>();
-	      cols.add("key");
-	      cols.add("value");
-	      for (String src : srctables) {
-	        db.dropTable(MetaStoreUtils.DEFAULT_DATABASE_NAME, src, true, true);
-	        db.createTable(src, cols, null, TextInputFormat.class,
-	            IgnoreKeyTextOutputFormat.class);
-	        db.loadTable(hadoopDataFile[i], src, false, false);
-	        i++;
-	      }
-
-	    } catch (Throwable e) {
-	      e.printStackTrace();
-	      throw new RuntimeException("Encountered throwable");
-	    }
-	  }
 
 		public static Configuration WORK()
 		{
@@ -158,18 +103,47 @@ public class TestPTFOperator extends TestCase {
 	    
 	    try {
 		
-		Configuration conf = WORK();
+		Configuration conf = HOME();
 		conf.setBoolean(Constants.WINDOWING_TEST_MODE, true);
-		HiveConf hiveConf = new HiveConf(conf, conf.getClass());
+		hiveConf = new HiveConf(conf, conf.getClass());
 	    outStream = new ByteArrayOutputStream();
 		
 		wshell = new WindowingShell(hiveConf, new Translator(), new Executor());
 		wshell.setHiveQryExec(new ThriftBasedHiveQueryExecutor(conf));
 		eCtx = new EvalContext(wshell.getCfg());
+		setupFS();
 	    } catch (WindowingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	  }
+	  
+	  private void setupFS(){
+		    try {
+			      fs = FileSystem.get(hiveConf);
+			      if (fs.exists(tmppath) && !fs.getFileStatus(tmppath).isDir()) {
+			        throw new RuntimeException(tmpdir + " exists but is not a directory");
+			      }
+
+			      if (!fs.exists(tmppath)) {
+			        if (!fs.mkdirs(tmppath)) {
+			          throw new RuntimeException("Could not make scratch directory "
+			              + tmpdir);
+			        }
+			      }
+
+			      for (Object one : Utilities.makeList("windowing-hive-1.out")) {
+			        Path onedir = new Path(tmppath, (String) one);
+			        if (fs.exists(onedir)) {
+			          fs.delete(onedir, true);
+			        }
+			      }
+
+			    } catch (Throwable e) {
+			      e.printStackTrace();
+			      throw new RuntimeException("Encountered throwable");
+			    }
+
 	  }
 	  
 	  public static ExprNodeColumnDesc getStringColumn(String columnName) {
@@ -202,32 +176,79 @@ public class TestPTFOperator extends TestCase {
 	  }
 
 	  @SuppressWarnings("unchecked")
-	  private void populateMapRedPlan1(Table src) throws SemanticException {
+	  private void populateReduceOnlyPlan(Table inputTable, QueryDef qdef) throws SemanticException {
 	    mr.setNumReduceTasks(Integer.valueOf(1));
 
-	    ArrayList<String> outputColumns = new ArrayList<String>();
-	    for (int i = 0; i < 2; i++) {
-	      outputColumns.add("_col" + i);
-	    }
+	    TableFuncDef tdef = (TableFuncDef) qdef.getInput();
+	    QueryOutputSpec qOutSpec = qdef.getSpec().getOutput();
+	    TableFuncSpec qInSpec = (TableFuncSpec) qdef.getSpec().getInput();
+	    
+	    
+	    
+	    //get partitiondef, orderdef from windowdef->queryinputdef->tablefuncdef
+	    //get rowresolver from querytranslationinfo (getinputinfo or getmapinputinfo)
+	    
+	    
+/*	    ArrayList<ColumnDef> outputColDefs = qdef.getOutput().getColumnDefs();
+	    for (ColumnDef columnDef : outputColDefs) {
+			String col = columnDef.getExprNode().getName();
+			System.out.println("Column - " + col);
+		}
+*/	    
 	    // map-side work
-	    Operator<ReduceSinkDesc> op1 = OperatorFactory.get(PlanUtils
-	        .getReduceSinkDesc(Utilities.makeList(getStringColumn("key")),
-	        Utilities.makeList(getStringColumn("value")), outputColumns, true,
+	    ArrayList<ExprNodeDesc> keyCols = Utilities.makeList(getStringColumn("p_mfgr")); 
+	    ArrayList<ExprNodeDesc> valueCols = Utilities.makeList(getStringColumn("p_mfgr"),
+	    		getStringColumn("p_name"),
+	    		getStringColumn("p_size")); 
+	    List<String> outputColumnNames = new ArrayList<String>();
+	    
+	    
+/*
+	    for (int i = 0; i < 4; i++) {
+	    	outputColumnNames.add("_col" + i);
+	    }
+*/
+	    outputColumnNames.add("p_mfgr");
+	    outputColumnNames.add("p_mfgr");
+	    outputColumnNames.add("p_name");
+	    outputColumnNames.add("p_size");
+	    
+	     Operator<ReduceSinkDesc> op1 = OperatorFactory.get(PlanUtils
+	        .getReduceSinkDesc(keyCols, valueCols, outputColumnNames, true,
 	        -1, 1, -1));
+	    
+	    
 
-	    Utilities.addMapWork(mr, src, "a", op1);
+	    
+	    Utilities.addMapWork(mr, inputTable, "part", op1);
 	    mr.setKeyDesc(op1.getConf().getKeySerializeInfo());
 	    mr.getTagToValueDesc().add(op1.getConf().getValueSerializeInfo());
 
 	    // reduce side work
 	    Operator<FileSinkDesc> op4 = OperatorFactory.get(new FileSinkDesc(tmpdir
-	        + "mapredplan1.out", Utilities.defaultTd, false));
+	        + "reduceOnlyPlan.out", Utilities.defaultTd, false));
 	    
-/*	    Operator<FileSinkDesc> op3 = OperatorFactory.get(collist-exprnodedesc,
-	    		Utilities.makeList("outputcols"), op4);
-*/
+	    ArrayList<ExprNodeDesc> selectColList = Utilities.makeList(
+	    		getStringColumn("p_mfgr"),
+	    		getStringColumn("p_name"),
+	    		getStringColumn("p_size"));
+	    
+	    ArrayList<String> selectOutputColumns = new ArrayList<String>();
+	     SelectSpec selSpec = qdef.getSpec().getSelectList();
+	     ArrayList<ASTNode> selExprs = selSpec.getExpressions();
+	     for (ASTNode astNode : selExprs) {
+	    	 selectOutputColumns.add(astNode.getChild(0).getText());
+		}
+
+
+	    
+	    Operator<SelectDesc> op3 = OperatorFactory.get(new SelectDesc(selectColList, 
+	    		selectOutputColumns), op4);
+	     
+
+
 	    Operator<ExtractDesc> op2 = OperatorFactory.get(new ExtractDesc(
-	        getStringColumn(Utilities.ReduceField.VALUE.toString())), op4);
+	        getStringColumn(Utilities.ReduceField.VALUE.toString())), op3);
 
 	    mr.setReducer(op2);
 	  }
@@ -249,7 +270,7 @@ public class TestPTFOperator extends TestCase {
 		  }
 	  
 	  private QueryDef populateQueryDef() throws Exception{
-		  return wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +
+/*		  return wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +
 		  		"from part " +
 		  		"partition by p_mfgr " +
 		  		"order by p_mfgr " +
@@ -257,20 +278,39 @@ public class TestPTFOperator extends TestCase {
 		  		"into path='/tmp/wout2' " +
 		  		"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
 		  		"with serdeproperties('field.delim'=',') " +
-		  		"format 'org.apache.hadoop.mapred.TextOutputFormat'");
+		  		"format 'org.apache.hadoop.mapred.TextOutputFormat'");*/
+		  
+		  return wshell.translate("select  p_mfgr,p_name, p_size " +
+			  		"from part " +
+			  		"partition by p_mfgr " +
+			  		"order by p_mfgr " +
+			  		"into path='/tmp/wout2' " +
+			  		"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
+			  		"with serdeproperties('field.delim'=',') " +
+			  		"format 'org.apache.hadoop.mapred.TextOutputFormat'");
 	  }
 
+	@SuppressWarnings("deprecation")
 	@Test
-	  public void testMapRedPlan1() throws Exception {
+	  public void testReduceOnlyPlan() throws Exception {
 
-	    System.out.println("Beginning testMapRedPlan1");
+	    System.out.println("Beginning testReduceOnlyPlan");
 
 	    try {
 	      QueryDef qDef = populateQueryDef();
-	      populateMapRedPlan1(db.getTable(MetaStoreUtils.DEFAULT_DATABASE_NAME,
-	          "src"));
+	      System.out.println(qDef.getInput().getAlias());
+	      String tableName = "part";
+	      org.apache.hadoop.hive.metastore.api.Table hiveTable = qDef.getTranslationInfo().getHiveMSClient().getTable(tableName);
+	      String dbName = hiveTable.getDbName();
+	      
+
+	      db = Hive.get(hiveConf);
+	      Table hiveMetaTable = db.getTable(dbName, tableName);
+	      
+	      
+	      populateReduceOnlyPlan(hiveMetaTable, qDef);
 	      executePlan();
-	      fileDiff("kv1.val.sorted.txt", "mapredplan1.out");
+	      //fileDiff("kv1.val.sorted.txt", "mapredplan1.out");
 	    } catch (Throwable e) {
 	      e.printStackTrace();
 	      fail("Got Throwable");

@@ -15,7 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.parse.BaseSemanticAnalyzer;
-import org.apache.hadoop.hive.ql.parse.ErrorMsg;
+import org.apache.hadoop.hive.ql.ErrorMsg;
 import org.apache.hadoop.hive.ql.parse.RowResolver;
 import org.apache.hadoop.hive.ql.parse.SemanticAnalyzer;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
@@ -496,7 +496,7 @@ public class WindowingTypeCheckProcFactory
 					else
 					{
 						List<String> possibleColumnNames = input
-								.getNonHiddenColumnNames(-1);
+								.getReferenceableColumnAliases(colInfo.getTabAlias(),-1);
 						String reason = String.format(
 								"(possible column names are: %s)",
 								StringUtils.join(possibleColumnNames, ", "));

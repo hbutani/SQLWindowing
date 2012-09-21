@@ -16,17 +16,16 @@ import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.DriverContext;
 import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.ql.metadata.Table;
-import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
 import org.apache.hadoop.hive.ql.plan.ExprNodeColumnDesc;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
-import org.apache.hadoop.hive.ql.plan.ExprNodeFieldDesc;
 import org.apache.hadoop.hive.ql.plan.ExtractDesc;
 import org.apache.hadoop.hive.ql.plan.FileSinkDesc;
 import org.apache.hadoop.hive.ql.plan.MapredWork;
 import org.apache.hadoop.hive.ql.plan.PlanUtils;
 import org.apache.hadoop.hive.ql.plan.ReduceSinkDesc;
 import org.apache.hadoop.hive.ql.plan.SelectDesc;
+import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,14 +33,13 @@ import org.junit.rules.ExpectedException;
 
 import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
+import com.sap.hadoop.windowing.query2.definition.QueryOutputDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
-import com.sap.hadoop.windowing.query2.specification.QueryOutputSpec;
-import com.sap.hadoop.windowing.query2.specification.SelectSpec;
-import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
 import com.sap.hadoop.windowing.query2.translate.Translator;
 import com.sap.hadoop.windowing.runtime.hive.EvalContext;
-import com.sap.hadoop.windowing.runtime2.Executor;
+import com.sap.hadoop.windowing.runtime2.LocalExecutor;
 import com.sap.hadoop.windowing.runtime2.ThriftBasedHiveQueryExecutor;
 import com.sap.hadoop.windowing.runtime2.WindowingShell;
 
@@ -108,7 +106,7 @@ public class TestPTFOperator extends TestCase {
 		hiveConf = new HiveConf(conf, conf.getClass());
 	    outStream = new ByteArrayOutputStream();
 		
-		wshell = new WindowingShell(hiveConf, new Translator(), new Executor());
+		wshell = new WindowingShell(hiveConf, new Translator(), new LocalExecutor());
 		wshell.setHiveQryExec(new ThriftBasedHiveQueryExecutor(conf));
 		eCtx = new EvalContext(wshell.getCfg());
 		setupFS();
@@ -179,39 +177,37 @@ public class TestPTFOperator extends TestCase {
 	  private void populateReduceOnlyPlan(Table inputTable, QueryDef qdef) throws SemanticException {
 	    mr.setNumReduceTasks(Integer.valueOf(1));
 
-	    TableFuncDef tdef = (TableFuncDef) qdef.getInput();
-	    QueryOutputSpec qOutSpec = qdef.getSpec().getOutput();
-	    TableFuncSpec qInSpec = (TableFuncSpec) qdef.getSpec().getInput();
-	    
-	    
-	    
 	    //get partitiondef, orderdef from windowdef->queryinputdef->tablefuncdef
 	    //get rowresolver from querytranslationinfo (getinputinfo or getmapinputinfo)
 	    
 	    
-/*	    ArrayList<ColumnDef> outputColDefs = qdef.getOutput().getColumnDefs();
-	    for (ColumnDef columnDef : outputColDefs) {
-			String col = columnDef.getExprNode().getName();
-			System.out.println("Column - " + col);
-		}
-*/	    
+	    
 	    // map-side work
 	    ArrayList<ExprNodeDesc> keyCols = Utilities.makeList(getStringColumn("p_mfgr")); 
-	    ArrayList<ExprNodeDesc> valueCols = Utilities.makeList(getStringColumn("p_mfgr"),
+	    ArrayList<ExprNodeDesc> valueCols = Utilities.makeList(
+	    		new ExprNodeColumnDesc(TypeInfoFactory.intTypeInfo, "p_partkey", "", false), 
 	    		getStringColumn("p_name"),
-	    		getStringColumn("p_size")); 
+	    		getStringColumn("p_mfgr"),
+	    		getStringColumn("p_brand"),
+	    		getStringColumn("p_type"),
+	    		new ExprNodeColumnDesc(TypeInfoFactory.intTypeInfo, "p_size", "", false),
+	    		getStringColumn("p_container"), 
+	    		new ExprNodeColumnDesc(TypeInfoFactory.doubleTypeInfo, "p_retailprice", "", false),
+	    		getStringColumn("p_comment"));
+	    
 	    List<String> outputColumnNames = new ArrayList<String>();
-	    
-	    
-/*
-	    for (int i = 0; i < 4; i++) {
-	    	outputColumnNames.add("_col" + i);
-	    }
-*/
+	
 	    outputColumnNames.add("p_mfgr");
-	    outputColumnNames.add("p_mfgr");
-	    outputColumnNames.add("p_name");
-	    outputColumnNames.add("p_size");
+	    outputColumnNames.add("p_partkey"); 
+		outputColumnNames.add("p_name");
+		outputColumnNames.add("p_mfgr");
+		outputColumnNames.add("p_brand");
+		outputColumnNames.add("p_type");
+		outputColumnNames.add("p_size");
+		outputColumnNames.add("p_container"); 
+		outputColumnNames.add("p_retailprice");
+		outputColumnNames.add("p_comment");
+
 	    
 	     Operator<ReduceSinkDesc> op1 = OperatorFactory.get(PlanUtils
 	        .getReduceSinkDesc(keyCols, valueCols, outputColumnNames, true,
@@ -230,16 +226,32 @@ public class TestPTFOperator extends TestCase {
 	    
 	    ArrayList<ExprNodeDesc> selectColList = Utilities.makeList(
 	    		getStringColumn("p_mfgr"),
-	    		getStringColumn("p_name"),
-	    		getStringColumn("p_size"));
+	    		new ExprNodeColumnDesc(TypeInfoFactory.intTypeInfo, "p_partkey", "", false),
+	    		getStringColumn("p_comment"),
+	    		new ExprNodeColumnDesc(TypeInfoFactory.intTypeInfo, "p_size", "", false));
 	    
 	    ArrayList<String> selectOutputColumns = new ArrayList<String>();
-	     SelectSpec selSpec = qdef.getSpec().getSelectList();
+/*	     SelectSpec selSpec = qdef.getSpec().getSelectList();
 	     ArrayList<ASTNode> selExprs = selSpec.getExpressions();
 	     for (ASTNode astNode : selExprs) {
 	    	 selectOutputColumns.add(astNode.getChild(0).getText());
-		}
+		}*/
+	    
+	    TableFuncDef tabDef = (TableFuncDef)qdef.getInput();
+	    QueryOutputDef qOutDef = qdef.getOutput();
+	    
 
+	    
+/*	    	    ArrayList<ColumnDef> outputColDefs = qdef.getOutput().get;
+	    for (ColumnDef columnDef : outputColDefs) {
+			String col = columnDef.getExprNode().getName();
+			System.out.println("Column - " + col);
+		}
+*/
+	    selectOutputColumns.add("p_mfgr");
+	    selectOutputColumns.add("p_partkey");
+	    selectOutputColumns.add("p_comment");
+	    selectOutputColumns.add("p_size");
 
 	    
 	    Operator<SelectDesc> op3 = OperatorFactory.get(new SelectDesc(selectColList, 
@@ -280,7 +292,7 @@ public class TestPTFOperator extends TestCase {
 		  		"with serdeproperties('field.delim'=',') " +
 		  		"format 'org.apache.hadoop.mapred.TextOutputFormat'");*/
 		  
-		  return wshell.translate("select  p_mfgr,p_name, p_size " +
+		  return wshell.translate("select p_mfgr,p_name,p_size,p_comment " +
 			  		"from part " +
 			  		"partition by p_mfgr " +
 			  		"order by p_mfgr " +

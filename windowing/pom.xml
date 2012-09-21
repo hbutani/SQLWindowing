@@ -146,27 +146,52 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 	<dependency>
 		<groupId>org.apache.hive</groupId>
 		<artifactId>hive-serde</artifactId>
-		<version>0.9.0</version>
+		<version>0.10.0-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 		<groupId>org.apache.hive</groupId>
 		<artifactId>hive-exec</artifactId>
-		<version>0.9.0</version>
+		<version>0.10.0-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 		<groupId>org.apache.hive</groupId>
 		<artifactId>hive-contrib</artifactId>
-		<version>0.9.0</version>
+		<version>0.10.0-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 		<groupId>org.apache.hive</groupId>
 		<artifactId>hive-metastore</artifactId>
-		<version>0.9.0</version>
+		<version>0.10.0-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 		<groupId>org.apache.hive</groupId>
 		<artifactId>hive-cli</artifactId>
-		<version>0.9.0</version>
+		<version>0.10.0-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.hive</groupId>
+		<artifactId>hive-service</artifactId>
+		<version>0.10.0-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.hive</groupId>
+		<artifactId>hive-common</artifactId>
+		<version>0.10.0-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.hive</groupId>
+		<artifactId>hive-shims</artifactId>
+		<version>0.10.0-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.hive</groupId>
+		<artifactId>hive-pdk</artifactId>
+		<version>0.10.0-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+		<groupId>com.google.guava</groupId>
+		<artifactId>guava</artifactId>
+		<version>r09</version>
 	</dependency>
   </dependencies>
   <repositories>

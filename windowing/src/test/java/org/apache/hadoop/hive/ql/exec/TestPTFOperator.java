@@ -8,6 +8,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.apache.derby.iapi.sql.dictionary.KeyConstraintDescriptor;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -16,6 +17,7 @@ import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.DriverContext;
 import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.ql.metadata.Table;
+import org.apache.hadoop.hive.ql.parse.RowResolver;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
 import org.apache.hadoop.hive.ql.plan.ExprNodeColumnDesc;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
@@ -35,8 +37,10 @@ import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
+import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.definition.QueryOutputDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
+import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 import com.sap.hadoop.windowing.query2.translate.Translator;
 import com.sap.hadoop.windowing.runtime.hive.EvalContext;
 import com.sap.hadoop.windowing.runtime2.LocalExecutor;
@@ -172,6 +176,11 @@ public class TestPTFOperator extends TestCase {
 	      assertEquals(false, true);
 	    }
 	  }
+	  
+	  private ExprNodeDesc getExprDesc(String name, TypeInfo ti){
+		  ExprNodeDesc nodeDesc = new ExprNodeColumnDesc(ti, name, "_" + name, false);
+		  return nodeDesc;
+	  }
 
 	  @SuppressWarnings("unchecked")
 	  private void populateReduceOnlyPlan(Table inputTable, QueryDef qdef) throws SemanticException {
@@ -180,34 +189,29 @@ public class TestPTFOperator extends TestCase {
 	    //get partitiondef, orderdef from windowdef->queryinputdef->tablefuncdef
 	    //get rowresolver from querytranslationinfo (getinputinfo or getmapinputinfo)
 	    
+	    TableFuncDef tabDef = (TableFuncDef) qdef.getInput();
+	    InputInfo input = qdef.getTranslationInfo().getInputInfo(tabDef);
 	    
-	    
-	    // map-side work
-	    ArrayList<ExprNodeDesc> keyCols = Utilities.makeList(getStringColumn("p_mfgr")); 
-	    ArrayList<ExprNodeDesc> valueCols = Utilities.makeList(
-	    		new ExprNodeColumnDesc(TypeInfoFactory.intTypeInfo, "p_partkey", "", false), 
-	    		getStringColumn("p_name"),
-	    		getStringColumn("p_mfgr"),
-	    		getStringColumn("p_brand"),
-	    		getStringColumn("p_type"),
-	    		new ExprNodeColumnDesc(TypeInfoFactory.intTypeInfo, "p_size", "", false),
-	    		getStringColumn("p_container"), 
-	    		new ExprNodeColumnDesc(TypeInfoFactory.doubleTypeInfo, "p_retailprice", "", false),
-	    		getStringColumn("p_comment"));
-	    
+	    ArrayList<ExprNodeDesc> keyCols =  new ArrayList<ExprNodeDesc>();
+	    ArrayList<ExprNodeDesc> valueCols = new ArrayList<ExprNodeDesc>();	    
 	    List<String> outputColumnNames = new ArrayList<String>();
-	
-	    outputColumnNames.add("p_mfgr");
-	    outputColumnNames.add("p_partkey"); 
-		outputColumnNames.add("p_name");
-		outputColumnNames.add("p_mfgr");
-		outputColumnNames.add("p_brand");
-		outputColumnNames.add("p_type");
-		outputColumnNames.add("p_size");
-		outputColumnNames.add("p_container"); 
-		outputColumnNames.add("p_retailprice");
-		outputColumnNames.add("p_comment");
 
+
+	    ArrayList<ColumnDef> partColList = tabDef.getWindow().getPartDef().getColumns();
+	    for (ColumnDef colDef : partColList) {
+			keyCols.add(colDef.getExprNode());
+			String colName = colDef.getExpression().getChild(0).getText();
+			outputColumnNames.add(colName);
+		}
+	    
+	    RowResolver rr = input.getRowResolver();
+	    ArrayList<ColumnInfo> colInfoList = rr.getColumnInfos();
+	    for (ColumnInfo colInfo : colInfoList) {
+			String internalName = colInfo.getInternalName();
+			TypeInfo type = colInfo.getType();
+			valueCols.add(getExprDesc(internalName, type));
+			outputColumnNames.add(internalName);
+		}
 	    
 	     Operator<ReduceSinkDesc> op1 = OperatorFactory.get(PlanUtils
 	        .getReduceSinkDesc(keyCols, valueCols, outputColumnNames, true,
@@ -216,7 +220,7 @@ public class TestPTFOperator extends TestCase {
 	    
 
 	    
-	    Utilities.addMapWork(mr, inputTable, "part", op1);
+	    Utilities.addMapWork(mr, inputTable, "_" + inputTable, op1);
 	    mr.setKeyDesc(op1.getConf().getKeySerializeInfo());
 	    mr.getTagToValueDesc().add(op1.getConf().getValueSerializeInfo());
 
@@ -237,8 +241,8 @@ public class TestPTFOperator extends TestCase {
 	    	 selectOutputColumns.add(astNode.getChild(0).getText());
 		}*/
 	    
-	    TableFuncDef tabDef = (TableFuncDef)qdef.getInput();
-	    QueryOutputDef qOutDef = qdef.getOutput();
+/*	    TableFuncDef tabDef = (TableFuncDef)qdef.getInput();
+	    QueryOutputDef qOutDef = qdef.getOutput();*/
 	    
 
 	    

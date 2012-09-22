@@ -99,7 +99,7 @@ public class QueryTranslationInfo
 		inputInfoMap.put(input.getAlias(), new InputInfo(input, null));
 	}
 	
-	InputInfo getMapInputInfo(TableFuncDef tDef) throws WindowingException
+	public InputInfo getMapInputInfo(TableFuncDef tDef) throws WindowingException
 	{
 		TableFunctionEvaluator tFn = tDef.getFunction();
 		if ( !tFn.hasMapPhase() )
@@ -116,12 +116,12 @@ public class QueryTranslationInfo
 		return ii;
 	}
 	
-	InputInfo getInputInfo(QueryInputDef input)
+	public InputInfo getInputInfo(QueryInputDef input)
 	{
 		return inputInfoMap.get(input.getAlias());
 	}
 	
-	static class InputInfo
+	public static class InputInfo
 	{
 		private boolean forMapPhase;
 		private QueryInputDef inpDef;

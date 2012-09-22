@@ -496,7 +496,7 @@ public class WindowingTypeCheckProcFactory
 					else
 					{
 						List<String> possibleColumnNames = input
-								.getReferenceableColumnAliases(colInfo.getTabAlias(),-1);
+								.getReferenceableColumnAliases(tableOrCol, -1);
 						String reason = String.format(
 								"(possible column names are: %s)",
 								StringUtils.join(possibleColumnNames, ", "));

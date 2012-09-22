@@ -1,16 +1,12 @@
 package org.apache.hadoop.hive.ql.exec;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.apache.derby.iapi.sql.dictionary.KeyConstraintDescriptor;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.conf.HiveConf;
@@ -37,9 +33,8 @@ import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
-import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
-import com.sap.hadoop.windowing.query2.definition.QueryOutputDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
+import com.sap.hadoop.windowing.query2.specification.QueryOutputSpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 import com.sap.hadoop.windowing.query2.translate.Translator;
 import com.sap.hadoop.windowing.runtime.hive.EvalContext;
@@ -54,8 +49,7 @@ public class TestPTFOperator extends TestCase {
 	  static WindowingShell wshell;
       static ByteArrayOutputStream outStream;
 
-	  private static String tmpdir = "/home/pkalmegh/Projects/SQLWindowing/" + System.getProperty("user.name")
-	      + "/";
+	  private static String tmpdir = "/home/pkalmegh/Projects/SQLWindowing/output" + "/";
 	  private static Path tmppath = new Path(tmpdir);
 	  private static Hive db;
 	  private static FileSystem fs;
@@ -153,30 +147,6 @@ public class TestPTFOperator extends TestCase {
 		        "", false);
 		  }
 
-
-	  private static void fileDiff(String datafile, String testdir) throws Exception {
-	    String testFileDir = hiveConf.get("test.data.files");
-	    System.out.println(testFileDir);
-	    FileInputStream fi_gold = new FileInputStream(new File(testFileDir,
-	        datafile));
-
-	    // inbuilt assumption that the testdir has only one output file.
-	    Path di_test = new Path(tmppath, testdir);
-	    if (!fs.exists(di_test)) {
-	      throw new RuntimeException(tmpdir + testdir + " does not exist");
-	    }
-	    if (!fs.getFileStatus(di_test).isDir()) {
-	      throw new RuntimeException(tmpdir + testdir + " is not a directory");
-	    }
-
-	    FSDataInputStream fi_test = fs.open((fs.listStatus(di_test))[0].getPath());
-
-	    if (!Utilities.contentsEqual(fi_gold, fi_test, false)) {
-	      System.out.println(di_test.toString() + " does not match " + datafile);
-	      assertEquals(false, true);
-	    }
-	  }
-	  
 	  private ExprNodeDesc getExprDesc(String name, TypeInfo ti){
 		  ExprNodeDesc nodeDesc = new ExprNodeColumnDesc(ti, name, "_" + name, false);
 		  return nodeDesc;
@@ -186,15 +156,14 @@ public class TestPTFOperator extends TestCase {
 	  private void populateReduceOnlyPlan(Table inputTable, QueryDef qdef) throws SemanticException {
 	    mr.setNumReduceTasks(Integer.valueOf(1));
 
-	    //get partitiondef, orderdef from windowdef->queryinputdef->tablefuncdef
-	    //get rowresolver from querytranslationinfo (getinputinfo or getmapinputinfo)
-	    
 	    TableFuncDef tabDef = (TableFuncDef) qdef.getInput();
 	    InputInfo input = qdef.getTranslationInfo().getInputInfo(tabDef);
 	    
 	    ArrayList<ExprNodeDesc> keyCols =  new ArrayList<ExprNodeDesc>();
 	    ArrayList<ExprNodeDesc> valueCols = new ArrayList<ExprNodeDesc>();	    
 	    List<String> outputColumnNames = new ArrayList<String>();
+	    ArrayList<ExprNodeDesc> selectColList = new ArrayList<ExprNodeDesc>();
+	    ArrayList<String> selectOutputColumns = new ArrayList<String>();
 
 
 	    ArrayList<ColumnDef> partColList = tabDef.getWindow().getPartDef().getColumns();
@@ -213,54 +182,33 @@ public class TestPTFOperator extends TestCase {
 			outputColumnNames.add(internalName);
 		}
 	    
-	     Operator<ReduceSinkDesc> op1 = OperatorFactory.get(PlanUtils
+	    
+	    ArrayList<ColumnDef> selColDefs = qdef.getSelectList().getColumns();
+	    for (ColumnDef colDef : selColDefs) {
+	    	selectColList.add(colDef.getExprNode());
+	    	String name = colDef.getExpression().getChild(0).getText();
+	    	selectOutputColumns.add(name);
+		}
+	    
+	    QueryOutputSpec qOutSpec = qdef.getOutput().getOutputSpec();
+	    String outputPath = qOutSpec.getPath();
+
+
+	    //map-side work
+	    Operator<ReduceSinkDesc> op1 = OperatorFactory.get(PlanUtils
 	        .getReduceSinkDesc(keyCols, valueCols, outputColumnNames, true,
 	        -1, 1, -1));
-	    
-	    
-
 	    
 	    Utilities.addMapWork(mr, inputTable, "_" + inputTable, op1);
 	    mr.setKeyDesc(op1.getConf().getKeySerializeInfo());
 	    mr.getTagToValueDesc().add(op1.getConf().getValueSerializeInfo());
 
 	    // reduce side work
-	    Operator<FileSinkDesc> op4 = OperatorFactory.get(new FileSinkDesc(tmpdir
-	        + "reduceOnlyPlan.out", Utilities.defaultTd, false));
-	    
-	    ArrayList<ExprNodeDesc> selectColList = Utilities.makeList(
-	    		getStringColumn("p_mfgr"),
-	    		new ExprNodeColumnDesc(TypeInfoFactory.intTypeInfo, "p_partkey", "", false),
-	    		getStringColumn("p_comment"),
-	    		new ExprNodeColumnDesc(TypeInfoFactory.intTypeInfo, "p_size", "", false));
-	    
-	    ArrayList<String> selectOutputColumns = new ArrayList<String>();
-/*	     SelectSpec selSpec = qdef.getSpec().getSelectList();
-	     ArrayList<ASTNode> selExprs = selSpec.getExpressions();
-	     for (ASTNode astNode : selExprs) {
-	    	 selectOutputColumns.add(astNode.getChild(0).getText());
-		}*/
-	    
-/*	    TableFuncDef tabDef = (TableFuncDef)qdef.getInput();
-	    QueryOutputDef qOutDef = qdef.getOutput();*/
-	    
-
-	    
-/*	    	    ArrayList<ColumnDef> outputColDefs = qdef.getOutput().get;
-	    for (ColumnDef columnDef : outputColDefs) {
-			String col = columnDef.getExprNode().getName();
-			System.out.println("Column - " + col);
-		}
-*/
-	    selectOutputColumns.add("p_mfgr");
-	    selectOutputColumns.add("p_partkey");
-	    selectOutputColumns.add("p_comment");
-	    selectOutputColumns.add("p_size");
-
+	    Operator<FileSinkDesc> op4 = OperatorFactory.get(new FileSinkDesc(outputPath, 
+	    		Utilities.defaultTd, false));
 	    
 	    Operator<SelectDesc> op3 = OperatorFactory.get(new SelectDesc(selectColList, 
 	    		selectOutputColumns), op4);
-	     
 
 
 	    Operator<ExtractDesc> op2 = OperatorFactory.get(new ExtractDesc(

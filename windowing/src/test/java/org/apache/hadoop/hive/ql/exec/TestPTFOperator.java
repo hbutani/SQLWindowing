@@ -13,6 +13,7 @@ import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.DriverContext;
 import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.ql.metadata.Table;
+import org.apache.hadoop.hive.ql.parse.BaseSemanticAnalyzer;
 import org.apache.hadoop.hive.ql.parse.RowResolver;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
 import org.apache.hadoop.hive.ql.plan.ExprNodeColumnDesc;
@@ -29,9 +30,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.sap.hadoop.metadata.Order;
 import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
+import com.sap.hadoop.windowing.query2.definition.OrderColumnDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.specification.QueryOutputSpec;
@@ -159,8 +162,9 @@ public class TestPTFOperator extends TestCase {
 	    TableFuncDef tabDef = (TableFuncDef) qdef.getInput();
 	    InputInfo input = qdef.getTranslationInfo().getInputInfo(tabDef);
 	    
-	    ArrayList<ExprNodeDesc> keyCols =  new ArrayList<ExprNodeDesc>();
-	    ArrayList<ExprNodeDesc> valueCols = new ArrayList<ExprNodeDesc>();	    
+	    ArrayList<ExprNodeDesc> partCols =  new ArrayList<ExprNodeDesc>();
+	    ArrayList<ExprNodeDesc> valueCols = new ArrayList<ExprNodeDesc>();
+	    ArrayList<ExprNodeDesc> orderCols =  new ArrayList<ExprNodeDesc>();
 	    List<String> outputColumnNames = new ArrayList<String>();
 	    ArrayList<ExprNodeDesc> selectColList = new ArrayList<ExprNodeDesc>();
 	    ArrayList<String> selectOutputColumns = new ArrayList<String>();
@@ -168,7 +172,21 @@ public class TestPTFOperator extends TestCase {
 
 	    ArrayList<ColumnDef> partColList = tabDef.getWindow().getPartDef().getColumns();
 	    for (ColumnDef colDef : partColList) {
-			keyCols.add(colDef.getExprNode());
+			partCols.add(colDef.getExprNode());
+		}
+
+	    ArrayList<OrderColumnDef> orderColList = tabDef.getWindow().getOrderDef().getColumns();
+	    StringBuilder orderString = new StringBuilder();
+
+	    for (OrderColumnDef colDef : orderColList) {
+	    	Order order = colDef.getOrder();
+	    	if(order.name().equals("ASC")){
+	    		orderString.append('+');	
+	    	}else{
+	    		orderString.append('-');
+	    	}
+	    	
+			orderCols.add(colDef.getExprNode());
 			String colName = colDef.getExpression().getChild(0).getText();
 			outputColumnNames.add(colName);
 		}
@@ -195,9 +213,13 @@ public class TestPTFOperator extends TestCase {
 
 
 	    //map-side work
+	    /*Operator<ReduceSinkDesc> op1 = OperatorFactory.get(PlanUtils
+	        .getReduceSinkDesc(partCols, valueCols, outputColumnNames, true,
+	        -1, 1, -1));*/
+	    
+	    
 	    Operator<ReduceSinkDesc> op1 = OperatorFactory.get(PlanUtils
-	        .getReduceSinkDesc(keyCols, valueCols, outputColumnNames, true,
-	        -1, 1, -1));
+		        .getReduceSinkDesc(orderCols, valueCols, outputColumnNames, true, -1, partCols, orderString.toString(), -1));
 	    
 	    Utilities.addMapWork(mr, inputTable, "_" + inputTable, op1);
 	    mr.setKeyDesc(op1.getConf().getKeySerializeInfo());
@@ -247,7 +269,7 @@ public class TestPTFOperator extends TestCase {
 		  return wshell.translate("select p_mfgr,p_name,p_size,p_comment " +
 			  		"from part " +
 			  		"partition by p_mfgr " +
-			  		"order by p_mfgr " +
+			  		"order by p_size " +
 			  		"into path='/tmp/wout2' " +
 			  		"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
 			  		"with serdeproperties('field.delim'=',') " +

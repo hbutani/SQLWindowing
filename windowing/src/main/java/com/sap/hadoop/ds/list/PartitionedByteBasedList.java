@@ -12,6 +12,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.io.Writable;
 
 import com.google.common.io.Files;
+import com.sap.hadoop.Utils;
 import com.sap.hadoop.ds.BaseException;
 import com.sap.hadoop.ds.LockUtils;
 
@@ -223,7 +224,7 @@ public class PartitionedByteBasedList extends ByteBasedList
 		{
 			try
 			{
-				Files.deleteRecursively(dir);
+				Utils.deleteRecursively(dir);
 			}
 			catch(IOException ie)
 			{

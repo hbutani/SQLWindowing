@@ -2,8 +2,6 @@ package com.sap.hadoop.windowing.query2.definition;
 
 import java.util.Map;
 
-import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
-
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo;
 
@@ -14,7 +12,7 @@ public class QueryDef
 	Map<String, WindowDef> windowDefs;
 	SelectDef selectList;
 	QueryInputDef input;
-	ExprNodeDesc whereExprNode;
+	WhereDef whereDef;
 	ReduceInputDef reduceInput;
 	QueryOutputDef output;
 	
@@ -68,14 +66,14 @@ public class QueryDef
 		this.input = input;
 	}
 	
-	public ExprNodeDesc getWhereExprNode()
+	public WhereDef getWhere()
 	{
-		return whereExprNode;
+		return whereDef;
 	}
 	
-	public void setWhereExprNode(ExprNodeDesc whereExprNode)
+	public void setWhere(WhereDef whereDef)
 	{
-		this.whereExprNode = whereExprNode;
+		this.whereDef = whereDef;
 	}
 	
 	public ReduceInputDef getReduceInput()

@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.antlr.runtime.tree.CommonTree;
+import org.apache.hadoop.hive.ql.parse.ASTNode;
 
 public class QuerySpec
 {
 	QueryInputSpec input;
 	SelectSpec selectList;
-	CommonTree whereExpr;
+	ASTNode whereExpr;
 	Map<String, WindowSpec> windowSpecs;
 	QueryOutputSpec output;
 	
@@ -21,13 +22,13 @@ public class QuerySpec
 	{
 		this.input = input;
 	}
-	public CommonTree getWhereExpr()
+	public ASTNode getWhereExpr()
 	{
 		return whereExpr;
 	}
 	public void setWhereExpr(CommonTree whereExpr)
 	{
-		this.whereExpr = whereExpr;
+		this.whereExpr = (ASTNode) whereExpr;
 	}
 	public Map<String, WindowSpec> getWindowSpecs()
 	{

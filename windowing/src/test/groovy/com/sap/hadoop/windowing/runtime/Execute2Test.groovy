@@ -27,19 +27,19 @@ class Execute2Test extends MRBase2Test
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
 	
-	static EvalContext eCtx;
+//	static EvalContext eCtx;
 	
 	@BeforeClass
 	public static void setupClass()
 	{
 		MRBase2Test.setupClass();
-		eCtx = new EvalContext(wshell.cfg)
+//		eCtx = new EvalContext(wshell.cfg)
 	}
 	
 	@Before
 	public void setup()
 	{
-		eCtx.wIn = IOUtils.createTableWindowingInput(null, "part", wshell.cfg)
+//		eCtx.wIn = IOUtils.createTableWindowingInput(null, "part", wshell.cfg)
 	}
 	
 	public static void execute(QueryDef qDef)
@@ -64,7 +64,7 @@ class Execute2Test extends MRBase2Test
 select  p_mfgr,p_name, p_size,
 	rank() as r,
 	denserank() as dr
-from part
+from part_demo
 partition by p_mfgr
 order by p_mfgr
 window w1 as rows between 2 preceding and 2 following
@@ -83,7 +83,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 select  p_mfgr,p_name, p_size,
 	rank() as r,
 	denserank() as dr
-from part
+from part_demo
 partition by p_mfgr
 window w1 as rows between 2 preceding and 2 following
 into path='/tmp/wout2'
@@ -104,7 +104,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 select  p_mfgr,p_name, p_size,
 	sum(p_size) over w1 as s,
 	denserank() as dr
-from part
+from part_demo
 partition by p_mfgr
 window w1 as rows between 2 preceding and 2 following
 into path='/tmp/wout2'
@@ -127,7 +127,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 select  p_mfgr,p_name, p_size,
 	sum(p_size) over w1 as s,
 	denserank() as dr
-from part
+from part_demo
 partition by p_mfgr
 window w1 as partition by p_name rows between 2 preceding and 2 following
 into path='/tmp/wout2'
@@ -146,7 +146,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 select  p_mfgr,p_name, p_size,
 	sum(p_size) over w1 as s,
 	denserank() as dr
-from part
+from part_demo
 partition by p_mfgr
 window w1 as partition by p_mfgr order by p_name rows between 2 preceding and 2 following
 into path='/tmp/wout2'
@@ -165,7 +165,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 select  p_mfgr,p_name, p_size,
 	sum(p_size) over w1 as s,
 	denserank() as dr
-from part
+from part_demo
 partition by p_mfgr
 window w1 as range between p_name 2 less and current row
 into path='/tmp/wout2'
@@ -180,7 +180,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		QueryDef qDef = wshell.translate("""
 select  p_mfgr,p_name, p_size,
 	sum(p_size) as s
-from part
+from part_demo
 partition by p_mfgr
 order by p_mfgr
 window w1 as rows between 2 preceding and 2 following
@@ -199,7 +199,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 select  p_mfgr,p_name, p_size,
 	sum(p_size) over w1 as s,
     sum(p_size) over rows between current row and current row as s2
-from part
+from part_demo
 partition by p_mfgr
 order by p_mfgr
 window w1 as rows between 2 preceding and 2 following
@@ -219,9 +219,31 @@ select  p_mfgr,p_name, p_size,
     sum(p_size) over rows between current row and current row as s2,
 	first_value(p_size) over w1 as f,
 	last_value(p_size, false) over w1 as l
-from part
+from part_demo
 partition by p_mfgr
 order by p_mfgr
+window w1 as rows between 2 preceding and 2 following
+into path='/tmp/wout2'
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+with serdeproperties('field.delim'=',')
+format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+		execute(qDef)
+	}
+	
+	@Test
+	void testWhere()
+	{
+		QueryDef qDef = wshell.translate("""
+select  p_mfgr,p_name, p_size,
+	rank() as r,
+	sum(p_size) over rows between current row and current row as s2,
+	first_value(p_size) over w1 as f,
+	last_value(p_size, false) over w1 as l
+from part_demo
+partition by p_mfgr
+order by p_mfgr
+where r < 7 or p_mfgr = 'Manufacturer#3'
 window w1 as rows between 2 preceding and 2 following
 into path='/tmp/wout2'
 serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'

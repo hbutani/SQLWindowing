@@ -3,10 +3,14 @@ package com.sap.hadoop.windowing.runtime2;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorConverters;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorConverters.Converter;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Writable;
 
@@ -15,6 +19,7 @@ import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
+import com.sap.hadoop.windowing.query2.definition.WhereDef;
 
 public abstract class Executor
 {
@@ -53,11 +58,39 @@ public abstract class Executor
 		ArrayList<ColumnDef> cols = qDef.getSelectList().getColumns();
 		ObjectInspector selectOI = qDef.getSelectList().getOI();
 		SerDe oSerDe = qDef.getOutput().getSerDe();
+		
+		WhereDef whDef = qDef.getWhere();
+		boolean applyWhere = whDef != null;
+		Converter whConverter = !applyWhere ? null : 
+				ObjectInspectorConverters.getConverter(
+						whDef.getOI(), 
+						PrimitiveObjectInspectorFactory.javaBooleanObjectInspector);
+		ExprNodeEvaluator whCondEval = !applyWhere ? null : whDef.getExprEvaluator();
+				
 		Writable value = null;
 		for(int i=0; i < oPart.size(); i++)
 		{
 			ArrayList selectList = new ArrayList();
 			Object oRow = oPart.getAt(i);
+			
+			if ( applyWhere )
+			{
+				Object whCond = null;
+				try
+				{
+					whCond = whCondEval.evaluate(oRow);
+					whCond = whConverter.convert(whCond);
+				}
+				catch(HiveException he)
+				{
+					throw new WindowingException(he);
+				}
+				if ( whCond == null || !((Boolean)whCond).booleanValue() )
+				{
+					continue;
+				}
+			}
+			
 			for(ColumnDef cDef : cols)
 			{
 				try

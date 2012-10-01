@@ -319,14 +319,18 @@ public class WindowingTypeCheckProcFactory
 			switch (expr.getToken().getType())
 			{
 			case Windowing2Parser.StringLiteral:
-				str = BaseSemanticAnalyzer.unescapeSQLString(expr.getText());
+				//str = BaseSemanticAnalyzer.unescapeSQLString(expr.getText());
+				// unescape not needed already done, by tree walking in WShell.parse
+				str = expr.getText();
 				break;
 			case Windowing2Parser.STRINGLITERALSEQUENCE:
 				StringBuilder sb = new StringBuilder();
 				for (Node n : expr.getChildren())
 				{
-					sb.append(BaseSemanticAnalyzer
-							.unescapeSQLString(((ASTNode) n).getText()));
+					//sb.append(BaseSemanticAnalyzer
+					//		.unescapeSQLString(((ASTNode) n).getText()));
+					// unesacpe not needed already done, by tree walking in WShell.parse
+					sb.append(((ASTNode) n).getText());
 				}
 				str = sb.toString();
 				break;

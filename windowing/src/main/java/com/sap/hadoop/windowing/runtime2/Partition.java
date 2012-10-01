@@ -16,7 +16,7 @@ import com.sap.hadoop.windowing.WindowingException;
 /*
  * represents a collection of rows that is acted upon by a TableFunction or a WindowFunction. 
  */
-public class Partition implements Iterable<Object>
+public class Partition
 {
 	SerDe serDe;
 	StructObjectInspector OI;
@@ -131,13 +131,12 @@ public class Partition implements Iterable<Object>
 		return sz;
 	}
 	
-	@Override
-	public Iterator<Object> iterator()
+	public PartitionIterator<Object> iterator()
 	{
 		return new PItr(0, size());
 	}
 	
-	public Iterator<Object> range(int start, int end)
+	public PartitionIterator<Object> range(int start, int end)
 	{
 		assert(start >= 0);
 		assert(end < size());
@@ -145,15 +144,17 @@ public class Partition implements Iterable<Object>
 		return new PItr(start, end);
 	}
 	
-	class PItr implements Iterator<Object>
+	class PItr implements PartitionIterator<Object>
 	{
 		int idx;
+		int start;
 		int end;
 		int createTimeSz;
 		
 		PItr(int start, int end)
 		{
 			this.idx = start;
+			this.start = start;
 			this.end = end;
 			createTimeSz = Partition.this.size();
 		}
@@ -186,6 +187,46 @@ public class Partition implements Iterable<Object>
 		{
 		    if (createTimeSz != Partition.this.size())
 			throw new ConcurrentModificationException();
+		}
+
+		@Override
+		public int getIndex()
+		{
+			return idx;
+		}
+		
+		private Object getAt(int i)
+		{
+			try
+			{
+				return Partition.this.getAt(idx++);
+			}
+			catch(WindowingException e)
+			{
+				throw new RuntimeException(e);
+			}
+		}
+
+		@Override
+		public Object lead(int amt)
+		{
+			int i = idx + amt;
+			i = i >= end ? end - 1 : i;
+			return getAt(i);
+		}
+
+		@Override
+		public Object lag(int amt)
+		{
+			int i = idx - amt;
+			i = i < start ? start : i;
+			return getAt(i);
+		}
+
+		@Override
+		public void resetToIndex()
+		{
+			getAt(idx);
 		}
 	};
 	

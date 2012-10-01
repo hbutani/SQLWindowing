@@ -14,5 +14,5 @@ public interface PartitionIterator<T> extends Iterator<T>
 	 * after a lead and lag call, allow Object associated with SerDe and writable associated with partition to be reset
 	 * to the value for the current Index.
 	 */
-	void resetToIndex();
+	void resetToIndex(int idx);
 }

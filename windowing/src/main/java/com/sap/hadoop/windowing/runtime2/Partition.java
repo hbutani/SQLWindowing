@@ -1,7 +1,6 @@
 package com.sap.hadoop.windowing.runtime2;
 
 import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.serde2.SerDe;
@@ -224,9 +223,10 @@ public class Partition
 		}
 
 		@Override
-		public void resetToIndex()
+		public void resetToIndex(int idx)
 		{
 			getAt(idx);
+			this.idx = idx + 1;
 		}
 	};
 	

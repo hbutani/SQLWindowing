@@ -75,4 +75,9 @@ public class TableFuncDef extends QueryInputDef
 	{
 		this.mapOI = mapOI;
 	}
+
+	@Override
+	public HiveTableDef getHiveTableDef() {
+		return input.getHiveTableDef();
+	}
 }

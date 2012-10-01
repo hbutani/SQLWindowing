@@ -68,4 +68,6 @@ public abstract class QueryInputDef
 	 * get the Hive Table associated with this input chain.
 	 */
 	public abstract HiveTableSpec getHiveTableSpec();
+	
+	public abstract HiveTableDef getHiveTableDef();
 }

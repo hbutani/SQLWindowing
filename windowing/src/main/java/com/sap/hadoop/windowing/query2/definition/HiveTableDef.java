@@ -55,5 +55,10 @@ public class HiveTableDef extends QueryInputDef
 	{
 		this.inputFormatClassName = inputFormatClassName;
 	}
+
+	@Override
+	public HiveTableDef getHiveTableDef() {
+		return this;
+	}
 	
 }

@@ -3,7 +3,6 @@ package com.sap.hadoop.windowing.exec;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.DriverContext;
 import org.apache.hadoop.hive.ql.exec.ColumnInfo;
@@ -28,6 +27,7 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 
 import com.sap.hadoop.metadata.Order;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
+import com.sap.hadoop.windowing.query2.definition.HiveTableDef;
 import com.sap.hadoop.windowing.query2.definition.OrderColumnDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
@@ -79,7 +79,9 @@ public class QueryDefExecutor {
 		    mr.setNumReduceTasks(Integer.valueOf(1));
 
 		    TableFuncDef tabDef = (TableFuncDef) qdef.getInput();
-		    InputInfo input = qdef.getTranslationInfo().getInputInfo(tabDef);
+		    HiveTableDef hDef = qdef.getInput().getHiveTableDef();
+		    InputInfo input = qdef.getTranslationInfo().getInputInfo(hDef);
+		    
 		    
 		    ArrayList<ExprNodeDesc> partCols =  new ArrayList<ExprNodeDesc>();
 		    ArrayList<ExprNodeDesc> valueCols = new ArrayList<ExprNodeDesc>();
@@ -109,6 +111,8 @@ public class QueryDefExecutor {
 				String colName = colDef.getExpression().getChild(0).getText();
 				outputColumnNames.add(colName);
 			}
+		    
+		    
 		    
 		    RowResolver rr = input.getRowResolver();
 		    ArrayList<ColumnInfo> colInfoList = rr.getColumnInfos();
@@ -140,17 +144,19 @@ public class QueryDefExecutor {
 		    Operator<ReduceSinkDesc> op1 = OperatorFactory.get(PlanUtils
 			        .getReduceSinkDesc(orderCols, valueCols, outputColumnNames, true, -1, partCols, orderString.toString(), -1));
 		    
-		    Utilities.addMapWork(mr, inputTable, "_" + inputTable, op1);
+		    Utilities.addMapWork(mr, inputTable, hDef.getAlias() + inputTable, op1);
 		    mr.setKeyDesc(op1.getConf().getKeySerializeInfo());
 		    mr.getTagToValueDesc().add(op1.getConf().getValueSerializeInfo());
 
 		    // reduce side work
-		    Operator<FileSinkDesc> op4 = OperatorFactory.get(new FileSinkDesc(outputPath, 
+		    Operator<FileSinkDesc> op5 = OperatorFactory.get(new FileSinkDesc(outputPath, 
 		    		Utilities.defaultTd, false));
 		    
-		    Operator<SelectDesc> op3 = OperatorFactory.get(new SelectDesc(selectColList, 
-		    		selectOutputColumns), op4);
-
+		    Operator<SelectDesc> op4 = OperatorFactory.get(new SelectDesc(selectColList, 
+		    		selectOutputColumns), op5);
+		    
+		    Operator<PTFDesc> op3 = WindowingOpFactory.getOperator(new PTFDesc(tabDef, 
+		    		qdef, partCols), op4);
 
 		    Operator<ExtractDesc> op2 = OperatorFactory.get(new ExtractDesc(
 		        getStringColumn(Utilities.ReduceField.VALUE.toString())), op3);

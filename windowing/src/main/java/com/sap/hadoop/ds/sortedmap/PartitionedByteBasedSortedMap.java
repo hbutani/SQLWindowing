@@ -9,6 +9,7 @@ import org.apache.hadoop.io.RawComparator;
 import org.apache.hadoop.io.Writable;
 
 import com.google.common.io.Files;
+import com.sap.hadoop.Utils;
 import com.sap.hadoop.ds.BaseException;
 import com.sap.hadoop.ds.LockUtils;
 import com.sap.hadoop.ds.streams.Streams;
@@ -362,7 +363,7 @@ public class PartitionedByteBasedSortedMap extends ByteBasedSortedMap
 		{
 			try
 			{
-				Files.deleteRecursively(dir);
+				Utils.deleteRecursively(dir);
 			}
 			catch(IOException ie)
 			{

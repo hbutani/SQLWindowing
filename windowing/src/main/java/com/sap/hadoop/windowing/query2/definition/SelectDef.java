@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
+import com.sap.hadoop.Utils;
 import com.sap.hadoop.windowing.query2.specification.SelectSpec;
 
 public class SelectDef
@@ -11,7 +12,16 @@ public class SelectDef
 	SelectSpec selectSpec;
 	ArrayList<WindowFunctionDef> windowFuncs;
 	ArrayList<ColumnDef> columns;
-	StructObjectInspector OI;
+	transient StructObjectInspector OI;
+	
+	static{
+		Utils.makeTransient(SelectDef.class, "OI");
+	}
+
+	
+	public SelectDef(){
+		
+	}
 	
 	public SelectSpec getSelectSpec()
 	{

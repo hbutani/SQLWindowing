@@ -5,12 +5,21 @@ import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
+import com.sap.hadoop.Utils;
+
 public class WhereDef
 {
 	ASTNode expression;
 	ExprNodeDesc exprNode;
-	ExprNodeEvaluator exprEvaluator;
-	ObjectInspector OI;
+	transient ExprNodeEvaluator exprEvaluator;
+	transient ObjectInspector OI;
+	
+	static{
+		Utils.makeTransient(WhereDef.class, "exprEvaluator");
+		Utils.makeTransient(WhereDef.class, "OI");
+	}
+
+	public WhereDef(){}
 	
 	public ASTNode getExpression()
 	{

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
+import com.sap.hadoop.Utils;
 import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
 import com.sap.hadoop.windowing.query2.specification.HiveTableSpec;
 import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
@@ -12,8 +13,14 @@ public class TableFuncDef extends QueryInputDef
 {
 	ArrayList<ArgDef> args;
 	QueryInputDef input;
-	TableFunctionEvaluator tFunction;
-	ObjectInspector mapOI;
+	transient TableFunctionEvaluator tFunction;
+	transient ObjectInspector mapOI;
+	
+	static{
+		Utils.makeTransient(TableFuncDef.class, "tFunction");
+		Utils.makeTransient(TableFuncDef.class, "mapOI");
+	}
+
 	
 	public TableFuncSpec getTableFuncSpec()
 	{
@@ -74,5 +81,10 @@ public class TableFuncDef extends QueryInputDef
 	public void setMapOI(ObjectInspector mapOI)
 	{
 		this.mapOI = mapOI;
+	}
+
+	@Override
+	public HiveTableDef getHiveTableDef() {
+		return input.getHiveTableDef();
 	}
 }

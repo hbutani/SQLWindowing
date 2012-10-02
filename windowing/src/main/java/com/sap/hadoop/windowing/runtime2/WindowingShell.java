@@ -33,8 +33,11 @@ public class WindowingShell
 	Translator translator;
 	HiveQueryExecutor hiveQryExec;
 	
+	public WindowingShell(){
+		
+	}
 	
-	WindowingShell(HiveConf cfg, Translator translator, Executor executor)
+	public WindowingShell(HiveConf cfg, Translator translator, Executor executor)
 	{
 		this.cfg = cfg;
 		this.executor = executor;

@@ -9,6 +9,10 @@ public class OrderDef
 	OrderSpec spec;
 	ArrayList<OrderColumnDef> columns;
 	
+	public OrderDef(){
+		
+	}
+	
 	public OrderDef(OrderSpec spec)
 	{
 		this.spec = spec;

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
+import com.sap.hadoop.Utils;
 import com.sap.hadoop.windowing.query2.specification.WindowFunctionSpec;
 
 public class WindowFunctionDef
@@ -12,8 +13,18 @@ public class WindowFunctionDef
 	WindowFunctionSpec wSpec;
 	ArrayList<ArgDef> args;
 	WindowDef window;
-	GenericUDAFEvaluator wFnEval;
-	ObjectInspector OI;
+	transient GenericUDAFEvaluator wFnEval;
+	transient ObjectInspector OI;
+	
+	static{
+		Utils.makeTransient(WindowFunctionDef.class, "wFnEval");
+		Utils.makeTransient(WindowFunctionDef.class, "OI");
+	}
+
+	
+	public WindowFunctionDef(){
+		
+	}
 	
 	public WindowFunctionSpec getSpec()
 	{

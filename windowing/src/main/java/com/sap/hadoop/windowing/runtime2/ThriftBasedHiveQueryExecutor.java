@@ -17,7 +17,7 @@ public class ThriftBasedHiveQueryExecutor implements HiveQueryExecutor
 {
 	HiveInterface client;
 	
-	ThriftBasedHiveQueryExecutor(Configuration conf) throws WindowingException
+	public ThriftBasedHiveQueryExecutor(Configuration conf) throws WindowingException
 	{
 		String host = conf.get(Constants.HIVE_THRIFTSERVER, "localhost");
 		int port = conf.getInt(Constants.HIVE_THRIFTSERVER_PORT, 10000);

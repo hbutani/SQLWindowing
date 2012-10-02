@@ -130,7 +130,8 @@ public class SerializationUtils
 	{
 		public void exceptionThrown(Exception e)
 		{
-			throw new RuntimeException("Cannot serialize the query plan", e);
+			e.printStackTrace();
+			//throw new RuntimeException("Cannot serialize the query plan", e);
 		}
 	}
 }

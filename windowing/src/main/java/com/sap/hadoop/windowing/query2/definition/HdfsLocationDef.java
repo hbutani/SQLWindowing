@@ -68,5 +68,10 @@ public class HdfsLocationDef extends QueryInputDef
 	{
 		return null;
 	}
+
+	@Override
+	public HiveTableDef getHiveTableDef() {
+		return null;
+	}
 	
 }

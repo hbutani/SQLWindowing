@@ -40,19 +40,25 @@ class Serialization2Test  extends MRBase2Test
 	{
 		TableFunctionEvaluator tFn = qDef.input.function
 		
-		validateSerialization(qDef.spec)
+		validateObjectSerialization(qDef.spec, "spec")
 		
 		qDef.selectList.windowFuncs.each { wFnDef ->
 			wFnDef?.args.each { argDef ->
-				validateSerialization(argDef.expression)
-				validateSerialization(argDef.exprNode)
+				validateObjectSerialization(argDef.expression)
+				validateObjectSerialization(argDef.exprNode)
 			}
 		}
 	}
 	
-	public static void validateSerialization(Object o)
+	public static void validateQueryDefSerialization(QueryDef qDef)
 	{
-		File f = File.createTempFile("SQW-", null);
+		validateObjectSerialization(qDef, "querydef")
+	}
+	
+	
+	public static void validateObjectSerialization(Object o, String suffix)
+	{
+		File f = File.createTempFile("SQW-", suffix);
 		FileOutputStream out = new FileOutputStream(f);
 		try
 		{
@@ -112,6 +118,26 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
 		validateSerialization(qDef)
 	}
+	
+	@Test
+	void testQueryDefSerialization()
+	{
+		QueryDef qDef = wshell.translate("""
+select  p_mfgr,p_name, p_size,
+	rank() as r,
+	denserank() as dr
+from part
+partition by p_mfgr
+order by p_mfgr
+window w1 as rows between 2 preceding and 2 following
+into path='/tmp/wout2'
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+with serdeproperties('field.delim'=',')
+format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+		validateQueryDefSerialization(qDef)
+	}
+
 	
 	@Test
 	void testExpressions()

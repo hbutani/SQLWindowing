@@ -16,6 +16,10 @@ public class WindowDef
 	OrderDef orderDef;
 	WindowFrameDef window;
 	
+	public WindowDef(){
+		
+	}
+	
 	public WindowDef(WindowSpec spec)
 	{
 		this.spec = spec;

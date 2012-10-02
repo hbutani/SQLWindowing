@@ -2,12 +2,22 @@ package com.sap.hadoop.windowing.query2.definition;
 
 import org.apache.hadoop.hive.serde2.SerDe;
 
+import com.sap.hadoop.Utils;
 import com.sap.hadoop.windowing.query2.specification.QueryOutputSpec;
 
 public class QueryOutputDef
 {
 	QueryOutputSpec outputSpec;
-	SerDe serDe;
+	transient SerDe serDe;
+	
+	static{
+		Utils.makeTransient(QueryOutputDef.class, "serDe");
+	}
+
+	
+	public QueryOutputDef(){
+		
+	}
 	
 	public QueryOutputSpec getSpec()
 	{

@@ -20,5 +20,6 @@
 		<nature>org.eclipse.jdt.groovy.core.groovyNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
+		<nature>org.datanucleus.ide.eclipse.projectnature</nature>
 	</natures>
 </projectDescription>

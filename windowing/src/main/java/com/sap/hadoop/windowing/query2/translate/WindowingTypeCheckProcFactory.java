@@ -13,14 +13,7 @@ import java.util.Stack;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.hadoop.hive.ql.parse.ASTNode;
-import org.apache.hadoop.hive.ql.parse.BaseSemanticAnalyzer;
-import org.apache.hadoop.hive.ql.parse.ErrorMsg;
-import org.apache.hadoop.hive.ql.parse.RowResolver;
-import org.apache.hadoop.hive.ql.parse.SemanticAnalyzer;
-import org.apache.hadoop.hive.ql.parse.SemanticException;
-import org.apache.hadoop.hive.ql.parse.TypeCheckCtx;
-import org.apache.hadoop.hive.ql.parse.TypeCheckProcFactory;
+import org.apache.hadoop.hive.ql.ErrorMsg;
 import org.apache.hadoop.hive.ql.exec.ColumnInfo;
 import org.apache.hadoop.hive.ql.exec.FunctionInfo;
 import org.apache.hadoop.hive.ql.exec.FunctionRegistry;
@@ -36,6 +29,13 @@ import org.apache.hadoop.hive.ql.lib.NodeProcessor;
 import org.apache.hadoop.hive.ql.lib.NodeProcessorCtx;
 import org.apache.hadoop.hive.ql.lib.Rule;
 import org.apache.hadoop.hive.ql.lib.RuleRegExp;
+import org.apache.hadoop.hive.ql.parse.ASTNode;
+import org.apache.hadoop.hive.ql.parse.BaseSemanticAnalyzer;
+import org.apache.hadoop.hive.ql.parse.RowResolver;
+import org.apache.hadoop.hive.ql.parse.SemanticAnalyzer;
+import org.apache.hadoop.hive.ql.parse.SemanticException;
+import org.apache.hadoop.hive.ql.parse.TypeCheckCtx;
+import org.apache.hadoop.hive.ql.parse.TypeCheckProcFactory;
 import org.apache.hadoop.hive.ql.plan.ExprNodeColumnDesc;
 import org.apache.hadoop.hive.ql.plan.ExprNodeConstantDesc;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
@@ -164,7 +164,7 @@ public class WindowingTypeCheckProcFactory
 
 		return nodeOutputs;
 	}
-		
+
 	/**
 	 * Processor for processing NULL expression.
 	 */
@@ -500,7 +500,7 @@ public class WindowingTypeCheckProcFactory
 					else
 					{
 						List<String> possibleColumnNames = input
-								.getNonHiddenColumnNames(-1);
+								.getReferenceableColumnAliases(tableOrCol, -1);
 						String reason = String.format(
 								"(possible column names are: %s)",
 								StringUtils.join(possibleColumnNames, ", "));
@@ -535,7 +535,7 @@ public class WindowingTypeCheckProcFactory
 		return new ColumnExprProcessor();
 	}
 
-	
+
 	/**
 	 * The default processor for typechecking.
 	 */
@@ -545,7 +545,7 @@ public class WindowingTypeCheckProcFactory
 		static HashMap<Integer, String> specialUnaryOperatorTextHashMap;
 		static HashMap<Integer, String> specialFunctionTextHashMap;
 		static HashMap<Integer, String> conversionFunctionTextHashMap;
-		
+
 		static
 		{
 			specialUnaryOperatorTextHashMap = new HashMap<Integer, String>();
@@ -555,7 +555,7 @@ public class WindowingTypeCheckProcFactory
 			specialFunctionTextHashMap = new HashMap<Integer, String>();
 			specialFunctionTextHashMap.put(Windowing2Parser.NULL, "isnull");
 			specialFunctionTextHashMap.put(Windowing2Parser.NOTNULL, 	"isnotnull");
-			
+
 			conversionFunctionTextHashMap = new HashMap<Integer, String>();
 			conversionFunctionTextHashMap.put(Windowing2Parser.BOOLEAN, Constants.BOOLEAN_TYPE_NAME);
 			conversionFunctionTextHashMap.put(Windowing2Parser.TINYINT, 	Constants.TINYINT_TYPE_NAME);
@@ -682,7 +682,7 @@ public class WindowingTypeCheckProcFactory
 			}
 			String funcText = getFunctionText(expr, isFunction);
 			ExprNodeDesc desc;
-			
+
 			if (funcText.equals("."))
 			{
 				// "." : FIELD Expression

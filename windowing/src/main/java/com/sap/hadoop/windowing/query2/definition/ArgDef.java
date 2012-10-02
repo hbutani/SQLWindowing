@@ -5,6 +5,8 @@ import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
+import com.sap.hadoop.Utils;
+
 /**
  * represents and argument of a Window or table Function.
  *
@@ -13,8 +15,18 @@ public class ArgDef
 {
 	ASTNode expression;
 	ExprNodeDesc exprNode;
-	ExprNodeEvaluator exprEvaluator;
-	ObjectInspector OI;
+	transient ExprNodeEvaluator exprEvaluator;
+	transient ObjectInspector OI;
+	
+	static{
+		Utils.makeTransient(ArgDef.class, "exprEvaluator");
+		Utils.makeTransient(ArgDef.class, "OI");
+	}
+
+	
+	public ArgDef(){
+		
+	}
 	
 	public ASTNode getExpression()
 	{

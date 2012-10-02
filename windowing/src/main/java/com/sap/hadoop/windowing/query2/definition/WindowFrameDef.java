@@ -4,6 +4,7 @@ import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
+import com.sap.hadoop.Utils;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.BoundarySpec;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.CurrentRowSpec;
@@ -16,6 +17,10 @@ public class WindowFrameDef
 	WindowFrameSpec spec;
 	BoundaryDef start;
 	BoundaryDef end;
+	
+	public WindowFrameDef(){
+		
+	}
 	
 	public WindowFrameDef(WindowFrameSpec spec) { this.spec = spec; }
 	
@@ -43,6 +48,14 @@ public class WindowFrameDef
 	{
 		BoundarySpec spec;
 		
+		public BoundarySpec getSpec() {
+			return spec;
+		}
+
+		public void setSpec(BoundarySpec spec) {
+			this.spec = spec;
+		}
+
 		public BoundaryDef(BoundarySpec spec)
 		{
 			this.spec = spec;
@@ -83,8 +96,14 @@ public class WindowFrameDef
 	public static class ValueBoundaryDef extends BoundaryDef
 	{
 		ExprNodeDesc exprNode;
-		ExprNodeEvaluator exprEvaluator;
-		ObjectInspector OI;
+		transient ExprNodeEvaluator exprEvaluator;
+		transient ObjectInspector OI;
+		
+		static{
+			Utils.makeTransient(ValueBoundaryDef.class, "exprEvaluator");
+			Utils.makeTransient(ValueBoundaryDef.class, "OI");
+		}
+
 		
 		public ValueBoundaryDef(ValueBoundarySpec spec) { super(spec);}
 

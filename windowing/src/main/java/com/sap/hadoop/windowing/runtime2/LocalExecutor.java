@@ -1,5 +1,7 @@
 package com.sap.hadoop.windowing.runtime2;
 
+import java.io.PrintStream;
+
 import org.apache.hadoop.io.Writable;
 
 import com.sap.hadoop.windowing.WindowingException;
@@ -13,6 +15,18 @@ import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo;
 
 public class LocalExecutor extends Executor
 {
+	PrintStream out;
+	
+	public LocalExecutor()
+	{
+		this(System.out);
+	}
+	
+	public LocalExecutor(PrintStream out)
+	{
+		this.out = out;
+	}
+	
 	public void execute(QueryDef qDef, WindowingShell wShell) throws WindowingException
 	{
 		QueryTranslationInfo tInfo = qDef.getTranslationInfo();
@@ -27,14 +41,21 @@ public class LocalExecutor extends Executor
 		
 		Partition oP = executeChain(qDef, p);
 		//IOUtils.dumpPartition(oP, System.out);
-		executeSelectList(qDef, oP, new SysOutRS());
+		executeSelectList(qDef, oP, new SysOutRS(out));
 	}
 	
 	public static class SysOutRS implements ReduceSink
 	{
+		PrintStream out;
+		
+		public SysOutRS(PrintStream out)
+		{
+			this.out = out;
+		}
+		
 		public void collectOutput(Writable key, Writable value)
 		{
-			System.out.println(value);
+			out.println(value);
 		}
 	}
 }

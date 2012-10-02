@@ -28,7 +28,7 @@ class MRBase2Test
 		conf.setBoolean(Constants.WINDOWING_TEST_MODE, true)
 		HiveConf hCfg = new HiveConf(conf, conf.getClass())
 		
-		wshell = new WindowingShell(hCfg, new Translator(), new LocalExecutor())
+		wshell = new WindowingShell(hCfg, new Translator(), new LocalExecutor(new PrintStream(outStream)))
 		wshell.hiveQryExec = new ThriftBasedHiveQueryExecutor(conf)
 	}
 	

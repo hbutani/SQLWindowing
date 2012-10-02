@@ -1,15 +1,20 @@
 package com.sap.hadoop;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
+
+import javax.swing.JTextField;
 
 import org.apache.hadoop.hive.serde.Constants;
 import org.apache.hadoop.hive.serde2.SerDeException;
@@ -170,6 +175,24 @@ public class Utils
       for (File file : files) {
         deleteRecursively(file);
       }
+    }
+    
+    public static void makeTransient(Class<?> beanClass, String pdName){
+		BeanInfo info;
+		try {
+			info = Introspector.getBeanInfo(beanClass);
+			PropertyDescriptor[] propertyDescriptors =
+	                info.getPropertyDescriptors();
+			for (int i = 0; i < propertyDescriptors.length; ++i) {
+				PropertyDescriptor pd = propertyDescriptors[i];
+				if (pd.getName().equals(pdName)) {
+					pd.setValue("transient", Boolean.TRUE);
+				}
+			}
+		} catch (IntrospectionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
 }

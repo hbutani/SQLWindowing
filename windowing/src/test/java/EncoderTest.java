@@ -11,7 +11,8 @@ public class EncoderTest {
 	
 	public static void main(String[] args) throws Exception
 	{
-		isTransient(TableFuncDef.class, "OI");
+		boolean res = isTransient(TableFuncDef.class, "mapOI");
+		System.out.println(res);
 		//isTransient(JoinDesc.class, "reversedExprs");
 	}
 	

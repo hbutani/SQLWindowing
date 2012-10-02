@@ -11,7 +11,11 @@ public class SelectDef
 	SelectSpec selectSpec;
 	ArrayList<WindowFunctionDef> windowFuncs;
 	ArrayList<ColumnDef> columns;
-	StructObjectInspector OI;
+	transient StructObjectInspector OI;
+	
+	public SelectDef(){
+		
+	}
 	
 	public SelectSpec getSelectSpec()
 	{

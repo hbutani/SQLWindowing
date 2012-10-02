@@ -7,6 +7,10 @@ public class ReduceInputDef
 	String serDeClassName;
 	Properties serDeProperties;
 	
+	public ReduceInputDef(){
+		
+	}
+	
 	public String getSerDeClassName()
 	{
 		return serDeClassName;

@@ -39,31 +39,8 @@ Serializable {
     	super.initializeOp(hconf);
 		qDef = conf.getQdef();
 		output = new Object[eval.length];
-		initOI();
+		outputObjInspector = qDef.getSelectList().getOI();
 		inputPart = createPartition();
-    }
-
-    private void initOI(){
-		TableFuncDef tabDef = (TableFuncDef) qDef.getInput();
-		outputObjInspector = tabDef.getOI();
-
-/*        ArrayList<ExprNodeDesc> colList = conf.getInColList();
-        eval = new ExprNodeEvaluator[colList.size()];
-        for (int i = 0; i < colList.size(); i++) {
-          assert (colList.get(i) != null);
-          eval[i] = ExprNodeEvaluatorFactory.get(colList.get(i));
-        }
-
-        output = new Object[eval.length];
-        System.out.println("PTF "
-            + ((StructObjectInspector) inputObjInspectors[0]).getTypeName());
-        try {
-			outputObjInspector = initEvaluatorsAndReturnStruct(eval, conf
-			    .getOutColList(), inputObjInspectors[0]);
-		} catch (HiveException e) {
-			e.printStackTrace();
-		}
-*/
     }
 
     @Override
@@ -74,12 +51,12 @@ Serializable {
 			//while rows exist in partition, forward one-by-one to next operator
 	    	for(int i=0; i < outPart.size(); i++){
 					output[i] = outPart.getWritableAt(i);
-	    	}
+					forward(output[i], outputObjInspector);
+			}
     	} catch (WindowingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		forward(output, outputObjInspector);
 
     }
 
@@ -162,7 +139,7 @@ Serializable {
 
 	@Override
 	public OperatorType getType() {
-		return null; //OperatorType.PTF;
+		return OperatorType.PTF;
 	}
 
 }

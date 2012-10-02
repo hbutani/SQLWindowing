@@ -5,6 +5,11 @@ import com.sap.hadoop.windowing.query2.specification.OrderColumnSpec;
 
 public class OrderColumnDef extends ColumnDef
 {
+	
+	public OrderColumnDef(){
+		
+	}
+	
 	public OrderColumnDef(OrderColumnSpec spec)
 	{
 		super(spec);

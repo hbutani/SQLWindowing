@@ -12,8 +12,8 @@ public class TableFuncDef extends QueryInputDef
 {
 	ArrayList<ArgDef> args;
 	QueryInputDef input;
-	TableFunctionEvaluator tFunction;
-	ObjectInspector mapOI;
+	public transient TableFunctionEvaluator tFunction;
+	public transient ObjectInspector mapOI;
 	
 	public TableFuncSpec getTableFuncSpec()
 	{

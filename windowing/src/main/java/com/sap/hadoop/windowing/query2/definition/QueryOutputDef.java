@@ -7,7 +7,11 @@ import com.sap.hadoop.windowing.query2.specification.QueryOutputSpec;
 public class QueryOutputDef
 {
 	QueryOutputSpec outputSpec;
-	SerDe serDe;
+	transient SerDe serDe;
+	
+	public QueryOutputDef(){
+		
+	}
 	
 	public QueryOutputSpec getSpec()
 	{

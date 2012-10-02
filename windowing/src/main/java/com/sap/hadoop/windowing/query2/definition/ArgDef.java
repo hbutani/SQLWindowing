@@ -13,8 +13,12 @@ public class ArgDef
 {
 	ASTNode expression;
 	ExprNodeDesc exprNode;
-	ExprNodeEvaluator exprEvaluator;
-	ObjectInspector OI;
+	transient ExprNodeEvaluator exprEvaluator;
+	transient ObjectInspector OI;
+	
+	public ArgDef(){
+		
+	}
 	
 	public ASTNode getExpression()
 	{

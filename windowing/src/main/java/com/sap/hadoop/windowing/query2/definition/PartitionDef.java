@@ -9,6 +9,10 @@ public class PartitionDef
 	PartitionSpec spec;
 	ArrayList<ColumnDef> columns;
 	
+	public PartitionDef(){
+		
+	}
+	
 	public PartitionDef(PartitionSpec spec)
 	{
 		this.spec = spec;

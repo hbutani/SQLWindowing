@@ -17,6 +17,10 @@ public class WindowFrameDef
 	BoundaryDef start;
 	BoundaryDef end;
 	
+	public WindowFrameDef(){
+		
+	}
+	
 	public WindowFrameDef(WindowFrameSpec spec) { this.spec = spec; }
 	
 	public BoundaryDef getStart()
@@ -43,6 +47,14 @@ public class WindowFrameDef
 	{
 		BoundarySpec spec;
 		
+		public BoundarySpec getSpec() {
+			return spec;
+		}
+
+		public void setSpec(BoundarySpec spec) {
+			this.spec = spec;
+		}
+
 		public BoundaryDef(BoundarySpec spec)
 		{
 			this.spec = spec;
@@ -83,8 +95,8 @@ public class WindowFrameDef
 	public static class ValueBoundaryDef extends BoundaryDef
 	{
 		ExprNodeDesc exprNode;
-		ExprNodeEvaluator exprEvaluator;
-		ObjectInspector OI;
+		transient ExprNodeEvaluator exprEvaluator;
+		transient ObjectInspector OI;
 		
 		public ValueBoundaryDef(ValueBoundarySpec spec) { super(spec);}
 

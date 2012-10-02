@@ -1,14 +1,20 @@
 package com.sap.hadoop.windowing.query2.definition;
 
+import java.io.Serializable;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.hadoop.hive.ql.QueryPlan;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo;
 
-public class QueryDef
+public class QueryDef implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	//private static final Log LOG = LogFactory.getLog(QueryDef.class.getName());
 	QuerySpec qSpec;
 	transient QueryTranslationInfo qTranslationInfo;
 	Map<String, WindowDef> windowDefs;

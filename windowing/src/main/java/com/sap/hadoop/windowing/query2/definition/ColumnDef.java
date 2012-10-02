@@ -21,8 +21,12 @@ public class ColumnDef
 	
 	ASTNode expression;
 	ExprNodeDesc exprNode;
-	ExprNodeEvaluator exprEvaluator;
-	ObjectInspector OI;
+	transient ExprNodeEvaluator exprEvaluator;
+	transient ObjectInspector OI;
+	
+	public ColumnDef(){
+		
+	}
 	
 	public ColumnDef(ColumnSpec spec)
 	{
@@ -39,6 +43,10 @@ public class ColumnDef
 		OI = cDef.getOI();
 	}
 	
+	public void setSpec(ColumnSpec spec) {
+		this.spec = spec;
+	}
+
 	public ColumnSpec getSpec()
 	{
 		return spec;

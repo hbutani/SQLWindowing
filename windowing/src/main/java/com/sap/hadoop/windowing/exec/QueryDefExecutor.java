@@ -1,5 +1,8 @@
 package com.sap.hadoop.windowing.exec;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +29,7 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 
 import com.sap.hadoop.metadata.Order;
+import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.HiveTableDef;
 import com.sap.hadoop.windowing.query2.definition.OrderColumnDef;
@@ -142,7 +146,8 @@ public class QueryDefExecutor {
 		    
 		    
 		    Operator<ReduceSinkDesc> op1 = OperatorFactory.get(PlanUtils
-			        .getReduceSinkDesc(orderCols, valueCols, outputColumnNames, true, -1, partCols, orderString.toString(), -1));
+			        .getReduceSinkDesc(orderCols, valueCols, outputColumnNames, 
+			        		true, -1, partCols, orderString.toString(), -1));
 		    
 		    Utilities.addMapWork(mr, inputTable, hDef.getAlias() + inputTable, op1);
 		    mr.setKeyDesc(op1.getConf().getKeySerializeInfo());
@@ -162,7 +167,22 @@ public class QueryDefExecutor {
 		        getStringColumn(Utilities.ReduceField.VALUE.toString())), op3);
 
 		    mr.setReducer(op2);
+		    serializeQueryDef(qdef);
 		  }
+	  
+	  private static void serializeQueryDef(Object o){
+		  FileOutputStream out ;
+			try {
+				File f = File.createTempFile("SQW-", "qdef");
+				out = new FileOutputStream(f);
+				SerializationUtils.serialize(out, o);
+				if (out != null) out.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+	  }
 
 		  private static int executePlan() throws Exception {
 			    MapRedTask mrtask = new MapRedTask();

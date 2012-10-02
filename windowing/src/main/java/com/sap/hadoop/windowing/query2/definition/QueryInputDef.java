@@ -1,18 +1,24 @@
 package com.sap.hadoop.windowing.query2.definition;
 
+import java.io.Serializable;
+
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.windowing.query2.specification.HiveTableSpec;
 import com.sap.hadoop.windowing.query2.specification.QueryInputSpec;
 
-public abstract class QueryInputDef
+public abstract class QueryInputDef implements Serializable
 {
 	QueryInputSpec inputSpec;
 	WindowDef window;
-	StructObjectInspector OI;
-	SerDe serde;
+	public transient StructObjectInspector OI;
+	public transient SerDe serde;
 	String alias;
+	
+	public QueryInputDef(){
+		
+	}
 	
 	public QueryInputSpec getSpec()
 	{
@@ -70,4 +76,12 @@ public abstract class QueryInputDef
 	public abstract HiveTableSpec getHiveTableSpec();
 	
 	public abstract HiveTableDef getHiveTableDef();
+
+	public QueryInputSpec getInputSpec() {
+		return inputSpec;
+	}
+
+	public void setInputSpec(QueryInputSpec inputSpec) {
+		this.inputSpec = inputSpec;
+	}
 }

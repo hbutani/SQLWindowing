@@ -12,8 +12,12 @@ public class WindowFunctionDef
 	WindowFunctionSpec wSpec;
 	ArrayList<ArgDef> args;
 	WindowDef window;
-	GenericUDAFEvaluator wFnEval;
-	ObjectInspector OI;
+	transient GenericUDAFEvaluator wFnEval;
+	transient ObjectInspector OI;
+	
+	public WindowFunctionDef(){
+		
+	}
 	
 	public WindowFunctionSpec getSpec()
 	{

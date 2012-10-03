@@ -139,7 +139,7 @@ Serializable {
 
 	@Override
 	public OperatorType getType() {
-		return OperatorType.PTF;
+		return null;
 	}
 
 }

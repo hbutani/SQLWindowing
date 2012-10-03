@@ -37,8 +37,8 @@ package com.sap.hadoop.windowing.query2.translate;
  * for WdwTablFunc:
  *   - for WndFnDef
  *     - for Args:
- *       - recreate the ExprEvaluator, OI using the current InputInfo
- *     - process WdwDef just like TblFunc's Wdw but use the current InputInfo.
+ *       - recreate the ExprEvaluator, OI using the current mapInputInfo
+ *     - process WdwDef just like TblFunc's Wdw but use the current mapInputInfo.
  *     - invoke init on the GenericUDAFEvaluator and set the OI.
  * On TableFuncDef visit:
  * - invoke setupOI on the TableFunctionEvaluator

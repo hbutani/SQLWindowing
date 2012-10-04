@@ -42,6 +42,7 @@ import com.sap.hadoop.windowing.query2.definition.OrderColumnDef;
 import com.sap.hadoop.windowing.query2.definition.OrderDef;
 import com.sap.hadoop.windowing.query2.definition.PartitionDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
+import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.specification.ColumnSpec;
 import com.sap.hadoop.windowing.query2.specification.OrderColumnSpec;
 import com.sap.hadoop.windowing.query2.specification.QueryInputSpec;
@@ -52,6 +53,8 @@ import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.Que
 import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.ReverseQueryInputSpecIterator;
 import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.ReverseTableFunctionSpecIterator;
 import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.TableFunctionSpecIterator;
+import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.QueryInputDefIterator;
+import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.ReverseQueryInputDefIterator;
 
 import static com.sap.hadoop.Utils.sprintf;
 
@@ -77,6 +80,11 @@ public class TranslateUtils
 	public static Iterator<TableFuncSpec> iterateTableFuncSpecs(QuerySpec qSpec, boolean reverse)
 	{
 		return reverse ? new ReverseTableFunctionSpecIterator(qSpec) : new TableFunctionSpecIterator(qSpec);
+	}
+	
+	public static Iterator<QueryInputDef> iterateInputDefs(QueryDef qDef, boolean reverse)
+	{
+		return reverse ? new ReverseQueryInputDefIterator(qDef) : new QueryInputDefIterator(qDef);
 	}
 	
 	public static ExprNodeDesc buildExprNode(ASTNode expr, TypeCheckCtx typeCheckCtx) throws WindowingException

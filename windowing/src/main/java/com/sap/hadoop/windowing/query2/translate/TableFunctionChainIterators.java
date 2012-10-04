@@ -4,6 +4,9 @@ import java.util.Iterator;
 
 import com.sap.hadoop.Utils.Predicate;
 import com.sap.hadoop.Utils.ReverseIterator;
+import com.sap.hadoop.windowing.query2.definition.QueryDef;
+import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
+import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.specification.QueryInputSpec;
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
@@ -104,6 +107,54 @@ public class TableFunctionChainIterators
 		ReverseTableFunctionSpecIterator(QuerySpec qSpec)
 		{
 			super(new TableFunctionSpecIterator(qSpec));
+		}
+	}
+	
+	public static class QueryInputDefIterator implements Iterator<QueryInputDef>
+	{
+		QueryDef qDef;
+		QueryInputDef nextInput;
+		
+		public QueryInputDefIterator(QueryDef qDef)
+		{
+			this.qDef = qDef;
+			nextInput = qDef.getInput();
+		}
+		
+		@Override
+		public boolean hasNext()
+		{
+			return nextInput != null;
+		}
+
+		@Override
+		public QueryInputDef next()
+		{
+			QueryInputDef curr = nextInput;
+			if ( curr instanceof TableFuncDef)
+			{
+				TableFuncDef tFunc = (TableFuncDef) curr;
+				nextInput = tFunc.getInput();
+			}
+			else
+			{
+				nextInput = null;
+			}
+			return curr;
+		}
+
+		@Override
+		public void remove()
+		{
+			throw new UnsupportedOperationException();
+		}
+	}
+	
+	public static class ReverseQueryInputDefIterator extends ReverseIterator<QueryInputDef>
+	{
+		ReverseQueryInputDefIterator(QueryDef qDef)
+		{
+			super(new QueryInputDefIterator(qDef));
 		}
 	}
 	

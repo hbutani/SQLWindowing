@@ -68,10 +68,11 @@ public abstract class Executor
 		ExprNodeEvaluator whCondEval = !applyWhere ? null : whDef.getExprEvaluator();
 				
 		Writable value = null;
-		for(int i=0; i < oPart.size(); i++)
+		PartitionIterator<Object> pItr = oPart.iterator();
+		while(pItr.hasNext())
 		{
 			ArrayList selectList = new ArrayList();
-			Object oRow = oPart.getAt(i);
+			Object oRow = pItr.next();
 			
 			if ( applyWhere )
 			{

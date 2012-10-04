@@ -35,6 +35,7 @@ import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.Direction;
 import com.sap.hadoop.windowing.query2.specification.WindowFunctionSpec;
 import com.sap.hadoop.windowing.query2.translate.WindowFunctionTranslation;
 import com.sap.hadoop.windowing.runtime2.Partition;
+import com.sap.hadoop.windowing.runtime2.PartitionIterator;
 import com.sap.hadoop.windowing.runtime2.ValueBoundaryScanner;
 
 public class WindowingTableFunction extends TableFunctionEvaluator
@@ -94,8 +95,10 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 					GenericUDAFEvaluator fEval = wFn.getEvaluator();
 					Object[] args = new Object[wFn.getArgs().size()];
 					AggregationBuffer aggBuffer = fEval.getNewAggregationBuffer();
-					for(Object row: iPart)
+					PartitionIterator<Object> pItr = iPart.iterator();
+					while(pItr.hasNext())
 					{
+						Object row = pItr.next();
 						int i =0;
 						for(ArgDef arg : wFn.getArgs())
 						{
@@ -164,8 +167,10 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 		{
 			AggregationBuffer aggBuffer = fEval.getNewAggregationBuffer();
 			Range rng = getRange(wFnDef, i, iPart); 
-			for(Object row : rng)
+			PartitionIterator<Object> rItr = rng.iterator();
+			while(rItr.hasNext())
 			{
+				Object row = rItr.next();
 				int j = 0;
 				for(ArgDef arg : wFnDef.getArgs())
 				{
@@ -219,7 +224,7 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 		}
 	}
 	
-	static class Range implements Iterable<Object>
+	static class Range
 	{
 		int start;
 		int end;
@@ -233,8 +238,7 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 			this.p = p;
 		}
 
-		@Override
-		public Iterator<Object> iterator()
+		public PartitionIterator<Object> iterator()
 		{
 			return p.range(start, end);
 		}

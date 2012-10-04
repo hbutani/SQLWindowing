@@ -13,9 +13,13 @@ import java.io.OutputStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.BaseTree;
 import org.antlr.runtime.tree.CommonTree;
+import org.apache.hadoop.hive.conf.HiveConf;
+import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
+
+import com.sap.hadoop.HiveUtils;
 
 public class SerializationUtils
 {

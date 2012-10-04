@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.DriverContext;
 import org.apache.hadoop.hive.ql.exec.ColumnInfo;
@@ -27,6 +31,7 @@ import org.apache.hadoop.hive.ql.plan.ReduceSinkDesc;
 import org.apache.hadoop.hive.ql.plan.SelectDesc;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
+import org.apache.hadoop.mapred.JobConf;
 
 import com.sap.hadoop.metadata.Order;
 import com.sap.hadoop.windowing.query2.SerializationUtils;
@@ -39,7 +44,8 @@ import com.sap.hadoop.windowing.query2.specification.QueryOutputSpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 
 public class QueryDefExecutor {
-	
+	private static final Log LOG = LogFactory.getLog(QueryDefExecutor.class.getName());
+
 	  private static HiveConf hiveConf;
 	  private static MapredWork mr;
 	  private static Hive db;
@@ -160,29 +166,16 @@ public class QueryDefExecutor {
 		    Operator<SelectDesc> op4 = OperatorFactory.get(new SelectDesc(selectColList, 
 		    		selectOutputColumns), op5);
 		    
-		    Operator<PTFDesc> op3 = WindowingOpFactory.getOperator(new PTFDesc(tabDef, 
-		    		qdef, partCols), op4);
+		    Operator<PTFDesc> op3 = WindowingOpFactory.getOperator(new PTFDesc(//tabDef, 
+		    		qdef//, partCols
+		    		), op4);
 
 		    Operator<ExtractDesc> op2 = OperatorFactory.get(new ExtractDesc(
 		        getStringColumn(Utilities.ReduceField.VALUE.toString())), op3);
 
 		    mr.setReducer(op2);
-		    serializeQueryDef(qdef);
 		  }
 	  
-	  private static void serializeQueryDef(Object o){
-		  FileOutputStream out ;
-			try {
-				File f = File.createTempFile("SQW-", "qdef");
-				out = new FileOutputStream(f);
-				SerializationUtils.serialize(out, o);
-				if (out != null) out.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-	  }
 
 		  private static int executePlan() throws Exception {
 			    MapRedTask mrtask = new MapRedTask();

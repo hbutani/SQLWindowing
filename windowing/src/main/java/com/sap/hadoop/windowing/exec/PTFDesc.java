@@ -16,25 +16,26 @@ public class PTFDesc extends AbstractOperatorDesc{
 
 	private static final long serialVersionUID = 1L;
 	QueryDef qdef;
-	TableFuncDef tabDef;
+/*	TableFuncDef tabDef;
 	OutputPartition outPart;
 	IPartition inPart;
 	Partition part;
 	ArrayList<ExprNodeDesc> partColList;
 	ArrayList<ExprNodeDesc> inColList;
 	List<String> outColList;
-
+*/
 	public PTFDesc(){
 		
 	}
 
     public PTFDesc(
-		    TableFuncDef tabDef,
-		    QueryDef qdef,
-		    final ArrayList<ExprNodeDesc> partColList) {
+		    //TableFuncDef tabDef,
+		    QueryDef qdef//,
+		    //final ArrayList<ExprNodeDesc> partColList
+		    ) {
     	this.qdef = qdef;
-    	this.tabDef = tabDef;
-    	this.partColList = partColList;
+    	//this.tabDef = tabDef;
+    	//this.partColList = partColList;
 	}
 
 	public QueryDef getQdef() {
@@ -44,7 +45,7 @@ public class PTFDesc extends AbstractOperatorDesc{
 	public void setQdef(QueryDef qdef) {
 		this.qdef = qdef;
 	}
-
+/*
 	public TableFuncDef getTabDef() {
 		return tabDef;
 	}
@@ -101,6 +102,6 @@ public class PTFDesc extends AbstractOperatorDesc{
 		this.partColList = partColList;
 	}
 
-
+*/
 
 }

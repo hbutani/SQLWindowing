@@ -12,8 +12,10 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.HiveUtils;
+import com.sap.hadoop.Utils;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
+import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.definition.WindowDef;

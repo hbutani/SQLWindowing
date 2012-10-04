@@ -1,15 +1,10 @@
 package com.sap.hadoop.windowing.exec;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.DriverContext;
 import org.apache.hadoop.hive.ql.exec.ColumnInfo;
@@ -32,9 +27,9 @@ import org.apache.hadoop.hive.ql.plan.SelectDesc;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 import org.apache.hadoop.mapred.JobConf;
+import org.apache.hadoop.mapreduce.Job;
 
 import com.sap.hadoop.metadata.Order;
-import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.HiveTableDef;
 import com.sap.hadoop.windowing.query2.definition.OrderColumnDef;
@@ -155,7 +150,7 @@ public class QueryDefExecutor {
 			        .getReduceSinkDesc(orderCols, valueCols, outputColumnNames, 
 			        		true, -1, partCols, orderString.toString(), -1));
 		    
-		    Utilities.addMapWork(mr, inputTable, hDef.getAlias() + inputTable, op1);
+		    Utilities.addMapWork(mr, inputTable, hDef.getAlias(), op1);
 		    mr.setKeyDesc(op1.getConf().getKeySerializeInfo());
 		    mr.getTagToValueDesc().add(op1.getConf().getValueSerializeInfo());
 
@@ -181,8 +176,14 @@ public class QueryDefExecutor {
 			    MapRedTask mrtask = new MapRedTask();
 			    DriverContext dctx = new DriverContext ();
 			    mrtask.setWork(mr);
+			    hiveConf.set("hive.added.jars.path", "file:///home/saplabs/Projects/hive/build/dist/lib/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar," +
+			    		"file:///home/saplabs/Projects/hive/build/dist/lib/antlr-runtime-3.0.1.jar," +
+			    		"file:///home/saplabs/Projects/hive/build/dist/lib/groovy-all-1.8.0.jar");
 			    mrtask.initialize(hiveConf, null, dctx);
-			    return mrtask.execute(dctx);
+/*			    JobConf mrJob = new JobConf(hiveConf);
+			    mrJob.setJar("/home/saplabs/Projects/hive/build/dist/lib/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
+			    mrJob.setJobName("windowing-pk");
+*/			    return mrtask.execute(dctx);
 			    
 			  }
 

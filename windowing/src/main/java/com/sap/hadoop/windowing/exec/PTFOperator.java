@@ -1,8 +1,5 @@
 package com.sap.hadoop.windowing.exec;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.Stack;
 
@@ -20,7 +17,6 @@ import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
 import com.sap.hadoop.windowing.io.IOUtils;
 import com.sap.hadoop.windowing.io.WindowingInput;
-import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
@@ -42,7 +38,6 @@ Serializable {
     protected void initializeOp(Configuration hconf) throws HiveException {
     	super.initializeOp(hconf);
     	LOG.info("Initializing PTFOperator...");
-		//qDef = conf.getQdef();
     	qDef = (QueryDef) deserializeQueryDef();
 		output = new Object[eval.length];
 		outputObjInspector = qDef.getSelectList().getOI();
@@ -51,15 +46,6 @@ Serializable {
     
     private Object deserializeQueryDef(){
     	Object obj = null;
-		try {
-			LOG.info("Deserializing QueryDef...");
-	    	File f = new File("SQW.1def");
-	    	FileInputStream	in1 = new FileInputStream(f);
-			obj = SerializationUtils.deserialize(in1);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return obj;
     }
 

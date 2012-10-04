@@ -3,6 +3,7 @@ package com.sap.hadoop.windowing;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
+import java.util.concurrent.ThreadPoolExecutor.Worker;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -27,7 +28,7 @@ abstract class MRBaseTest
 	{
 		outStream = new ByteArrayOutputStream()
 
-		Configuration conf = HOME();
+		Configuration conf = WORK();
 		conf.setBoolean(Constants.WINDOWING_TEST_MODE, true)
 		HiveConf hCfg = new HiveConf(conf, conf.getClass())
 
@@ -50,11 +51,11 @@ abstract class MRBaseTest
 		conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
 		conf.set("windowing.jar.file", "/home/saplabs/Projects/SQLWindowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
-
+		
 		conf.set(Constants.HIVE_THRIFTSERVER, "localhost");
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
 		conf.set("HIVE_HOME", "/home/saplabs/Projects/hive/build/dist");
-
+		conf.set("hadoop.bin.path", "/home/pkalmegh/Projects/hadoop/bin/hadoop");
 		return conf;
 	}
 
@@ -66,10 +67,11 @@ abstract class MRBaseTest
 		conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
 		conf.set("windowing.jar.file", "/home/pkalmegh/Projects/SQLWindowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
-
+		
 		conf.set(Constants.HIVE_THRIFTSERVER, "localhost");
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
 		conf.set("HIVE_HOME", "/home/pkalmegh/Projects/hive/build/dist");
+		conf.set("hadoop.bin.path", "/home/pkalmegh/Projects/hadoop/bin/hadoop");
 		return conf;
 	}
 
@@ -99,10 +101,12 @@ abstract class MRBaseTest
 		conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
 		conf.set("windowing.jar.file", "/home/saplabs/Projects/SQLWindowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
-
+		
 		conf.set(Constants.HIVE_THRIFTSERVER, "localhost");
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
 		conf.set("HIVE_HOME", "/home/saplabs/Projects/hive/build/dist");
+		conf.set("hadoop.bin.path", "/home/pkalmegh/Projects/hadoop/bin/hadoop");
+		conf.set("hive.exec.submitviachild","false");
 
 		return conf;
 	}

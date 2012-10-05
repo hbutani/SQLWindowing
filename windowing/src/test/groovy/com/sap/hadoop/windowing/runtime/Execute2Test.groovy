@@ -65,7 +65,7 @@ class Execute2Test extends MRBase2Test
 select  p_mfgr,p_name, p_size,
 	rank() as r,
 	denserank() as dr
-from part
+from part_demo
 partition by p_mfgr
 order by p_mfgr
 window w1 as rows between 2 preceding and 2 following
@@ -115,7 +115,7 @@ Manufacturer#5,almond azure blanched chiffon midnight,23,22,5
 select  p_mfgr,p_name, p_size,
 	rank() as r,
 	denserank() as dr
-from part
+from part_demo
 partition by p_mfgr
 window w1 as rows between 2 preceding and 2 following
 into path='/tmp/wout2'
@@ -136,7 +136,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 select  p_mfgr,p_name, p_size,
 	sum(p_size) over w1 as s,
 	denserank() as dr
-from part
+from part_demo
 partition by p_mfgr
 window w1 as rows between 2 preceding and 2 following
 into path='/tmp/wout2'
@@ -159,7 +159,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 select  p_mfgr,p_name, p_size,
 	sum(p_size) over w1 as s,
 	denserank() as dr
-from part
+from part_demo
 partition by p_mfgr
 window w1 as partition by p_name rows between 2 preceding and 2 following
 into path='/tmp/wout2'
@@ -178,7 +178,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 select  p_mfgr,p_name, p_size,
 	sum(p_size) over w1 as s,
 	denserank() as dr
-from part
+from part_demo
 partition by p_mfgr
 window w1 as partition by p_mfgr order by p_name rows between 2 preceding and 2 following
 into path='/tmp/wout2'
@@ -197,7 +197,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 select  p_mfgr,p_name, p_size,
 	sum(p_size) over w1 as s,
 	denserank() as dr
-from part
+from part_demo
 partition by p_mfgr
 window w1 as range between p_name 2 less and current row
 into path='/tmp/wout2'
@@ -212,7 +212,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		QueryDef qDef = wshell.translate("""
 select  p_mfgr,p_name, p_size,
 	sum(p_size) as s
-from part
+from part_demo
 partition by p_mfgr
 order by p_mfgr
 window w1 as rows between 2 preceding and 2 following
@@ -262,7 +262,7 @@ Manufacturer#5,almond azure blanched chiffon midnight,23,512
 select  p_mfgr,p_name, p_size,
 	sum(p_size) over w1 as s,
     sum(p_size) over rows between current row and current row as s2
-from part
+from part_demo
 partition by p_mfgr
 order by p_mfgr
 window w1 as rows between 2 preceding and 2 following
@@ -313,7 +313,7 @@ select  p_mfgr,p_name, p_size,
     sum(p_size) over rows between current row and current row as s2,
 	first_value(p_size) over w1 as f,
 	last_value(p_size, false) over w1 as l
-from part
+from part_demo
 partition by p_mfgr
 order by p_mfgr
 window w1 as rows between 2 preceding and 2 following
@@ -365,7 +365,7 @@ select  p_mfgr,p_name, p_size,
 	sum(p_size) over rows between current row and current row as s2,
 	first_value(p_size) over w1 as f,
 	last_value(p_size, false) over w1 as l
-from part
+from part_demo
 partition by p_mfgr
 order by p_mfgr
 where r < 7 or p_mfgr = 'Manufacturer#3'

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
-import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluatorFactory;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
@@ -106,9 +105,9 @@ public class WindowSpecTranslation
 		PartitionSpec pSpec = wSpec.getPartition();
 		OrderSpec oSpec = wSpec.getOrder();
 		WindowFrameSpec wFrameSpec = wSpec.getWindow();
-		PartitionDef pDef = translatePartition(iInfo, pSpec);
-		OrderDef oDef = translateOrder(inputDesc, iInfo, oSpec, pDef);
-		WindowFrameDef wdwDef = translateWindowFrame(wFrameSpec, iInfo);
+		PartitionDef pDef = translatePartition(qDef, iInfo, pSpec);
+		OrderDef oDef = translateOrder(qDef, inputDesc, iInfo, oSpec, pDef);
+		WindowFrameDef wdwDef = translateWindowFrame(qDef, wFrameSpec, iInfo);
 		
 		wDef.setPartDef(pDef);
 		wDef.setOrderDef(oDef);
@@ -146,7 +145,7 @@ public class WindowSpecTranslation
 		}
 	}
 	
-	static PartitionDef translatePartition(InputInfo iInfo, PartitionSpec spec) throws WindowingException
+	static PartitionDef translatePartition(QueryDef qDef, InputInfo iInfo, PartitionSpec spec) throws WindowingException
 	{
 		if ( spec == null || spec.getColumns() == null || spec.getColumns().size() == 0) 
 			return null;
@@ -154,13 +153,13 @@ public class WindowSpecTranslation
 		PartitionDef pDef = new PartitionDef(spec);
 		for(ColumnSpec colSpec : spec.getColumns())
 		{
-			ColumnDef cDef = translatePartitionColumn(iInfo, colSpec);
+			ColumnDef cDef = translatePartitionColumn(qDef, iInfo, colSpec);
 			pDef.addColumn(cDef);
 		}
 		return pDef;
 	}
 	
-	static OrderDef translateOrder(String inputDesc, InputInfo iInfo, OrderSpec spec, PartitionDef pDef) throws WindowingException
+	static OrderDef translateOrder(QueryDef qDef, String inputDesc, InputInfo iInfo, OrderSpec spec, PartitionDef pDef) throws WindowingException
 	{
 		
 		if ( spec == null || spec.getColumns() == null || spec.getColumns().size() == 0) 
@@ -178,7 +177,7 @@ public class WindowSpecTranslation
 		OrderDef oDef = new OrderDef(spec);
 		for(OrderColumnSpec colSpec : spec.getColumns())
 		{
-			OrderColumnDef cDef = translateOrderColumn(iInfo, colSpec);
+			OrderColumnDef cDef = translateOrderColumn(qDef, iInfo, colSpec);
 			oDef.addColumn(cDef);
 		}
 		
@@ -224,24 +223,24 @@ public class WindowSpecTranslation
 		return oDef;
 	}
 	
-	static OrderColumnDef translateOrderColumn(InputInfo iInfo, OrderColumnSpec oSpec) throws WindowingException
+	static OrderColumnDef translateOrderColumn(QueryDef qDef, InputInfo iInfo, OrderColumnSpec oSpec) throws WindowingException
 	{
 		OrderColumnDef ocDef = new OrderColumnDef(oSpec);
-		translateColumn(ocDef, iInfo, oSpec);
+		translateColumn(qDef, ocDef, iInfo, oSpec);
 		TranslateUtils.validateComparable(ocDef.getOI(), sprintf("Partition Column %s is not comparable", oSpec));
 		return ocDef;
 	}
 
 
-	static ColumnDef translatePartitionColumn(InputInfo iInfo, ColumnSpec cSpec) throws WindowingException
+	static ColumnDef translatePartitionColumn(QueryDef qDef, InputInfo iInfo, ColumnSpec cSpec) throws WindowingException
 	{
 		ColumnDef cDef = new ColumnDef(cSpec);
-		translateColumn(cDef, iInfo,  cSpec);
+		translateColumn(qDef, cDef, iInfo,  cSpec);
 		TranslateUtils.validateComparable(cDef.getOI(), sprintf("Partition Column %s is not comparable", cSpec));
 		return cDef;
 	}
 	
-	static void  translateColumn(ColumnDef cDef, InputInfo iInfo, ColumnSpec cSpec) throws WindowingException
+	static void  translateColumn(QueryDef qDef, ColumnDef cDef, InputInfo iInfo, ColumnSpec cSpec) throws WindowingException
 	{
 		String colTabName = cSpec.getTableName();
 		if (  colTabName != null && !colTabName.equals(iInfo.getAlias()))
@@ -251,7 +250,7 @@ public class WindowSpecTranslation
 		
 		ASTNode expr = TranslateUtils.buildASTNode(cSpec.getColumnName());
 		ExprNodeDesc exprNode = TranslateUtils.buildExprNode(expr, iInfo.getTypeCheckCtx());
-		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(exprNode);
+		ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(qDef.getTranslationInfo(), exprNode);
 		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, iInfo);
 		
 		cDef.setExpression(expr);
@@ -261,7 +260,7 @@ public class WindowSpecTranslation
 	}
 		
 	
-	static WindowFrameDef translateWindowFrame(WindowFrameSpec wfSpec, InputInfo iInfo) throws WindowingException
+	static WindowFrameDef translateWindowFrame(QueryDef qDef, WindowFrameSpec wfSpec, InputInfo iInfo) throws WindowingException
 	{
 		if ( wfSpec == null )
 		{
@@ -272,8 +271,8 @@ public class WindowSpecTranslation
 		BoundarySpec e = wfSpec.getEnd();
 		WindowFrameDef wfDef = new WindowFrameDef(wfSpec);
 		
-		wfDef.setStart(translateBoundary(s, iInfo));
-		wfDef.setEnd(translateBoundary(e, iInfo));
+		wfDef.setStart(translateBoundary(qDef, s, iInfo));
+		wfDef.setEnd(translateBoundary(qDef, e, iInfo));
 		
 		int cmp = s.compareTo(e);
 		if ( cmp > 0 ) 
@@ -283,7 +282,7 @@ public class WindowSpecTranslation
 		return wfDef;
 	}
 	
-	static BoundaryDef translateBoundary(BoundarySpec bndSpec, InputInfo iInfo) throws WindowingException
+	static BoundaryDef translateBoundary(QueryDef qDef, BoundarySpec bndSpec, InputInfo iInfo) throws WindowingException
 	{
 		if ( bndSpec instanceof ValueBoundarySpec )
 		{
@@ -291,7 +290,7 @@ public class WindowSpecTranslation
 			ValueBoundaryDef vbDef = new ValueBoundaryDef(vBndSpec);
 			ExprNodeDesc exprNode = TranslateUtils.buildExprNode(vBndSpec.getExpression(), iInfo.getTypeCheckCtx());
 			vbDef.setExprNode(exprNode);
-			ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(exprNode);
+			ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(qDef.getTranslationInfo(), exprNode);
 			ObjectInspector OI = TranslateUtils.initExprNodeEvaluator(exprEval, iInfo);
 			TranslateUtils.validateValueBoundaryExprType(OI);
 			vbDef.setExprEvaluator(exprEval);

@@ -13,7 +13,6 @@ import org.antlr.runtime.tree.TreeWizard;
 import org.antlr.runtime.tree.TreeWizard.ContextVisitor;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
-import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluatorFactory;
 import org.apache.hadoop.hive.ql.lib.Node;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
@@ -117,7 +116,7 @@ public class TranslateUtils
 		ArgDef argDef = new ArgDef();
 		
 		ExprNodeDesc exprNode = TranslateUtils.buildExprNode(arg, iInfo.getTypeCheckCtx());
-		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(exprNode);
+		ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(qDef.getTranslationInfo(), exprNode);
 		ObjectInspector oi = initExprNodeEvaluator(exprEval, iInfo);
 		
 		argDef.setExpression(arg);

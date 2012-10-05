@@ -1,6 +1,8 @@
 package com.sap.hadoop.windowing.query2.translate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.hadoop.hive.conf.HiveConf;
@@ -12,10 +14,9 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.HiveUtils;
-import com.sap.hadoop.Utils;
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.functions2.GenericUDFLeadLag;
 import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
-import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.definition.WindowDef;
@@ -49,6 +50,8 @@ public class QueryTranslationInfo
 	 * InputInfos for table functions that rehape the input map-side.
 	 */
 	Map<String, InputInfo> mapReshapeInfoMap;
+	
+	List<GenericUDFLeadLag> leadLagFns;
 	
 	public HiveConf getHiveCfg()
 	{
@@ -165,6 +168,12 @@ public class QueryTranslationInfo
 		{
 			return OI;
 		}
+	}
+	
+	public void addLeadLagFunction(GenericUDFLeadLag llFunc)
+	{
+		leadLagFns = leadLagFns == null ? new ArrayList<GenericUDFLeadLag>() : leadLagFns;
+		leadLagFns.add(llFunc);
 	}
 	
 }

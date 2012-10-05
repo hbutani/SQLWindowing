@@ -9,6 +9,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 
+import com.sap.hadoop.Utils;
 import com.sap.hadoop.windowing.runtime2.PartitionIterator;
 
 public abstract class GenericUDFLeadLag extends GenericUDF
@@ -18,14 +19,19 @@ public abstract class GenericUDFLeadLag extends GenericUDF
 	
 	private PrimitiveObjectInspector amtOI;
 	
+	static{
+		Utils.makeTransient(GenericUDFLeadLag.class, "exprEvaluator");
+		Utils.makeTransient(GenericUDFLeadLag.class, "pItr");
+	}
+	
 	@Override
 	public Object evaluate(DeferredObject[] arguments) throws HiveException
 	{
-		Object amt = arguments[1];
+		DeferredObject amt = arguments[1];
 		int intAmt = 0;
 		try
 		{
-			intAmt = PrimitiveObjectInspectorUtils.getInt(amt, amtOI);
+			intAmt = PrimitiveObjectInspectorUtils.getInt(amt.get(), amtOI);
 		}
 		catch (NullPointerException e)
 		{

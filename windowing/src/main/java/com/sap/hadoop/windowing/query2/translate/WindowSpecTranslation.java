@@ -288,6 +288,7 @@ public class WindowSpecTranslation
 		{
 			ValueBoundarySpec vBndSpec = (ValueBoundarySpec) bndSpec;
 			ValueBoundaryDef vbDef = new ValueBoundaryDef(vBndSpec);
+			TranslateUtils.validateNoLeadLagInValueBoundarySpec(vBndSpec.getExpression());
 			ExprNodeDesc exprNode = TranslateUtils.buildExprNode(vBndSpec.getExpression(), iInfo.getTypeCheckCtx());
 			vbDef.setExprNode(exprNode);
 			ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(qDef.getTranslationInfo(), exprNode);

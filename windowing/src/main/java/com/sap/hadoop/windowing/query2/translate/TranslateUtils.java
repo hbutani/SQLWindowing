@@ -34,6 +34,7 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.functions2.FunctionRegistry;
 import com.sap.hadoop.windowing.parser.Windowing2Parser;
 import com.sap.hadoop.windowing.query2.definition.ArgDef;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
@@ -337,4 +338,42 @@ public class TranslateUtils
 	}
 	   
    }
+   
+   public static void validateNoLeadLagInValueBoundarySpec(ASTNode node) throws WindowingException
+   {
+	   TreeWizard tw = new TreeWizard(adaptor, Windowing2Parser.tokenNames);
+	   ValidateNoLeadLagInValueBoundarySpec visitor = new ValidateNoLeadLagInValueBoundarySpec();
+	   tw.visit(node, Windowing2Parser.FUNCTION, visitor);
+	   visitor.checkValid();
+   }
+   
+	public static class ValidateNoLeadLagInValueBoundarySpec implements ContextVisitor
+	{
+		boolean throwError = false;
+		ASTNode errorNode;
+
+		@SuppressWarnings("rawtypes")
+		@Override
+		public void visit(Object t, Object parent, int childIndex, Map labels)
+		{
+			ASTNode expr = (ASTNode) t;
+			ASTNode nameNode = (ASTNode) expr.getChild(0);
+			if (nameNode.getText().equals(FunctionRegistry.LEAD_FUNC_NAME)
+					|| nameNode.getText().equals(
+							FunctionRegistry.LAG_FUNC_NAME))
+			{
+				throwError = true;
+				errorNode = expr;
+			}
+		}
+		
+		void checkValid() throws WindowingException
+		{
+			if (throwError)
+			{
+				throw new WindowingException("Lead/Lag not allowed in ValueBoundary Spec" + 
+						errorNode.toStringTree());
+			}
+		}
+	}
 }

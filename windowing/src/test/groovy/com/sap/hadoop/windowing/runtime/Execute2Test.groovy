@@ -393,4 +393,25 @@ Manufacturer#3,almond antique olive coral navajo,45,12,45,19,39
 """
 		assert r == e
 	}
+	
+	@Test
+	void testLead()
+	{
+		QueryDef qDef = wshell.translate("""
+select  p_mfgr,p_name, p_size,
+p_size - lead(p_size,1) as deltaSz
+from part_demo
+partition by p_mfgr
+order by p_mfgr
+window w1 as rows between 2 preceding and 2 following
+into path='/tmp/wout2'
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+with serdeproperties('field.delim'=',')
+format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+		execute(qDef)
+		String r = outStream.toString()
+		r = r.replace("\r\n", "\n")
+		println r
+	}
 }

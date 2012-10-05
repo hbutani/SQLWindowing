@@ -218,7 +218,18 @@ public class InputTranslation
 		/*
 		 * setup the SerDe.
 		 */
-		SerDe serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(), tEval.getOutputOI());
+		SerDe serde = null;
+		// treat Noop Function special because it just hands the input Partition 
+		// to the next function in the chain.
+		if ( tDef.getName().equals(FunctionRegistry.NOOP_TABLE_FUNCTION) || 
+				tDef.getName().equals(FunctionRegistry.NOOP_MAP_TABLE_FUNCTION) )
+		{
+			serde = inputDef.getSerde();
+		}
+		else
+		{
+			serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(), tEval.getOutputOI());
+		}
 		tDef.setSerde(serde);
 		
 		try
@@ -232,7 +243,14 @@ public class InputTranslation
 		
 		if ( tEval.hasMapPhase() )
 		{
-			serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(), tEval.getMapOutputOI());
+			if ( tDef.getName().equals(FunctionRegistry.NOOP_MAP_TABLE_FUNCTION) )
+			{
+				serde = inputDef.getSerde();
+			}
+			else
+			{
+				serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(), tEval.getMapOutputOI());
+			}
 			try
 			{
 				tDef.setMapOI((StructObjectInspector) serde.getObjectInspector());

@@ -9,6 +9,8 @@ import org.apache.hadoop.hive.ql.exec.FunctionInfo;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFResolver;
 
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.functions2.GenericUDFLeadLag.GenericUDFLag;
+import com.sap.hadoop.windowing.functions2.GenericUDFLeadLag.GenericUDFLead;
 import com.sap.hadoop.windowing.functions2.annotation.TableFuncDef;
 import com.sap.hadoop.windowing.functions2.annotation.WindowFuncDef;
 import com.sap.hadoop.windowing.functions2.window.GenericUDAFCumeDist;
@@ -24,10 +26,12 @@ import com.sap.hadoop.windowing.functions2.table.Noop.NoopResolver;
 import com.sap.hadoop.windowing.functions2.table.NoopWithMap.NoopWithMapResolver;
 import com.sap.hadoop.windowing.functions2.table.WindowingTableFunction.WindowingTableFunctionResolver;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({ "deprecation", "static-access" })
 public class FunctionRegistry
 {
 	static org.apache.hadoop.hive.ql.exec.FunctionRegistry HiveFR  = null;
+	public static final String LEAD_FUNC_NAME = "lead";
+	public static final String LAG_FUNC_NAME = "lag";
 	
 	static Map<String, WindowFunctionInfo> windowFunctions = Collections.synchronizedMap(new LinkedHashMap<String, WindowFunctionInfo>());
 	
@@ -42,6 +46,9 @@ public class FunctionRegistry
 		registerWindowFunction("ntile", new GenericUDAFNTile());
 		registerWindowFunction("first_value", new GenericUDAFFirstValue());
 		registerWindowFunction("last_value", new GenericUDAFLastValue());
+		
+		HiveFR.registerGenericUDF(true, LEAD_FUNC_NAME, GenericUDFLead.class);
+		HiveFR.registerGenericUDF(true, LAG_FUNC_NAME, GenericUDFLag.class);
 	}
 
 	public static boolean isWindowFunction(String name)
@@ -55,7 +62,6 @@ public class FunctionRegistry
 		return windowFunctions.get(name.toLowerCase());
 	}
 	
-	@SuppressWarnings("static-access")
 	static void registerHiveUDAFsAsWindowFunctions()
 	{
 		Set<String> fNames = HiveFR.getFunctionNames();
@@ -70,7 +76,6 @@ public class FunctionRegistry
 		}
 	}
 	
-	@SuppressWarnings("static-access")
 	public static void registerWindowFunction(String name, GenericUDAFResolver wFn)
 	{
 		HiveFR.registerGenericUDAF(true, name, wFn);
@@ -116,13 +121,14 @@ public class FunctionRegistry
 	
 	public static final String WINDOWING_TABLE_FUNCTION = "windowingtablefunction";
 	public static final String NOOP_TABLE_FUNCTION = "noop";
+	public static final String NOOP_MAP_TABLE_FUNCTION = "noopwithmap";
 	
 	static Map<String, TableFunctionInfo> tableFunctions = Collections.synchronizedMap(new LinkedHashMap<String, TableFunctionInfo>());
 	
 	static
 	{
 		registerTableFunction(NOOP_TABLE_FUNCTION, NoopResolver.class);
-		registerTableFunction("noopwithmap", NoopWithMapResolver.class);
+		registerTableFunction(NOOP_MAP_TABLE_FUNCTION, NoopWithMapResolver.class);
 		registerTableFunction(WINDOWING_TABLE_FUNCTION,  WindowingTableFunctionResolver.class);
 	}
 	

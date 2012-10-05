@@ -175,5 +175,10 @@ public class QueryTranslationInfo
 		leadLagFns = leadLagFns == null ? new ArrayList<GenericUDFLeadLag>() : leadLagFns;
 		leadLagFns.add(llFunc);
 	}
+
+	public List<GenericUDFLeadLag> getLeadLagFns()
+	{
+		return leadLagFns;
+	}
 	
 }

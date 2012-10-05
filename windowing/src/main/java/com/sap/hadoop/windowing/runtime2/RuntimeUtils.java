@@ -1,8 +1,16 @@
 package com.sap.hadoop.windowing.runtime2;
 
+import java.util.List;
+
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
+
+import com.sap.hadoop.windowing.functions2.GenericUDFLeadLag;
+import com.sap.hadoop.windowing.query2.definition.QueryDef;
+import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo;
+
+import com.sap.hadoop.windowing.WindowingException;
 
 public class RuntimeUtils
 {
@@ -25,5 +33,17 @@ public class RuntimeUtils
 			out[i] = ObjectInspectorUtils.copyToStandardObject(o[i], oi[i], objectInspectorOption);
 		}
 		return out;
+	}
+	
+	public static void connectLeadLagFunctionsToPartition(QueryDef qDef, PartitionIterator<Object> pItr) 
+		throws WindowingException
+	{
+		QueryTranslationInfo tInfo = qDef.getTranslationInfo();
+		List<GenericUDFLeadLag> llFns = tInfo.getLeadLagFns();
+		if ( llFns == null ) return;
+		for(GenericUDFLeadLag llFn : llFns)
+		{
+			llFn.setpItr(pItr);
+		}
 	}
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.hadoop.hive.ql.exec.Operator;
 import org.apache.hadoop.hive.ql.plan.OperatorDesc;
 
-
+/*Copied as is from org.apache.hadoop.hive.ql.exec.OperatorFactory*/
 public class WindowingOpFactory {
 	static OpTuple<? extends OperatorDesc> o;
 	

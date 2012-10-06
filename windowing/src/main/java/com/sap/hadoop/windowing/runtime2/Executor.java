@@ -69,6 +69,7 @@ public abstract class Executor
 				
 		Writable value = null;
 		PartitionIterator<Object> pItr = oPart.iterator();
+		RuntimeUtils.connectLeadLagFunctionsToPartition(qDef, pItr);
 		while(pItr.hasNext())
 		{
 			ArrayList selectList = new ArrayList();

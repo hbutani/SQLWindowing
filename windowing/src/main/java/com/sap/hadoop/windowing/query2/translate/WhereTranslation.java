@@ -1,7 +1,6 @@
 package com.sap.hadoop.windowing.query2.translate;
 
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
-import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluatorFactory;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
@@ -33,7 +32,7 @@ public class WhereTranslation
 		InputInfo iInfo = tInfo.getInputInfo(iDef);
 		
 		ExprNodeDesc exprNode = TranslateUtils.buildExprNode(wExpr, iInfo.getTypeCheckCtx());
-		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(exprNode);
+		ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(tInfo, exprNode);
 		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, iInfo);
 		
 		try

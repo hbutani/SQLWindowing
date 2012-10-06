@@ -9,7 +9,6 @@ import org.antlr.runtime.tree.Tree;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.metastore.api.Table;
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
-import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluatorFactory;
 import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
@@ -156,11 +155,11 @@ public class OutputTranslation
 			
 			if ( isWnFn )
 			{
-				cDef = translateWindowFnAlias(iInfo, i++, (String) o[1]);
+				cDef = translateWindowFnAlias(qDef, iInfo, i++, (String) o[1]);
 			}
 			else
 			{
-				cDef = translateSelectExpr(iInfo, i++, (String) o[1], (ASTNode) o[2]);
+				cDef = translateSelectExpr(qDef, iInfo, i++, (String) o[1], (ASTNode) o[2]);
 			}
 			selectDef.addColumn(cDef);
 			colAliases.add(cDef.getAlias());
@@ -170,12 +169,12 @@ public class OutputTranslation
 		selectDef.setOI(ObjectInspectorFactory.getStandardStructObjectInspector(colAliases, colOIs));
 	}
 
-	public static ColumnDef translateSelectExpr(InputInfo iInfo, int colIdx, String alias, ASTNode expr) 
+	public static ColumnDef translateSelectExpr(QueryDef qDef, InputInfo iInfo, int colIdx, String alias, ASTNode expr) 
 		throws WindowingException
 	{
 		ColumnDef cDef = new ColumnDef((ColumnSpec) null);
 		ExprNodeDesc exprNode = TranslateUtils.buildExprNode(expr, iInfo.getTypeCheckCtx());
-		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(exprNode);
+		ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(qDef.getTranslationInfo(), exprNode);
 		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, iInfo);
 		
 		cDef.setExpression(expr);
@@ -188,11 +187,11 @@ public class OutputTranslation
 		return cDef;
 	}
 	
-	public static ColumnDef translateWindowFnAlias(InputInfo iInfo, int colIdx, String alias) 
+	public static ColumnDef translateWindowFnAlias(QueryDef qDef, InputInfo iInfo, int colIdx, String alias) 
 		throws WindowingException
 	{
 		ASTNode expr = TranslateUtils.buildASTNode(alias);
-		return translateSelectExpr(iInfo, colIdx, alias, expr);
+		return translateSelectExpr(qDef, iInfo, colIdx, alias, expr);
 	}
 	
 	public static String getAlias(String alias, ASTNode expr, int columnIdx)

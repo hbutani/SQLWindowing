@@ -1,21 +1,21 @@
 package com.sap.hadoop.windowing.runtime2;
 
+import static com.sap.hadoop.Utils.sprintf;
+
 import java.io.IOException;
 import java.net.URI;
 
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.Token;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.CommonTreeAdaptor;
-import org.antlr.runtime.tree.CommonTreeNodeStream;
-import org.antlr.runtime.tree.TreeAdaptor;
 import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
 
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.functions2.FunctionRegistry;
 import com.sap.hadoop.windowing.parser.QSpecBuilder2;
 import com.sap.hadoop.windowing.parser.Windowing2Lexer;
 import com.sap.hadoop.windowing.parser.Windowing2Parser;
@@ -23,8 +23,6 @@ import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 import com.sap.hadoop.windowing.query2.translate.TranslateUtils;
 import com.sap.hadoop.windowing.query2.translate.Translator;
-
-import static com.sap.hadoop.Utils.sprintf;
 
 public class WindowingShell
 {
@@ -315,4 +313,9 @@ public class WindowingShell
 			throw new WindowingException("cannot execute hive Query: hiveQryExec not setup");
 		hiveQryExec.executeHiveQuery(hQry);
 	}
+	
+	/*
+	 * trigger registering lead/lag functions in Hive FunctionRegistry.
+	 */
+	static FunctionRegistry FR = null;
 }

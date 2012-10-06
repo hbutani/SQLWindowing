@@ -1,7 +1,6 @@
 package com.sap.hadoop.windowing.functions2.table;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.hadoop.hive.ql.metadata.HiveException;
@@ -36,6 +35,7 @@ import com.sap.hadoop.windowing.query2.specification.WindowFunctionSpec;
 import com.sap.hadoop.windowing.query2.translate.WindowFunctionTranslation;
 import com.sap.hadoop.windowing.runtime2.Partition;
 import com.sap.hadoop.windowing.runtime2.PartitionIterator;
+import com.sap.hadoop.windowing.runtime2.RuntimeUtils;
 import com.sap.hadoop.windowing.runtime2.ValueBoundaryScanner;
 
 public class WindowingTableFunction extends TableFunctionEvaluator
@@ -96,6 +96,7 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 					Object[] args = new Object[wFn.getArgs().size()];
 					AggregationBuffer aggBuffer = fEval.getNewAggregationBuffer();
 					PartitionIterator<Object> pItr = iPart.iterator();
+					RuntimeUtils.connectLeadLagFunctionsToPartition(getQueryDef(), pItr);
 					while(pItr.hasNext())
 					{
 						Object row = pItr.next();
@@ -116,7 +117,7 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 				}
 				else
 				{
-					oColumns.add(executeFnwithWindow(wFn, iPart));
+					oColumns.add(executeFnwithWindow(getQueryDef(), wFn, iPart));
 				}
 			}
 			
@@ -156,7 +157,7 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 		
 	}
 	
-	static ArrayList<Object> executeFnwithWindow(WindowFunctionDef wFnDef, Partition iPart) 
+	static ArrayList<Object> executeFnwithWindow(QueryDef qDef, WindowFunctionDef wFnDef, Partition iPart) 
 		throws HiveException, WindowingException
 	{
 		ArrayList<Object> vals = new ArrayList<Object>();
@@ -168,6 +169,7 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 			AggregationBuffer aggBuffer = fEval.getNewAggregationBuffer();
 			Range rng = getRange(wFnDef, i, iPart); 
 			PartitionIterator<Object> rItr = rng.iterator();
+			RuntimeUtils.connectLeadLagFunctionsToPartition(qDef, rItr);
 			while(rItr.hasNext())
 			{
 				Object row = rItr.next();

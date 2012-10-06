@@ -1,4 +1,4 @@
-package com.sap.hadoop.windowing.exec;
+package com.sap.hadoop.windowing.runtime2.mr;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -121,41 +121,7 @@ public class FileUtils {
 		return libFiles;
 		
 	}
-	
-	
-	  private static void serializeQueryDef(Object o){
-		  FileOutputStream out ;
-			try {
-				LOG.info("Serializing QueryDef...");
-				//File f = File.createTempFile("SQW-", ".def");
-				File f = new File("SQW.def");
-				out = new FileOutputStream(f);
-				SerializationUtils.serialize(out, o);
-/*				JobConf jobConf = new JobConf(hiveConf, QueryDefExecutor.class);
-				FileUtils.addJars(jobConf);
-				copyFilesToDistCache(f);
-*/				if (out != null) out.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-	  }
 	  
-/*	  private static void copyFilesToDistCache(File localFile){
-		  try {
-			FileSystem dfs = FileSystem.get(hiveConf);
-			Path localPath = new Path(localFile.getAbsolutePath()); 
-			Path remotePath = new Path(dfs.getUri() + "/distCache");
-			dfs.copyFromLocalFile(localPath, remotePath);
-			hiveConf.set("mapred.cache.files",remotePath.getName());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		  
-	  }
-*/
 
 }
 

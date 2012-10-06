@@ -1,4 +1,4 @@
-package com.sap.hadoop.windowing.exec;
+package com.sap.hadoop.windowing.runtime2.mr;
 
 import java.io.Serializable;
 import java.util.Stack;
@@ -23,6 +23,7 @@ import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.specification.HiveTableSpec;
 import com.sap.hadoop.windowing.query2.translate.QueryDefDeserializer;
+import com.sap.hadoop.windowing.query2.translate.QueryDefVisitor;
 import com.sap.hadoop.windowing.query2.translate.QueryDefWalker;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo;
 import com.sap.hadoop.windowing.runtime2.Partition;
@@ -41,27 +42,24 @@ Serializable {
     @Override
     protected void initializeOp(Configuration hconf) throws HiveException {
     	super.initializeOp(hconf);
-    	hiveConf = hconf;
+    	hiveConf = (HiveConf) hconf;
     	LOG.info("Initializing PTFOperator...");
-    	deserializeQueryDef();
-		output = new Object[eval.length];
+    	reconstructQueryDef(qDef, hiveConf);
+		output = new Object[1000];
 		outputObjInspector = qDef.getSelectList().getOI();
 		inputPart = createPartition();
     }
     
-    private void deserializeQueryDef(){
-    	QueryDefDeserializer qdd = new QueryDefDeserializer(hiveConf);
-    	qdd.initialize(qDef);
-    	
-    	QueryDefWalker qdw = new QueryDefWalker(qdd);
-    	try {
-    		qdw.walk(qDef);
+	static void reconstructQueryDef(QueryDef qDef, HiveConf hiveConf){
+		QueryDefVisitor qdd = new QueryDefDeserializer(hiveConf);
+		QueryDefWalker qdw = new QueryDefWalker(qdd);
+		try {
+			qdw.walk(qDef);
 		} catch (WindowingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-    }
+	}
 
     @Override
     protected void closeOp(boolean abort) throws HiveException {

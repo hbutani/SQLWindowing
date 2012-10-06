@@ -13,11 +13,10 @@ public class TableFuncDef extends QueryInputDef
 {
 	ArrayList<ArgDef> args;
 	QueryInputDef input;
-	transient TableFunctionEvaluator tFunction;
+	TableFunctionEvaluator tFunction;
 	transient ObjectInspector mapOI;
 	
 	static{
-		Utils.makeTransient(TableFuncDef.class, "tFunction");
 		Utils.makeTransient(TableFuncDef.class, "mapOI");
 	}
 

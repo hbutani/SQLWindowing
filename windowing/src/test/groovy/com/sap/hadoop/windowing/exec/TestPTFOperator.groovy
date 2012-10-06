@@ -1,6 +1,5 @@
 package com.sap.hadoop.windowing.exec
 
-import java.beans.XMLEncoder;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -9,37 +8,25 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.sap.hadoop.windowing.MRBase2Test;
-import com.sap.hadoop.windowing.WindowingException;
-import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
-import com.sap.hadoop.windowing.functions2.TableFunctionResolver;
-import com.sap.hadoop.windowing.io.IOUtils;
-import com.sap.hadoop.windowing.query2.definition.OrderDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
-import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
-import com.sap.hadoop.windowing.runtime.hive.EvalContext;
-import com.sap.hadoop.windowing.runtime2.Partition;
+import com.sap.hadoop.windowing.runtime2.mr.QueryDefExecutor
 
-import java.beans.ExceptionListener;
-import java.io.PrintWriter;
 
 class TestPTFOperator extends MRBase2Test
 {
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
 	
-	static EvalContext eCtx;
-	
 	@BeforeClass
 	public static void setupClass()
 	{
 		MRBase2Test.setupClass();
-		eCtx = new EvalContext(wshell.cfg)
 	}
 	
 	@Before
 	public void setup()
 	{
-		eCtx.wIn = IOUtils.createTableWindowingInput(null, "part", wshell.cfg)
+		super.setup();
 	}
 	
 

@@ -3,9 +3,14 @@ package com.sap.hadoop.windowing.query2.translate;
 import static com.sap.hadoop.Utils.sprintf;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
+import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.metastore.api.StorageDescriptor;
 import org.apache.hadoop.hive.metastore.api.Table;
 import org.apache.hadoop.hive.ql.metadata.Hive;
@@ -129,7 +134,8 @@ public class InputTranslation
 			StorageDescriptor sd = t.getSd();
 			def.setInputFormatClassName(sd.getInputFormat());
 			def.setTableSerdeClassName(sd.getSerdeInfo().getSerializationLib());
-			def.setTableSerdeProps(sd.getSerdeInfo().getParameters());
+			//def.setTableSerdeProps(sd.getSerdeInfo().getParameters());
+			def.setTableSerdeProps(setupSerdeProps(qDef,sd));
 			def.setLocation(sd.getLocation());
 			
 			Deserializer serde = HiveUtils.getDeserializer(qDef.getTranslationInfo().getHiveCfg(), t);
@@ -146,6 +152,31 @@ public class InputTranslation
 		}
 		
 		return def;
+	}
+	
+	private static Map<String,String> setupSerdeProps(QueryDef qDef, StorageDescriptor sd){
+		Map<String,String> serdePropsMap = new HashMap<String, String>();
+		StringBuilder colNames = new StringBuilder();
+		StringBuilder colTypes = new StringBuilder();
+		List<FieldSchema> sdCols = sd.getCols();
+		boolean first = true;
+
+		for (FieldSchema fieldSchema : sdCols) {
+			if (!first)
+			{
+				colNames.append(",");
+				colTypes.append(",");
+			}
+			else
+				first = false;
+			colNames.append(fieldSchema.getName());
+			colTypes.append(fieldSchema.getType());
+		}
+		
+		serdePropsMap.put(org.apache.hadoop.hive.serde.Constants.LIST_COLUMNS, colNames.toString());
+		serdePropsMap.put(org.apache.hadoop.hive.serde.Constants.LIST_COLUMN_TYPES, colTypes.toString());
+		
+		return serdePropsMap;
 	}
 	
 	private static HiveQueryDef translate(QueryDef qDef, HiveQuerySpec spec) throws WindowingException

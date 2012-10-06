@@ -1,11 +1,29 @@
 package com.sap.hadoop.windowing.query2.translate;
 
+import static com.sap.hadoop.Utils.sprintf;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Properties;
+
 import org.apache.hadoop.hive.conf.HiveConf;
+import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
+import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluatorFactory;
 import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
+import org.apache.hadoop.hive.ql.parse.ASTNode;
+import org.apache.hadoop.hive.serde2.SerDe;
+import org.apache.hadoop.hive.serde2.SerDeException;
+import org.apache.hadoop.hive.serde2.SerDeUtils;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
+import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.functions2.FunctionRegistry;
+import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
+import com.sap.hadoop.windowing.functions2.TableFunctionResolver;
 import com.sap.hadoop.windowing.query2.definition.ArgDef;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.HiveQueryDef;
@@ -14,6 +32,7 @@ import com.sap.hadoop.windowing.query2.definition.OrderColumnDef;
 import com.sap.hadoop.windowing.query2.definition.OrderDef;
 import com.sap.hadoop.windowing.query2.definition.PartitionDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
+import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.definition.QueryOutputDef;
 import com.sap.hadoop.windowing.query2.definition.SelectDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
@@ -24,6 +43,8 @@ import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.CurrentRowDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.RangeBoundaryDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.ValueBoundaryDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFunctionDef;
+import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
+import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 
 
 
@@ -83,21 +104,32 @@ public class QueryDefDeserializer extends QueryDefVisitor
 {
 	HiveConf hConf;
 	QueryDef qDef;
+	QueryInputDef qInDef;
+	InputInfo inputInfo;
+	QueryTranslationInfo tInfo;
 	
 
 	public QueryDefDeserializer(HiveConf hc){
 		this.hConf = hc;
 	}
 	
+	/* 
+	 * 0. Assume HiveConf is passed to this Object on construction.
+	 * On initialize:
+	 * - create TranslationInfo and set on QDef
+	 * - setup HiveCfg and Hive on TranslationInfo
+	 * 
+	 */
 	@Override
 	public void initialize(QueryDef queryDef) {
+		super.initialize(queryDef);
 		qDef = queryDef;
-		QueryTranslationInfo transInfo = new QueryTranslationInfo();
-		transInfo.setHiveCfg(hConf);
+		tInfo = new QueryTranslationInfo();
+		tInfo.setHiveCfg(hConf);
 		try
 		{
-			transInfo.setHive(Hive.get(hConf));
-			transInfo.setHiveMSClient(HiveUtils.getClient(hConf));
+			tInfo.setHive(Hive.get(hConf));
+			tInfo.setHiveMSClient(HiveUtils.getClient(hConf));
 		}
 		catch (WindowingException e) {
 			// TODO Auto-generated catch block
@@ -106,7 +138,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		qDef.setTranslationInfo(transInfo);
+		qDef.setTranslationInfo(tInfo);
 
 	}
 	
@@ -116,94 +148,304 @@ public class QueryDefDeserializer extends QueryDefVisitor
 		
 	}
 	
+	/* 
+	 * On HiveTableDef:
+	 * - set OI and SerDe using:
+  	 * 	 serDe = (SerDe) SerDeUtils.lookupDeserializer(serDeClassName);
+	 *	 serDe.initialize(conf, tbl);
+	 *   may require adding columns and columnTypes to Properties. See OutputTranslation:setupOutputSerDe line 243
+	 * - add the inputDef to the TranslationInfo, so it add it to the InfoMap.
+	 */
 	@Override
 	public void visit(HiveTableDef hiveTable) throws WindowingException
 	{
+		this.qInDef = hiveTable;
+		String serDeClassName = hiveTable.getTableSerdeClassName();
+		Properties serDeProps = new Properties();
+		Map<String, String> serdePropsMap = hiveTable.getTableSerdeProps();
+		for (String serdeName : serdePropsMap.keySet()) {
+			serDeProps.setProperty(serdeName, serdePropsMap.get(serdeName));
+		}
+		
+		try {
+			SerDe serDe = (SerDe) SerDeUtils.lookupDeserializer(serDeClassName);
+	   	    serDe.initialize(hConf, serDeProps);
+			hiveTable.setSerde(serDe);
+			hiveTable.setOI((StructObjectInspector)serDe.getObjectInspector());
+		} catch (SerDeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		tInfo.addInput(hiveTable);
+		qDef.setTranslationInfo(tInfo);
+
 	}
 	
+	/* 
+	 * On HiveQueryDef:
+	 * 	- same as HiveTableDef
+	 */
 	@Override
 	public void visit(HiveQueryDef hiveQuery) throws WindowingException
 	{
+		this.qInDef = hiveQuery;
+		String serDeClassName = hiveQuery.getTableSerdeClassName();
+		Properties serDeProps = new Properties();
+		Map<String, String> serdePropsMap = hiveQuery.getTableSerdeProps();
+		for (String serdeName : serdePropsMap.keySet()) {
+			serDeProps.setProperty(serdeName, serdePropsMap.get(serdeName));
+		}
+		
+		try {
+			SerDe serDe = (SerDe) SerDeUtils.lookupDeserializer(serDeClassName);
+	   	    serDe.initialize(hConf, serDeProps);
+	   	    hiveQuery.setSerde(serDe);
+	   	    hiveQuery.setOI((StructObjectInspector)serDe.getObjectInspector());
+		} catch (SerDeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		tInfo.addInput(hiveQuery);
+		qDef.setTranslationInfo(tInfo);
+
 	}
 	
+	/* 
+	 * On TableFuncDef previsit:
+	 * - have a instance variable that holds onto the InputInfo for this TableFunc
+	 * - have another instance variable that holds onto the map-side InputInfo for this TableFunc(if TFunc has Map Side processing)
+	 *   if TblFunc has no map-side set this to the InputInfo from above.
+	 * - invoke setupMapOI on the TableFunctionEvaluator; enable TFunc to establish MapOI
+	 * - if TblFunc has a Map Phase:
+	 *   - invoke tInfo.getMapInputInfo(tFnDef) // this triggers creating and storing the Map-side InputInfo in TranslationInfo
+	 *   - set this InputInfo as the current map InputInfo.
+	 */
 	@Override
-	public void preVisit(TableFuncDef tblFunc) throws WindowingException
+	public void preVisit(TableFuncDef tblFuncDef) throws WindowingException
 	{
+		TableFunctionEvaluator tEval = tblFuncDef.getFunction();
+		if(!tEval.hasMapPhase() ){
+			inputInfo = qDef.getTranslationInfo().getInputInfo(qInDef);
+		}else{
+			tEval.setupMapOI();
+			inputInfo = qDef.getTranslationInfo().getMapInputInfo(tblFuncDef);
+		}
 	}
 	
+	/* 
+	 * On TableFuncDef visit:
+	 * - invoke setupOI on the TableFunctionEvaluator
+	 * - set Serde, OI, and MapOI on tDef: see end of InputTranslation:translate(TblFuncDef) method, from line 221
+	 */
 	@Override
-	public void visit(TableFuncDef tblFunc) throws WindowingException
+	public void visit(TableFuncDef tblFuncDef) throws WindowingException
 	{
+		TableFunctionEvaluator tEval = tblFuncDef.getFunction();
+		tEval.setupOI();
+		
+		/*
+		 * setup the SerDe.
+		 */
+		SerDe serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(), tEval.getOutputOI());
+		tblFuncDef.setSerde(serde);
+		
+		try
+		{
+			tblFuncDef.setOI((StructObjectInspector) serde.getObjectInspector());
+		}
+		catch(SerDeException se)
+		{
+			throw new WindowingException(se);
+		}
+		
+		if ( tEval.hasMapPhase() )
+		{
+			serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(), tEval.getMapOutputOI());
+			try
+			{
+				tblFuncDef.setMapOI((StructObjectInspector) serde.getObjectInspector());
+			}
+			catch(SerDeException se)
+			{
+				throw new WindowingException(se);
+			}
+		}
+		
+		tInfo.addInput(tblFuncDef);
+		inputInfo = qDef.getTranslationInfo().getInputInfo(qInDef);
+
 	}
 	
+	/* 
+	 * on TblFn Args:
+	 *   - recreate the ExprEvaluator, OI using the current mapInputInfo
+	 */
 	@Override
 	public void visit(ArgDef arg) throws WindowingException
 	{
+		ASTNode exprNode = arg.getExpression();
+		arg = TranslateUtils.buildArgDef(qDef, inputInfo, exprNode);
 	}
 	
+	/* 
+	 * on TblFn Window:
+	 *   - for Partition:
+	 *     - recreate the ExprEvaluator, OI using the current mapInputInfo
+	 *   - for Order:
+	 *     - recreate the ExprEvaluator, OI using the current mapInputInfo
+	 *   - for ValueBoundary:
+	 *     - recreate the ExprEvaluator, OI using the current mapInputInfo
+	 */
 	@Override
 	public void visit(WindowDef window) throws WindowingException
 	{
+		/** Do Nothing **/
 	}
 	
+	/* 
+	 *   - for Partition:
+	 *     - recreate the ExprEvaluator, OI using the current mapInputInfo
+	 */
 	@Override
 	public void visit(PartitionDef partition) throws WindowingException
 	{
+		/** Do Nothing **/
 	}
 	
+	/* 
+	 *   - for Order:
+	 *     - recreate the ExprEvaluator, OI using the current mapInputInfo
+	 */
 	@Override
 	public void visit(OrderDef order) throws WindowingException
 	{
+		/** Do Nothing **/
 	}
 	
 	@Override
 	public void visit(WindowFrameDef windowFrame) throws WindowingException
 	{
+		/** Do Nothing **/
 	}
 	
+	/* 
+	 * - On ColumnDef:
+	 *   - recreate ExprNodeEvaluator, OI using InputInfo of first InputDef in chain.
+	 */
 	@Override
 	public void visit(ColumnDef column) throws WindowingException
 	{
+		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(column.getExprNode());
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		column.setExprEvaluator(exprEval);
+		column.setOI(oi);
 	}
 	
 	@Override
 	public void visit(OrderColumnDef column) throws WindowingException
 	{
+		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(column.getExprNode());
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		column.setExprEvaluator(exprEval);
+		column.setOI(oi);
 	}
 	
 	@Override
 	public void visit(CurrentRowDef boundary) throws WindowingException
 	{
+		/** Do Nothing **/
 	}
 	
 	@Override
 	public void visit(RangeBoundaryDef boundary) throws WindowingException
 	{
+		/** Do Nothing **/
 	}
 	
+	/* inputInfo
+	 *   - for ValueBoundary:
+	 *     - recreate the ExprEvaluator, OI using the current mapInputInfo
+	 */
 	@Override
 	public void visit(ValueBoundaryDef boundary) throws WindowingException
 	{
+		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(boundary.getExprNode());
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		boundary.setExprEvaluator(exprEval);
+		boundary.setOI(oi);
 	}
 	
+	/* 
+	 * for WdwTablFunc:
+	 *   - for WndFnDef
+	 *     - for Args:
+	 *       - recreate the ExprEvaluator, OI using the current mapInputInfo
+	 *     - process WdwDef just like TblFunc's Wdw but use the current mapInputInfo.
+	 *     - invoke init on the GenericUDAFEvaluator and set the OI.
+	 */
 	@Override
 	public void visit(WindowFunctionDef wFn) throws WindowingException
 	{
+		WindowFunctionTranslation.setupEvaluator(wFn);
 	}
 	
+	/* 
+	 * On WhereDef:
+	 * - recreate ExprNodeEvaluator, OI using InputInfo of first InputDef in chain.
+	 */
 	@Override
 	public void visit(WhereDef where) throws WindowingException
 	{
+		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(where.getExprNode());
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		where.setExprEvaluator(exprEval);
+		where.setOI(oi);
 	}
 	
+	/* 
+	 * On SelectDef:
+	 * - On ColumnDef:
+	 *   - recreate ExprNodeEvaluator, OI using InputInfo of first InputDef in chain.
+	 */
 	@Override
 	public void visit(SelectDef select) throws WindowingException
 	{
+		ArrayList<ColumnDef> selColDefs = select.getColumns();
+		ArrayList<String> colAliases = new ArrayList<String>();
+		ArrayList<ObjectInspector> colOIs = new ArrayList<ObjectInspector>();
+
+		for (ColumnDef colDef : selColDefs) {
+			colAliases.add(colDef.getAlias());
+			colOIs.add(colDef.getOI());
+		}
+		
+		select.setOI(ObjectInspectorFactory.getStandardStructObjectInspector(colAliases, colOIs));
 	}
 	
+	/* 
+	 * - On QueryOutputDef:
+	 *   - set SerDe using:
+	  		serDe = (SerDe) SerDeUtils.lookupDeserializer(serDeClassName);
+			serDe.initialize(conf, tbl);
+	 */
 	@Override
 	public void visit(QueryOutputDef output) throws WindowingException
 	{
+		
+		String serDeClassName = output.getOutputSpec().getSerDeClass();
+		Properties serDeProps = output.getOutputSpec().getSerDeProps();
+		
+		try {
+			SerDe serDe = (SerDe) SerDeUtils.lookupDeserializer(serDeClassName);
+	   	    serDe.initialize(hConf, serDeProps);
+	   	    output.setSerDe(serDe);
+		} catch (SerDeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 

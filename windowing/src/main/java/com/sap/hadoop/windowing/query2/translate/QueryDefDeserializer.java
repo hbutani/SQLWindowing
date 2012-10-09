@@ -1,7 +1,5 @@
 package com.sap.hadoop.windowing.query2.translate;
 
-import static com.sap.hadoop.Utils.sprintf;
-
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
@@ -21,9 +19,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.WindowingException;
-import com.sap.hadoop.windowing.functions2.FunctionRegistry;
 import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
-import com.sap.hadoop.windowing.functions2.TableFunctionResolver;
 import com.sap.hadoop.windowing.query2.definition.ArgDef;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.HiveQueryDef;
@@ -43,7 +39,6 @@ import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.CurrentRowDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.RangeBoundaryDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.ValueBoundaryDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFunctionDef;
-import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 
 
@@ -338,7 +333,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	public void visit(ColumnDef column) throws WindowingException
 	{
 		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(column.getExprNode());
-		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef, column.getExprNode(), exprEval, inputInfo);
 		column.setExprEvaluator(exprEval);
 		column.setOI(oi);
 	}
@@ -347,7 +342,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	public void visit(OrderColumnDef column) throws WindowingException
 	{
 		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(column.getExprNode());
-		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef, column.getExprNode(), exprEval, inputInfo);
 		column.setExprEvaluator(exprEval);
 		column.setOI(oi);
 	}
@@ -372,7 +367,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	public void visit(ValueBoundaryDef boundary) throws WindowingException
 	{
 		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(boundary.getExprNode());
-		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef, boundary.getExprNode(), exprEval, inputInfo);
 		boundary.setExprEvaluator(exprEval);
 		boundary.setOI(oi);
 	}
@@ -399,7 +394,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	public void visit(WhereDef where) throws WindowingException
 	{
 		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(where.getExprNode());
-		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef, where.getExprNode(), exprEval, inputInfo);
 		where.setExprEvaluator(exprEval);
 		where.setOI(oi);
 	}

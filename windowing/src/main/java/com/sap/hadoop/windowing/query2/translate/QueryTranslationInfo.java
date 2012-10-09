@@ -10,12 +10,13 @@ import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
 import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.ql.parse.RowResolver;
 import org.apache.hadoop.hive.ql.parse.TypeCheckCtx;
+import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
+import org.apache.hadoop.hive.ql.plan.ExprNodeGenericFuncDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.WindowingException;
-import com.sap.hadoop.windowing.functions2.GenericUDFLeadLag;
 import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
@@ -51,7 +52,7 @@ public class QueryTranslationInfo
 	 */
 	Map<String, InputInfo> mapReshapeInfoMap;
 	
-	List<GenericUDFLeadLag> leadLagFns;
+	LeadLagInfo llInfo;
 	
 	public HiveConf getHiveCfg()
 	{
@@ -101,7 +102,7 @@ public class QueryTranslationInfo
 	void addInput(QueryInputDef input) throws WindowingException
 	{
 		inputInfoMap = inputInfoMap == null ? new HashMap<String, QueryTranslationInfo.InputInfo>() : inputInfoMap;
-		inputInfoMap.put(input.getAlias(), new InputInfo(input, null));
+		inputInfoMap.put(input.getAlias(), new InputInfo(this, input, null));
 	}
 	
 	public InputInfo getMapInputInfo(TableFuncDef tDef) throws WindowingException
@@ -115,7 +116,7 @@ public class QueryTranslationInfo
 		InputInfo ii = mapReshapeInfoMap.get(tDef.getAlias());
 		if ( ii == null )
 		{
-			ii = new InputInfo(tDef, tFn.getMapOutputOI());
+			ii = new InputInfo(this, tDef, tFn.getMapOutputOI());
 			mapReshapeInfoMap.put(tDef.getAlias(), ii);
 		}
 		return ii;
@@ -134,7 +135,8 @@ public class QueryTranslationInfo
 		private RowResolver rr;
 		private TypeCheckCtx tCtx;
 		
-		InputInfo(QueryInputDef input, StructObjectInspector mapOI) throws WindowingException
+		InputInfo(QueryTranslationInfo tInfo, QueryInputDef input, StructObjectInspector mapOI) 
+			throws WindowingException
 		{
 			this.inpDef = input;
 			this.forMapPhase = mapOI != null;
@@ -170,15 +172,48 @@ public class QueryTranslationInfo
 		}
 	}
 	
-	public void addLeadLagFunction(GenericUDFLeadLag llFunc)
+	public LeadLagInfo getLLInfo()
 	{
-		leadLagFns = leadLagFns == null ? new ArrayList<GenericUDFLeadLag>() : leadLagFns;
-		leadLagFns.add(llFunc);
+		llInfo = llInfo == null ? new LeadLagInfo() : llInfo;
+		return llInfo;
 	}
 
-	public List<GenericUDFLeadLag> getLeadLagFns()
+
+	public static class LeadLagInfo
 	{
-		return leadLagFns;
+		List<ExprNodeGenericFuncDesc> leadLagExprs;
+		Map<ExprNodeDesc, List<ExprNodeGenericFuncDesc>> mapTopExprToLLFunExprs;
+			
+		private void addLeadLagExpr(ExprNodeGenericFuncDesc llFunc)
+		{
+			leadLagExprs = leadLagExprs == null ? new ArrayList<ExprNodeGenericFuncDesc>() : leadLagExprs;
+			leadLagExprs.add(llFunc);
+		}
+	
+		public List<ExprNodeGenericFuncDesc> getLeadLagExprs()
+		{
+			return leadLagExprs;
+		}
+		
+		public void addLLFuncExprForTopExpr(ExprNodeDesc topExpr, ExprNodeGenericFuncDesc llFuncExpr)
+		{
+			addLeadLagExpr(llFuncExpr);
+			mapTopExprToLLFunExprs = mapTopExprToLLFunExprs == null ? 
+					new HashMap<ExprNodeDesc, List<ExprNodeGenericFuncDesc>>() : mapTopExprToLLFunExprs;
+			List<ExprNodeGenericFuncDesc> funcList = mapTopExprToLLFunExprs.get(topExpr);
+			if ( funcList == null )
+			{
+				funcList = new ArrayList<ExprNodeGenericFuncDesc>();
+				mapTopExprToLLFunExprs.put(topExpr, funcList);
+			}
+			funcList.add(llFuncExpr);
+		}
+		
+		public List<ExprNodeGenericFuncDesc> getLLFuncExprsInTopExpr(ExprNodeDesc topExpr)
+		{
+			if ( mapTopExprToLLFunExprs == null ) return null;
+			return mapTopExprToLLFunExprs.get(topExpr);
+		}
 	}
 	
 }

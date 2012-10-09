@@ -251,7 +251,7 @@ public class WindowSpecTranslation
 		ASTNode expr = TranslateUtils.buildASTNode(cSpec.getColumnName());
 		ExprNodeDesc exprNode = TranslateUtils.buildExprNode(expr, iInfo.getTypeCheckCtx());
 		ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(qDef.getTranslationInfo(), exprNode);
-		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, iInfo);
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef, exprNode, exprEval, iInfo);
 		
 		cDef.setExpression(expr);
 		cDef.setExprNode(exprNode);
@@ -292,7 +292,7 @@ public class WindowSpecTranslation
 			ExprNodeDesc exprNode = TranslateUtils.buildExprNode(vBndSpec.getExpression(), iInfo.getTypeCheckCtx());
 			vbDef.setExprNode(exprNode);
 			ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(qDef.getTranslationInfo(), exprNode);
-			ObjectInspector OI = TranslateUtils.initExprNodeEvaluator(exprEval, iInfo);
+			ObjectInspector OI = TranslateUtils.initExprNodeEvaluator(qDef, exprNode, exprEval, iInfo);
 			TranslateUtils.validateValueBoundaryExprType(OI);
 			vbDef.setExprEvaluator(exprEval);
 			vbDef.setOI(OI);

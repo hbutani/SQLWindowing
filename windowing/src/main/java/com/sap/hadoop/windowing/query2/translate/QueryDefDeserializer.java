@@ -287,7 +287,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	{
 		ExprNodeDesc exprNodeDesc = arg.getExprNode();
 		ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(tInfo, exprNodeDesc);
-		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef, exprNodeDesc, exprEval, inputInfo);
 		
 		arg.setExprEvaluator(exprEval);
 		arg.setOI(oi);
@@ -343,7 +343,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	public void visit(ColumnDef column) throws WindowingException
 	{
 		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(column.getExprNode());
-		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef, column.getExprNode(), exprEval, inputInfo);
 		column.setExprEvaluator(exprEval);
 		column.setOI(oi);
 	}
@@ -352,7 +352,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	public void visit(OrderColumnDef column) throws WindowingException
 	{
 		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(column.getExprNode());
-		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef, column.getExprNode(), exprEval, inputInfo);
 		column.setExprEvaluator(exprEval);
 		column.setOI(oi);
 	}
@@ -377,7 +377,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	public void visit(ValueBoundaryDef boundary) throws WindowingException
 	{
 		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(boundary.getExprNode());
-		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef, boundary.getExprNode(), exprEval, inputInfo);
 		boundary.setExprEvaluator(exprEval);
 		boundary.setOI(oi);
 	}
@@ -404,7 +404,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	public void visit(WhereDef where) throws WindowingException
 	{
 		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(where.getExprNode());
-		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef, where.getExprNode(), exprEval, inputInfo);
 		where.setExprEvaluator(exprEval);
 		where.setOI(oi);
 	}
@@ -455,3 +455,4 @@ public class QueryDefDeserializer extends QueryDefVisitor
 
 
 }
+

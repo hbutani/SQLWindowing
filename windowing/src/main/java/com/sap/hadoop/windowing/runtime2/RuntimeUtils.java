@@ -2,6 +2,7 @@ package com.sap.hadoop.windowing.runtime2;
 
 import java.util.List;
 
+import org.apache.hadoop.hive.ql.plan.ExprNodeGenericFuncDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
@@ -39,10 +40,11 @@ public class RuntimeUtils
 		throws WindowingException
 	{
 		QueryTranslationInfo tInfo = qDef.getTranslationInfo();
-		List<GenericUDFLeadLag> llFns = tInfo.getLeadLagFns();
-		if ( llFns == null ) return;
-		for(GenericUDFLeadLag llFn : llFns)
+		List<ExprNodeGenericFuncDesc> llFnDescs = tInfo.getLLInfo().getLeadLagExprs();
+		if ( llFnDescs == null ) return;
+		for(ExprNodeGenericFuncDesc llFnDesc : llFnDescs)
 		{
+			GenericUDFLeadLag llFn = (GenericUDFLeadLag) llFnDesc.getGenericUDF();
 			llFn.setpItr(pItr);
 		}
 	}

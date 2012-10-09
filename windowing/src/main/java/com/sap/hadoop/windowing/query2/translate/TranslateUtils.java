@@ -3,6 +3,7 @@ package com.sap.hadoop.windowing.query2.translate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -20,6 +21,7 @@ import org.apache.hadoop.hive.ql.parse.BaseSemanticAnalyzer;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
 import org.apache.hadoop.hive.ql.parse.TypeCheckCtx;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
+import org.apache.hadoop.hive.ql.plan.ExprNodeGenericFuncDesc;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.lazybinary.LazyBinarySerDe;
@@ -35,6 +37,7 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions2.FunctionRegistry;
+import com.sap.hadoop.windowing.functions2.GenericUDFLeadLag;
 import com.sap.hadoop.windowing.parser.Windowing2Parser;
 import com.sap.hadoop.windowing.query2.definition.ArgDef;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
@@ -49,6 +52,7 @@ import com.sap.hadoop.windowing.query2.specification.QueryInputSpec;
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
+import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.LeadLagInfo;
 import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.QueryInputSpecIterator;
 import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.ReverseQueryInputSpecIterator;
 import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.ReverseTableFunctionSpecIterator;
@@ -100,16 +104,50 @@ public class TranslateUtils
 		}
 	}
 	
-	public static ObjectInspector initExprNodeEvaluator(ExprNodeEvaluator exprEval, InputInfo iInfo) throws WindowingException
+	public static ObjectInspector initExprNodeEvaluator(
+			QueryDef qDef, ExprNodeDesc exprNode, 
+			ExprNodeEvaluator exprEval, InputInfo iInfo) throws WindowingException
 	{
+		ObjectInspector OI;
 		try
 		{
-			return exprEval.initialize(iInfo.getOI());
+			OI = exprEval.initialize(iInfo.getOI());
 		}
 		catch(HiveException he)
 		{
 			throw new WindowingException(he);
 		}
+		
+		/*
+		 * if there are any LeadLag functions in this Expression Tree:
+		 * - setup a duplicate Evaluator for the 1st arg of the LLFuncDesc
+		 * - initialize it using the InputInfo provided for this Expr tree
+		 * - set the duplicate evaluator on the LLUDF instance.
+		 */
+		LeadLagInfo llInfo = qDef.getTranslationInfo().getLLInfo();
+		List<ExprNodeGenericFuncDesc> llFuncExprs = 
+			llInfo.getLLFuncExprsInTopExpr(exprNode);
+		if ( llFuncExprs != null )
+		{
+			for(ExprNodeGenericFuncDesc llFuncExpr : llFuncExprs)
+			{
+				ExprNodeDesc firstArg = llFuncExpr.getChildren().get(0);
+				ExprNodeEvaluator dupExprEval = WindowingExprNodeEvaluatorFactory.get(
+						qDef.getTranslationInfo(), firstArg);
+				try
+				{
+					dupExprEval.initialize(iInfo.getOI());
+				}
+				catch(HiveException he)
+				{
+					throw new WindowingException(he);
+				}
+				GenericUDFLeadLag llFn = (GenericUDFLeadLag) llFuncExpr.getGenericUDF();
+				llFn.setArgEvaluator(dupExprEval);
+			}
+		}
+		
+		return OI;
 	}
 	
 	public static ArgDef buildArgDef(QueryDef qDef, InputInfo iInfo, ASTNode arg) throws WindowingException
@@ -118,7 +156,7 @@ public class TranslateUtils
 		
 		ExprNodeDesc exprNode = TranslateUtils.buildExprNode(arg, iInfo.getTypeCheckCtx());
 		ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(qDef.getTranslationInfo(), exprNode);
-		ObjectInspector oi = initExprNodeEvaluator(exprEval, iInfo);
+		ObjectInspector oi = initExprNodeEvaluator(qDef, exprNode, exprEval, iInfo);
 		
 		argDef.setExpression(arg);
 		argDef.setExprNode(exprNode);

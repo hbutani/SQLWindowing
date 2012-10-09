@@ -6,7 +6,9 @@ import org.apache.hadoop.hive.ql.exec.UDFArgumentTypeException;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDF;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 
 import com.sap.hadoop.Utils;
@@ -16,6 +18,7 @@ public abstract class GenericUDFLeadLag extends GenericUDF
 {
 	ExprNodeEvaluator exprEvaluator;
 	PartitionIterator<Object> pItr;
+	ObjectInspector firstArgOI;
 	
 	private PrimitiveObjectInspector amtOI;
 	
@@ -46,11 +49,16 @@ public abstract class GenericUDFLeadLag extends GenericUDF
 		try
 		{
 			Object row = getRow(intAmt);
-			return exprEvaluator.evaluate(row);
+			Object ret = exprEvaluator.evaluate(row);
+			ret = ObjectInspectorUtils.copyToStandardObject(ret, firstArgOI, ObjectInspectorCopyOption.WRITABLE);
+			return ret;
 		}
 		finally
 		{
-			pItr.resetToIndex(idx);
+			Object currRow = pItr.resetToIndex(idx);
+			// reevaluate expression on current Row, to trigger the Lazy object
+			// caches to be reset to the current row.
+			exprEvaluator.evaluate(currRow);
 		}
 		
 	}
@@ -71,7 +79,9 @@ public abstract class GenericUDFLeadLag extends GenericUDF
 							+ arguments[1].getTypeName() + "\" is found");
 		}
 	    
-		return arguments[0];
+		firstArgOI = arguments[0];
+		return ObjectInspectorUtils.getStandardObjectInspector(firstArgOI,
+				ObjectInspectorCopyOption.WRITABLE);
 	}
 	
 	
@@ -126,7 +136,7 @@ public abstract class GenericUDFLeadLag extends GenericUDF
 		@Override
 		protected Object getRow(int amt)
 		{
-			return pItr.getIndex() - 1 + amt;
+			return pItr.lead(amt - 1);
 		}
 		
 	}
@@ -143,7 +153,7 @@ public abstract class GenericUDFLeadLag extends GenericUDF
 		@Override
 		protected Object getRow(int amt)
 		{
-			return pItr.getIndex() - 1 - amt;
+			return pItr.lag(amt - 1);
 		}
 		
 	}

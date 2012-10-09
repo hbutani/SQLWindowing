@@ -198,7 +198,7 @@ public class Partition
 		{
 			try
 			{
-				return Partition.this.getAt(idx++);
+				return Partition.this.getAt(i);
 			}
 			catch(WindowingException e)
 			{
@@ -223,10 +223,11 @@ public class Partition
 		}
 
 		@Override
-		public void resetToIndex(int idx)
+		public Object resetToIndex(int idx)
 		{
-			getAt(idx);
+			Object o = getAt(idx);
 			this.idx = idx + 1;
+			return o;
 		}
 	};
 	

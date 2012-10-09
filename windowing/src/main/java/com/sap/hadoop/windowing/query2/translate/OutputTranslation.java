@@ -175,7 +175,7 @@ public class OutputTranslation
 		ColumnDef cDef = new ColumnDef((ColumnSpec) null);
 		ExprNodeDesc exprNode = TranslateUtils.buildExprNode(expr, iInfo.getTypeCheckCtx());
 		ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(qDef.getTranslationInfo(), exprNode);
-		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, iInfo);
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef, exprNode, exprEval, iInfo);
 		
 		cDef.setExpression(expr);
 		cDef.setExprNode(exprNode);

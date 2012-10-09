@@ -33,7 +33,7 @@ public class WhereTranslation
 		
 		ExprNodeDesc exprNode = TranslateUtils.buildExprNode(wExpr, iInfo.getTypeCheckCtx());
 		ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(tInfo, exprNode);
-		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, iInfo);
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef, exprNode, exprEval, iInfo);
 		
 		try
 		{

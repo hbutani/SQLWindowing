@@ -155,15 +155,14 @@ public class QueryDefExecutor {
 		    mr.getTagToValueDesc().add(op1.getConf().getValueSerializeInfo());
 
 		    // reduce side work
-		    Operator<FileSinkDesc> op5 = OperatorFactory.get(new FileSinkDesc(outputPath, 
+		    /*		    Operator<FileSinkDesc> op5 = OperatorFactory.get(new FileSinkDesc(outputPath, 
 		    		Utilities.defaultTd, false));
 		    
 		    Operator<SelectDesc> op4 = OperatorFactory.get(new SelectDesc(selectColList, 
-		    		selectOutputColumns), op5);
+		    		selectOutputColumns), op5);*/
 		    
-		    Operator<PTFDesc> op3 = WindowingOpFactory.getOperator(new PTFDesc(//tabDef, 
-		    		qdef//, partCols
-		    		), op4);
+		    Operator<PTFDesc> op3 = WindowingOpFactory.getOperator(new PTFDesc(qdef)//, op5
+		    		);
 
 		    Operator<ExtractDesc> op2 = OperatorFactory.get(new ExtractDesc(
 		        getStringColumn(Utilities.ReduceField.VALUE.toString())), op3);
@@ -173,17 +172,16 @@ public class QueryDefExecutor {
 	  
 
 		  private static int executePlan() throws Exception {
+			    hiveConf.set("hive.added.jars.path", "file:///home/saplabs/Projects/hive/build/dist/lib/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar," +
+						"file:///home/saplabs/Projects/hive/build/dist/lib/antlr-runtime-3.0.1.jar," +
+						"file:///home/saplabs/Projects/hive/build/dist/lib/groovy-all-1.8.0.jar," + 
+						"file:///home/saplabs/Projects/hive/build/dist/lib/hive-metastore-0.10.0-SNAPSHOT.jar");
+
 			    MapRedTask mrtask = new MapRedTask();
 			    DriverContext dctx = new DriverContext ();
 			    mrtask.setWork(mr);
-			    hiveConf.set("hive.added.jars.path", "file:///home/saplabs/Projects/hive/build/dist/lib/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar," +
-			    		"file:///home/saplabs/Projects/hive/build/dist/lib/antlr-runtime-3.0.1.jar," +
-			    		"file:///home/saplabs/Projects/hive/build/dist/lib/groovy-all-1.8.0.jar");
 			    mrtask.initialize(hiveConf, null, dctx);
-/*			    JobConf mrJob = new JobConf(hiveConf);
-			    mrJob.setJar("/home/saplabs/Projects/hive/build/dist/lib/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
-			    mrJob.setJobName("windowing-pk");
-*/			    return mrtask.execute(dctx);
+			    return mrtask.execute(dctx);
 			    
 			  }
 

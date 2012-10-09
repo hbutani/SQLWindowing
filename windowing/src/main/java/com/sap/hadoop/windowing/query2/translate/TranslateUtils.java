@@ -1,5 +1,7 @@
 package com.sap.hadoop.windowing.query2.translate;
 
+import static com.sap.hadoop.Utils.sprintf;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,9 +27,9 @@ import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.lazybinary.LazyBinarySerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
-import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector.PrimitiveCategory;
-import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
+import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector.PrimitiveCategory;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.hive.serde2.typeinfo.StructTypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
@@ -43,20 +45,23 @@ import com.sap.hadoop.windowing.query2.definition.OrderDef;
 import com.sap.hadoop.windowing.query2.definition.PartitionDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
+import com.sap.hadoop.windowing.query2.definition.QueryOutputDef;
+import com.sap.hadoop.windowing.query2.definition.ReduceInputDef;
+import com.sap.hadoop.windowing.query2.definition.SelectDef;
+import com.sap.hadoop.windowing.query2.definition.WhereDef;
+import com.sap.hadoop.windowing.query2.definition.WindowDef;
 import com.sap.hadoop.windowing.query2.specification.ColumnSpec;
 import com.sap.hadoop.windowing.query2.specification.OrderColumnSpec;
 import com.sap.hadoop.windowing.query2.specification.QueryInputSpec;
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
+import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.QueryInputDefIterator;
 import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.QueryInputSpecIterator;
+import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.ReverseQueryInputDefIterator;
 import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.ReverseQueryInputSpecIterator;
 import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.ReverseTableFunctionSpecIterator;
 import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.TableFunctionSpecIterator;
-import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.QueryInputDefIterator;
-import com.sap.hadoop.windowing.query2.translate.TableFunctionChainIterators.ReverseQueryInputDefIterator;
-
-import static com.sap.hadoop.Utils.sprintf;
 
 public class TranslateUtils
 {
@@ -212,6 +217,96 @@ public class TranslateUtils
 		return isEqual(def1.getSpec(), def2.getSpec());
 	}
 	
+
+	public static boolean isEqual(QueryDef def1, QueryDef def2)
+	{
+		if ( def1 == null && def2 == null ) return false;
+		if ( def1 == null && def2 != null ) return false;
+		if ( def1 != null && def2 == null ) return false;
+		
+		return isEqual(def1.getSpec(), def2.getSpec()) &&
+			   isEqual(def1.getTranslationInfo(), def2.getTranslationInfo()) && 
+			   isEqual(def1.getWindowDefs(), def2.getWindowDefs()) && 
+			   isEqual(def1.getSelectList(), def2.getSelectList()) && 
+			   isEqual(def1.getInput(), def2.getInput()) && 
+			   isEqual(def1.getWhere(), def2.getWhere()) && 
+			   isEqual(def1.getReduceInput(), def2.getReduceInput()) && 
+			   isEqual(def1.getOutput(), def2.getOutput());
+	}
+	
+	public static boolean isEqual(QuerySpec spec1, QuerySpec spec2){
+		boolean isEqual = false;
+		if ( spec1 == null && spec2 == null ) return false;
+		if ( spec1 == null && spec2 != null ) return false;
+		if ( spec1 != null && spec2 == null ) return false;
+
+		return isEqual;
+	}
+
+
+	public static boolean isEqual(QueryTranslationInfo info1, QueryTranslationInfo info2){
+		boolean isEqual = false;
+		if ( info1 == null && info2 == null ) return false;
+		if ( info1 == null && info2 != null ) return false;
+		if ( info1 != null && info2 == null ) return false;
+
+		return isEqual;
+	}
+
+	public static boolean isEqual(Map<String,WindowDef> map1, Map<String,WindowDef> map2){
+		boolean isEqual = false;
+		if ( map1 == null && map2 == null ) return false;
+		if ( map1 == null && map2 != null ) return false;
+		if ( map1 != null && map2 == null ) return false;
+
+		return isEqual;
+	}
+
+	public static boolean isEqual(SelectDef def1, SelectDef def2){
+		boolean isEqual = false;
+		if ( def1 == null && def2 == null ) return false;
+		if ( def1 == null && def2 != null ) return false;
+		if ( def1 != null && def2 == null ) return false;
+
+		return isEqual;
+	}
+
+	public static boolean isEqual(QueryInputDef def1, QueryInputDef def2){
+		boolean isEqual = false;
+		if ( def1 == null && def2 == null ) return false;
+		if ( def1 == null && def2 != null ) return false;
+		if ( def1 != null && def2 == null ) return false;
+
+		return isEqual;
+	}
+
+	public static boolean isEqual(WhereDef def1, WhereDef def2){
+		boolean isEqual = false;
+		if ( def1 == null && def2 == null ) return false;
+		if ( def1 == null && def2 != null ) return false;
+		if ( def1 != null && def2 == null ) return false;
+
+		return isEqual;
+	}
+
+	public static boolean isEqual(ReduceInputDef def1, ReduceInputDef def2){
+		boolean isEqual = false;
+		if ( def1 == null && def2 == null ) return false;
+		if ( def1 == null && def2 != null ) return false;
+		if ( def1 != null && def2 == null ) return false;
+
+		return isEqual;
+	}
+
+	public static boolean isEqual(QueryOutputDef def1, QueryOutputDef def2){
+		boolean isEqual = false;
+		if ( def1 == null && def2 == null ) return false;
+		if ( def1 == null && def2 != null ) return false;
+		if ( def1 != null && def2 == null ) return false;
+		
+		return isEqual;
+	}
+
 	/*
 	 * A Window Function's partition clause must exactly match that of the associated tableFn.
 	 */

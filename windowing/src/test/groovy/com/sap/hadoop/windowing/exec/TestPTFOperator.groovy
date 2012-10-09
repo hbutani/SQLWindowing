@@ -36,7 +36,8 @@ class TestPTFOperator extends MRBase2Test
 	{
 		System.out.println("Beginning testReduceOnlyPlan");
 	    
-/*	    QueryDef qdef =  wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +
+	    
+	    QueryDef qdef =  wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +
   		"from part " +
   		"partition by p_mfgr " +
   		"order by p_mfgr " +
@@ -45,17 +46,17 @@ class TestPTFOperator extends MRBase2Test
   		"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
   		"with serdeproperties('field.delim'=',') " +
   		"format 'org.apache.hadoop.mapred.TextOutputFormat'");
-*/  
-	    QueryDef qdef = wshell.translate("select p_mfgr,p_name,p_size,p_comment " +
+  
+/*	    QueryDef qdef = wshell.translate("select p_mfgr,p_name,p_size,p_comment " +
 	  		"from part " +
 	  		"partition by p_mfgr " +
 	  		"order by p_size " +
-	  		"into path='/tmp/wout2' " +
+	  		"into path='/tmp/wout-pk' " +
 	  		"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
 	  		"with serdeproperties('field.delim'=',') " +
 	  		"format 'org.apache.hadoop.mapred.TextOutputFormat'");
 		  
-	    	int exitVal = QueryDefExecutor.executeQuery(wshell.getCfg(), qdef);
+*/	    	int exitVal = QueryDefExecutor.executeQuery(wshell.getCfg(), qdef);
 			String testName = new Exception().getStackTrace()[1].getMethodName();
 			if (exitVal != 0) {
 				  System.out.println(testName + " execution failed with exit status: "

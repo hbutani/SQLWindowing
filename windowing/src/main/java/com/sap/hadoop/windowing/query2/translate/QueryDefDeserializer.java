@@ -1,7 +1,5 @@
 package com.sap.hadoop.windowing.query2.translate;
 
-import static com.sap.hadoop.Utils.sprintf;
-
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
@@ -9,9 +7,8 @@ import java.util.Properties;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluatorFactory;
-import org.apache.hadoop.hive.ql.metadata.Hive;
-import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
+import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.SerDeUtils;
@@ -19,11 +16,9 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
-import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions2.FunctionRegistry;
 import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
-import com.sap.hadoop.windowing.functions2.TableFunctionResolver;
 import com.sap.hadoop.windowing.query2.definition.ArgDef;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.HiveQueryDef;
@@ -43,7 +38,6 @@ import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.CurrentRowDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.RangeBoundaryDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.ValueBoundaryDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFunctionDef;
-import com.sap.hadoop.windowing.query2.specification.TableFuncSpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 
 
@@ -107,8 +101,20 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	QueryInputDef qInDef;
 	InputInfo inputInfo;
 	QueryTranslationInfo tInfo;
+	ObjectInspector inputOI;
+
+	//todo-get rid of this dependency
+	static
+	{
+		FunctionRegistry.getWindowFunctionInfo("rank");
+	}
 	
 
+	public QueryDefDeserializer(HiveConf hc, ObjectInspector inputOI){
+		this.hConf = hc;
+		this.inputOI = inputOI;
+	}
+	
 	public QueryDefDeserializer(HiveConf hc){
 		this.hConf = hc;
 	}
@@ -126,18 +132,6 @@ public class QueryDefDeserializer extends QueryDefVisitor
 		qDef = queryDef;
 		tInfo = new QueryTranslationInfo();
 		tInfo.setHiveCfg(hConf);
-		try
-		{
-			tInfo.setHive(Hive.get(hConf));
-			tInfo.setHiveMSClient(HiveUtils.getClient(hConf));
-		}
-		catch (WindowingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (HiveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		qDef.setTranslationInfo(tInfo);
 
 	}
@@ -160,6 +154,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	public void visit(HiveTableDef hiveTable) throws WindowingException
 	{
 		this.qInDef = hiveTable;
+
 		String serDeClassName = hiveTable.getTableSerdeClassName();
 		Properties serDeProps = new Properties();
 		Map<String, String> serdePropsMap = hiveTable.getTableSerdeProps();
@@ -171,7 +166,11 @@ public class QueryDefDeserializer extends QueryDefVisitor
 			SerDe serDe = (SerDe) SerDeUtils.lookupDeserializer(serDeClassName);
 	   	    serDe.initialize(hConf, serDeProps);
 			hiveTable.setSerde(serDe);
-			hiveTable.setOI((StructObjectInspector)serDe.getObjectInspector());
+			if(inputOI != null){
+				hiveTable.setOI((StructObjectInspector) inputOI);
+			}else{
+				hiveTable.setOI((StructObjectInspector)serDe.getObjectInspector());
+			}
 		} catch (SerDeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -274,7 +273,8 @@ public class QueryDefDeserializer extends QueryDefVisitor
 		}
 		
 		tInfo.addInput(tblFuncDef);
-		inputInfo = qDef.getTranslationInfo().getInputInfo(qInDef);
+		inputInfo = qDef.getTranslationInfo().getInputInfo(tblFuncDef);
+
 
 	}
 	
@@ -285,8 +285,13 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	@Override
 	public void visit(ArgDef arg) throws WindowingException
 	{
-		ASTNode exprNode = arg.getExpression();
-		arg = TranslateUtils.buildArgDef(qDef, inputInfo, exprNode);
+		ExprNodeDesc exprNodeDesc = arg.getExprNode();
+		ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(tInfo, exprNodeDesc);
+		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(exprEval, inputInfo);
+		
+		arg.setExprEvaluator(exprEval);
+		arg.setOI(oi);
+				
 	}
 	
 	/* 

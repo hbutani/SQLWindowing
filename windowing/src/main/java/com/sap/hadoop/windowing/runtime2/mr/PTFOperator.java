@@ -1,8 +1,13 @@
 package com.sap.hadoop.windowing.runtime2.mr;
 
+import java.io.File;
+import java.io.PrintStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Stack;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
@@ -11,47 +16,57 @@ import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.plan.api.OperatorType;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorConverters;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorConverters.Converter;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Writable;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
-import com.sap.hadoop.windowing.io.IOUtils;
-import com.sap.hadoop.windowing.io.WindowingInput;
+import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
-import com.sap.hadoop.windowing.query2.specification.HiveTableSpec;
+import com.sap.hadoop.windowing.query2.definition.WhereDef;
 import com.sap.hadoop.windowing.query2.translate.QueryDefDeserializer;
 import com.sap.hadoop.windowing.query2.translate.QueryDefVisitor;
 import com.sap.hadoop.windowing.query2.translate.QueryDefWalker;
-import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo;
+import com.sap.hadoop.windowing.query2.translate.TranslateUtils;
+import com.sap.hadoop.windowing.runtime2.Executor.ReduceSink;
 import com.sap.hadoop.windowing.runtime2.Partition;
+import com.sap.hadoop.windowing.runtime2.PartitionIterator;
+import com.sap.hadoop.windowing.runtime2.RuntimeUtils;
 
 public class PTFOperator extends Operator<PTFDesc> implements
 Serializable {
 
     private static final long serialVersionUID = 1L;
-    static QueryDef qDef;
-    static Partition inputPart;
-    protected transient ExprNodeEvaluator[] eval;
-    transient Object[] output;
-    static HiveConf hiveConf;
+    QueryDef qDef;
+    Partition inputPart;
+    transient Object output;
+    HiveConf hiveConf;
+    int rowCnt = 0;
 
 
     @Override
-    protected void initializeOp(Configuration hconf) throws HiveException {
-    	super.initializeOp(hconf);
-    	hiveConf = (HiveConf) hconf;
-    	LOG.info("Initializing PTFOperator...");
+    protected void initializeOp(Configuration jobConf) throws HiveException {
+    	super.initializeOp(jobConf);
+    	System.out.println("Initializing PTFOperator...");
+
+    	hiveConf = new HiveConf(jobConf, PTFOperator.class);
+    	qDef = conf.getQdef();
+    	
     	reconstructQueryDef(qDef, hiveConf);
-		output = new Object[1000];
-		outputObjInspector = qDef.getSelectList().getOI();
+		
+    	outputObjInspector = qDef.getSelectList().getOI();
 		inputPart = createPartition();
     }
     
-	static void reconstructQueryDef(QueryDef qDef, HiveConf hiveConf){
-		QueryDefVisitor qdd = new QueryDefDeserializer(hiveConf);
+	void reconstructQueryDef(QueryDef qDef, HiveConf hiveConf){
+		QueryDefVisitor qdd = new QueryDefDeserializer(hiveConf, inputObjInspectors[0]);
 		QueryDefWalker qdw = new QueryDefWalker(qdd);
 		try {
 			qdw.walk(qDef);
@@ -59,18 +74,17 @@ Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("Finished deserializing QueryDef");
 	}
 
     @Override
     protected void closeOp(boolean abort) throws HiveException {
     	super.closeOp(abort);
-    	Partition outPart = executePTF(inputPart);
 		try {
-			//while rows exist in partition, forward one-by-one to next operator
-	    	for(int i=0; i < outPart.size(); i++){
-					output[i] = outPart.getWritableAt(i);
-					forward(output[i], outputObjInspector);
-			}
+			System.out.println("Accumulated " + rowCnt + " rows..");
+	    	Partition outPart = executePTF(inputPart);
+	    	executeSelectList(qDef, outPart, new SysOutRS(System.out)
+	    			);
     	} catch (WindowingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -82,35 +96,27 @@ Serializable {
 	public void processOp(Object row, int tag) throws HiveException {
 		//hold on to all the rows in partition; required later to execute PTF chain
 		try {
-			Writable w = (Writable) row; //wIn.createRow();
-			inputPart.append(w);
+			rowCnt++;
+			inputPart.append(row);
 		} catch (WindowingException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static Partition createPartition()
+	private Partition createPartition()
 	{
-		QueryTranslationInfo tInfo = qDef.getTranslationInfo();
-		HiveTableSpec hvTblSpec = qDef.getInput().getHiveTableSpec();
 		TableFuncDef tabDef = (TableFuncDef) qDef.getInput();
 		TableFunctionEvaluator tEval = tabDef.getFunction();
 		String partClassName = tEval.getPartitionClass();
 		int partMemSize = tEval.getPartitionMemSize();
 
-		WindowingInput wIn;
 		Partition part = null;
 		try {
-			wIn = IOUtils.createTableWindowingInput(hvTblSpec.getDbName(),
-					hvTblSpec.getTableName(), tInfo.getHiveCfg());
-			SerDe serDe = (SerDe) wIn.getDeserializer();
-			StructObjectInspector oI = (StructObjectInspector) serDe
-					.getObjectInspector();
+			SerDe serDe = TranslateUtils.createLazyBinarySerDe(hiveConf, 
+					tEval.getOutputOI());
 			part = new Partition(partClassName, partMemSize,
-					serDe, oI);
+					serDe, (StructObjectInspector) inputObjInspectors[0]);
 		} catch (WindowingException e) {
-			e.printStackTrace();
-		} catch (SerDeException e) {
 			e.printStackTrace();
 		}
 		return part;
@@ -138,7 +144,6 @@ Serializable {
 			while( !fnDefs.isEmpty() ){
 			currFnDef = fnDefs.pop();
 				part = currFnDef.getFunction().execute(part);
-
 			}
 		} catch (WindowingException e) {
 			// TODO Auto-generated catch block
@@ -146,6 +151,79 @@ Serializable {
 		}
 		return part;
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public void executeSelectList(QueryDef qDef, Partition oPart, ReduceSink rS
+			) throws WindowingException, HiveException
+	{
+		ArrayList<ColumnDef> cols = qDef.getSelectList().getColumns();
+		ObjectInspector selectOI = qDef.getSelectList().getOI();
+		SerDe oSerDe = qDef.getOutput().getSerDe();
+		
+		WhereDef whDef = qDef.getWhere();
+		boolean applyWhere = whDef != null;
+		Converter whConverter = !applyWhere ? null : 
+				ObjectInspectorConverters.getConverter(
+						whDef.getOI(), 
+						PrimitiveObjectInspectorFactory.javaBooleanObjectInspector);
+		ExprNodeEvaluator whCondEval = !applyWhere ? null : whDef.getExprEvaluator();
+				
+		Writable value = null;
+		PartitionIterator<Object> pItr = oPart.iterator();
+		RuntimeUtils.connectLeadLagFunctionsToPartition(qDef, pItr);
+		while(pItr.hasNext())
+		{
+			System.out.println("Processing select on next row...");
+			@SuppressWarnings("rawtypes")
+			ArrayList selectList = new ArrayList();
+			Object oRow = pItr.next();
+			
+			if ( applyWhere )
+			{
+				Object whCond = null;
+				try
+				{
+					whCond = whCondEval.evaluate(oRow);
+					whCond = whConverter.convert(whCond);
+				}
+				catch(HiveException he)
+				{
+					throw new WindowingException(he);
+				}
+				if ( whCond == null || !((Boolean)whCond).booleanValue() )
+				{
+					continue;
+				}
+			}
+			
+			for(ColumnDef cDef : cols)
+			{
+				try
+				{
+					selectList.add(cDef.getExprEvaluator().evaluate(oRow));
+				}
+				catch(HiveException he)
+				{
+					throw new WindowingException(he);
+				}
+			}
+			
+			try
+			{
+				value = oSerDe.serialize(selectList, selectOI);
+			}
+			catch(SerDeException se)
+			{
+				throw new WindowingException(se);
+			}
+			rS.collectOutput(NullWritable.get(), value);
+			output = selectList;
+			forward(output, outputObjInspector);
+		}
+	}
+	
+
 
 	  /**
 	   * @return the name of the operator
@@ -158,6 +236,23 @@ Serializable {
 	@Override
 	public OperatorType getType() {
 		return null;
+	}
+
+	public static class SysOutRS implements ReduceSink
+	{
+		PrintStream out;
+		private static final Log LOG = LogFactory.getLog(SysOutRS.class.getName());
+		
+		public SysOutRS(PrintStream out)
+		{
+			this.out = out;
+		}
+		
+		public void collectOutput(Writable key, Writable value)
+		{
+			out.println(value);
+			//System.out.println("Value=" + value);
+		}
 	}
 
 }

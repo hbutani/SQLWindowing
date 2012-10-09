@@ -1,0 +1,88 @@
+#+TITLE: Lead Lag Processing
+#+OPTIONS: toc:nil
+
+Consider the following expression $psize - lag(psize,1)$. This
+computes the difference in psize between the /current/ row and the
+previous row.
+
+In Hive the expression is translated int to the following Evaluator
+Tree
+#+begin_src dot :file leadlagExec.png :cmdline -Kdot -Tpng
+digraph G {
+  //size ="6 6";
+  nodesep=.2;
+  //rankdir=BT;
+  ranksep=.25;
+  //node [shape=record];
+
+  "-" -> psize;
+  "-" -> lag;
+  psize2[label="psize"];
+  lag -> psize2;
+  lag -> "1";
+ 
+}
+#+end_src
+
+#+results:
+[[file:leadlagExec.png]]
+
+* Translation
+We setup the LeadLagUDF with an ExprEvaluator that is a duplicate of
+the first argument. Since the ExprEvaluator classes don't expose their
+fields with public getters, setting this up is superfluously contrived:
+- We introduced a *WindowingExprNodeEvaluatorFactory*. Whenever it is
+  called upon to create an ExprEvaluator from an ExprNode, before
+  handing off to Hive's EvalFactory it records any Lead/Lag
+  expressions in the given expression tree.
+- Now when the ExprEvaluator is initialized based on a RowResolver. A
+  check is made if its Expression Tree had any lead/lag functions. If
+  yes:
+  - a duplicate Evaluator is made for the of the 1st child (argument)
+    of the lead/lag expression.
+  - The duplicate is initialized using the RowResolver.
+  - Finally it is attached with the Lead/Lag UDF.
+  - For details see /TranslateUtils:initExprNodeEvaluator/
+
+* Execution
+- The context of processing is always a *Partition*
+- There is now a *PartitionIterator* which extends the Iterator with
+  the following functions:
+  - /lead(i)/ or /lag(i) :/ returns a row that precedes or succeeds the
+    current row.
+  - /getIndex() :/ returns the index of the current row.
+  - /resetToIndex(i) :/ this sets the Iterator back to the given index.
+- The utility *RuntimeUtils.connectLeadLagFunctionsToPartition(qDef,
+  pItr)* sets the PartitionIterator in any lead/lag UDF in the current
+  Query. This is how a lead/lag UDF gets access to surrounding rows in
+  the Partition.
+- During the execution of the row:
+  - The function navigates to the corresponding row using lead/lag
+  - Evaluates the expression for the first Arg on this row
+  - Before returning this value it resets the Partition back to the
+    index of the input row.
+
+** Handling SerDe and Partition state
+- The Partition and SerDe object are designed to stream rows.
+- So the same java Object is returned on each call to
+  *Partition:getAt* and *SerDe:deserialize*
+- Combine this with the /Lazy/ model of some of the SerDes even though
+  we can get to a different row in the partition *when the actual
+  computation happens all subexpressions access the same row.* To get
+  around this problem we have the lead/lag UDF return a StandardOI and
+  during execution we copy the result of executing the first Arg to
+  Standard Object.
+- There is one last thing that needs to be done:
+  - If lead / lag is the last expression in the first Arg, then merely
+    resetting the Partition back to the current row is not enough. The
+    reason being this is not enough to trigger recomputation of the
+    field level caches. Resetting the index causes the Struct:parsed
+    to be false; but direct field level access doesn't check this
+    flag. So a LazyInteger on this Struct if accessed directly will
+    return the value already parsed. So in the current e.g. since the
+    psize expression was evaluated before the lag the LazyInteger
+    contains the value from the previous row ( triggered by p_size
+    expression in lag). To have it point to the current row; after the
+    resetIndex we evaluate the first Arg in the context of the current row.
+
+ 

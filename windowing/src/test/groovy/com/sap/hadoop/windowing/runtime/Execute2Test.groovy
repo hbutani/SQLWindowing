@@ -412,6 +412,172 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		execute(qDef)
 		String r = outStream.toString()
 		r = r.replace("\r\n", "\n")
-		println r
+//		println r
+		String e = """Manufacturer#1,almond antique burnished rose metallic,2,0
+Manufacturer#1,almond antique burnished rose metallic,2,-32
+Manufacturer#1,almond antique chartreuse lavender yellow,34,28
+Manufacturer#1,almond antique salmon chartreuse burlywood,6,-22
+Manufacturer#1,almond aquamarine burnished black steel,28,-14
+Manufacturer#1,almond aquamarine pink moccasin thistle,42,28
+Manufacturer#2,almond antique violet chocolate turquoise,14,-26
+Manufacturer#2,almond antique violet turquoise frosted,40,38
+Manufacturer#2,almond aquamarine midnight light salmon,2,-23
+Manufacturer#2,almond aquamarine rose maroon antique,25,7
+Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,1
+Manufacturer#3,almond antique chartreuse khaki white,17,3
+Manufacturer#3,almond antique forest lavender goldenrod,14,-5
+Manufacturer#3,almond antique metallic orange dim,19,18
+Manufacturer#3,almond antique misty red olive,1,-44
+Manufacturer#3,almond antique olive coral navajo,45,35
+Manufacturer#4,almond antique gainsboro frosted violet,10,-29
+Manufacturer#4,almond antique violet mint lemon,39,12
+Manufacturer#4,almond aquamarine floral ivory bisque,27,20
+Manufacturer#4,almond aquamarine yellow dodger mint,7,-5
+Manufacturer#4,almond azure aquamarine papaya violet,12,-19
+Manufacturer#5,almond antique blue firebrick mint,31,25
+Manufacturer#5,almond antique medium spring khaki,6,4
+Manufacturer#5,almond antique sky peru orange,2,-44
+Manufacturer#5,almond aquamarine dodger light gainsboro,46,23
+Manufacturer#5,almond azure blanched chiffon midnight,23,0
+"""
+		assert r == e
+	}
+	
+	@Test
+	void testLag()
+	{
+		QueryDef qDef = wshell.translate("""
+select  p_mfgr,p_name, p_size,
+p_size - lag(p_size,1) as deltaSz
+from part_demo
+partition by p_mfgr
+order by p_mfgr
+window w1 as rows between 2 preceding and 2 following
+into path='/tmp/wout2'
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+with serdeproperties('field.delim'=',')
+format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+		execute(qDef)
+		String r = outStream.toString()
+		r = r.replace("\r\n", "\n")
+//		println r
+		String e = """Manufacturer#1,almond antique burnished rose metallic,2,0
+Manufacturer#1,almond antique burnished rose metallic,2,0
+Manufacturer#1,almond antique chartreuse lavender yellow,34,32
+Manufacturer#1,almond antique salmon chartreuse burlywood,6,-28
+Manufacturer#1,almond aquamarine burnished black steel,28,22
+Manufacturer#1,almond aquamarine pink moccasin thistle,42,14
+Manufacturer#2,almond antique violet chocolate turquoise,14,-28
+Manufacturer#2,almond antique violet turquoise frosted,40,26
+Manufacturer#2,almond aquamarine midnight light salmon,2,-38
+Manufacturer#2,almond aquamarine rose maroon antique,25,23
+Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,-7
+Manufacturer#3,almond antique chartreuse khaki white,17,-1
+Manufacturer#3,almond antique forest lavender goldenrod,14,-3
+Manufacturer#3,almond antique metallic orange dim,19,5
+Manufacturer#3,almond antique misty red olive,1,-18
+Manufacturer#3,almond antique olive coral navajo,45,44
+Manufacturer#4,almond antique gainsboro frosted violet,10,-35
+Manufacturer#4,almond antique violet mint lemon,39,29
+Manufacturer#4,almond aquamarine floral ivory bisque,27,-12
+Manufacturer#4,almond aquamarine yellow dodger mint,7,-20
+Manufacturer#4,almond azure aquamarine papaya violet,12,5
+Manufacturer#5,almond antique blue firebrick mint,31,19
+Manufacturer#5,almond antique medium spring khaki,6,-25
+Manufacturer#5,almond antique sky peru orange,2,-4
+Manufacturer#5,almond aquamarine dodger light gainsboro,46,44
+Manufacturer#5,almond azure blanched chiffon midnight,23,-23
+"""
+		assert r == e
+	}
+	
+	/*
+	 * sum(row(i) - row(i-1)) = row(n) - row(1)
+	 */
+	@Test
+	void testSumDelta()
+	{
+		QueryDef qDef = wshell.translate("""
+select  p_mfgr,p_name, p_size,
+sum(p_size - lag(p_size,1)) as deltaSum
+from part_demo
+partition by p_mfgr
+order by p_mfgr
+window w1 as rows between 2 preceding and 2 following
+into path='/tmp/wout2'
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+with serdeproperties('field.delim'=',')
+format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+		execute(qDef)
+		String r = outStream.toString()
+		r = r.replace("\r\n", "\n")
+//		println r
+		String e = """Manufacturer#1,almond antique burnished rose metallic,2,21
+Manufacturer#1,almond antique burnished rose metallic,2,21
+Manufacturer#1,almond antique chartreuse lavender yellow,34,21
+Manufacturer#1,almond antique salmon chartreuse burlywood,6,21
+Manufacturer#1,almond aquamarine burnished black steel,28,21
+Manufacturer#1,almond aquamarine pink moccasin thistle,42,21
+Manufacturer#2,almond antique violet chocolate turquoise,14,21
+Manufacturer#2,almond antique violet turquoise frosted,40,21
+Manufacturer#2,almond aquamarine midnight light salmon,2,21
+Manufacturer#2,almond aquamarine rose maroon antique,25,21
+Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,21
+Manufacturer#3,almond antique chartreuse khaki white,17,21
+Manufacturer#3,almond antique forest lavender goldenrod,14,21
+Manufacturer#3,almond antique metallic orange dim,19,21
+Manufacturer#3,almond antique misty red olive,1,21
+Manufacturer#3,almond antique olive coral navajo,45,21
+Manufacturer#4,almond antique gainsboro frosted violet,10,21
+Manufacturer#4,almond antique violet mint lemon,39,21
+Manufacturer#4,almond aquamarine floral ivory bisque,27,21
+Manufacturer#4,almond aquamarine yellow dodger mint,7,21
+Manufacturer#4,almond azure aquamarine papaya violet,12,21
+Manufacturer#5,almond antique blue firebrick mint,31,21
+Manufacturer#5,almond antique medium spring khaki,6,21
+Manufacturer#5,almond antique sky peru orange,2,21
+Manufacturer#5,almond aquamarine dodger light gainsboro,46,21
+Manufacturer#5,almond azure blanched chiffon midnight,23,21
+"""
+		assert r == e
+	}
+	
+	@Test
+	void testWhereLead()
+	{
+		QueryDef qDef = wshell.translate("""
+select  p_mfgr,p_name, p_size
+from part_demo
+partition by p_mfgr
+order by p_mfgr
+where lead(p_size, 1) <= p_size
+into path='/tmp/wout2'
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+with serdeproperties('field.delim'=',')
+format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+		execute(qDef)
+		String r = outStream.toString()
+		r = r.replace("\r\n", "\n")
+//		println r
+		String e = """Manufacturer#1,almond antique burnished rose metallic,2
+Manufacturer#1,almond antique chartreuse lavender yellow,34
+Manufacturer#1,almond aquamarine pink moccasin thistle,42
+Manufacturer#2,almond antique violet turquoise frosted,40
+Manufacturer#2,almond aquamarine rose maroon antique,25
+Manufacturer#2,almond aquamarine sandy cyan gainsboro,18
+Manufacturer#3,almond antique chartreuse khaki white,17
+Manufacturer#3,almond antique metallic orange dim,19
+Manufacturer#3,almond antique olive coral navajo,45
+Manufacturer#4,almond antique violet mint lemon,39
+Manufacturer#4,almond aquamarine floral ivory bisque,27
+Manufacturer#5,almond antique blue firebrick mint,31
+Manufacturer#5,almond antique medium spring khaki,6
+Manufacturer#5,almond aquamarine dodger light gainsboro,46
+Manufacturer#5,almond azure blanched chiffon midnight,23
+"""
+		assert r == e
 	}
 }

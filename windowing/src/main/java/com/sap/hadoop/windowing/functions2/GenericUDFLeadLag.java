@@ -153,7 +153,7 @@ public abstract class GenericUDFLeadLag extends GenericUDF
 		@Override
 		protected Object getRow(int amt)
 		{
-			return pItr.lag(amt - 1);
+			return pItr.lag(amt + 1);
 		}
 		
 	}

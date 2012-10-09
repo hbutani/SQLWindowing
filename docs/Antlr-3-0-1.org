@@ -64,3 +64,31 @@ cp /cygdrive/e/windowing/windowing/src/main/java/com/sap/hadoop/windowing /parse
 java -cp "e:/java-tools/antlr-3.0.1-src/lib/antlr-3.0.1.jar;e:/java-tools/antlr-3.0.1-src/lib/stringtemplate-3.1b1.jar;e:/java-tools/antlr-3.0.1-src/lib/antlr-runtime-3.0.1.jar;e:/java-tools/antlr-3.0.1-src/lib/antlr-2.7.7.jar" \
  org.antlr.Tool -fo e:/windowing/windowing/src/main/java/com/sap/hadoop/windowing/parser  QSpecBuilder.g
 #+end_src sh
+
+
+On the desktop do:
+#+begin_src sh
+java -cp "e:/java-tools/antlr-3.0.1-src/lib/antlr-3.0.1.jar;e:/java-tools/antlr-3.0.1-src/lib/stringtemplate-3.1b1.jar;e:/java-tools/antlr-3.0.1-src/lib/antlr-runtime-3.0.1.jar;e:/java-tools/antlr-3.0.1-src/lib/antlr-2.7.7.jar" org.antlr.Tool -fo e:/windowing/windowing/src/main/java/com/sap/hadoop/windowing/parser Windowing2.g
+
+cp /cygdrive/e/windowing/windowing/src/main/java/com/sap/hadoop/windowing/parser/Windowing2.tokens .
+
+java -cp
+"e:/java-tools/antlr-3.0.1-src/lib/antlr-3.0.1.jar;e:/java-tools/antlr-3.0.1-src/lib/stringtemplate-3.1b1.jar;e:/java-tools/antlr-3.0.1-src/lib/antlr-runtime-3.0.1.jar;e:/java-tools/antlr-3.0.1-src/lib/antlr-2.7.7.jar"
+org.antlr.Tool -fo
+e:/windowing/windowing/src/main/java/com/sap/hadoop/windowing/parser
+QSpecBuilder2.g
+#+end_src sh
+
+
+At home:
+#+begin_src sh
+java -cp "/media/MyPassport/java-tools/antlr-3.0.1-src/lib/antlr-3.0.1.jar:/media/MyPassport/java-tools/antlr-3.0.1-src/lib/stringtemplate-3.1b1.jar:/media/MyPassport/java-tools/antlr-3.0.1-src/lib/antlr-runtime-3.0.1.jar:/media/MyPassport/java-tools/antlr-3.0.1-src/lib/antlr-2.7.7.jar" org.antlr.Tool -fo /media/MyPassport/windowing/windowing/src/main/java/com/sap/hadoop/windowing/parser Windowing2.g
+
+cp /media/MyPassport/windowing/windowing/src/main/java/com/sap/hadoop/windowing/parser/Windowing2.tokens .
+
+java -cp
+"/media/MyPassport/java-tools/antlr-3.0.1-src/lib/antlr-3.0.1.jar:/media/MyPassport/java-tools/antlr-3.0.1-src/lib/stringtemplate-3.1b1.jar:/media/MyPassport/java-tools/antlr-3.0.1-src/lib/antlr-runtime-3.0.1.jar:/media/MyPassport/java-tools/antlr-3.0.1-src/lib/antlr-2.7.7.jar"
+org.antlr.Tool -fo
+/media/MyPassport/windowing/windowing/src/main/java/com/sap/hadoop/windowing/parser
+QSpecBuilder2.g
+#+end_src sh

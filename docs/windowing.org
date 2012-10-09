@@ -440,9 +440,157 @@ class QueryOutput
   - Partitions are formed manually by creating a Partition object
   - Output Writables are written to the OutputCollector.
 **** currently the query String is passed in the Job Conf. Hence each Reducer reparses the Query.
-***** TODO pass a translated representation of the Query in the Job.
+***** DONE pass a translated representation of the Query in the Job.
+      CLOSED: [2012-03-12 Mon 19:57]
+      CLOCK: [2012-03-12 Mon 15:30]--[2012-03-12 Mon 17:30] =>  2:00
+      CLOCK: [2012-03-12 Mon 09:00]--[2012-03-12 Mon 14:00] =>  5:00
 * The Language
 * Parsing and Translation
+** Translation
+The process is:
+- setup the Query Input
+- setup Window Functions
+- setup Table Functions
+- setup Map Phase
+- if Query has a table function: setup Input Partition and Order
+  columns
+- setup Output
+- setup Where Clause
+*** Setup the Query Input
+- If the Input to the Query is a _hive Query_ execute it, store result in a Temp. table and change Query 
+  * input to the Temp. table.
+- extract SerDe, OI information from the Hive metadata for the input
+  table.
+- If the Query has no table function:
+  - validate columns in PArtionSpec and OrderSpec
+  - setup ColumnDef and OrderDef for them. These defs point to the
+    Fields in the OI.
+*** Setup Window Functions
+- conversion of a FuncSpec to IWnFn done by FunctionTranslator
+  - check function name
+  - get function annotation
+  - check if Function supports window: throw error if wdw specified
+    and fn doesn't support window
+  - parse the Groovy expressions for the Boundaries in the Window
+  - to the extent possible check that the Boundaries make sense: start
+    <= end.
+  - create the WnFn instance; set the Window and Query Input Order Columns.
+  - check and setup args for WFn:
+    - for Groovy Scripts: parse script and set script as attr on Fn Obj.
+    - for Groovy Expressions: parse and run scripts and set output as attr on Fn Obj.
+    - for other types: evaluate expr and set output as attr on Fn Obj.
+*** Setup Table Functions
+- The /QuerySpec/ has a list of /TblFuncSpec/ which is in the order
+  encountered in the Query. The functions  need to be applied in
+  reverse order.
+- If windowing clauses are specified in the Query then the final
+  function will be the /WindowingTableFunction/.
+- translation of a Table function:
+  - validate name
+  - check if a Window Spec is valid on a TFn.
+  - setup a Window Defn and validate Window, see /Setup Wdw Fns/
+  - instantiate the TableFunc and set the Window on it.
+  - check and setup args: just like in a Wdw Function
+  - call /completeTranslation/ on the TableFn passing the Shell, Query
+    and TblFunSpec. Used by function to learn about its Input Shape;
+    setup Output shape.
+- setup TableFunc chain that is in /execution order/
+- If Query has Window clauses setup a WindowingTableFunction.
+*** Setup Map Phase
+If the query's inputtableFunction has a Map Phase then the MR Job has
+to be setup such that:
+1. During the Map Phase each Map Task collects the Input rows into a
+   Partition. At the end it calls the TableFunction's mapExecute
+   method.
+2. The Map Task takes the output of the mapExecute method and serializes it using the TblFunc's SerDe.
+3. The Reduce phase works as always, except that it uses the TblFunc's SerDe to deserialize objects from the stream.
+
+In order for the above to work the QueryMapPhase captures information
+on the shape & serilization of data as it gets operated on in the Map
+Phase:
+1. qry.mapPhase.inputOI is set to the Query's input ObjectInspector
+2. qry.mapPhase.inputDeserializer is set to the Query's input Deserializer.
+3. qry.mapPhase.outputSerDe is set to the TableFunction's MapOutputSerDe
+4. finally the Query's inputOI & deserializer are set to the mapPhase's
+outputOI and outputSerDe. The variables inputOI and deserializer are
+really used during the reduce phase, since there was no map phase
+before there names imply that they represent the Query input.
+*** Resetup Partition and Order defns for Query if Fn has map phase.
+
+*** Setup Output
+1. Setup Output Columns
+   - Validate Column: Column must refer to an input column or a column in
+   the top TblFunc output.
+   - For selcet columns with expressions: parse the Groovy expressions.
+   - Infer the Type of the Column:
+     - if explicitly specified by user, use this.
+     - if name matches an input column, use type of input column
+     - if name matches a column from the query's final table function, use its type.
+     - otherwise assume type is 'double'.
+2. Validate Output Spec:
+   - validate output Serde. By default use: TypedBytesSerDe
+   - validate output rowformat. y default use TypedBytesRecordWriter
+   - In MR mode output path must be specified.
+   - In MR mode if table is specified: verify its existence.
+   - In MR mode use SerDe and Properties from output table.
+   - In MR mode use outputformat from destination table.
+   - By default use TextOutputFormat for outputFormat
+3. Setup the Output SerDe & OI
+   - build ColumnName and Type list from Select List
+   - create a SerDe instance
+   - set Col Names and Types in a Propeties obj
+   - invoke initialize on SerDe.
+   - ask SerDe for an OI
+   - setup a ProcessingOI which assumes Java objects as representation.
+4. Setup a Writer
+   - in MR do nothing
+   - instantiate a Writer
+   - initialize it, passing it a OutputStream
+*** Setup Where Clause
+- Parse Where Expression.
+** Query componentization
+- refers to the process of converting a Query into a set of component
+  Queries
+- The Table Function Chain is split at the following positions:
+  - First function always tied to Query Component 1.
+  - Any other TableFunc triggers a Function Chain split if it has to
+    Partition its input.
+
+In order to understand the splitting logic one must be aware of the
+semantics of the language:
+- A tableSpec is a hiveQuery or HiveTbl or HdfsLoc or a TableFunc + a
+  Partitioning Specification.
+- A TblFunc operates on a TblSpec
+- The Query's input is a TblSpec.
+  - but if the Query's input is a Function Chain then the topmost
+    TFunc must not have a associated Partition Spec.
+- internally a QuerySpec is setup by associating the Partition Spec
+  with the TFunction that operates on an TblSpec and not with the
+  TblSpec.
+  - in case there is no TFunc then a NoopTFunc or WindowingTFunc is assumed.
+
+The splitting is done in the following way:
+- The current QuerySpec is cloned into 2 QSpecs: current, rest.
+- For the 'current' QSpec:
+  - The function chain is set from the input function up to the
+    function previous to the split position.
+  - The whereExpr is cleared.
+  - windowing clauses are cleared
+  - The selectList is set to Columns based on the previous function's OutputShape.
+  - The QuerySpec's tableOutput is changed so that the outputPath is a
+    jobWorking directory; the output SerDe and properties are
+    LazyBinarySerDe. A Temporary table is created based on the
+    OutputShape of the previous function. The QuerySpec's output
+    tableName is set to this Table.
+- For the 'rest' QSpec:
+  - The function chain is set from the split position upto to the end.
+  - The QuerySpec's tableInput is changed to point the table created
+    above. Hive Query is set to a non null String to trigger deletion
+    of the table at the end of this job. QuerySpec's inputSerDe,
+    format is set based on ColumnarSerDe. 
+  - set Query's partition & order clause based on function's partition
+    & order spec. 
+- The split algorithm is recursively applied on the 'rest' QuerySpec.
 * A Windowing Function
 * Execution
 ** Object conversions
@@ -464,6 +612,90 @@ class QueryOutput
   - in WindowingServer asks Client to execute Query
 
 * Functions
+** NPath
+
+*Signature:* NPath(String Pattern, GroovyExpr Symbols, GroovyExpr
+ Results)
+
+Returns rows that meet a specified pattern. Use /Symbols/ to specify a
+list of expressions to match. /Pattern/ is used to specify a Path.
+The results list can contain expressions based on the input columns
+and also the matched Path.
+
+- Pattern :: pattern for the Path. Path is 'dot' separated list of
+             symbols. Each element is treated as a groovy
+             expression. Elements that end in '*' or '+' are
+             interpreted with the usual meaning of zero or more, one
+             or more respectively. For e.g. "LATE.EARLY*.(ONTIME ||
+             EARLY)"  implies a sequence of flights where the first
+             occurence was LATE, followed by zero or more EARLY
+             flights, followed by a ONTIME or EARLY flight.
+- Symbols :: specify a map from names to expresssions. For
+             e.g. <[LATE: "arrival\_delay > 0", EARLY: "arrival\_delay <
+             0" , ONTIME : "arrival\_delay == 0"]> The
+             names for symbols don't need to be quoted as long as they
+             are valid groovy names. When in doubt add quotes, for eg:
+             <LATE: "arrival\_delay > 0 and arrival\_delay < 60",
+             "LATE*2": "arrival\_delay >= 60" >
+- Results :: specified as a list. Each entry can be just a string, or
+             a  list of 3 elems: [expr, type, name]. If an element is
+             just a string, it is interpreted as a reference to a
+             column in the input to this function or as a Symbol. When
+             specified as a list the first element is interepreted as
+             a groovy expression; the second is interpreted as a
+             typename, and the third is the expression's alias. For eg
+             <["weight", ["2*weight", "double", 'doubleWeight"]>. The expressions are evaluated in the
+             context where all the input columns are available, plus
+             the attributes "path", "count", "first", and "last" are
+             available. Path is a collection of nodes that represents
+             the matching Path, count, first, last are convenience fns
+             about the Path. Each node in the path exposes all the
+             attributes of the corresponding input row.
+*** Examples
+**** Late Flights
+list incidents where a Flight(to NY) has been more than 15 minutes late 5 or more times in a row.
+#+begin_src sql
+	  from npath(<select origin_city_name, year, month, day_of_month, arr_delay, fl_num
+			from flightsdata
+			where dest_city_name = 'New York' and dep_time != ''>
+	  		partition by fl_num
+	  		order by year, month, day_of_month,
+	  	'LATE.LATE.LATE.LATE.LATE+',
+		<[LATE : "arr_delay \\> 15"]>,
+		<["origin_city_name", "fl_num", "year", "month", "day_of_month",
+				["(path.sum() { it.arr_delay})/((double)count)", "double", "avgDelay"],
+				["count", "int", "numOfDelays"]
+		]>)
+	  select origin_city_name, fl_num, year, month, day_of_month, avgDelay, numOfDelays
+	  into path='/tmp/wout'
+	  serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+	  with serdeproperties('field.delim'=',')
+	  format 'org.apache.hadoop.mapred.TextOutputFormat'
+#+end_src sql
+** Other Oracle Functions
+*** Frequent Itemsets
+mechanism for counting how often multiple events occur together. for
+e.g. how often someone has purchased milk & cereal. Input to itemsets
+is a collection of items, an itemset.(like the products a given
+customer has purchaed)
+#+begin_src sql
+dbms_frequent_itemset.fi_transactional:
+input data is in row format(each transaction is spread across
+multip,le rows). Supports: threshol, minimum itemset length, max
+length, inclusion set and exclusion items set.
+#+end_src sql
+*** Width_Bucket function
+dual of NTile: output equal width histogram as opposed equal height
+histogram:
+ : width_bucket(expr, lowValue, highValue, num_of_buckets)
+*** case Expressions
+- historgram use case
+*** Data densification for Reporting
+- using partition right join
+- to a table function, provide a set of dimension lists
+- output original facts plus any missing facts.
+- for e.g. output sales for all weeks, even there are no sales for
+  some products in certain weeks
 * Testing/Use cases
 ** Setup of Census tables
   
@@ -482,3 +714,8 @@ select symbol, dt, rollingavg
 Research and Innovative Technology Administration, Bureau of
 Transportation Statistics
 http://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236&DB_Short_Name=On-Time
+
+* Advanced Analytical Capabilities
+** Why
+** How
+*** MDX

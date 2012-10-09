@@ -22,16 +22,13 @@ import com.sap.hadoop.windowing.query2.definition.WindowFunctionDef;
 
 public class QueryDefVisitor
 {
-	QueryDef qDef;
 	
 	public void initialize(QueryDef qDef)
 	{
-		this.qDef = qDef;
 	}
 	
 	public void finish() throws WindowingException
 	{
-		
 	}
 	
 	public void visit(HiveTableDef hiveTable) throws WindowingException

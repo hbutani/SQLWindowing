@@ -1,4 +1,4 @@
-package com.sap.hadoop.windowing.exec;
+package com.sap.hadoop.windowing.runtime2.mr;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +80,7 @@ public class QueryDefExecutor {
 
 	
 	  @SuppressWarnings("unchecked")
-	private static void createOperatorTree(Table inputTable, QueryDef qdef) throws SemanticException {
+	public static void createOperatorTree(Table inputTable, QueryDef qdef) throws SemanticException {
 		    mr.setNumReduceTasks(Integer.valueOf(1));
 
 		    TableFuncDef tabDef = (TableFuncDef) qdef.getInput();

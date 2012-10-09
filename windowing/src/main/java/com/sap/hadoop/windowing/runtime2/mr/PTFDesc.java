@@ -8,12 +8,15 @@ public class PTFDesc extends AbstractOperatorDesc{
 
 	private static final long serialVersionUID = 1L;
 	QueryDef qdef;
+	String queryDef;
+	
 	public PTFDesc(){
 		
 	}
 
-    public PTFDesc(QueryDef qdef) {
+    public PTFDesc(QueryDef qdef, String plan) {
     	this.qdef = qdef;
+    	this.queryDef = plan;
 	}
 
 	public QueryDef getQdef() {
@@ -22,6 +25,14 @@ public class PTFDesc extends AbstractOperatorDesc{
 
 	public void setQdef(QueryDef qdef) {
 		this.qdef = qdef;
+	}
+
+	public String getQueryDef() {
+		return queryDef;
+	}
+
+	public void setQueryDef(String queryDef) {
+		this.queryDef = queryDef;
 	}
 
 }

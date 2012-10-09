@@ -1,5 +1,7 @@
 package com.sap.hadoop.windowing.runtime2.mr;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,13 +25,11 @@ import org.apache.hadoop.hive.ql.plan.FileSinkDesc;
 import org.apache.hadoop.hive.ql.plan.MapredWork;
 import org.apache.hadoop.hive.ql.plan.PlanUtils;
 import org.apache.hadoop.hive.ql.plan.ReduceSinkDesc;
-import org.apache.hadoop.hive.ql.plan.SelectDesc;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
-import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapreduce.Job;
 
 import com.sap.hadoop.metadata.Order;
+import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.HiveTableDef;
 import com.sap.hadoop.windowing.query2.definition.OrderColumnDef;
@@ -76,6 +76,14 @@ public class QueryDefExecutor {
 			      e.printStackTrace();
 			    }
 		    return status;
+	  }
+	  
+	  private static String serializePlan(QueryDef qdef){
+		  String queryDef = null;
+		  ByteArrayOutputStream out = new ByteArrayOutputStream();
+		  SerializationUtils.serialize(out, qdef);
+		  queryDef = out.toString();
+		  return queryDef;
 	  }
 
 	
@@ -155,14 +163,16 @@ public class QueryDefExecutor {
 		    mr.getTagToValueDesc().add(op1.getConf().getValueSerializeInfo());
 
 		    // reduce side work
-		    /*		    Operator<FileSinkDesc> op5 = OperatorFactory.get(new FileSinkDesc(outputPath, 
+		    Operator<FileSinkDesc> op5 = OperatorFactory.get(new FileSinkDesc(outputPath, 
 		    		Utilities.defaultTd, false));
 		    
-		    Operator<SelectDesc> op4 = OperatorFactory.get(new SelectDesc(selectColList, 
+		    /*Operator<SelectDesc> op4 = OperatorFactory.get(new SelectDesc(selectColList, 
 		    		selectOutputColumns), op5);*/
 		    
-		    Operator<PTFDesc> op3 = WindowingOpFactory.getOperator(new PTFDesc(qdef)//, op5
-		    		);
+		    String plan = serializePlan(qdef);
+		    
+		    Operator<PTFDesc> op3 = WindowingOpFactory.getOperator(new PTFDesc(qdef,
+		    		plan), op5 );
 
 		    Operator<ExtractDesc> op2 = OperatorFactory.get(new ExtractDesc(
 		        getStringColumn(Utilities.ReduceField.VALUE.toString())), op3);
@@ -170,12 +180,14 @@ public class QueryDefExecutor {
 		    mr.setReducer(op2);
 		  }
 	  
+	   	
+	  
 
 		  private static int executePlan() throws Exception {
-			    hiveConf.set("hive.added.jars.path", "file:///home/saplabs/Projects/hive/build/dist/lib/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar," +
-						"file:///home/saplabs/Projects/hive/build/dist/lib/antlr-runtime-3.0.1.jar," +
-						"file:///home/saplabs/Projects/hive/build/dist/lib/groovy-all-1.8.0.jar," + 
-						"file:///home/saplabs/Projects/hive/build/dist/lib/hive-metastore-0.10.0-SNAPSHOT.jar");
+			    hiveConf.set("hive.added.jars.path", "file:///home/pkalmegh/Projects/hive/build/dist/lib/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar," +
+						"file:///home/pkalmegh/Projects/hive/build/dist/lib/antlr-runtime-3.0.1.jar," +
+						"file:///home/pkalmegh/Projects/hive/build/dist/lib/groovy-all-1.8.0.jar," + 
+						"file:///home/pkalmegh/Projects/hive/build/dist/lib/hive-metastore-0.10.0-SNAPSHOT.jar");
 
 			    MapRedTask mrtask = new MapRedTask();
 			    DriverContext dctx = new DriverContext ();

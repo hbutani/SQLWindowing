@@ -1,6 +1,6 @@
 package com.sap.hadoop.windowing.runtime2.mr;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,8 +11,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
+import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluatorFactory;
 import org.apache.hadoop.hive.ql.exec.Operator;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
+import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.ql.plan.api.OperatorType;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
@@ -26,6 +28,7 @@ import org.apache.hadoop.io.Writable;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
+import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
@@ -45,24 +48,50 @@ Serializable {
 
     private static final long serialVersionUID = 1L;
     QueryDef qDef;
+    String queryDef;
     Partition inputPart;
-    transient Object output;
+    transient Object[] output;
+    protected transient ExprNodeEvaluator[] eval;
     HiveConf hiveConf;
-    int rowCnt = 0;
 
 
     @Override
     protected void initializeOp(Configuration jobConf) throws HiveException {
     	super.initializeOp(jobConf);
-    	System.out.println("Initializing PTFOperator...");
-
     	hiveConf = new HiveConf(jobConf, PTFOperator.class);
-    	qDef = conf.getQdef();
-    	
+    	//qDef = conf.getQdef();
+    	queryDef = conf.getQueryDef();
+    	qDef = (QueryDef) SerializationUtils.deserialize(
+    			new ByteArrayInputStream(queryDef.getBytes()));
     	reconstructQueryDef(qDef, hiveConf);
 		
-    	outputObjInspector = qDef.getSelectList().getOI();
+    	initOutputOI();
 		inputPart = createPartition();
+		initializeChildren(jobConf);
+    }
+    
+    private void initOutputOI(){
+	    ArrayList<ColumnDef> selColDefs = qDef.getSelectList().getColumns();
+	    ArrayList<String> selectOutputColumns = new ArrayList<String>();
+        eval = new ExprNodeEvaluator[selColDefs.size()];
+        int colCnt = 0;
+	    
+	    for (ColumnDef colDef : selColDefs) {
+	    	ExprNodeDesc colExpr = colDef.getExprNode();
+	    	String colName = colDef.getExpression().getChild(0).getText();
+	          assert (colExpr != null);
+	          eval[colCnt++] = ExprNodeEvaluatorFactory.get(colExpr);
+	          selectOutputColumns.add(colName);
+	          System.out.print("Column - " + colName);
+		}
+
+        output = new Object[eval.length];
+        try {
+			outputObjInspector = initEvaluatorsAndReturnStruct(eval, 
+					selectOutputColumns, qDef.getSelectList().getOI());
+		} catch (HiveException e) {
+			e.printStackTrace();
+		}
     }
     
 	void reconstructQueryDef(QueryDef qDef, HiveConf hiveConf){
@@ -74,14 +103,12 @@ Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Finished deserializing QueryDef");
 	}
 
     @Override
     protected void closeOp(boolean abort) throws HiveException {
     	super.closeOp(abort);
 		try {
-			System.out.println("Accumulated " + rowCnt + " rows..");
 	    	Partition outPart = executePTF(inputPart);
 	    	executeSelectList(qDef, outPart, new SysOutRS(System.out)
 	    			);
@@ -96,7 +123,6 @@ Serializable {
 	public void processOp(Object row, int tag) throws HiveException {
 		//hold on to all the rows in partition; required later to execute PTF chain
 		try {
-			rowCnt++;
 			inputPart.append(row);
 		} catch (WindowingException e) {
 			e.printStackTrace();
@@ -157,6 +183,7 @@ Serializable {
 	public void executeSelectList(QueryDef qDef, Partition oPart, ReduceSink rS
 			) throws WindowingException, HiveException
 	{
+		
 		ArrayList<ColumnDef> cols = qDef.getSelectList().getColumns();
 		ObjectInspector selectOI = qDef.getSelectList().getOI();
 		SerDe oSerDe = qDef.getOutput().getSerDe();
@@ -174,6 +201,7 @@ Serializable {
 		RuntimeUtils.connectLeadLagFunctionsToPartition(qDef, pItr);
 		while(pItr.hasNext())
 		{
+			int colCnt = 0;
 			System.out.println("Processing select on next row...");
 			@SuppressWarnings("rawtypes")
 			ArrayList selectList = new ArrayList();
@@ -201,7 +229,9 @@ Serializable {
 			{
 				try
 				{
-					selectList.add(cDef.getExprEvaluator().evaluate(oRow));
+					Object newCol = cDef.getExprEvaluator().evaluate(oRow);
+					output[colCnt++] = newCol;
+					selectList.add(newCol);
 				}
 				catch(HiveException he)
 				{
@@ -218,7 +248,6 @@ Serializable {
 				throw new WindowingException(se);
 			}
 			rS.collectOutput(NullWritable.get(), value);
-			output = selectList;
 			forward(output, outputObjInspector);
 		}
 	}

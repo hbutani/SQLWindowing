@@ -176,6 +176,8 @@ public class WindowFrameSpec
 	
 	public static class CurrentRowSpec extends BoundarySpec
 	{
+		public CurrentRowSpec() {}
+		
 		public String toString()
 		{
 			return sprintf( "currentRow");

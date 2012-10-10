@@ -28,7 +28,7 @@ abstract class MRBaseTest
 	{
 		outStream = new ByteArrayOutputStream()
 
-		Configuration conf = WORK();
+		Configuration conf = HOME();
 		conf.setBoolean(Constants.WINDOWING_TEST_MODE, true)
 		HiveConf hCfg = new HiveConf(conf, conf.getClass())
 
@@ -56,6 +56,11 @@ abstract class MRBaseTest
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
 		conf.set("HIVE_HOME", "/home/saplabs/Projects/hive/build/dist");
 		conf.set("hadoop.bin.path", "/home/pkalmegh/Projects/hadoop/bin/hadoop");
+		conf.set("hive.added.jars.path", "file:///home/pkalmegh/Projects/hive/build/dist/lib/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar," +
+			"file:///home/pkalmegh/Projects/hive/build/dist/lib/antlr-runtime-3.0.1.jar," +
+			"file:///home/pkalmegh/Projects/hive/build/dist/lib/groovy-all-1.8.0.jar," +
+			"file:///home/pkalmegh/Projects/hive/build/dist/lib/hive-metastore-0.10.0-SNAPSHOT.jar");
+
 		return conf;
 	}
 
@@ -72,6 +77,11 @@ abstract class MRBaseTest
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000)
 		conf.set("HIVE_HOME", "/home/pkalmegh/Projects/hive/build/dist");
 		conf.set("hadoop.bin.path", "/home/pkalmegh/Projects/hadoop/bin/hadoop");
+		conf.set("hive.added.jars.path", "file:///home/pkalmegh/Projects/hive/build/dist/lib/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar," +
+			"file:///home/pkalmegh/Projects/hive/build/dist/lib/antlr-runtime-3.0.1.jar," +
+			"file:///home/pkalmegh/Projects/hive/build/dist/lib/groovy-all-1.8.0.jar," +
+			"file:///home/pkalmegh/Projects/hive/build/dist/lib/hive-metastore-0.10.0-SNAPSHOT.jar");
+
 		return conf;
 	}
 
@@ -79,7 +89,6 @@ abstract class MRBaseTest
 	{
 		Configuration conf = new Configuration();
 		conf.set("fs.default.name", "hdfs://localhost:9000");
-		//conf.set("mapred.job.tracker", "localhost:9001");
 		conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
 		conf.set("windowing.jar.file", "/home/pkalmegh/Projects/SQLWindowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
@@ -89,7 +98,12 @@ abstract class MRBaseTest
 		conf.set("HIVE_HOME", "/home/pkalmegh/Projects/hive/build/dist");
 		conf.set("hadoop.bin.path", "/home/pkalmegh/Projects/hadoop/bin/hadoop");
 		conf.set("hive.exec.submitviachild","false");
-		conf.set("mapred.job.tracker","nonlocal");
+		conf.set("mapred.job.tracker","local");
+		conf.set("hive.added.jars.path", "file:///home/pkalmegh/Projects/hive/build/dist/lib/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar," +
+			"file:///home/pkalmegh/Projects/hive/build/dist/lib/antlr-runtime-3.0.1.jar," +
+			"file:///home/pkalmegh/Projects/hive/build/dist/lib/groovy-all-1.8.0.jar," +
+			"file:///home/pkalmegh/Projects/hive/build/dist/lib/hive-metastore-0.10.0-SNAPSHOT.jar");
+
 		return conf;
 	}
 
@@ -97,7 +111,6 @@ abstract class MRBaseTest
 	{
 		Configuration conf = new Configuration();
 		conf.set("fs.default.name", "hdfs://localhost:9000");
-		//conf.set("mapred.job.tracker", "localhost:9001");
 		conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
 		conf.set("windowing.jar.file", "/home/saplabs/Projects/SQLWindowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
@@ -107,6 +120,12 @@ abstract class MRBaseTest
 		conf.set("HIVE_HOME", "/home/saplabs/Projects/hive/build/dist");
 		conf.set("hadoop.bin.path", "/home/pkalmegh/Projects/hadoop/bin/hadoop");
 		conf.set("hive.exec.submitviachild","false");
+		conf.set("mapred.job.tracker","local");
+		conf.set("hive.added.jars.path", "file:///home/pkalmegh/Projects/hive/build/dist/lib/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar," +
+			"file:///home/pkalmegh/Projects/hive/build/dist/lib/antlr-runtime-3.0.1.jar," +
+			"file:///home/pkalmegh/Projects/hive/build/dist/lib/groovy-all-1.8.0.jar," +
+			"file:///home/pkalmegh/Projects/hive/build/dist/lib/hive-metastore-0.10.0-SNAPSHOT.jar");
+
 
 		return conf;
 	}

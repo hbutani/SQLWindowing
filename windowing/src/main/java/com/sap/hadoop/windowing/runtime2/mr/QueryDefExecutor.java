@@ -1,7 +1,6 @@
 package com.sap.hadoop.windowing.runtime2.mr;
 
 import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,46 +38,59 @@ import com.sap.hadoop.windowing.query2.specification.QueryOutputSpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 
 public class QueryDefExecutor {
-	private static final Log LOG = LogFactory.getLog(QueryDefExecutor.class.getName());
+	private final Log LOG = LogFactory.getLog(QueryDefExecutor.class.getName());
 
-	  private static HiveConf hiveConf;
+	  private HiveConf hiveConf;
 	  private static MapredWork mr;
-	  private static Hive db;
+	  private Hive db;
+	  private QueryDef qdef;
 	  
-	  static{
+	  public QueryDefExecutor(HiveConf hCfg, QueryDef qDef){
+		  this.hiveConf = hCfg;
+		  this.qdef = qDef;
 		  mr = PlanUtils.getMapRedWork();
 	  }
-
-	  public static ExprNodeColumnDesc getStringColumn(String columnName) {
+	  
+	  public ExprNodeColumnDesc getStringColumn(String columnName) {
 		    return new ExprNodeColumnDesc(TypeInfoFactory.stringTypeInfo, columnName,
 		        "", false);
 		  }
 
-	  private static ExprNodeDesc getExprDesc(String name, TypeInfo ti){
+	  private ExprNodeDesc getExprDesc(String name, TypeInfo ti){
 		  ExprNodeDesc nodeDesc = new ExprNodeColumnDesc(ti, name, "_" + name, false);
 		  return nodeDesc;
 	  }
 
-	  public static int executeQuery(HiveConf hCfg, QueryDef qDef) throws Exception{
-		  hiveConf = hCfg;
-		  int status = 0;
-		    try {
-			      System.out.println(qDef.getInput().getAlias());
-			      String tableName = "part";
-			      org.apache.hadoop.hive.metastore.api.Table hiveTable = qDef.getTranslationInfo().getHiveMSClient().getTable(tableName);
-			      String dbName = hiveTable.getDbName();
-
-			      db = Hive.get(hiveConf);
-			      Table hiveMetaTable = db.getTable(dbName, tableName);
-			      createOperatorTree(hiveMetaTable, qDef);
-			      status = executePlan();
-			    } catch (Throwable e) {
-			      e.printStackTrace();
-			    }
-		    return status;
-	  }
+	public int executeQuery(){
+		int status = 0;
+		try {
+			createOperatorTree(getHiveTable());
+			status = executePlan();
+		} catch (SemanticException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return status;
+	}
 	  
-	  private static String serializePlan(QueryDef qdef){
+	private Table getHiveTable(){
+		Table hiveMetaTable = null;
+		try {
+			String tableName = qdef.getInput().getHiveTableDef().
+					getHiveTableSpec().getTableName();
+			org.apache.hadoop.hive.metastore.api.Table hiveTable = 
+					qdef.getTranslationInfo().getHiveMSClient().getTable(tableName);
+			String dbName = hiveTable.getDbName();
+			db = Hive.get(hiveConf);
+			hiveMetaTable = db.getTable(dbName, tableName);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		return hiveMetaTable;
+	}
+	  
+	  private String serializePlan(){
 		  String queryDef = null;
 		  ByteArrayOutputStream out = new ByteArrayOutputStream();
 		  SerializationUtils.serialize(out, qdef);
@@ -88,7 +100,7 @@ public class QueryDefExecutor {
 
 	
 	  @SuppressWarnings("unchecked")
-	public static void createOperatorTree(Table inputTable, QueryDef qdef) throws SemanticException {
+	public void createOperatorTree(Table inputTable) throws SemanticException {
 		    mr.setNumReduceTasks(Integer.valueOf(1));
 
 		    TableFuncDef tabDef = (TableFuncDef) qdef.getInput();
@@ -100,9 +112,6 @@ public class QueryDefExecutor {
 		    ArrayList<ExprNodeDesc> valueCols = new ArrayList<ExprNodeDesc>();
 		    ArrayList<ExprNodeDesc> orderCols =  new ArrayList<ExprNodeDesc>();
 		    List<String> outputColumnNames = new ArrayList<String>();
-		    ArrayList<ExprNodeDesc> selectColList = new ArrayList<ExprNodeDesc>();
-		    ArrayList<String> selectOutputColumns = new ArrayList<String>();
-
 
 		    ArrayList<ColumnDef> partColList = tabDef.getWindow().getPartDef().getColumns();
 		    for (ColumnDef colDef : partColList) {
@@ -137,23 +146,11 @@ public class QueryDefExecutor {
 			}
 		    
 		    
-		    ArrayList<ColumnDef> selColDefs = qdef.getSelectList().getColumns();
-		    for (ColumnDef colDef : selColDefs) {
-		    	selectColList.add(colDef.getExprNode());
-		    	String name = colDef.getExpression().getChild(0).getText();
-		    	selectOutputColumns.add(name);
-			}
-		    
 		    QueryOutputSpec qOutSpec = qdef.getOutput().getOutputSpec();
 		    String outputPath = qOutSpec.getPath();
 
 
 		    //map-side work
-		    /*Operator<ReduceSinkDesc> op1 = OperatorFactory.get(PlanUtils
-		        .getReduceSinkDesc(partCols, valueCols, outputColumnNames, true,
-		        -1, 1, -1));*/
-		    
-		    
 		    Operator<ReduceSinkDesc> op1 = OperatorFactory.get(PlanUtils
 			        .getReduceSinkDesc(orderCols, valueCols, outputColumnNames, 
 			        		true, -1, partCols, orderString.toString(), -1));
@@ -163,39 +160,26 @@ public class QueryDefExecutor {
 		    mr.getTagToValueDesc().add(op1.getConf().getValueSerializeInfo());
 
 		    // reduce side work
-		    Operator<FileSinkDesc> op5 = OperatorFactory.get(new FileSinkDesc(outputPath, 
+		    Operator<FileSinkDesc> op4 = OperatorFactory.get(new FileSinkDesc(outputPath, 
 		    		Utilities.defaultTd, false));
 		    
-		    /*Operator<SelectDesc> op4 = OperatorFactory.get(new SelectDesc(selectColList, 
-		    		selectOutputColumns), op5);*/
-		    
-		    String plan = serializePlan(qdef);
-		    
 		    Operator<PTFDesc> op3 = WindowingOpFactory.getOperator(new PTFDesc(qdef,
-		    		plan), op5 );
+		    		serializePlan()), op4 );
 
 		    Operator<ExtractDesc> op2 = OperatorFactory.get(new ExtractDesc(
 		        getStringColumn(Utilities.ReduceField.VALUE.toString())), op3);
 
 		    mr.setReducer(op2);
 		  }
-	  
-	   	
-	  
 
-		  private static int executePlan() throws Exception {
-			    hiveConf.set("hive.added.jars.path", "file:///home/pkalmegh/Projects/hive/build/dist/lib/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar," +
-						"file:///home/pkalmegh/Projects/hive/build/dist/lib/antlr-runtime-3.0.1.jar," +
-						"file:///home/pkalmegh/Projects/hive/build/dist/lib/groovy-all-1.8.0.jar," + 
-						"file:///home/pkalmegh/Projects/hive/build/dist/lib/hive-metastore-0.10.0-SNAPSHOT.jar");
-
-			    MapRedTask mrtask = new MapRedTask();
-			    DriverContext dctx = new DriverContext ();
-			    mrtask.setWork(mr);
-			    mrtask.initialize(hiveConf, null, dctx);
-			    return mrtask.execute(dctx);
-			    
-			  }
+	  private int executePlan() throws Exception {
+	    MapRedTask mrtask = new MapRedTask();
+	    DriverContext dctx = new DriverContext ();
+	    mrtask.setWork(mr);
+	    mrtask.initialize(hiveConf, null, dctx);
+	    return mrtask.execute(dctx);
+	    
+	  }
 
 
 }

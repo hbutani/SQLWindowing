@@ -24,7 +24,8 @@ public abstract class GenericUDFLeadLag extends GenericUDF
 	
 	static{
 		Utils.makeTransient(GenericUDFLeadLag.class, "exprEvaluator");
-		Utils.makeTransient(GenericUDFLeadLag.class, "pItr");
+		Utils.makeTransient(GenericUDFLeadLag.class, "firstArgOI");
+		Utils.makeTransient(GenericUDFLeadLag.class, "amtOI");
 	}
 	
 	@Override

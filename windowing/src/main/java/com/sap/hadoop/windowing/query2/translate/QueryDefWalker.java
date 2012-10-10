@@ -125,20 +125,25 @@ public class QueryDefWalker
 		if ( window == null ) return;
 		
 		PartitionDef pDef = window.getPartDef();
-		ArrayList<ColumnDef> cols = pDef.getColumns();
-		for(ColumnDef col : cols)
-		{
-			visitor.visit(col);
+		if(pDef != null){
+			ArrayList<ColumnDef> cols = pDef.getColumns();
+			for(ColumnDef col : cols)
+			{
+				visitor.visit(col);
+			}
+			visitor.visit(pDef);
 		}
-		visitor.visit(pDef);
+
 		
 		OrderDef oDef = window.getOrderDef();
-		ArrayList<OrderColumnDef> ocols = oDef.getColumns();
-		for(OrderColumnDef ocol : ocols)
-		{
-			visitor.visit(ocol);
+		if(oDef != null){
+			ArrayList<OrderColumnDef> ocols = oDef.getColumns();
+			for(OrderColumnDef ocol : ocols)
+			{
+				visitor.visit(ocol);
+			}
+			visitor.visit(oDef);
 		}
-		visitor.visit(oDef);
 		
 		WindowFrameDef wFrmDef = window.getWindow();
 		if ( wFrmDef != null)

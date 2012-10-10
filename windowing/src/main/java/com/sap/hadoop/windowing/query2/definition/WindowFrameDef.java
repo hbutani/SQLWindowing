@@ -48,6 +48,8 @@ public class WindowFrameDef
 	{
 		BoundarySpec spec;
 		
+		public BoundaryDef(){}
+		
 		public BoundarySpec getSpec() {
 			return spec;
 		}
@@ -66,6 +68,7 @@ public class WindowFrameDef
 	
 	public static class RangeBoundaryDef extends BoundaryDef
 	{
+		public RangeBoundaryDef(){}
 		
 		public RangeBoundaryDef(RangeBoundarySpec spec) { super(spec);}
 		
@@ -85,6 +88,9 @@ public class WindowFrameDef
 	
 	public static class CurrentRowDef extends BoundaryDef
 	{
+		
+		public CurrentRowDef(){}
+		
 		public CurrentRowDef(CurrentRowSpec spec) { super(spec);}
 	
 		public int compareTo(BoundaryDef other)
@@ -104,6 +110,7 @@ public class WindowFrameDef
 			Utils.makeTransient(ValueBoundaryDef.class, "OI");
 		}
 
+		public ValueBoundaryDef(){ }
 		
 		public ValueBoundaryDef(ValueBoundarySpec spec) { super(spec);}
 

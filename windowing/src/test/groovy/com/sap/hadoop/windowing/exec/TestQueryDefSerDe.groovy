@@ -40,27 +40,31 @@ public class TestQueryDefSerDe extends MRBase2Test
 	@Test
 	public void test() {
 		System.out.println("Beginning testReduceOnlyPlan");
-	    
-	    QueryDef qDef =  wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +
-  		"from part " +
-  		"partition by p_mfgr " +
-  		"order by p_mfgr " +
-  		"window w1 as rows between 2 preceding and 2 following " +
-  		"into path='/tmp/wout2' " +
-  		"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
-  		"with serdeproperties('field.delim'=',') " +
-  		"format 'org.apache.hadoop.mapred.TextOutputFormat'");
-  
-/*	    QueryDef qDef = wshell.translate("select p_mfgr,p_name,p_size,p_comment " +
-	  		"from part " +
-	  		"partition by p_mfgr " +
-	  		"order by p_size " +
-	  		"into path='/tmp/wout2' " +
-	  		"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
-	  		"with serdeproperties('field.delim'=',') " +
-	  		"format 'org.apache.hadoop.mapred.TextOutputFormat'");
-*/		  
-		  int exitVal = validateObjectSerialization(qDef , ".qdef");
+
+/*		QueryDef qDef =  wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +
+			"from part " +
+			"partition by p_mfgr " +
+			"order by p_mfgr " +
+			"window w1 as rows between 2 preceding and 2 following " +
+			"into path='/tmp/test1' " +
+			"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
+			"with serdeproperties('field.delim'=',') " +
+			"format 'org.apache.hadoop.mapred.TextOutputFormat'");
+*/  
+			    
+		QueryDef qDef = wshell.translate("""
+select  p_mfgr,p_name, p_size,
+p_size - lead(p_size,1) as deltaSz
+from part
+partition by p_mfgr
+order by p_mfgr
+window w1 as rows between 2 preceding and 2 following
+into path='/tmp/testLead'
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+with serdeproperties('field.delim'=',')
+format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+
+				  int exitVal = validateObjectSerialization(qDef , ".qdef");
 		  
 
 /*			String testName = new Exception().getStackTrace()[1].getMethodName();

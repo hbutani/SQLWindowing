@@ -6,11 +6,13 @@ import static com.sap.hadoop.windowing.Constants.INPUT_PATH;
 import static com.sap.hadoop.windowing.Constants.INPUT_SERDE_CLASS;
 import static com.sap.hadoop.windowing.Constants.INPUT_VALUE_CLASS;
 
+import java.io.IOException;
 import java.io.PrintStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
@@ -60,7 +62,18 @@ public class IOUtils
 			{
 				((TextInputFormat)iFmt).configure(job);
 			}
-			FileInputFormat.addInputPath(job, new Path(sd.getLocation()));
+			
+			
+			Path p = new Path(sd.getLocation());
+			/*
+			 * Convert the Path in the StorageDescriptor into a Path in the current FileSystem.
+			 * Used in testing: Jobs run on MiniDFSCluster, whereas hive metadata refers to a real cluster.
+			 */
+			{
+				p = makeQualified(p, conf);
+			}
+			
+			FileInputFormat.addInputPath(job, p);
 			InputSplit[] iSplits = iFmt.getSplits(job, 1);
 			org.apache.hadoop.mapred.RecordReader<Writable, Writable> rdr =
 					(org.apache.hadoop.mapred.RecordReader<Writable, Writable>) iFmt.getRecordReader(iSplits[0], job, Reporter.NULL);
@@ -136,6 +149,13 @@ public class IOUtils
 		{
 			throw new WindowingException(se);
 		}
+	}
+	
+	public static Path makeQualified(Path p, Configuration conf) throws IOException
+	{
+		FileSystem fs = FileSystem.get(conf);
+		p = new Path(p.toUri().getPath()).makeQualified(fs);
+		return p;
 	}
 	
 }

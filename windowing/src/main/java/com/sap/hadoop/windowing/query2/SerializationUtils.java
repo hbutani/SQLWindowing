@@ -1,12 +1,17 @@
 package com.sap.hadoop.windowing.query2;
 
+import java.beans.BeanInfo;
 import java.beans.Encoder;
 import java.beans.ExceptionListener;
 import java.beans.Expression;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
 import java.beans.PersistenceDelegate;
+import java.beans.PropertyDescriptor;
 import java.beans.Statement;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -18,6 +23,8 @@ import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 
+import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.Direction;
 
 public class SerializationUtils
@@ -54,8 +61,9 @@ public class SerializationUtils
 		addHivePersistenceDelegates(e);
 		addEnumDelegates(e);
 	}
-	
-	public static void addEnumDelegates(XMLEncoder e){
+
+	public static void addEnumDelegates(XMLEncoder e)
+	{
 		e.setPersistenceDelegate(Direction.class, new EnumDelegate());
 	}
 
@@ -138,8 +146,40 @@ public class SerializationUtils
 	{
 		public void exceptionThrown(Exception e)
 		{
-			e.printStackTrace();
-			//throw new RuntimeException("Cannot serialize the query plan", e);
+			throw new RuntimeException("Cannot serialize the query plan", e);
 		}
 	}
+
+	public static String serializeQueryDef(QueryDef qdef)
+	{
+		String queryDef = null;
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		SerializationUtils.serialize(out, qdef);
+		queryDef = out.toString();
+		return queryDef;
+	}
+
+	public static void makeTransient(Class<?> beanClass, String pdName)
+	{
+		BeanInfo info;
+		try
+		{
+			info = Introspector.getBeanInfo(beanClass);
+			PropertyDescriptor[] propertyDescriptors = info
+					.getPropertyDescriptors();
+			for (int i = 0; i < propertyDescriptors.length; ++i)
+			{
+				PropertyDescriptor pd = propertyDescriptors[i];
+				if (pd.getName().equals(pdName))
+				{
+					pd.setValue("transient", Boolean.TRUE);
+				}
+			}
+		}
+		catch (IntrospectionException ie)
+		{
+			throw new RuntimeException(ie);
+		}
+	}
+
 }

@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.sap.hadoop.Utils;
+import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo;
 
@@ -23,7 +23,7 @@ public class QueryDef
 	QueryOutputDef output;
 	
 	static{
-		Utils.makeTransient(QueryDef.class, "translationInfo");
+		SerializationUtils.makeTransient(QueryDef.class, "translationInfo");
 	}
 	
 	public QueryDef(){

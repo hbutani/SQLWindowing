@@ -5,8 +5,8 @@ import static com.sap.hadoop.Utils.sprintf;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
-import com.sap.hadoop.Utils;
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.runtime2.Partition;
@@ -27,8 +27,8 @@ public abstract class TableFunctionEvaluator
 	int partitionMemSize;
 	
 	static{
-		Utils.makeTransient(TableFunctionEvaluator.class, "OI");
-		Utils.makeTransient(TableFunctionEvaluator.class, "mapOI");
+		SerializationUtils.makeTransient(TableFunctionEvaluator.class, "OI");
+		SerializationUtils.makeTransient(TableFunctionEvaluator.class, "mapOI");
 	}
 
 	

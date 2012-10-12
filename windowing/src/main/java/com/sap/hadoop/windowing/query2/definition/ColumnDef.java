@@ -5,7 +5,7 @@ import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
-import com.sap.hadoop.Utils;
+import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.specification.ColumnSpec;
 
 /*
@@ -26,8 +26,8 @@ public class ColumnDef
 	transient ObjectInspector OI;
 	
 	static{
-		Utils.makeTransient(ColumnDef.class, "exprEvaluator");
-		Utils.makeTransient(ColumnDef.class, "OI");
+		SerializationUtils.makeTransient(ColumnDef.class, "exprEvaluator");
+		SerializationUtils.makeTransient(ColumnDef.class, "OI");
 	}
 	
 	public ColumnDef(){

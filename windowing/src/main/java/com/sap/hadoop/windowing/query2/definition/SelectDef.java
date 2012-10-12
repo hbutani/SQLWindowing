@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
-import com.sap.hadoop.Utils;
+import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.specification.SelectSpec;
 
 public class SelectDef
@@ -15,7 +15,7 @@ public class SelectDef
 	transient StructObjectInspector OI;
 	
 	static{
-		Utils.makeTransient(SelectDef.class, "OI");
+		SerializationUtils.makeTransient(SelectDef.class, "OI");
 	}
 
 	

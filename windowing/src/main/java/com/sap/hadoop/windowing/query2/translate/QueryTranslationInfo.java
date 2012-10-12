@@ -23,6 +23,7 @@ import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.definition.WindowDef;
 import com.sap.hadoop.windowing.runtime2.HiveQueryExecutor;
 import com.sap.hadoop.windowing.runtime2.WindowingShell;
+import org.apache.hadoop.hive.ql.metadata.Table;
 
 
 /*
@@ -34,6 +35,8 @@ public class QueryTranslationInfo
 	WindowingShell wshell;
 	Hive hive;
 	HiveMetaStoreClient hiveMSC;
+	Table tbl;
+	
 	
 	/*
 	 * A map from a QueryInput to the WindowDefns defined on it.
@@ -62,6 +65,14 @@ public class QueryTranslationInfo
 	public void setHiveCfg(HiveConf hCfg)
 	{
 		this.hCfg = hCfg;
+	}
+
+	public Table getTbl() {
+		return tbl;
+	}
+
+	public void setTbl(Table tbl) {
+		this.tbl = tbl;
 	}
 
 	public WindowingShell getWshell()

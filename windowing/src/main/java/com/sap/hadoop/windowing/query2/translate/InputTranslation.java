@@ -115,45 +115,52 @@ public class InputTranslation
 		throw new WindowingException(sprintf("Internal Error: attempt to translate %s", inputDef.getSpec()));
 	}
 
-	private static HiveTableDef translate(QueryDef qDef, HiveTableSpec spec, HiveTableDef def) throws WindowingException
+	private static HiveTableDef translate(QueryDef qDef, HiveTableSpec spec,
+			HiveTableDef def) throws WindowingException
 	{
 		def = def == null ? new HiveTableDef() : def;
-		HiveMetaStoreClient hiveMSC = qDef.getTranslationInfo().getHiveMSClient();
+		HiveMetaStoreClient hiveMSC = qDef.getTranslationInfo()
+				.getHiveMSClient();
 		Hive hive = qDef.getTranslationInfo().getHive();
-		
+
 		def.setSpec(spec);
-		
-		if ( spec.getDbName() == null )
+
+		if (spec.getDbName() == null)
 		{
 			spec.setDbName(hive.getCurrentDatabase());
 		}
-		
+
 		try
 		{
 			Table t = hiveMSC.getTable(spec.getDbName(), spec.getTableName());
+			qDef.getTranslationInfo().setTbl(
+					TranslateUtils.getHiveMetaTable(hive, t.getDbName(), def
+							.getHiveTableSpec().getTableName()));
+
 			StorageDescriptor sd = t.getSd();
 			def.setInputFormatClassName(sd.getInputFormat());
 			def.setTableSerdeClassName(sd.getSerdeInfo().getSerializationLib());
-			//def.setTableSerdeProps(sd.getSerdeInfo().getParameters());
-			def.setTableSerdeProps(setupSerdeProps(qDef,sd));
+			// def.setTableSerdeProps(sd.getSerdeInfo().getParameters());
+			def.setTableSerdeProps(setupSerdeProps(qDef, sd));
 			def.setLocation(sd.getLocation());
-			
-			Deserializer serde = HiveUtils.getDeserializer(qDef.getTranslationInfo().getHiveCfg(), t);
-			def.setOI((StructObjectInspector)serde.getObjectInspector());
+
+			Deserializer serde = HiveUtils.getDeserializer(qDef
+					.getTranslationInfo().getHiveCfg(), t);
+			def.setOI((StructObjectInspector) serde.getObjectInspector());
 			def.setSerde((SerDe) serde);
 		}
-		catch(WindowingException we)
+		catch (WindowingException we)
 		{
 			throw we;
 		}
-		catch(Exception he)
+		catch (Exception he)
 		{
 			throw new WindowingException(he);
 		}
-		
+
 		return def;
 	}
-	
+
 	private static Map<String,String> setupSerdeProps(QueryDef qDef, StorageDescriptor sd){
 		Map<String,String> serdePropsMap = new HashMap<String, String>();
 		StringBuilder colNames = new StringBuilder();
@@ -245,52 +252,7 @@ public class InputTranslation
 		tDef.setWindow(WindowSpecTranslation.translateWindow(qDef, tDef));
 		tEval.setupOI();
 		
-		
-		/*
-		 * setup the SerDe.
-		 */
-		SerDe serde = null;
-		// treat Noop Function special because it just hands the input Partition 
-		// to the next function in the chain.
-		if ( tDef.getName().equals(FunctionRegistry.NOOP_TABLE_FUNCTION) || 
-				tDef.getName().equals(FunctionRegistry.NOOP_MAP_TABLE_FUNCTION) )
-		{
-			serde = inputDef.getSerde();
-		}
-		else
-		{
-			serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(), tEval.getOutputOI());
-		}
-		tDef.setSerde(serde);
-		
-		try
-		{
-			tDef.setOI((StructObjectInspector) serde.getObjectInspector());
-		}
-		catch(SerDeException se)
-		{
-			throw new WindowingException(se);
-		}
-		
-		if ( tEval.hasMapPhase() )
-		{
-			if ( tDef.getName().equals(FunctionRegistry.NOOP_MAP_TABLE_FUNCTION) )
-			{
-				serde = inputDef.getSerde();
-			}
-			else
-			{
-				serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(), tEval.getMapOutputOI());
-			}
-			try
-			{
-				tDef.setMapOI((StructObjectInspector) serde.getObjectInspector());
-			}
-			catch(SerDeException se)
-			{
-				throw new WindowingException(se);
-			}
-		}
+		TranslateUtils.setupSerdeAndOI(tDef, inputDef, tInfo, tEval);
 
 		return tDef;
 	}

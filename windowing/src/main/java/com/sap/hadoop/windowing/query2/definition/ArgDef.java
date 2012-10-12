@@ -5,7 +5,7 @@ import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
-import com.sap.hadoop.Utils;
+import com.sap.hadoop.windowing.query2.SerializationUtils;
 
 /**
  * represents and argument of a Window or table Function.
@@ -19,8 +19,8 @@ public class ArgDef
 	transient ObjectInspector OI;
 	
 	static{
-		Utils.makeTransient(ArgDef.class, "exprEvaluator");
-		Utils.makeTransient(ArgDef.class, "OI");
+		SerializationUtils.makeTransient(ArgDef.class, "exprEvaluator");
+		SerializationUtils.makeTransient(ArgDef.class, "OI");
 	}
 
 	

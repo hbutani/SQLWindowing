@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
-import com.sap.hadoop.Utils;
+import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.specification.WindowFunctionSpec;
 
 public class WindowFunctionDef
@@ -17,8 +17,8 @@ public class WindowFunctionDef
 	transient ObjectInspector OI;
 	
 	static{
-		Utils.makeTransient(WindowFunctionDef.class, "wFnEval");
-		Utils.makeTransient(WindowFunctionDef.class, "OI");
+		SerializationUtils.makeTransient(WindowFunctionDef.class, "wFnEval");
+		SerializationUtils.makeTransient(WindowFunctionDef.class, "OI");
 	}
 
 	

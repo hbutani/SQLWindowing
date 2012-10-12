@@ -37,7 +37,7 @@ public class Translator
 		InputTranslation.translate(qry);
 		WhereTranslation.translate(qry);
 		OutputTranslation.translate(qry);
-		
+
 		return qry;
 	}
 	

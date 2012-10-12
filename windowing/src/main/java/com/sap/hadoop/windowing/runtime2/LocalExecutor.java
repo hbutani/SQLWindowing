@@ -2,6 +2,7 @@ package com.sap.hadoop.windowing.runtime2;
 
 import java.io.PrintStream;
 
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.io.Writable;
 
 import com.sap.hadoop.windowing.WindowingException;
@@ -44,7 +45,7 @@ public class LocalExecutor extends Executor
 		executeSelectList(qDef, oP, new SysOutRS(out));
 	}
 	
-	public static class SysOutRS implements ReduceSink
+	public static class SysOutRS implements ForwardSink
 	{
 		PrintStream out;
 		
@@ -56,6 +57,19 @@ public class LocalExecutor extends Executor
 		public void collectOutput(Writable key, Writable value)
 		{
 			out.println(value);
+		}
+
+		@Override
+		public void collectOutput(Object[] o, ObjectInspector oi)
+		{
+			throw new UnsupportedOperationException();
+			
+		}
+
+		@Override
+		public boolean acceptObject()
+		{
+			return false;
 		}
 	}
 }

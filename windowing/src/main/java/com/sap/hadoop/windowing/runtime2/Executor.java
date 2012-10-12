@@ -23,18 +23,19 @@ import com.sap.hadoop.windowing.query2.definition.WhereDef;
 
 public abstract class Executor
 {
-	public abstract void execute(QueryDef query, WindowingShell wShell) throws WindowingException;
+	public abstract void execute(QueryDef query, WindowingShell wShell)
+			throws WindowingException;
 
-	
-	public Partition executeChain(QueryDef qDef, Partition part) throws WindowingException
+	public static Partition executeChain(QueryDef qDef, Partition part)
+			throws WindowingException
 	{
 		Stack<TableFuncDef> fnDefs = new Stack<TableFuncDef>();
 		QueryInputDef iDef = qDef.getInput();
-		while(true)
+		while (true)
 		{
-			if (iDef instanceof TableFuncDef )
+			if (iDef instanceof TableFuncDef)
 			{
-				fnDefs.push((TableFuncDef)iDef);
+				fnDefs.push((TableFuncDef) iDef);
 				iDef = ((TableFuncDef) iDef).getInput();
 			}
 			else
@@ -42,40 +43,46 @@ public abstract class Executor
 				break;
 			}
 		}
-		
+
 		TableFuncDef currFnDef;
-		while( !fnDefs.isEmpty() )
+		while (!fnDefs.isEmpty())
 		{
 			currFnDef = fnDefs.pop();
 			part = currFnDef.getFunction().execute(part);
 		}
 		return part;
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void executeSelectList(QueryDef qDef, Partition oPart, ReduceSink rS) throws WindowingException
+
+	@SuppressWarnings(
+	{ "rawtypes", "unchecked" })
+	public static void executeSelectList(QueryDef qDef, Partition oPart, ForwardSink rS)
+			throws WindowingException
 	{
 		ArrayList<ColumnDef> cols = qDef.getSelectList().getColumns();
 		ObjectInspector selectOI = qDef.getSelectList().getOI();
 		SerDe oSerDe = qDef.getOutput().getSerDe();
-		
+		Object[] output = new Object[cols.size()];
+
 		WhereDef whDef = qDef.getWhere();
 		boolean applyWhere = whDef != null;
-		Converter whConverter = !applyWhere ? null : 
-				ObjectInspectorConverters.getConverter(
-						whDef.getOI(), 
-						PrimitiveObjectInspectorFactory.javaBooleanObjectInspector);
-		ExprNodeEvaluator whCondEval = !applyWhere ? null : whDef.getExprEvaluator();
-				
+		Converter whConverter = !applyWhere ? null
+				: ObjectInspectorConverters
+						.getConverter(
+								whDef.getOI(),
+								PrimitiveObjectInspectorFactory.javaBooleanObjectInspector);
+		ExprNodeEvaluator whCondEval = !applyWhere ? null : whDef
+				.getExprEvaluator();
+
 		Writable value = null;
 		PartitionIterator<Object> pItr = oPart.iterator();
 		RuntimeUtils.connectLeadLagFunctionsToPartition(qDef, pItr);
-		while(pItr.hasNext())
+		while (pItr.hasNext())
 		{
+			int colCnt = 0;
 			ArrayList selectList = new ArrayList();
 			Object oRow = pItr.next();
-			
-			if ( applyWhere )
+
+			if (applyWhere)
 			{
 				Object whCond = null;
 				try
@@ -83,43 +90,50 @@ public abstract class Executor
 					whCond = whCondEval.evaluate(oRow);
 					whCond = whConverter.convert(whCond);
 				}
-				catch(HiveException he)
+				catch (HiveException he)
 				{
 					throw new WindowingException(he);
 				}
-				if ( whCond == null || !((Boolean)whCond).booleanValue() )
+				if (whCond == null || !((Boolean) whCond).booleanValue())
 				{
 					continue;
 				}
 			}
-			
-			for(ColumnDef cDef : cols)
+
+			for (ColumnDef cDef : cols)
 			{
 				try
 				{
-					selectList.add(cDef.getExprEvaluator().evaluate(oRow));
+					Object newCol = cDef.getExprEvaluator().evaluate(oRow);
+					output[colCnt++] = newCol;
+					selectList.add(newCol);
 				}
-				catch(HiveException he)
+				catch (HiveException he)
 				{
 					throw new WindowingException(he);
 				}
 			}
 			
-			try
-			{
-				value = oSerDe.serialize(selectList, selectOI);
+			if(rS.acceptObject()){
+				rS.collectOutput(output, selectOI);
+			}else{
+				try
+				{
+					value = oSerDe.serialize(selectList, selectOI);
+				}
+				catch (SerDeException se)
+				{
+					throw new WindowingException(se);
+				}
+				rS.collectOutput(NullWritable.get(), value);
 			}
-			catch(SerDeException se)
-			{
-				throw new WindowingException(se);
-			}
-			rS.collectOutput(NullWritable.get(), value);
 		}
 	}
-	
-	
-	public static interface ReduceSink
+
+	public static interface ForwardSink
 	{
 		void collectOutput(Writable key, Writable value);
+		void collectOutput(Object[] output, ObjectInspector oi);
+		boolean acceptObject();
 	}
 }

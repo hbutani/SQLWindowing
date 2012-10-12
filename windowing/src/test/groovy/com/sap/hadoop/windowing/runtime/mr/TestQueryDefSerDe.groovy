@@ -1,4 +1,4 @@
-package com.sap.hadoop.windowing.exec;
+package com.sap.hadoop.windowing.runtime.mr;
 
 
 import java.io.File;
@@ -41,7 +41,7 @@ public class TestQueryDefSerDe extends MRBase2Test
 	public void test() {
 		System.out.println("Beginning testReduceOnlyPlan");
 
-/*		QueryDef qDef =  wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +
+		QueryDef qDef =  wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +
 			"from part " +
 			"partition by p_mfgr " +
 			"order by p_mfgr " +
@@ -50,9 +50,9 @@ public class TestQueryDefSerDe extends MRBase2Test
 			"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
 			"with serdeproperties('field.delim'=',') " +
 			"format 'org.apache.hadoop.mapred.TextOutputFormat'");
-*/  
+  
 			    
-		QueryDef qDef = wshell.translate("""
+/*		QueryDef qDef = wshell.translate("""
 select  p_mfgr,p_name, p_size,
 p_size - lead(p_size,1) as deltaSz
 from part
@@ -63,18 +63,18 @@ into path='/tmp/testLead'
 serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 with serdeproperties('field.delim'=',')
 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
-
+*/
 				  int exitVal = validateObjectSerialization(qDef , ".qdef");
 		  
 
-/*			String testName = new Exception().getStackTrace()[1].getMethodName();
+			String testName = new Exception().getStackTrace()[1].getMethodName();
 			if (exitVal != 0) {
 				  System.out.println(testName + " execution failed with exit status: "
 					  + exitVal);
 			}else
 				System.out.println(testName + " execution completed successfully");
 				
-*/	}
+	}
 	
 	public static int validateObjectSerialization(QueryDef qdef, String suffix)
 	{
@@ -95,12 +95,10 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		
 		if ( afterQDef instanceof QueryDef )
 		{
-			reconstructQueryDef((QueryDef) afterQDef, wshell.getCfg());
-			//if(afterQDef.equals(qdef)){
-				wshell.executor.execute(afterQDef, wshell);
-				System.out.println(outStream);
-				status = 0 ;
-			//}
+		reconstructQueryDef((QueryDef) afterQDef, wshell.getCfg());
+			wshell.executor.execute(afterQDef, wshell);
+			System.out.println(outStream);
+			status = 0 ;
 		}
 		return status;
 		

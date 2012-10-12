@@ -144,8 +144,6 @@ public class OutputTranslation
 		Iterator<Object> selectExprsAndAliases = selectSpec.getColumnListAndAlias();
 		int i = 0;
 		ColumnDef cDef = null;
-		ArrayList<String> colAliases = new ArrayList<String>();
-		ArrayList<ObjectInspector> colOIs = new ArrayList<ObjectInspector>();
 		
 		
 		while(selectExprsAndAliases.hasNext())
@@ -162,12 +160,11 @@ public class OutputTranslation
 				cDef = translateSelectExpr(qDef, iInfo, i++, (String) o[1], (ASTNode) o[2]);
 			}
 			selectDef.addColumn(cDef);
-			colAliases.add(cDef.getAlias());
-			colOIs.add(cDef.getOI());
 		}
+		TranslateUtils.setupSelectOI(selectDef);
 		
-		selectDef.setOI(ObjectInspectorFactory.getStandardStructObjectInspector(colAliases, colOIs));
 	}
+	
 
 	public static ColumnDef translateSelectExpr(QueryDef qDef, InputInfo iInfo, int colIdx, String alias, ASTNode expr) 
 		throws WindowingException

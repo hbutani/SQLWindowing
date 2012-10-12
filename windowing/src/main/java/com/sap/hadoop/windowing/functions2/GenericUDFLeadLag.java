@@ -7,11 +7,11 @@ import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDF;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
-import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils.ObjectInspectorCopyOption;
+import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 
-import com.sap.hadoop.Utils;
+import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.runtime2.PartitionIterator;
 
 public abstract class GenericUDFLeadLag extends GenericUDF
@@ -23,9 +23,8 @@ public abstract class GenericUDFLeadLag extends GenericUDF
 	private PrimitiveObjectInspector amtOI;
 	
 	static{
-		Utils.makeTransient(GenericUDFLeadLag.class, "exprEvaluator");
-		Utils.makeTransient(GenericUDFLeadLag.class, "firstArgOI");
-		Utils.makeTransient(GenericUDFLeadLag.class, "amtOI");
+		SerializationUtils.makeTransient(GenericUDFLeadLag.class, "exprEvaluator");
+		SerializationUtils.makeTransient(GenericUDFLeadLag.class, "pItr");
 	}
 	
 	@Override

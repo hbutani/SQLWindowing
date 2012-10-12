@@ -5,7 +5,7 @@ import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 
-import com.sap.hadoop.Utils;
+import com.sap.hadoop.windowing.query2.SerializationUtils;
 
 public class WhereDef
 {
@@ -15,8 +15,8 @@ public class WhereDef
 	transient ObjectInspector OI;
 	
 	static{
-		Utils.makeTransient(WhereDef.class, "exprEvaluator");
-		Utils.makeTransient(WhereDef.class, "OI");
+		SerializationUtils.makeTransient(WhereDef.class, "exprEvaluator");
+		SerializationUtils.makeTransient(WhereDef.class, "OI");
 	}
 
 	public WhereDef(){}

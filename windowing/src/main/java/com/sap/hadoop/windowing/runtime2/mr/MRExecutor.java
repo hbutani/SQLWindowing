@@ -48,7 +48,7 @@ public class MRExecutor extends Executor
 	private void createOperatorTree(QueryDef qdef, MapredWork mr)
 			throws SemanticException, WindowingException
 	{
-		mr.setNumReduceTasks(Integer.valueOf(1));
+		//mr.setNumReduceTasks(Integer.valueOf(1));
 		MRUtils mrUtils = new MRUtils(qdef);
 		mrUtils.initialize();
 

@@ -1074,6 +1074,9 @@ public class ClusterMapReduceDelegate
 			System.setProperty("mapred.local.dir",
 					System.getProperty("java.io.tmpdir", "."));
 		}
+		
+		System.setProperty("javax.xml.parsers.SAXParserFactory",
+				"com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl");
 	}
 
 	/**

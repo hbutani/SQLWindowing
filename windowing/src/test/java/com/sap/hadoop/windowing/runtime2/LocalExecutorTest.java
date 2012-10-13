@@ -8,11 +8,6 @@ import com.sap.hadoop.windowing.testutils.BaseTest;
 
 public class LocalExecutorTest extends BaseTest
 {
-	public static void execute(QueryDef qDef) throws WindowingException
-	{
-		wshell.executor.execute(qDef, wshell);
-	}
-	
 	@Test
 	public void test1() throws WindowingException
 	{

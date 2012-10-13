@@ -18,6 +18,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import com.sap.hadoop.windowing.Constants;
+import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.translate.Translator;
 import com.sap.hadoop.windowing.runtime2.LocalExecutor;
 import com.sap.hadoop.windowing.runtime2.ThriftBasedHiveQueryExecutor;
@@ -49,8 +51,7 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 		assertNotNull("Cluster has a file system", getFs());
 	}
 	
-	@BeforeClass
-	public static void setupClass() throws Exception
+	public static void setupCluster() throws Exception
 	{
 		outStream = new ByteArrayOutputStream();
 		startVirtualCluster();
@@ -59,11 +60,18 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 		
 		createTestData();
 		
-		HiveConf hCfg = new HiveConf(conf, conf.getClass());
+	}
+	
+	@BeforeClass
+	public static void setupClass() throws Exception
+	{
+		setupCluster();
 		
+		HiveConf hCfg = new HiveConf(conf, conf.getClass());
 		wshell = new WindowingShell(hCfg, new Translator(), new LocalExecutor(new PrintStream(outStream)));
 		wshell.setHiveQryExec(new ThriftBasedHiveQueryExecutor(conf));
 	}
+	
 	
 	@AfterClass
 	public static void stopVirtualCluster() throws Exception 
@@ -84,6 +92,11 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 				fs, new Path("/user/hive/warehouse/part_demo/"), 
 				false, 
 				conf);
+	}
+	
+	public static void execute(QueryDef qDef) throws WindowingException
+	{
+		wshell.getExecutor().execute(qDef, wshell);
 	}
 	
 	public static void WORK(Configuration conf)
@@ -110,6 +123,13 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 		
 		conf.set(Constants.HIVE_THRIFTSERVER, "localhost");
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000);
-		conf.set("HIVE_HOME", "/media/MyPassport/hadoop/hive-0.9.0-bin");
+		String hiveHome = "/media/MyPassport/hadoop/hive2/hive/build/dist";
+		conf.set("HIVE_HOME", hiveHome);
+		conf.set(HiveConf.ConfVars.HIVEADDEDJARS.toString(), 
+			"file:///media/MyPassport/windowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar," +
+			"file:///media/MyPassport/hadoop/hive2/hive/build/dist/lib/antlr-runtime-3.0.1.jar," +
+			"file:///media/MyPassport/hadoop/hive2/hive/build/dist/lib/groovy-all-1.8.0.jar," +
+			"file:///media/MyPassport/hadoop/hive2/hive/build/dist/lib/hive-metastore-0.10.0-SNAPSHOT.jar");
+		conf.set("mapred.child.java.opts", "-Xms1024m -Xmx2048m");
 	}
 }

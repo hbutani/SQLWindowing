@@ -167,7 +167,7 @@ public class TranslateUtils
 				}
 				GenericUDFLeadLag llFn = (GenericUDFLeadLag) llFuncExpr
 						.getGenericUDF();
-				llFn.setArgEvaluator(dupExprEval);
+				llFn.setExprEvaluator(dupExprEval);
 			}
 		}
 

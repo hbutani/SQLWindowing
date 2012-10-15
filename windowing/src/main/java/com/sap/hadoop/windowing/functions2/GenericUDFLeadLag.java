@@ -1,5 +1,7 @@
 package com.sap.hadoop.windowing.functions2;
 
+import java.io.Serializable;
+
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
 import org.apache.hadoop.hive.ql.exec.UDFArgumentException;
 import org.apache.hadoop.hive.ql.exec.UDFArgumentTypeException;
@@ -14,10 +16,14 @@ import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectIn
 import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.runtime2.PartitionIterator;
 
-public abstract class GenericUDFLeadLag extends GenericUDF
+public abstract class GenericUDFLeadLag extends GenericUDF  implements Serializable
 {
-	ExprNodeEvaluator exprEvaluator;
-	PartitionIterator<Object> pItr;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	transient ExprNodeEvaluator exprEvaluator;
+	transient PartitionIterator<Object> pItr;
 	ObjectInspector firstArgOI;
 	
 	private PrimitiveObjectInspector amtOI;
@@ -86,12 +92,12 @@ public abstract class GenericUDFLeadLag extends GenericUDF
 	
 	
 	
-	public ExprNodeEvaluator getArgEvaluator()
+	public ExprNodeEvaluator getExprEvaluator()
 	{
 		return exprEvaluator;
 	}
 
-	public void setArgEvaluator(ExprNodeEvaluator exprEvaluator)
+	public void setExprEvaluator(ExprNodeEvaluator exprEvaluator)
 	{
 		this.exprEvaluator = exprEvaluator;
 	}
@@ -127,6 +133,8 @@ public abstract class GenericUDFLeadLag extends GenericUDF
 	public static class GenericUDFLead extends GenericUDFLeadLag
 	{
 
+		public GenericUDFLead(){}
+		
 		@Override
 		protected String _getFnName()
 		{
@@ -143,6 +151,7 @@ public abstract class GenericUDFLeadLag extends GenericUDF
 	
 	public static class GenericUDFLag extends GenericUDFLeadLag
 	{
+		public GenericUDFLag(){}
 
 		@Override
 		protected String _getFnName()

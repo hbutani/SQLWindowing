@@ -139,7 +139,8 @@ class TestPTFOperator extends MRBase2Test {
 		 execute(qDef)
 	 }
 
-	 	/*	@Test
+		
+	 		@Test
 	 void testLead()
 	 {
 	 System.out.println("Beginning testLead");
@@ -156,7 +157,7 @@ class TestPTFOperator extends MRBase2Test {
 	 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	 execute(qDef)
 	 }
-	 @Test
+ @Test
 	 void testLag()
 	 {
 	 System.out.println("Beginning testLag");
@@ -207,5 +208,5 @@ class TestPTFOperator extends MRBase2Test {
 	 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	 execute(qDef)
 	 }
-	 */
+	 
 }

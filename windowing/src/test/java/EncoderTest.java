@@ -2,16 +2,14 @@ import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 
-import org.apache.hadoop.hive.ql.plan.JoinDesc;
-
-import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
+import com.sap.hadoop.windowing.functions2.GenericUDFLeadLag;
 
 public class EncoderTest {
 
 	
 	public static void main(String[] args) throws Exception
 	{
-		boolean res = isTransient(TableFuncDef.class, "mapOI");
+		boolean res = isTransient(GenericUDFLeadLag.class, "exprEvaluator");
 		System.out.println(res);
 		//isTransient(JoinDesc.class, "reversedExprs");
 	}
@@ -35,6 +33,7 @@ public class EncoderTest {
         PropertyDescriptor[] propertyDescriptors = info.getPropertyDescriptors();
         for (int i = 0; i < propertyDescriptors.length; ++i ) {
             PropertyDescriptor pd2 = propertyDescriptors[i];
+            System.out.println(pd2.getName());
             if (pName.equals(pd2.getName())) {
                 Object value = pd2.getValue("transient");
                 if (value != null) {

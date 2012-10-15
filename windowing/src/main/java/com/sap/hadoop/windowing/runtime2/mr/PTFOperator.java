@@ -2,21 +2,32 @@ package com.sap.hadoop.windowing.runtime2.mr;
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
+import java.util.Iterator;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.exec.Operator;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.plan.api.OperatorType;
+import org.apache.hadoop.hive.serde2.SerDe;
+import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
+import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.io.Writable;
 
 import com.sap.hadoop.windowing.WindowingException;
+import com.sap.hadoop.windowing.functions2.FunctionRegistry;
+import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
 import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
+import com.sap.hadoop.windowing.query2.definition.QueryInputDef;
+import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.translate.QueryDefDeserializer;
 import com.sap.hadoop.windowing.query2.translate.QueryDefVisitor;
 import com.sap.hadoop.windowing.query2.translate.QueryDefWalker;
+import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo;
+import com.sap.hadoop.windowing.query2.translate.TranslateUtils;
 import com.sap.hadoop.windowing.runtime2.Executor;
 import com.sap.hadoop.windowing.runtime2.Executor.ForwardSink;
 import com.sap.hadoop.windowing.runtime2.Partition;
@@ -36,11 +47,12 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 		qDef = (QueryDef) SerializationUtils
 				.deserialize(new ByteArrayInputStream(conf.getQueryDefStr()
 						.getBytes()));
+		//System.out.println("Inputobjoi - " + inputObjInspectors[0]);
 		try
 		{
 			reconstructQueryDef(hiveConf);
-			inputPart = RuntimeUtils.createPartition(qDef,
-					inputObjInspectors[0], hiveConf);
+			//inputPart = RuntimeUtils.createPartition(qDef);
+			inputPart = RuntimeUtils.createPartition(qDef, inputObjInspectors[0], hiveConf);
 		}
 		catch (WindowingException we)
 		{
@@ -48,8 +60,11 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 					"Cannot create input partition for PTFOperator.", we);
 		}
 		outputObjInspector = qDef.getSelectList().getOI();
+		outputObjInspector = ObjectInspectorUtils.getStandardObjectInspector(qDef.getSelectList().getOI());
+		//System.out.println("outputObjInspector - " + outputObjInspector );
 		super.initializeOp(jobConf);
 	}
+	
 
 	@Override
 	protected void closeOp(boolean abort) throws HiveException
@@ -57,12 +72,17 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 		super.closeOp(abort);
 		try
 		{
+			inputPart.setOI((StructObjectInspector) inputPart.getSerDe().getObjectInspector());
 			Partition outPart = Executor.executeChain(qDef, inputPart);
 			Executor.executeSelectList(qDef, outPart, new ForwardPTF());
 		}
 		catch (WindowingException we)
 		{
 			throw new HiveException("Cannot close PTFOperator.", we);
+		}
+		catch (SerDeException se)
+		{
+			throw new HiveException("Cannot close PTFOperator.", se);
 		}
 
 	}
@@ -105,7 +125,7 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 		{
 			try
 			{
-				forward(o, oi);
+				forward(o, outputObjInspector);
 			}
 			catch (HiveException e)
 			{

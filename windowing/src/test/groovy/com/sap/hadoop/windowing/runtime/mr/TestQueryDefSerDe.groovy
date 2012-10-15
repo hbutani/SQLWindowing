@@ -18,6 +18,7 @@ import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.translate.QueryDefDeserializer;
 import com.sap.hadoop.windowing.query2.translate.QueryDefVisitor;
 import com.sap.hadoop.windowing.query2.translate.QueryDefWalker;
+import com.sap.hadoop.windowing.runtime2.RuntimeUtils
 
 public class TestQueryDefSerDe extends MRBase2Test
 {
@@ -41,18 +42,17 @@ public class TestQueryDefSerDe extends MRBase2Test
 	public void test() {
 		System.out.println("Beginning testReduceOnlyPlan");
 
-		QueryDef qDef =  wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +
-			"from part " +
-			"partition by p_mfgr " +
-			"order by p_mfgr " +
-			"window w1 as rows between 2 preceding and 2 following " +
-			"into path='/tmp/test1' " +
-			"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
-			"with serdeproperties('field.delim'=',') " +
-			"format 'org.apache.hadoop.mapred.TextOutputFormat'");
-  
-			    
-/*		QueryDef qDef = wshell.translate("""
+/*		QueryDef qDef =  wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +
+				"from part " +
+				"partition by p_mfgr " +
+				"order by p_mfgr " +
+				"window w1 as rows between 2 preceding and 2 following " +
+				"into path='/tmp/test1' " +
+				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
+				"with serdeproperties('field.delim'=',') " +
+				"format 'org.apache.hadoop.mapred.TextOutputFormat'");
+*/			    
+		QueryDef qDef = wshell.translate("""
 select  p_mfgr,p_name, p_size,
 p_size - lead(p_size,1) as deltaSz
 from part
@@ -63,7 +63,7 @@ into path='/tmp/testLead'
 serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
 with serdeproperties('field.delim'=',')
 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
-*/
+
 				  int exitVal = validateObjectSerialization(qDef , ".qdef");
 		  
 

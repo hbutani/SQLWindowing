@@ -159,15 +159,15 @@ public class QueryDefDeserializer extends QueryDefVisitor
 			SerDe serDe = (SerDe) SerDeUtils.lookupDeserializer(serDeClassName);
 			serDe.initialize(hConf, serDeProps);
 			hiveTable.setSerde(serDe);
-			if (inputOI != null)
+/*			if (inputOI != null)
 			{
 				hiveTable.setOI((StructObjectInspector) inputOI);
 			}
 			else
 			{
-				hiveTable.setOI((StructObjectInspector) serDe
+*/				hiveTable.setOI((StructObjectInspector) serDe
 						.getObjectInspector());
-			}
+//			}
 		}
 		catch (SerDeException se)
 		{
@@ -252,7 +252,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	@Override
 	public void visit(ColumnDef column) throws WindowingException
 	{
-		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(column
+		ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(tInfo, column
 				.getExprNode());
 		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef,
 				column.getExprNode(), exprEval, inputInfo);
@@ -273,7 +273,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	@Override
 	public void visit(ValueBoundaryDef boundary) throws WindowingException
 	{
-		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(boundary
+		ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(tInfo, boundary
 				.getExprNode());
 		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef,
 				boundary.getExprNode(), exprEval, inputInfo);
@@ -300,7 +300,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	@Override
 	public void visit(WhereDef where) throws WindowingException
 	{
-		ExprNodeEvaluator exprEval = ExprNodeEvaluatorFactory.get(where
+		ExprNodeEvaluator exprEval = WindowingExprNodeEvaluatorFactory.get(tInfo, where
 				.getExprNode());
 		ObjectInspector oi = TranslateUtils.initExprNodeEvaluator(qDef,
 				where.getExprNode(), exprEval, inputInfo);

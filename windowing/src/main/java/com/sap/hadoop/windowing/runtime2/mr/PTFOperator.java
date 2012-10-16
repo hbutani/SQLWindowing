@@ -47,11 +47,9 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 		qDef = (QueryDef) SerializationUtils
 				.deserialize(new ByteArrayInputStream(conf.getQueryDefStr()
 						.getBytes()));
-		//System.out.println("Inputobjoi - " + inputObjInspectors[0]);
 		try
 		{
 			reconstructQueryDef(hiveConf);
-			//inputPart = RuntimeUtils.createPartition(qDef);
 			inputPart = RuntimeUtils.createPartition(qDef, inputObjInspectors[0], hiveConf);
 		}
 		catch (WindowingException we)
@@ -60,8 +58,7 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 					"Cannot create input partition for PTFOperator.", we);
 		}
 		outputObjInspector = qDef.getSelectList().getOI();
-		outputObjInspector = ObjectInspectorUtils.getStandardObjectInspector(qDef.getSelectList().getOI());
-		//System.out.println("outputObjInspector - " + outputObjInspector );
+		//outputObjInspector = ObjectInspectorUtils.getStandardObjectInspector(qDef.getSelectList().getOI());
 		super.initializeOp(jobConf);
 	}
 	
@@ -72,7 +69,6 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 		super.closeOp(abort);
 		try
 		{
-			inputPart.setOI((StructObjectInspector) inputPart.getSerDe().getObjectInspector());
 			Partition outPart = Executor.executeChain(qDef, inputPart);
 			Executor.executeSelectList(qDef, outPart, new ForwardPTF());
 		}
@@ -80,11 +76,6 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 		{
 			throw new HiveException("Cannot close PTFOperator.", we);
 		}
-		catch (SerDeException se)
-		{
-			throw new HiveException("Cannot close PTFOperator.", se);
-		}
-
 	}
 
 	@Override

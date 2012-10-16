@@ -20,6 +20,7 @@ import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.specification.QueryOutputSpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 import com.sap.hadoop.windowing.query2.translate.TranslateUtils;
+import com.sap.hadoop.windowing.runtime2.RuntimeUtils;
 
 public class MRUtils
 {
@@ -124,21 +125,20 @@ public class MRUtils
 	public void initialize() throws WindowingException
 	{
 
-		TableFuncDef tabDef = (TableFuncDef) qdef.getInput();
-		hiveTableDef = qdef.getInput().getHiveTableDef();
+		TableFuncDef tabDef = RuntimeUtils.getFirstTableFunction(qdef);
+		hiveTableDef = tabDef.getHiveTableDef();
 		InputInfo inputInfo;
 		ArrayList<ColumnDef> partColList = tabDef.getWindow().getPartDef()
 				.getColumns();
 
 		TableFunctionEvaluator tEval = tabDef.getFunction();
-		if (!tEval.hasMapPhase())
+		if (tEval.hasMapPhase())
 		{
-			inputInfo = qdef.getTranslationInfo().getInputInfo(hiveTableDef);
+			inputInfo = qdef.getTranslationInfo().getMapInputInfo(tabDef);
 		}
 		else
 		{
-			tEval.setupMapOI();
-			inputInfo = qdef.getTranslationInfo().getMapInputInfo(tabDef);
+			inputInfo = qdef.getTranslationInfo().getInputInfo(hiveTableDef);
 		}
 
 		for (ColumnDef colDef : partColList)
@@ -162,8 +162,8 @@ public class MRUtils
 			}
 
 			orderCols.add(colDef.getExprNode());
-			String colName = colDef.getExpression().getChild(0).getText();
-			outputColumnNames.add(colName);
+			//System.out.println(colDef.getAlias());
+			outputColumnNames.add(colDef.getExpression().getChild(0).getText());
 		}
 
 		RowResolver rr = inputInfo.getRowResolver();

@@ -48,7 +48,6 @@ public class MRExecutor extends Executor
 	private void createOperatorTree(QueryDef qdef, MapredWork mr)
 			throws SemanticException, WindowingException
 	{
-		//mr.setNumReduceTasks(Integer.valueOf(1));
 		MRUtils mrUtils = new MRUtils(qdef);
 		mrUtils.initialize();
 
@@ -91,6 +90,7 @@ public class MRExecutor extends Executor
 		if (exitVal != 0)
 		{
 			System.out.println("Test execution failed with exit status: " + exitVal);
+			throw new WindowingException("Test execution failed with exit status: " + exitVal);
 		}
 		else
 			System.out.println("Test execution completed successfully");

@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator.AggregationBuffer;
+import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
@@ -82,7 +83,12 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 		ArrayList<WindowFunctionDef> wFns = qDef.getSelectList().getWindowFuncs();
 		ArrayList<List<?>> oColumns = new ArrayList<List<?>>();
 		
-		StructObjectInspector inputOI = iPart.getOI();
+		StructObjectInspector inputOI;
+		try {
+			inputOI = (StructObjectInspector) iPart.getSerDe().getObjectInspector();
+		} catch (SerDeException se) {
+			throw new WindowingException(se);
+		}
 		
 		try
 		{

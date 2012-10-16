@@ -52,17 +52,18 @@ public class TestQueryDefSerDe extends MRBase2Test
 				"with serdeproperties('field.delim'=',') " +
 				"format 'org.apache.hadoop.mapred.TextOutputFormat'");
 */			    
-		QueryDef qDef = wshell.translate("""
-select  p_mfgr,p_name, p_size,
-p_size - lead(p_size,1) as deltaSz
-from part
-partition by p_mfgr
-order by p_mfgr
-window w1 as rows between 2 preceding and 2 following
-into path='/tmp/testLead'
-serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-with serdeproperties('field.delim'=',')
-format 'org.apache.hadoop.mapred.TextOutputFormat'""")
+		
+	 QueryDef qDef = wshell.translate("""
+	 select  p_mfgr,p_name, p_size,
+	 sum(p_size - lag(p_size,1)) as deltaSum
+	 from part
+	 partition by p_mfgr
+	 order by p_mfgr
+	 window w1 as rows between 2 preceding and 2 following
+	 into path='/tmp/testSumDelta'
+	 serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+	 with serdeproperties('field.delim'=',')
+	 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 
 				  int exitVal = validateObjectSerialization(qDef , ".qdef");
 		  

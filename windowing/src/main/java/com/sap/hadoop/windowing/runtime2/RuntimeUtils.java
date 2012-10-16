@@ -97,15 +97,12 @@ public class RuntimeUtils
 	public static Partition createPartition(QueryDef qDef, ObjectInspector oi,
 			HiveConf hiveConf) throws WindowingException
 	{
-		TableFuncDef tabDef = (TableFuncDef) qDef.getInput();
+		TableFuncDef tabDef = getFirstTableFunction(qDef);
 		TableFunctionEvaluator tEval = tabDef.getFunction();
 		String partClassName = tEval.getPartitionClass();
 		int partMemSize = tEval.getPartitionMemSize();
 
 		Partition part = null;
-/*		SerDe serDe = TranslateUtils.createLazyBinarySerDe(hiveConf,
-				tEval.getOutputOI());
-*/		
 		SerDe serde;
 		if (tEval.hasMapPhase())
 		{
@@ -122,76 +119,24 @@ public class RuntimeUtils
 			serde = tabDef.getInput().getSerde();
 		}
 
-/*		try
-		{
-			System.out.println("Serde oi - " + (StructObjectInspector) serde.getObjectInspector());
-		}
-		catch (SerDeException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Partition seder - " + serde);
-*/
 		part = new Partition(partClassName, partMemSize, serde,
 				(StructObjectInspector) oi);
 		return part;
 
 	}
 	
-	public static Partition createPartition(QueryDef qdef) throws WindowingException{
-		QueryTranslationInfo tInfo = qdef.getTranslationInfo();
-		TableFuncDef tDef = (TableFuncDef) qdef.getInput();
-		QueryInputDef inputDef;
-		SerDe serde;
-		Partition part;
-
-/*		Iterator<QueryInputDef> it = TranslateUtils.iterateInputDefs(qdef, true);
-		while(it.hasNext())
-		{
-			QueryInputDef nextDef = it.next();
-			if (nextDef instanceof TableFuncDef)
-			{
-				tDef = (TableFuncDef) nextDef;
+	public static TableFuncDef getFirstTableFunction(QueryDef qDef){
+		TableFuncDef tabDef = null; 
+		Iterator<QueryInputDef> it = TranslateUtils.iterateInputDefs(qDef, true);
+		while(it.hasNext()){
+			QueryInputDef qIn = it.next();
+			if(qIn instanceof TableFuncDef){
+				tabDef = (TableFuncDef) qIn;
 				break;
 			}
 		}
-*/		TableFunctionEvaluator tEval = tDef.getFunction();
-		inputDef = tDef.getInput();
-		
-		if (tEval.hasMapPhase())
-		{
-			if (tDef.getName().equals(FunctionRegistry.NOOP_MAP_TABLE_FUNCTION))
-			{
-				serde = inputDef.getSerde();
-			}
-			else
-			{
-				serde = TranslateUtils.createLazyBinarySerDe(
-						tInfo.getHiveCfg(), tEval.getMapOutputOI());
-			}
-		}else{
-			serde = inputDef.getSerde();
-		}
-
-		String partClassName = tEval.getPartitionClass();
-		int partMemSize = tEval.getPartitionMemSize();
-		try
-		{
-/*			System.out.println("Partition oi - " + (StructObjectInspector) serde.getObjectInspector());
-			System.out.println("Partition seder - " + serde);
-*/			part = new Partition(partClassName, partMemSize, serde,
-					(StructObjectInspector) serde
-					.getObjectInspector());
-		}
-		catch (SerDeException se)
-		{
-			throw new WindowingException(se);
-		}
-		
-		return part;
+		return tabDef;
 
 	}
-
 
 }

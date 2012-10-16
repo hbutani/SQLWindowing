@@ -108,8 +108,7 @@ public class WindowFunctionTranslation
 		{
 			for (ArgDef arg : args)
 			{
-				ExprNodeDesc expr = arg.getExprNode();
-				result.add(expr.getWritableObjectInspector());
+				result.add(arg.getOI());
 			}
 		}
 		return result;

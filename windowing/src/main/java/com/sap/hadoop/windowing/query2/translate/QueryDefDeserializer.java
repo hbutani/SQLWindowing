@@ -159,15 +159,8 @@ public class QueryDefDeserializer extends QueryDefVisitor
 			SerDe serDe = (SerDe) SerDeUtils.lookupDeserializer(serDeClassName);
 			serDe.initialize(hConf, serDeProps);
 			hiveTable.setSerde(serDe);
-/*			if (inputOI != null)
-			{
-				hiveTable.setOI((StructObjectInspector) inputOI);
-			}
-			else
-			{
-*/				hiveTable.setOI((StructObjectInspector) serDe
+				hiveTable.setOI((StructObjectInspector) serDe
 						.getObjectInspector());
-//			}
 		}
 		catch (SerDeException se)
 		{

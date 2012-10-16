@@ -55,7 +55,7 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 	{
 		outStream = new ByteArrayOutputStream();
 		startVirtualCluster();
-		HOME(getConf());
+		WORK(getConf());
 		conf.setBoolean(Constants.WINDOWING_TEST_MODE, true);
 		
 		createTestData();
@@ -89,7 +89,7 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 	{
 		FileSystem fs = FileSystem.get(conf);
 		FileUtil.copy(new File(baseDatadir + "/parttiny/"), 
-				fs, new Path("/user/hive/warehouse/part_demo/"), 
+				fs, new Path("/user/hive/warehouse/part/"), 
 				false, 
 				conf);
 	}
@@ -101,14 +101,13 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 	
 	public static void WORK(Configuration conf)
 	{
-		conf.set("hive.metastore.uris", "thrift://hbserver7.dhcp.pal.sap.corp:9083");
-		//conf.set("hive.metastore.uris", "thrift://localhost:9083");
+		conf.set("hive.metastore.uris", "thrift://localhost:9083");
 		conf.set("hive.metastore.local", "false");
-		conf.set("windowing.jar.file", "e:/windowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
+		conf.set("windowing.jar.file", "/home/saplabs/Projects/SQLWindowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
 		
-		conf.set(Constants.HIVE_THRIFTSERVER, "hbserver7.dhcp.pal.sap.corp");
+		conf.set(Constants.HIVE_THRIFTSERVER, "localhost");
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000);
-		conf.set("HIVE_HOME", "e:/hadoop/hive-0.9.0-bin");
+		conf.set("HIVE_HOME", "/home/saplabs/Projects/hive/build/dist");
 	}
 	
 	public static void HOME(Configuration conf)

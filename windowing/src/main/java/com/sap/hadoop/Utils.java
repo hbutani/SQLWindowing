@@ -1,9 +1,5 @@
 package com.sap.hadoop;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -13,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
-
-import javax.swing.JTextField;
 
 import org.apache.hadoop.hive.serde.Constants;
 import org.apache.hadoop.hive.serde2.SerDeException;
@@ -85,6 +79,13 @@ public class Utils
 		}
 		buf.append("]");
 		return buf.toString();
+	}
+	
+	public static String unescapeQueryString(String qry)
+	{
+		qry = qry.replace("\\\"", "\"");
+		qry = qry.replace("\\'", "'");
+		return qry;
 	}
 
 	public static class ReverseIterator<T> implements Iterator<T>

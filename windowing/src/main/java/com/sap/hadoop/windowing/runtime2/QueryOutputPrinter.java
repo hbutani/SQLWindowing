@@ -37,7 +37,7 @@ import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 
-class QueryOutputPrinter
+public class QueryOutputPrinter
 {
 	LogHelper hiveConsole;
 	

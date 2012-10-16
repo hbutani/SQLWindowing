@@ -1,0 +1,69 @@
+#+TITLE: Windowing CLI
+#+OPTIONS: toc:nil
+#+FILETAGS: windowing cli
+
+* Windowing CLI Classes
+#+begin_src plantuml :file windowingCLIModel.png
+ title Windowing CLI Object Model
+ 
+ class hive.CliDriver {
+  - HiveConf hCfg
+  - LogHelper logHelper
+ }
+ note top of hive.CliDriver
+ - provides CLI interface
+   for Hive commands
+ - setups HiveConf and LogHelper
+   on startup
+ end note
+
+ hive.CliDriver <|-- WindowingCliDriver 
+ note right of WindowingCliDriver
+ - extends HiveCliDriver
+ - provides CLI interface
+   for SQW queries.
+ end note
+
+ WindowingCliDriver --> WindowingClient : wClient
+ class WindowingClient {
+ }
+ WindowingClient --> QueryOutputPrinter : qryOutPrinter
+ WindowingClient --> WindowingCliDriver
+ WindowingClient --> WindowingShell
+ note left of WindowingClient
+ - provides a bridge between CLI layer
+   and WindowingShell
+ - provides HiveQueryExecutor, and
+   QueryOutputPrinter functionality
+   to WIndowingShell
+ end note
+ note right of QueryOutputPrinter
+ - outputs the Query Output to console
+   associated with CLI
+ - uses a FetchOperator to fetch rows
+   from the FileSystem.
+ end note
+#+end_src
+
+* Command processing flow
+#+begin_src plantuml :file wCLIExecFlow.png
+ title Windowing CLI process command
+ autonumber
+ hide footbox
+ title Footer removed
+ actor User
+ User -> WindowingCliDriver : processCmd
+ alt wmode is hive
+  WindowingCliDriver -> WindowingCliDriver: super.processCmd
+ else wmode is windowing
+   WindowingCliDriver -> WindowingClient : checkQuery
+   WindowingClient -> WindowingShell : checkQuery
+   WindowingShell --> WindowingCliDriver : true or false
+   alt query is not a SQW query
+     WindowingCliDriver -> WindowingCliDriver: super.processCmd
+   else query is a SQW query
+     WindowingCliDriver -> WindowingClient : executeQuery
+     WindowingClient -> WindowingShell : executeQuery with WindowingCLI as\n HiveQryExec and as QueryOutPrntr
+   end
+ end
+#+end_src

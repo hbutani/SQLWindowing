@@ -1,5 +1,7 @@
 package com.sap.hadoop.windowing.runtime2;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import com.sap.hadoop.windowing.WindowingException;
@@ -50,8 +52,8 @@ public class LocalExecutorTest extends BaseTest
 				"Manufacturer#5,almond antique medium spring khaki,6,22,5\n" +
 				"Manufacturer#5,almond antique sky peru orange,2,22,5\n" +
 				"Manufacturer#5,almond aquamarine dodger light gainsboro,46,22,5\n" +
-				"Manufacturer#5,almond azure blanched chiffon midnight,23,22,5";
-		assert r == e;
+				"Manufacturer#5,almond azure blanched chiffon midnight,23,22,5\n";
+		Assert.assertEquals(r, e);
 	}
 	
 	@Test
@@ -97,7 +99,7 @@ public class LocalExecutorTest extends BaseTest
 				"Manufacturer#5,almond antique sky peru orange,2,512\n" +
 				"Manufacturer#5,almond aquamarine dodger light gainsboro,46,512\n" +
 				"Manufacturer#5,almond azure blanched chiffon midnight,23,512\n";
-		assert r == e;
+		Assert.assertEquals(r, e);
 	}
 	
 	@Test
@@ -144,6 +146,6 @@ public class LocalExecutorTest extends BaseTest
 				"Manufacturer#5,almond antique sky peru orange,2,108,2\n" +
 				"Manufacturer#5,almond aquamarine dodger light gainsboro,46,77,46\n" +
 				"Manufacturer#5,almond azure blanched chiffon midnight,23,71,23\n";
-		assert r == e;
+		Assert.assertEquals(r, e);
 	}
 }

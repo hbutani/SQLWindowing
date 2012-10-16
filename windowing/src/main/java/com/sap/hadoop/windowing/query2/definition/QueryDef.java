@@ -6,12 +6,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.sap.hadoop.windowing.query2.SerializationUtils;
+import com.sap.hadoop.windowing.query2.specification.HiveTableSpec;
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo;
 
 public class QueryDef
 {
-	private static final long serialVersionUID = 1L;
+	@SuppressWarnings("unused")
 	private static final Log LOG = LogFactory.getLog(QueryDef.class.getName());
 	QuerySpec spec;
 	transient QueryTranslationInfo translationInfo;
@@ -108,6 +109,19 @@ public class QueryDef
 	public void setOutput(QueryOutputDef output)
 	{
 		this.output = output;
+	}
+	
+	/*
+	 * get the Hive Table associated with this input chain.
+	 */
+	public HiveTableSpec getHiveTableSpec()
+	{
+		return getInput().getHiveTableSpec();
+	}
+	
+	public HiveTableDef getHiveTableDef()
+	{
+		return getInput().getHiveTableDef();
 	}
 
 }

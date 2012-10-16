@@ -55,7 +55,7 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 	{
 		outStream = new ByteArrayOutputStream();
 		startVirtualCluster();
-		WORK(getConf());
+		HOME(getConf());
 		conf.setBoolean(Constants.WINDOWING_TEST_MODE, true);
 		
 		createTestData();
@@ -89,7 +89,7 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 	{
 		FileSystem fs = FileSystem.get(conf);
 		FileUtil.copy(new File(baseDatadir + "/parttiny/"), 
-				fs, new Path("/user/hive/warehouse/part/"), 
+				fs, new Path("/user/hive/warehouse/part_demo/"), 
 				false, 
 				conf);
 	}

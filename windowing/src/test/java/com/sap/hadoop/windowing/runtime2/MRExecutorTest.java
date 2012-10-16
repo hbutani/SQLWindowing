@@ -14,7 +14,7 @@ public class MRExecutorTest extends MRBaseTest
 		QueryDef qDef = wshell.translate("select  p_mfgr,p_name, p_size,\n" +
 				"rank() as r,\n" +
 				"denserank() as dr\n" +
-				"from part\n" +
+				"from part_demo\n" +
 				"partition by p_mfgr\n" +
 				"order by p_mfgr\n" +
 				"window w1 as rows between 2 preceding and 2 following\n" +

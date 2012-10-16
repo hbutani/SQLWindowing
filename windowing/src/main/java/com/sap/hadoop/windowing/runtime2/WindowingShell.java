@@ -4,6 +4,7 @@ import static com.sap.hadoop.Utils.sprintf;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
@@ -19,8 +20,11 @@ import com.sap.hadoop.windowing.functions2.FunctionRegistry;
 import com.sap.hadoop.windowing.parser.QSpecBuilder2;
 import com.sap.hadoop.windowing.parser.Windowing2Lexer;
 import com.sap.hadoop.windowing.parser.Windowing2Parser;
+import com.sap.hadoop.windowing.query2.definition.HiveQueryDef;
+import com.sap.hadoop.windowing.query2.definition.HiveTableDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.specification.QuerySpec;
+import com.sap.hadoop.windowing.query2.translate.QueryComponentizer;
 import com.sap.hadoop.windowing.query2.translate.TranslateUtils;
 import com.sap.hadoop.windowing.query2.translate.Translator;
 
@@ -199,36 +203,23 @@ public class WindowingShell
 		
 		execute(q, outP);
 		
-		/*
-		 * FIXME: componentization in next round.
-
 		ArrayList<QueryDef> componentQueries;
-		
-		
-		
-		if ( executor.allowQueryComponentization() )
-		{
-			executor.beforeComponentization(q, this)
-			QueryComponentizer qC = new QueryComponentizer(q, this);
-			componentQueries = qC.componentize();
-		}
-		else
-		{
-			componentQueries = [q]
-		}
+		executor.beforeComponentization(q, this);
+		QueryComponentizer qC = new QueryComponentizer(q, this);
+		componentQueries = qC.componentize();
 		
 		executor.beforeExecute(q, componentQueries, this);
 		try
 		{
-			componentQueries.each { Query cq ->
-				execute(cq, outP);
+			for(QueryDef cqDef : componentQueries)
+			{
+				execute(cqDef, outP);
 			}
 		}
 		finally
 		{
-			executor.afterExecute(q, this);
+			executor.afterExecute(q, componentQueries, this);
 		}
-		*/
 	}
 	
 	protected void execute(QueryDef q, QueryOutputPrinter outP) throws WindowingException
@@ -240,17 +231,13 @@ public class WindowingShell
 		}
 		finally
 		{
-			/* delete the temporary table created */
-			
-			/*
-			 * FIXME: delete all tables in 1 shot.
-
-			
-			if ( qSpec.tableIn.hiveQuery != null && qSpec.tableIn.tableName != null )
+			HiveTableDef hiveTable = q.getHiveTableDef();
+			if ( hiveTable instanceof HiveQueryDef )
 			{
-				hiveQryExec.dropTable(qSpec.tableIn.tableName)
+				String tableName = hiveTable.getHiveTableSpec().getTableName();
+				hiveQryExec.dropTable(tableName);
 			}
-			*/
+			
 		}
 		
 		if ( qSpec.getOutput().getHiveTable() != null )

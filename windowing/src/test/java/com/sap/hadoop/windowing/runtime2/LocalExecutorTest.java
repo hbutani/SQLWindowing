@@ -3,7 +3,6 @@ package com.sap.hadoop.windowing.runtime2;
 import org.junit.Test;
 
 import com.sap.hadoop.windowing.WindowingException;
-import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.testutils.BaseTest;
 
 public class LocalExecutorTest extends BaseTest
@@ -11,7 +10,7 @@ public class LocalExecutorTest extends BaseTest
 	@Test
 	public void test1() throws WindowingException
 	{
-		QueryDef qDef = wshell.translate("select  p_mfgr,p_name, p_size,\n" +
+		wshell.execute("select  p_mfgr,p_name, p_size,\n" +
 				"rank() as r,\n" +
 				"denserank() as dr\n" +
 				"from part_demo\n" +
@@ -21,9 +20,8 @@ public class LocalExecutorTest extends BaseTest
 				"into path='/tmp/wout2'\n" +
 				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'\n" +
 				"with serdeproperties('field.delim'=',')\n" +
-				"format 'org.apache.hadoop.mapred.TextOutputFormat'");
+				"format 'org.apache.hadoop.mapred.TextOutputFormat'", outPrinter);
 		
-		execute(qDef);
 		String r = outStream.toString();
 		r = r.replace("\r\n", "\n");
 //		println r
@@ -59,7 +57,7 @@ public class LocalExecutorTest extends BaseTest
 	@Test
 	public void testSum() throws WindowingException
 	{
-		QueryDef qDef = wshell.translate("select  p_mfgr,p_name, p_size, " +
+		wshell.execute("select  p_mfgr,p_name, p_size, " +
 				"	sum(p_size) as s " +
 				"from part_demo " +
 				"partition by p_mfgr " +
@@ -68,9 +66,8 @@ public class LocalExecutorTest extends BaseTest
 				"into path='/tmp/wout2' " +
 				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
 				"with serdeproperties('field.delim'=',') " +
-				"format 'org.apache.hadoop.mapred.TextOutputFormat'");
+				"format 'org.apache.hadoop.mapred.TextOutputFormat'", outPrinter);
 		
-		execute(qDef);
 		String r = outStream.toString();
 		r = r.replace("\r\n", "\n");
 //		println r
@@ -106,7 +103,7 @@ public class LocalExecutorTest extends BaseTest
 	@Test
 	public void testSumWindow() throws WindowingException
 	{
-		QueryDef qDef = wshell.translate("select  p_mfgr,p_name, p_size, " +
+		wshell.execute("select  p_mfgr,p_name, p_size, " +
 				"	sum(p_size) over w1 as s, " +
 				"    sum(p_size) over rows between current row and current row as s2 " +
 				"from part_demo " +
@@ -116,9 +113,8 @@ public class LocalExecutorTest extends BaseTest
 				"into path='/tmp/wout2' " +
 				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
 				"with serdeproperties('field.delim'=',') " +
-				"format 'org.apache.hadoop.mapred.TextOutputFormat'");
+				"format 'org.apache.hadoop.mapred.TextOutputFormat'", outPrinter);
 		
-		execute(qDef);
 		String r = outStream.toString();
 		r = r.replace("\r\n", "\n");
 //		println r

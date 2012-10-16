@@ -201,8 +201,6 @@ public class WindowingShell
 		QuerySpec qSpec = parse(query);
 		QueryDef q = translator.translate(qSpec, this);
 		
-		execute(q, outP);
-		
 		ArrayList<QueryDef> componentQueries;
 		executor.beforeComponentization(q, this);
 		QueryComponentizer qC = new QueryComponentizer(q, this);

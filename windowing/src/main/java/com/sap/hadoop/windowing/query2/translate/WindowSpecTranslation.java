@@ -257,6 +257,7 @@ public class WindowSpecTranslation
 		cDef.setExprNode(exprNode);
 		cDef.setExprEvaluator(exprEval);
 		cDef.setOI(oi);
+		cDef.setAlias(cSpec.getColumnName());
 	}
 		
 	

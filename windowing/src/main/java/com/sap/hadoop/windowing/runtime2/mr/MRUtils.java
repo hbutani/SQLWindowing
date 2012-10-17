@@ -122,6 +122,19 @@ public class MRUtils
 		this.hiveTableDef = hiveTableDef;
 	}
 
+	public static boolean addPTFMapOperator(QueryDef qdef)
+	{
+		boolean hasMap = false;
+		TableFuncDef tabDef = RuntimeUtils.getFirstTableFunction(qdef);
+		TableFunctionEvaluator tEval = tabDef.getFunction();
+		if (tEval.hasMapPhase())
+		{
+			hasMap = true;
+		}
+		return hasMap;
+
+	}
+
 	public void initialize() throws WindowingException
 	{
 
@@ -162,8 +175,7 @@ public class MRUtils
 			}
 
 			orderCols.add(colDef.getExprNode());
-			//System.out.println(colDef.getAlias());
-			outputColumnNames.add(colDef.getExpression().getChild(0).getText());
+			outputColumnNames.add(colDef.getAlias());
 		}
 
 		RowResolver rr = inputInfo.getRowResolver();

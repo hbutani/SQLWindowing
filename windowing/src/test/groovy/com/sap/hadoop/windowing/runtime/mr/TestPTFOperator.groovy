@@ -45,6 +45,7 @@ class TestPTFOperator extends MRBase2Test {
 				"format 'org.apache.hadoop.mapred.TextOutputFormat'");
 		execute(qdef);
 	}
+/*	
 		@Test
 	 void test2(){
 		 System.out.println("Beginning test2");
@@ -208,5 +209,5 @@ class TestPTFOperator extends MRBase2Test {
 	 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 	 execute(qDef)
 	 }
-	 
+*/	 
 }

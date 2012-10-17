@@ -1,0 +1,37 @@
+#+TITLE: Windowing Shell
+#+OPTIONS: toc:nil
+#+FILETAGS: windowing shell
+
+* Query execution Flow
+#+begin_src plantuml :file wshellQueryExecFlow.png
+ title Windowing Shell Query execution
+ autonumber
+ hide footbox
+ title Footer removed
+
+ [-> WindowingShell : executeQuery(String)
+ group Translate
+  WindowingShell -> WParser : parse
+  WParser --> WindowingShell : ASTNode tree
+  WindowingShell -> QSpecBuilder : build(ASTNode)
+  QSpecBuilder --> WindowingShell : QuerySpec
+  WindowingShell -> Translator : translate
+  Translator --> WindowingShell : QueryDef
+ end
+ WindowingShell -> Executor : beforeComponentization(QueryDef)
+ WindowingShell -> QueryComponentizer : componentize(QueryDef)
+ QueryComponentizer --> WindowingShell : QueryDef[]
+ WindowingShell -> Executor : beforeExecute(QueryDef[])
+ loop for each componentQuery
+  WindowingShell -> WindowingShell : execute
+  Activate WindowingShell
+  WindowingShell -> Executor : executeQuery(QueryDef)
+  alt Query was on an Embedded Hive Query
+   WindowingShell -> HiveQueryExecutor : dropTempTable
+  end
+    alt Query output to be loaded to a Hive Table/Partition
+   WindowingShell -> HiveQueryExecutor : loadToOutputTable
+  end
+  DeActivate WindowingShell
+ end
+#+end_src

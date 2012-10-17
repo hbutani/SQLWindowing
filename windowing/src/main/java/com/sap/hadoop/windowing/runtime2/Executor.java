@@ -9,9 +9,7 @@ import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorConverters;
-import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorConverters.Converter;
-import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Writable;
@@ -27,6 +25,27 @@ public abstract class Executor
 {
 	public abstract void execute(QueryDef query, WindowingShell wShell)
 			throws WindowingException;
+	
+	/*
+	 * Hook to Executor, before the Query is componentized.
+	 */
+	public void beforeComponentization(QueryDef qDef, WindowingShell wShell) throws WindowingException
+	{
+	}
+	
+	/*
+	 * Hook to Executor, after the Query is componentized; but before individual queries are executed.
+	 */
+	public void beforeExecute(QueryDef qDef, ArrayList<QueryDef> componentQueries, WindowingShell wShell) throws WindowingException
+	{
+	}
+	
+	/*
+	 * Hook to Executor, after all individual queries are executed.
+	 */
+	public void afterExecute(QueryDef qDef, ArrayList<QueryDef> componentQueries, WindowingShell wShell) throws WindowingException
+	{
+	}
 
 	public static Partition executeChain(QueryDef qDef, Partition part)
 			throws WindowingException

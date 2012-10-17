@@ -18,10 +18,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import com.sap.hadoop.windowing.Constants;
-import com.sap.hadoop.windowing.WindowingException;
-import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.translate.Translator;
 import com.sap.hadoop.windowing.runtime2.LocalExecutor;
+import com.sap.hadoop.windowing.runtime2.QueryOutputPrinter;
 import com.sap.hadoop.windowing.runtime2.ThriftBasedHiveQueryExecutor;
 import com.sap.hadoop.windowing.runtime2.WindowingShell;
 
@@ -30,6 +29,7 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 	protected  static WindowingShell wshell;
 	protected static String baseDatadir = "src/test/groovy/data";
 	protected static ByteArrayOutputStream outStream;
+	protected static QueryOutputPrinter outPrinter;
 	
 	public static void startVirtualCluster() throws Exception
 	{
@@ -55,7 +55,7 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 	{
 		outStream = new ByteArrayOutputStream();
 		startVirtualCluster();
-		WORK(getConf());
+		HOME(getConf());
 		conf.setBoolean(Constants.WINDOWING_TEST_MODE, true);
 		
 		createTestData();
@@ -70,6 +70,7 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 		HiveConf hCfg = new HiveConf(conf, conf.getClass());
 		wshell = new WindowingShell(hCfg, new Translator(), new LocalExecutor(new PrintStream(outStream)));
 		wshell.setHiveQryExec(new ThriftBasedHiveQueryExecutor(conf));
+		outPrinter = null;
 	}
 	
 	
@@ -89,14 +90,9 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 	{
 		FileSystem fs = FileSystem.get(conf);
 		FileUtil.copy(new File(baseDatadir + "/parttiny/"), 
-				fs, new Path("/user/hive/warehouse/part/"), 
+				fs, new Path("/user/hive/warehouse/part_demo/"), 
 				false, 
 				conf);
-	}
-	
-	public static void execute(QueryDef qDef) throws WindowingException
-	{
-		wshell.getExecutor().execute(qDef, wshell);
 	}
 	
 	public static void WORK(Configuration conf)

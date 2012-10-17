@@ -1,7 +1,7 @@
 package com.sap.hadoop.windowing.runtime2.mr;
 
 import java.util.ArrayList;
-
+import java.util.Properties;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.DriverContext;
 import org.apache.hadoop.hive.ql.exec.MapRedTask;
@@ -14,6 +14,9 @@ import org.apache.hadoop.hive.ql.plan.FileSinkDesc;
 import org.apache.hadoop.hive.ql.plan.MapredWork;
 import org.apache.hadoop.hive.ql.plan.PlanUtils;
 import org.apache.hadoop.hive.ql.plan.ReduceSinkDesc;
+import org.apache.hadoop.hive.ql.plan.TableDesc;
+import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde2.SerDe;
 
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
@@ -21,6 +24,7 @@ import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
+import com.sap.hadoop.windowing.query2.definition.QueryOutputDef;
 import com.sap.hadoop.windowing.query2.translate.TranslateUtils;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 import com.sap.hadoop.windowing.runtime2.Executor;
@@ -102,7 +106,7 @@ public class MRExecutor extends Executor
 	private void createReduceSideTree(QueryDef qdef, MRUtils mrUtils, MapredWork mr) throws WindowingException{
 		// reduce side work
 		Operator<FileSinkDesc> op4 = OperatorFactory.get(new FileSinkDesc(
-				mrUtils.getOutputPath(), Utilities.defaultTd, false));
+				mrUtils.getOutputPath(), createOutputTableDesc(qdef), false));
 
 		Operator<PTFDesc> op3 = RuntimeUtils.createPTFOperator(new PTFDesc(
 				SerializationUtils.serializeQueryDef(qdef)), op4);
@@ -134,6 +138,18 @@ public class MRExecutor extends Executor
 		else
 			System.out.println("Test execution completed successfully");
 
+	}
+	
+	static TableDesc createOutputTableDesc(QueryDef qDef) throws WindowingException
+	{
+		QueryOutputDef oDef = qDef.getOutput();
+		Class<? extends SerDe> serDeClass = oDef.getSerDe().getClass();
+		Properties p = oDef.getSpec().getSerDeProps();
+		String columnNamesList = p.getProperty(Constants.LIST_COLUMNS);
+		String columnTypesList = p.getProperty(Constants.LIST_COLUMN_TYPES);
+		String fieldSeparator = p.getProperty(Constants.FIELD_DELIM, Integer.toString(Utilities.ctrlaCode));
+		return PlanUtils.getTableDesc(serDeClass, fieldSeparator,
+			      columnNamesList, columnTypesList, false);
 	}
 
 }

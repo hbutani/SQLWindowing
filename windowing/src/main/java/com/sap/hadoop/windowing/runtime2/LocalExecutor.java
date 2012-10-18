@@ -60,7 +60,7 @@ public class LocalExecutor extends Executor
 		}
 
 		@Override
-		public void collectOutput(Object[] o, ObjectInspector oi)
+		public void collectOutput(Object[] o)
 		{
 			throw new UnsupportedOperationException();
 			

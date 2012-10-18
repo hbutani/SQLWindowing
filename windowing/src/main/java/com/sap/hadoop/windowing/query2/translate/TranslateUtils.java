@@ -489,6 +489,11 @@ public class TranslateUtils
 
 	}
 
+	/**
+	 * Use the column aliases and OIs on each ColumnDef 
+	 * to recreate the OI on the select list
+	 * @param sDef
+	 */
 	public static void setupSelectOI(SelectDef sDef)
 	{
 		ArrayList<ColumnDef> selColDefs = sDef.getColumns();

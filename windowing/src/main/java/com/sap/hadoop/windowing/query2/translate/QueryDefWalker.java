@@ -43,6 +43,13 @@ public class QueryDefWalker
 		this.visitor = visitor;
 	}
 	
+	/**
+	 * Use the visitor implementation to walk and reconstruct 
+	 * the table functions, where and select constructs and 
+	 * the query output definition.
+	 * @param qDef
+	 * @throws WindowingException
+	 */
 	public void walk(QueryDef qDef) throws WindowingException
 	{
 		visitor.initialize(qDef);
@@ -59,6 +66,14 @@ public class QueryDefWalker
 		visitor.finish();
 	}
 	
+	/**
+	 * Iterate the table functions and hive table
+	 * to reconstruct the definitions  
+	 * in reverse order or the order of invocations. 
+	 * HiveTableDef->PTF1->PTF2->WINDOWF
+	 * @param qDef
+	 * @throws WindowingException
+	 */
 	protected void walkInputChain(QueryDef qDef) throws WindowingException
 	{
 		Iterator<QueryInputDef> it = TranslateUtils.iterateInputDefs(qDef, true);
@@ -80,6 +95,19 @@ public class QueryDefWalker
 		}
 	}
 	
+	/**
+	 * 1. Reconstruct the InputInfo during previsit 
+	 * 2. setup OIs and Evaluators on the ArgDefs 
+	 * 3. setup OIs and Evaluators on the columns in the 
+	 *    PartitionDef, OrderDef and WindowFrameDef in the 
+	 *    WindowFunction definitions  
+	 * 4. walk the functions on the select list to 
+	 *    setup the OI and GenericUDAFEvaluators 
+	 * 
+	 * @param qDef
+	 * @param tblFunc
+	 * @throws WindowingException
+	 */
 	protected void walk(QueryDef qDef, TableFuncDef tblFunc) throws WindowingException
 	{
 		// 1. allow visitor to establish input
@@ -109,6 +137,11 @@ public class QueryDefWalker
 		visitor.visit(tblFunc);
 	}
 	
+	/**
+	 * Setup the OIs and evaluators on ArgDefs
+	 * @param args
+	 * @throws WindowingException
+	 */
 	protected void walk(ArrayList<ArgDef> args) throws WindowingException
 	{
 		if ( args != null )
@@ -120,6 +153,12 @@ public class QueryDefWalker
 		}
 	}
 	
+	/**
+	 * Visit the partition columns and order columns 
+	 * Visit the window frame definitions
+	 * @param window
+	 * @throws WindowingException
+	 */
 	protected void walk(WindowDef window) throws WindowingException
 	{
 		if ( window == null ) return;
@@ -155,6 +194,12 @@ public class QueryDefWalker
 		visitor.visit(window);
 	}
 	
+	/**
+	 * Visit all the implementations of 
+	 * BoundaryDef
+	 * @param boundary
+	 * @throws WindowingException
+	 */
 	protected void walk(BoundaryDef boundary) throws WindowingException
 	{
 		if ( boundary instanceof ValueBoundaryDef )
@@ -171,6 +216,12 @@ public class QueryDefWalker
 		}
 	}
 	
+	/**
+	 * Visit all the columns in the select list 
+	 * to setup their OIs and evaluators
+	 * @param select
+	 * @throws WindowingException
+	 */
 	protected void walk(SelectDef select) throws WindowingException
 	{
 		ArrayList<ColumnDef> cols = select.getColumns();

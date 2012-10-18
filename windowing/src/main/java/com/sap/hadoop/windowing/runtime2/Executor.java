@@ -47,6 +47,17 @@ public abstract class Executor
 	{
 	}
 
+	/**
+	 * For all the table functions to be applied to the input 
+	 * hive table or query, push them on a stack. 
+	 * For each table function popped out of the stack, 
+	 * execute the function on the input partition 
+	 * and return an output partition.
+	 * @param qDef
+	 * @param part
+	 * @return
+	 * @throws WindowingException
+	 */
 	public static Partition executeChain(QueryDef qDef, Partition part)
 			throws WindowingException
 	{
@@ -74,6 +85,18 @@ public abstract class Executor
 		return part;
 	}
 
+	/**
+	 * For each row in the partition: 
+	 * 1. evaluate the where condition if applicable.
+	 * 2. evaluate the value for each column retrieved 
+	 *    from the select list
+	 * 3. Forward the writable value or object based on the 
+	 * 	  implementation of the ForwardSink   
+	 * @param qDef
+	 * @param oPart
+	 * @param rS
+	 * @throws WindowingException
+	 */
 	@SuppressWarnings(
 	{ "rawtypes", "unchecked" })
 	public static void executeSelectList(QueryDef qDef, Partition oPart, ForwardSink rS)
@@ -135,8 +158,11 @@ public abstract class Executor
 				}
 			}
 			
+			//if the implementation of ForwardSink accepts an object, 
+			//forward it to the next operator in chain
+			//else collect the writable key-value pairs for outstream
 			if(rS.acceptObject()){
-				rS.collectOutput(output, selectOI);
+				rS.collectOutput(output);
 			}else{
 				try
 				{
@@ -154,7 +180,7 @@ public abstract class Executor
 	public static interface ForwardSink
 	{
 		void collectOutput(Writable key, Writable value);
-		void collectOutput(Object[] output, ObjectInspector oi);
+		void collectOutput(Object[] output);
 		boolean acceptObject();
 	}
 }

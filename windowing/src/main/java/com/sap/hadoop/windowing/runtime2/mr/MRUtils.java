@@ -22,6 +22,11 @@ import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 import com.sap.hadoop.windowing.query2.translate.TranslateUtils;
 import com.sap.hadoop.windowing.runtime2.RuntimeUtils;
 
+/**
+ * Utility class to construct and retrieve data structures required for
+ * constructing an operator tree
+ * 
+ */
 public class MRUtils
 {
 	QueryDef qdef;
@@ -122,6 +127,13 @@ public class MRUtils
 		this.hiveTableDef = hiveTableDef;
 	}
 
+	/**
+	 * Returns true if the query needs a map-side reshape. PTFOperator is added
+	 * on the map-side before ReduceSinkOperator in this scenario.
+	 * 
+	 * @param qdef
+	 * @return
+	 */
 	public static boolean addPTFMapOperator(QueryDef qdef)
 	{
 		boolean hasMap = false;
@@ -135,6 +147,13 @@ public class MRUtils
 
 	}
 
+	/**
+	 * Construct the data structures containing ExprNodeDesc for partition
+	 * columns and order columns. Use the input definition to construct the list
+	 * of output columns for the ReduceSinkOperator
+	 * 
+	 * @throws WindowingException
+	 */
 	public void initialize() throws WindowingException
 	{
 
@@ -145,6 +164,14 @@ public class MRUtils
 				.getColumns();
 
 		TableFunctionEvaluator tEval = tabDef.getFunction();
+
+		/*
+		 * If the query has a map phase, the inputInfo is retrieved from the map
+		 * output info of the table function definition. This is constructed
+		 * using the map output oi of the table function definition. If the
+		 * query does not have a map phase, the inputInfo is retrieved from the
+		 * QueryInputDef (either HiveTableDef or HiveQueryDef) of the query.
+		 */
 		if (tEval.hasMapPhase())
 		{
 			inputInfo = qdef.getTranslationInfo().getMapInputInfo(tabDef);

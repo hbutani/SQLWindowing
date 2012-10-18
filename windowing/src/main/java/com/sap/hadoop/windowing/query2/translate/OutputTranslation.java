@@ -1,6 +1,7 @@
 package com.sap.hadoop.windowing.query2.translate;
 
-import java.util.ArrayList;
+import static com.sap.hadoop.Utils.sprintf;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -16,11 +17,10 @@ import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 
-
 import com.sap.hadoop.HiveUtils;
+import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.parser.Windowing2Parser;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
@@ -33,9 +33,6 @@ import com.sap.hadoop.windowing.query2.specification.HiveTableSpec;
 import com.sap.hadoop.windowing.query2.specification.QueryOutputSpec;
 import com.sap.hadoop.windowing.query2.specification.SelectSpec;
 import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
-import com.sap.hadoop.windowing.Constants;
-
-import static com.sap.hadoop.Utils.sprintf;
 
 public class OutputTranslation
 {

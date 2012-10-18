@@ -89,8 +89,8 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 	public static void createTestData() throws Exception
 	{
 		FileSystem fs = FileSystem.get(conf);
-		FileUtil.copy(new File(baseDatadir + "/parttiny/"), 
-				fs, new Path("/user/hive/warehouse/part_demo/"), 
+		FileUtil.copy(new File(baseDatadir + "/part_tiny/"), 
+				fs, new Path("/user/hive/warehouse/part_tiny/"), 
 				false, 
 				conf);
 	}

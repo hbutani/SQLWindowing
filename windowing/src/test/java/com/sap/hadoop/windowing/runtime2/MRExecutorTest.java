@@ -16,7 +16,7 @@ public class MRExecutorTest extends MRBaseTest
 				"select  p_mfgr,p_name, p_size,\n"
 						+ "rank() as r,\n"
 						+ "denserank() as dr\n"
-						+ "from part_demo\n"
+						+ "from part_tiny\n"
 						+ "partition by p_mfgr\n"
 						+ "order by p_mfgr\n"
 						+ "window w1 as rows between 2 preceding and 2 following\n"
@@ -61,7 +61,7 @@ public class MRExecutorTest extends MRBaseTest
 	public void test2() throws WindowingException
 	{
 		System.out.println("Beginning test2");
-		wshell.execute("select p_mfgr,p_name,p_size,p_comment " + "from part "
+		wshell.execute("select p_mfgr,p_name,p_size,p_comment " + "from part_tiny "
 				+ "partition by p_mfgr " + "order by p_size "
 				+ "into path='/tmp/test2' "
 				+ "serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' "
@@ -80,7 +80,7 @@ public class MRExecutorTest extends MRBaseTest
 		wshell.execute(
 				"select  p_mfgr,p_name, p_size, \n"
 						+ "sum(p_size) as s \n"
-						+ "from part		"
+						+ "from part_tiny		"
 						+ " partition by p_mfgr \n"
 						+ "order by p_mfgr \n"
 						+ "window w1 as rows between 2 preceding and 2 following \n"
@@ -102,7 +102,7 @@ public class MRExecutorTest extends MRBaseTest
 				"select  p_mfgr,p_name, p_size, \n"
 						+ "sum(p_size) over w1 as s, \n"
 						+ "sum(p_size) over rows between current row and current row as s2 \n"
-						+ "from part \n"
+						+ "from part_tiny \n"
 						+ "partition by p_mfgr \n"
 						+ "order by p_mfgr \n"
 						+ "window w1 as rows between 2 preceding and 2 following \n"
@@ -125,7 +125,7 @@ public class MRExecutorTest extends MRBaseTest
 						+ "sum(p_size) over rows between current row and current row as s2, \n"
 						+ "first_value(p_size) over w1 as f, \n"
 						+ "last_value(p_size, false) over w1 as l \n"
-						+ "from part \n"
+						+ "from part_tiny \n"
 						+ "partition by p_mfgr \n"
 						+ "order by p_mfgr \n"
 						+ "window w1 as rows between 2 preceding and 2 following \n"
@@ -150,7 +150,7 @@ public class MRExecutorTest extends MRBaseTest
 						+ "sum(p_size) over rows between current row and current row as s2, \n"
 						+ "first_value(p_size) over w1 as f, \n"
 						+ "last_value(p_size, false) over w1 as l \n"
-						+ "from part \n"
+						+ "from part_tiny \n"
 						+ "partition by p_mfgr \n"
 						+ "order by p_mfgr \n"
 						+ "where r < 7 or p_mfgr = 'Manufacturer#3' \n"
@@ -172,7 +172,7 @@ public class MRExecutorTest extends MRBaseTest
 		System.out.println("Beginning testLead");
 		wshell.execute(
 				"	 select  p_mfgr,p_name, p_size,	 p_size - lead(p_size,1) as deltaSz \n"
-						+ "from part \n"
+						+ "from part_tiny \n"
 						+ "partition by p_mfgr \n"
 						+ "order by p_mfgr \n"
 						+ "window w1 as rows between 2 preceding and 2 following \n"
@@ -193,7 +193,7 @@ public class MRExecutorTest extends MRBaseTest
 		System.out.println("Beginning testLag");
 		wshell.execute(
 				"	 select  p_mfgr,p_name, p_size,	 p_size - lag(p_size,1) as deltaSz \n"
-						+ "from part \n"
+						+ "from part_tiny \n"
 						+ "partition by p_mfgr \n"
 						+ "order by p_mfgr \n"
 						+ "window w1 as rows between 2 preceding and 2 following \n"
@@ -215,7 +215,7 @@ public class MRExecutorTest extends MRBaseTest
 		System.out.println("Beginning testSumDelta");
 		wshell.execute(
 				"	 select  p_mfgr,p_name, p_size,	 sum(p_size - lag(p_size,1)) as deltaSum \n"
-						+ "from part \n"
+						+ "from part_tiny \n"
 						+ "partition by p_mfgr \n"
 						+ "order by p_mfgr \n"
 						+ "window w1 as rows between 2 preceding and 2 following \n"
@@ -235,7 +235,7 @@ public class MRExecutorTest extends MRBaseTest
 		System.out.println("Beginning testWhereLead");
 		wshell.execute(
 				"	 select  p_mfgr,p_name, p_size \n"
-						+ "from part \n"
+						+ "from part_tiny \n"
 						+ "partition by p_mfgr \n"
 						+ "order by p_mfgr \n"
 						+ "where lead(p_size, 1) <= p_size \n"

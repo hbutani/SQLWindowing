@@ -249,5 +249,23 @@ public class MRExecutorTest extends MRBaseTest
 		// System.out.println(r);
 
 	}
+	
+	@Test
+	public void testCensus1() throws WindowingException
+	{
+		wshell.execute("" +
+				"select county, tract, arealand, rank() as r " +
+				"from census_tiny " +
+				"partition by county " +
+				"order by county, arealand desc " +
+				"into path='/tmp/wout' " +
+				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
+				"with serdeproperties('field.delim'=',') " +
+				"format 'org.apache.hadoop.mapred.TextOutputFormat'",
+				outPrinter);
+		String r = outStream.toString();
+		r = r.replace("\r\n", "\n");
+		System.out.println(r);
+	}
 
 }

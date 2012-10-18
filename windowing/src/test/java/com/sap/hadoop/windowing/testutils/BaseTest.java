@@ -93,6 +93,22 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 				fs, new Path("/user/hive/warehouse/part_tiny/"), 
 				false, 
 				conf);
+		FileUtil.copy(new File(baseDatadir + "/census_tiny/"), 
+				fs, new Path("/user/hive/warehouse/census_tiny/"), 
+				false, 
+				conf);
+		FileUtil.copy(new File(baseDatadir + "/flights_tiny/"), 
+				fs, new Path("/user/hive/warehouse/flights_tiny/"), 
+				false, 
+				conf);
+		FileUtil.copy(new File(baseDatadir + "/partrc_tiny/"), 
+				fs, new Path("/user/hive/warehouse/partrc_tiny/"), 
+				false, 
+				conf);
+		FileUtil.copy(new File(baseDatadir + "/test.db/"), 
+				fs, new Path("/user/hive/warehouse/test.db/"), 
+				false, 
+				conf);
 	}
 	
 	public static void WORK(Configuration conf)

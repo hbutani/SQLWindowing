@@ -433,6 +433,19 @@ public class TranslateUtils
 		return hiveMetaTable;
 	}
 
+	/**
+	 * For NOOP table functions, the serde is the same as that on the input 
+	 * hive table,; for other table functions it is the lazy binary serde.
+	 * If the query has a map-phase, the map oi is set to be the oi on the 
+	 * lazy binary serde unless the table function is a NOOP_MAP_TABLE_FUNCTION
+	 * (in which case it is set to the oi on the serde of the input hive 
+	 * table definition).
+	 * @param tDef
+	 * @param inputDef
+	 * @param tInfo
+	 * @param tEval
+	 * @throws WindowingException
+	 */
 	public static void setupSerdeAndOI(TableFuncDef tDef,
 			QueryInputDef inputDef, QueryTranslationInfo tInfo,
 			TableFunctionEvaluator tEval) throws WindowingException
@@ -443,7 +456,7 @@ public class TranslateUtils
 		SerDe serde = null;
 		// treat Noop Function special because it just hands the input Partition
 		// to the next function in the chain.
-		if (tDef.getName().equals(FunctionRegistry.NOOP_TABLE_FUNCTION)
+/*		if (tDef.getName().equals(FunctionRegistry.NOOP_TABLE_FUNCTION)
 				|| tDef.getName().equals(
 						FunctionRegistry.NOOP_MAP_TABLE_FUNCTION))
 		{
@@ -451,9 +464,9 @@ public class TranslateUtils
 		}
 		else
 		{
-			serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(),
+*/			serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(),
 					tEval.getOutputOI());
-		}
+//		}
 		tDef.setSerde(serde);
 
 		try

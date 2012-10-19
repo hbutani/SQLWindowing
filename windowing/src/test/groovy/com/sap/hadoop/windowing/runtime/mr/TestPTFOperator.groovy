@@ -31,35 +31,50 @@ class TestPTFOperator extends MRBase2Test {
 		mrExec.execute(qdef, wshell);
 	}
 
-	@Test
+/*	@Test
 	void testMap()
 	{
 		System.out.println("Beginning testMap");
-		QueryDef qDef = wshell.translate("""
-		select p_mfgr,p_name, p_size,
-		rank() as r,
-		denserank() as dr,
-		cumedist() as cud,
-		percentrank() as pr,
-		ntile(3) as nt,
-		count(p_size) as c,
-		count(p_size, 'all') as ca,
-		count(p_size, 'distinct') as cd,
-		first_value(p_size) as fv,
-		last_value(p_size) as lv,
-		first_value(p_size, 'true') as fv2
-		from noopwithmap(part_rc
-		partition by p_mfgr
-		order by p_mfgr, p_name)
-		window w1 as rows between 2 preceding and 2 following 
-		into path='/tmp/testMap'
-		serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-		with serdeproperties('field.delim'=',')
-		format 'org.apache.hadoop.mapred.TextOutputFormat'""")
-		execute(qDef)
+		QueryDef qdef =  wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +
+						"from noopwithmap(part_rc " +  
+						"partition by p_mfgr "  + 
+						"order by p_mfgr, p_name) " + 
+				"window w1 as rows between 2 preceding and 2 following " +
+				"into path='/tmp/testmap' " +
+				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
+				"with serdeproperties('field.delim'=',') " +
+				"format 'org.apache.hadoop.mapred.TextOutputFormat'");
+		execute(qdef);
+	}
+*/	
+	@Test
+	void test1() {
+		System.out.println("Beginning test1");
+		QueryDef qdef =  wshell.translate("select  p_mfgr, p_name, p_size, rank() as r, denserank() as dr " +
+				"cumedist() as cud, " + 
+				"percentrank() as pr, " +
+				"ntile(3) as nt, " +
+				"count(p_size) as c, " +
+				"count(p_size, 'all') as ca, " +
+				"count(p_size, 'distinct') as cd, " +
+				"first_value(p_size) as fv, " +
+				"last_value(p_size) as lv, " +
+				"first_value(p_size, 'true') over w1 as fv2 " +
+				"from part " +
+				"partition by p_mfgr " +
+				"order by p_mfgr " +
+				"window w1 as rows between 2 preceding and 2 following " +
+				"into path='/tmp/test1' " +
+				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
+				"with serdeproperties('field.delim'=',') " +
+				"format 'org.apache.hadoop.mapred.TextOutputFormat'");
+		execute(qdef);
 	}
 
-/*	@Test
+
+/*	
+
+ 	@Test
 	void test1() {
 		System.out.println("Beginning test1");
 		QueryDef qdef =  wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +

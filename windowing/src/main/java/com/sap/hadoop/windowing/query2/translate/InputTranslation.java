@@ -140,7 +140,6 @@ public class InputTranslation
 			StorageDescriptor sd = t.getSd();
 			def.setInputFormatClassName(sd.getInputFormat());
 			def.setTableSerdeClassName(sd.getSerdeInfo().getSerializationLib());
-			// def.setTableSerdeProps(sd.getSerdeInfo().getParameters());
 			def.setTableSerdeProps(setupSerdeProps(qDef, sd));
 			def.setLocation(sd.getLocation());
 
@@ -161,6 +160,14 @@ public class InputTranslation
 		return def;
 	}
 
+	/**
+	 * Use the input hive table's storage descriptor to retrieve column 
+	 * names and column types for the table. Use this schema information 
+	 * to construct the serde properties for the hive table definition.
+	 * @param qDef
+	 * @param sd
+	 * @return
+	 */
 	private static Map<String,String> setupSerdeProps(QueryDef qDef, StorageDescriptor sd){
 		Map<String,String> serdePropsMap = new HashMap<String, String>();
 		StringBuilder colNames = new StringBuilder();

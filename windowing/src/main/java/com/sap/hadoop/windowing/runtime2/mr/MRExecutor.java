@@ -1,7 +1,7 @@
 package com.sap.hadoop.windowing.runtime2.mr;
 
-import java.util.ArrayList;
 import java.util.Properties;
+
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.DriverContext;
 import org.apache.hadoop.hive.ql.exec.MapRedTask;
@@ -19,14 +19,10 @@ import org.apache.hadoop.hive.serde.Constants;
 import org.apache.hadoop.hive.serde2.SerDe;
 
 import com.sap.hadoop.windowing.WindowingException;
-import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
 import com.sap.hadoop.windowing.query2.SerializationUtils;
-import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
-import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.definition.QueryOutputDef;
 import com.sap.hadoop.windowing.query2.translate.TranslateUtils;
-import com.sap.hadoop.windowing.query2.translate.QueryTranslationInfo.InputInfo;
 import com.sap.hadoop.windowing.runtime2.Executor;
 import com.sap.hadoop.windowing.runtime2.RuntimeUtils;
 import com.sap.hadoop.windowing.runtime2.WindowingShell;
@@ -34,6 +30,12 @@ import com.sap.hadoop.windowing.runtime2.WindowingShell;
 public class MRExecutor extends Executor
 {
 
+	/* 
+	 * Create a MapRedWork object and an operator tree 
+	 * for processing queries with table functions. 
+	 * Execute the plan defined in the MapRedWork using 
+	 * the Hive runtime environment. 
+	 */
 	@Override
 	public void execute(QueryDef qdef, WindowingShell wShell)
 			throws WindowingException
@@ -54,6 +56,15 @@ public class MRExecutor extends Executor
 		}
 	}
 
+	/**
+	 * Initialize the data structures required to create 
+	 * the operator tree. Create the Map-side and 
+	 * reduce-side operator trees.
+	 * @param qdef
+	 * @param mr
+	 * @throws SemanticException
+	 * @throws WindowingException
+	 */
 	private void createOperatorTree(QueryDef qdef, MapredWork mr)
 			throws SemanticException, WindowingException
 	{
@@ -64,6 +75,18 @@ public class MRExecutor extends Executor
 
 	}
 	
+	/**
+	 * The map-side operator tree consists of:
+	 * MapOperator->ReduceSinkOperator if the query does 
+	 * not have a map phase. 
+	 * If the query has a map phase, the PTFOperator needs to be 
+	 * invoked at the map-side of the query tree. The map-side plan then 
+	 * looks like MapOperator->PTFOperator->ReduceSinkOperator. 
+	 * @param qdef
+	 * @param mrUtils
+	 * @param mr
+	 * @throws WindowingException
+	 */
 	@SuppressWarnings("unchecked")
 	private void createMapSideTree(QueryDef qdef, MRUtils mrUtils, MapredWork mr) throws WindowingException{
 		// map-side work
@@ -102,6 +125,16 @@ public class MRExecutor extends Executor
 		
 	}
 
+	/**
+	 * The reduce-side plan always looks like 
+	 * ExtratOperator->PTFOperator->FileSinkOperator.
+	 * Use the data structures initialized in MRUtils to 
+	 * create the operators here.
+	 * @param qdef
+	 * @param mrUtils
+	 * @param mr
+	 * @throws WindowingException
+	 */
 	@SuppressWarnings("unchecked")
 	private void createReduceSideTree(QueryDef qdef, MRUtils mrUtils, MapredWork mr) throws WindowingException{
 		// reduce side work
@@ -120,6 +153,15 @@ public class MRExecutor extends Executor
 		mr.setReducer(op2);
 	}
 
+	/**
+	 * Invoke the MapRedTask and set the MapRedWork 
+	 * query plan to be used for execution.  
+	 * MapRedTask (an extension to the ExecDriver) is 
+	 * used to execute the query plan on Hadoop.
+	 * @param mr
+	 * @param hiveConf
+	 * @throws Exception
+	 */
 	private void executePlan(MapredWork mr, HiveConf hiveConf) throws Exception
 	{
 		MapRedTask mrtask = new MapRedTask();
@@ -140,6 +182,13 @@ public class MRExecutor extends Executor
 
 	}
 	
+	/**
+	 * Use the settings on the QueryOutputDef to define the 
+	 * properties for the output table in hive.
+	 * @param qDef
+	 * @return
+	 * @throws WindowingException
+	 */
 	static TableDesc createOutputTableDesc(QueryDef qDef) throws WindowingException
 	{
 		QueryOutputDef oDef = qDef.getOutput();

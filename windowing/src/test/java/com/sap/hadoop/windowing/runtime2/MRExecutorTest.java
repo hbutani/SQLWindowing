@@ -75,7 +75,7 @@ public class MRExecutorTest extends MRBaseTest
 				outPrinter);
 		String r = outStream.toString();
 		r = r.replace("\r\n", "\n");
-		System.out.println(r);
+		//System.out.println(r);
 		String e = "Manufacturer#1	almond antique burnished rose metallic	2	1	1\n" +
 				"Manufacturer#1	almond antique burnished rose metallic	2	1	1\n" +
 				"Manufacturer#1	almond antique chartreuse lavender yellow	34	3	2\n" +
@@ -108,7 +108,7 @@ public class MRExecutorTest extends MRBaseTest
 	@Test
 	public void test2() throws WindowingException {
 		System.out.println("Beginning test2");
-		wshell.execute("select p_mfgr,p_name,p_size,p_comment "
+		wshell.execute("select p_mfgr,p_name,p_size "
 				+ "from part_tiny " + "partition by p_mfgr "
 				+ "order by p_size " + "into path='/tmp/test2' "
 				+ "serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' "
@@ -117,33 +117,33 @@ public class MRExecutorTest extends MRBaseTest
 				outPrinter);
 		String r = outStream.toString();
 		r = r.replace("\r\n", "\n");
-		// System.out.println(r);
-		String e = "Manufacturer#1	almond antique burnished rose metallic	2	e pinto beans h\n"
-				+ "Manufacturer#1	almond antique burnished rose metallic	2	e pinto beans h\n"
-				+ "Manufacturer#1	almond antique salmon chartreuse burlywood	6	 to the furiously\n"
-				+ "Manufacturer#1	almond aquamarine burnished black steel	28	arefully\n"
-				+ "Manufacturer#1	almond antique chartreuse lavender yellow	34	refull\n"
-				+ "Manufacturer#1	almond aquamarine pink moccasin thistle	42	e across the expr\n"
-				+ "Manufacturer#2	almond aquamarine midnight light salmon	2	s cajole caref\n"
-				+ "Manufacturer#2	almond antique violet chocolate turquoise	14	ly pending requ\n"
-				+ "Manufacturer#2	almond aquamarine sandy cyan gainsboro	18	ic de\n"
-				+ "Manufacturer#2	almond aquamarine rose maroon antique	25	even\n"
-				+ "Manufacturer#2	almond antique violet turquoise frosted	40	 haggle\n"
-				+ "Manufacturer#3	almond antique misty red olive	1	c foxes can s\n"
-				+ "Manufacturer#3	almond antique forest lavender goldenrod	14	along the\n"
-				+ "Manufacturer#3	almond antique chartreuse khaki white	17	are slyly after the sl\n"
-				+ "Manufacturer#3	almond antique metallic orange dim	19	ole car\n"
-				+ "Manufacturer#3	almond antique olive coral navajo	45	ag furiously about\n"
-				+ "Manufacturer#4	almond aquamarine yellow dodger mint	7	ites. eve\n"
-				+ "Manufacturer#4	almond antique gainsboro frosted violet	10	ccounts run quick\n"
-				+ "Manufacturer#4	almond azure aquamarine papaya violet	12	reful\n"
-				+ "Manufacturer#4	almond aquamarine floral ivory bisque	27	careful\n"
-				+ "Manufacturer#4	almond antique violet mint lemon	39	hely ironic i\n"
-				+ "Manufacturer#5	almond antique sky peru orange	2	furiously. bra\n"
-				+ "Manufacturer#5	almond antique medium spring khaki	6	sits haggl\n"
-				+ "Manufacturer#5	almond azure blanched chiffon midnight	23	hely blith\n"
-				+ "Manufacturer#5	almond antique blue firebrick mint	31	ickly ir\n"
-				+ "Manufacturer#5	almond aquamarine dodger light gainsboro	46	packages hinder carefu\n";
+		//System.out.println(r);
+		String e = "Manufacturer#1	almond antique burnished rose metallic	2\n" +
+				"Manufacturer#1	almond antique burnished rose metallic	2\n" +
+				"Manufacturer#1	almond antique salmon chartreuse burlywood	6\n" +
+				"Manufacturer#1	almond aquamarine burnished black steel	28\n" +
+				"Manufacturer#1	almond antique chartreuse lavender yellow	34\n" +
+				"Manufacturer#1	almond aquamarine pink moccasin thistle	42\n" +
+				"Manufacturer#2	almond aquamarine midnight light salmon	2\n" +
+				"Manufacturer#2	almond antique violet chocolate turquoise	14\n" +
+				"Manufacturer#2	almond aquamarine sandy cyan gainsboro	18\n" +
+				"Manufacturer#2	almond aquamarine rose maroon antique	25\n" +
+				"Manufacturer#2	almond antique violet turquoise frosted	40\n" +
+				"Manufacturer#3	almond antique misty red olive	1\n" +
+				"Manufacturer#3	almond antique forest lavender goldenrod	14\n" +
+				"Manufacturer#3	almond antique chartreuse khaki white	17\n" +
+				"Manufacturer#3	almond antique metallic orange dim	19\n" +
+				"Manufacturer#3	almond antique olive coral navajo	45\n" +
+				"Manufacturer#4	almond aquamarine yellow dodger mint	7\n" +
+				"Manufacturer#4	almond antique gainsboro frosted violet	10\n" +
+				"Manufacturer#4	almond azure aquamarine papaya violet	12\n" +
+				"Manufacturer#4	almond aquamarine floral ivory bisque	27\n" +
+				"Manufacturer#4	almond antique violet mint lemon	39\n" +
+				"Manufacturer#5	almond antique sky peru orange	2\n" +
+				"Manufacturer#5	almond antique medium spring khaki	6\n" +
+				"Manufacturer#5	almond azure blanched chiffon midnight	23\n" +
+				"Manufacturer#5	almond antique blue firebrick mint	31\n" +
+				"Manufacturer#5	almond aquamarine dodger light gainsboro	46\n";
 		Assert.assertEquals(r, e);
 
 	}

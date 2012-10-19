@@ -1,7 +1,11 @@
 package com.sap.hadoop.windowing.runtime2.mr;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.Properties;
 
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.DriverContext;
 import org.apache.hadoop.hive.ql.exec.MapRedTask;
@@ -40,6 +44,8 @@ public class MRExecutor extends Executor
 	public void execute(QueryDef qdef, WindowingShell wShell)
 			throws WindowingException
 	{
+		deleteQueryOutputDir(qdef);
+		
 		MapredWork mr = PlanUtils.getMapRedWork();
 		try
 		{
@@ -199,6 +205,24 @@ public class MRExecutor extends Executor
 		String fieldSeparator = p.getProperty(Constants.FIELD_DELIM, Integer.toString(Utilities.ctrlaCode));
 		return PlanUtils.getTableDesc(serDeClass, fieldSeparator,
 			      columnNamesList, columnTypesList, false);
+	}
+	
+	static void deleteQueryOutputDir(QueryDef qDef) throws WindowingException
+	{
+		try
+		{
+			String outputPath = qDef.getOutput().getSpec().getPath();
+			FileSystem fs = FileSystem.get(URI.create(outputPath), qDef.getTranslationInfo().getHiveCfg());
+			Path p = new Path(outputPath);
+			if ( fs.exists(p))
+			{
+				fs.delete(p, true);
+			}
+		}
+		catch(IOException ie)
+		{
+			throw new WindowingException(ie);
+		}
 	}
 
 }

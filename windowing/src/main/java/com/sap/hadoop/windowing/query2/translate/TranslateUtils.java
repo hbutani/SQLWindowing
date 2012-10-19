@@ -15,7 +15,6 @@ import org.antlr.runtime.tree.TreeAdaptor;
 import org.antlr.runtime.tree.TreeWizard;
 import org.antlr.runtime.tree.TreeWizard.ContextVisitor;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
 import org.apache.hadoop.hive.ql.lib.Node;
 import org.apache.hadoop.hive.ql.metadata.Hive;
@@ -456,7 +455,7 @@ public class TranslateUtils
 		SerDe serde = null;
 		// treat Noop Function special because it just hands the input Partition
 		// to the next function in the chain.
-/*		if (tDef.getName().equals(FunctionRegistry.NOOP_TABLE_FUNCTION)
+		if (tDef.getName().equals(FunctionRegistry.NOOP_TABLE_FUNCTION)
 				|| tDef.getName().equals(
 						FunctionRegistry.NOOP_MAP_TABLE_FUNCTION))
 		{
@@ -464,9 +463,9 @@ public class TranslateUtils
 		}
 		else
 		{
-*/			serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(),
+			serde = TranslateUtils.createLazyBinarySerDe(tInfo.getHiveCfg(),
 					tEval.getOutputOI());
-//		}
+		}
 		tDef.setSerde(serde);
 
 		try

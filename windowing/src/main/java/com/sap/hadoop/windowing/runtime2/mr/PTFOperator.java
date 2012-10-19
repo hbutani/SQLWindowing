@@ -23,12 +23,14 @@ import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.PartitionDef;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
+import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.query2.translate.QueryDefDeserializer;
 import com.sap.hadoop.windowing.query2.translate.QueryDefVisitor;
 import com.sap.hadoop.windowing.query2.translate.QueryDefWalker;
 import com.sap.hadoop.windowing.runtime2.Executor;
 import com.sap.hadoop.windowing.runtime2.Executor.ForwardSink;
 import com.sap.hadoop.windowing.runtime2.Partition;
+import com.sap.hadoop.windowing.runtime2.PartitionIterator;
 import com.sap.hadoop.windowing.runtime2.RuntimeUtils;
 
 public class PTFOperator extends Operator<PTFDesc> implements Serializable
@@ -39,7 +41,6 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 	Partition inputPart;
 	boolean isMapOperator;
 	
-	transient boolean firstRow;
 	transient WindowingKeyWrapperFactory keyWrapperFactory;
 	protected transient WindowingKeyWrapper currentKeys;
 	protected transient WindowingKeyWrapper newKeys;
@@ -74,8 +75,8 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 		try
 		{
 			reconstructQueryDef(hiveConf);
-			inputPart = RuntimeUtils.createPartition(qDef,
-					inputObjInspectors[0], hiveConf);
+			inputPart = RuntimeUtils.createFirstPartitionForChain(qDef,
+					inputObjInspectors[0], hiveConf, isMapOperator);
 		}
 		catch (WindowingException we)
 		{
@@ -86,14 +87,14 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 		// OI for ReduceSinkOperator is taken from TODO
 		if (isMapOperator)
 		{
-
+			TableFuncDef tDef = RuntimeUtils.getFirstTableFunction(qDef);
+			outputObjInspector = tDef.getMapOI();
 		}
 		else
 		{
 			outputObjInspector = qDef.getSelectList().getOI();
 		}
 		
-		firstRow = true;
 		setupKeysWrapper(inputObjInspectors[0]);
 		
 		super.initializeOp(jobConf);
@@ -105,7 +106,7 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 		super.closeOp(abort);
 		if (isMapOperator)
 		{
-			// execute map method to get outpart
+			processMapFunction();
 		}
 		else
 		{
@@ -118,32 +119,35 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 	{
 		try
 		{
-			/*
-			 * checkif current row belongs to the current accumulated Partition:
-			 * - If not:
-			 * 	- process the current Partition
-			 *  - reset input Partition
-			 * - set currentKey to the newKey if it is null or has changed.
-			 */
-			newKeys.getNewKey(row, inputPart.getOI());
-			boolean keysAreEqual = (currentKeys != null && newKeys != null)?
-			        newKeys.equals(currentKeys) : false;
-			        
-			if (currentKeys != null && !keysAreEqual)
+			if (!isMapOperator )
 			{
-				processInputPartition();
-				inputPart = RuntimeUtils.createPartition(qDef, inputObjInspectors[0], hiveConf);
-			}
-			
-			if (currentKeys == null || !keysAreEqual)
-			{
-				if (currentKeys == null)
+				/*
+				 * checkif current row belongs to the current accumulated Partition:
+				 * - If not:
+				 * 	- process the current Partition
+				 *  - reset input Partition
+				 * - set currentKey to the newKey if it is null or has changed.
+				 */
+				newKeys.getNewKey(row, inputPart.getOI());
+				boolean keysAreEqual = (currentKeys != null && newKeys != null)?
+				        newKeys.equals(currentKeys) : false;
+				        
+				if (currentKeys != null && !keysAreEqual)
 				{
-					currentKeys = newKeys.copyKey();
+					processInputPartition();
+					inputPart = RuntimeUtils.createFirstPartitionForChain(qDef, inputObjInspectors[0], hiveConf, isMapOperator);
 				}
-				else
+				
+				if (currentKeys == null || !keysAreEqual)
 				{
-					currentKeys.copyKey(newKeys);
+					if (currentKeys == null)
+					{
+						currentKeys = newKeys.copyKey();
+					}
+					else
+					{
+						currentKeys.copyKey(newKeys);
+					}
 				}
 			}
 			
@@ -205,6 +209,25 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 		{
 			Partition outPart = Executor.executeChain(qDef, inputPart);
 			Executor.executeSelectList(qDef, outPart, new ForwardPTF());
+		}
+		catch (WindowingException we)
+		{
+			throw new HiveException("Cannot close PTFOperator.", we);
+		}
+	}
+	
+	protected void processMapFunction() throws HiveException
+	{
+		try
+		{
+			TableFuncDef tDef = RuntimeUtils.getFirstTableFunction(qDef);
+			Partition outPart = tDef.getFunction().mapExecute(inputPart);
+			PartitionIterator<Object> pItr = outPart.iterator();
+			while (pItr.hasNext())
+			{
+				Object oRow = pItr.next();
+				forward(oRow, outputObjInspector);
+			}
 		}
 		catch (WindowingException we)
 		{

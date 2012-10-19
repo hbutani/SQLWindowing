@@ -263,19 +263,22 @@ public class InputTranslation
 	}
 	
 	/*
-	 * If query has no table function, then add one: if query has window functions add the WindowingTableFunc; else add the Noop table function.
+	 * If query has no table function, then add one: 
+	 * 	- if query has window functions add the WindowingTableFunc; else add the Noop table function.
+	 * If query has Window Clauses add the Window TAble Function to the top of the Chain.
 	 */
 	static ITranslationTask EnsureTableFunctionInQuery = new ITranslationTask() {
 		public void execute(QueryDef qDef) throws WindowingException
 		{
 			QuerySpec qSpec = qDef.getSpec();
 			boolean hasTableFunction = TranslateUtils.hasTableFunctions(qSpec);
-			if ( hasTableFunction)
+			boolean hasWindowFunctions = TranslateUtils.hasWindowFunctions(qSpec);
+			
+			if ( hasTableFunction && !hasWindowFunctions )
 			{
 				return;
 			}
 			
-			boolean hasWindowFunctions = TranslateUtils.hasWindowFunctions(qSpec);
 			String fnName = hasWindowFunctions ? FunctionRegistry.WINDOWING_TABLE_FUNCTION : FunctionRegistry.NOOP_TABLE_FUNCTION;
 			TableFuncSpec tSpec = new TableFuncSpec();
 			tSpec.setName(fnName);

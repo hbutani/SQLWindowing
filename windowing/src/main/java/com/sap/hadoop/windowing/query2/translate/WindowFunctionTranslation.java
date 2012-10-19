@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
-import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
@@ -133,12 +132,26 @@ public class WindowFunctionTranslation
 		
 		QueryInputDef inpDef = windowTableFnDef.getInput();
 		InputInfo inpInfo = qDef.getTranslationInfo().getInputInfo(inpDef);
-		OrderDef oDef = windowTableFnDef.getWindow().getOrderDef();
+		OrderDef oDef = getTableFuncOrderDef(windowTableFnDef);
 		ArrayList<OrderColumnDef> oCols = oDef.getColumns();
 		for(OrderColumnDef oCol : oCols)
 		{
 			wFnDef.addArg(TranslateUtils.buildArgDef(qDef, inpInfo, oCol.getExpression()));
 		}
+	}
+	
+	public static OrderDef getTableFuncOrderDef(TableFuncDef tblFnDef) throws WindowingException
+	{
+		if ( tblFnDef.getWindow() != null )
+		{
+			return tblFnDef.getWindow().getOrderDef();
+		}
+		QueryInputDef iDef = tblFnDef.getInput();
+		if ( iDef instanceof TableFuncDef )
+		{
+			return getTableFuncOrderDef((TableFuncDef) iDef);
+		}
+		throw new WindowingException("No Order by specification on Function: " + tblFnDef.getSpec());
 	}
 	
 	public static WindowDef translateWindowSpec(QueryDef qDef, InputInfo iInfo, WindowFunctionSpec wFnSpec) throws WindowingException

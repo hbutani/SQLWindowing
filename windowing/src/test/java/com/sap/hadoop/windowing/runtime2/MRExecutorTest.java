@@ -282,5 +282,72 @@ public class MRExecutorTest extends MRBaseTest
 				"007	003600	3.30874034E8	4\n";
 		Assert.assertEquals(r, e);		
 	}
+	
+
+	@Test
+	public void testNoopWithWindowing() throws WindowingException
+	{
+		wshell.execute("" +
+				"select county, tract, arealand, rank() as r " +
+				"from noop(census_tiny " +
+				"			partition by county " +
+				"			order by county, arealand desc) " +
+				"where r < 5 " +
+				"into path='/tmp/wout' " +
+				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
+				"with serdeproperties('field.delim'=',') " +
+				"format 'org.apache.hadoop.mapred.TextOutputFormat'",
+				outPrinter);
+		String r = outStream.toString();
+		r = r.replace("\r\n", "\n");
+		//System.out.println(r);
+		String e ="001	451101	5.52877327E8	1\n" +
+				"001	450701	2.66251308E8	2\n" +
+				"001	441503	7.7476439E7	3\n" +
+				"001	430102	7.6698501E7	4\n" +
+				"003	010000	1.912271907E9	1\n" +
+				"005	000102	4.5622349E8	1\n" +
+				"005	000200	3.23078053E8	2\n" +
+				"005	000301	1.95628423E8	3\n" +
+				"005	000304	1.41639221E8	4\n" +
+				"007	002400	1.106587526E9	1\n" +
+				"007	001600	5.58529159E8	2\n" +
+				"007	001500	3.50730015E8	3\n" +
+				"007	003600	3.30874034E8	4\n";
+		Assert.assertEquals(r, e);		
+	}
+	
+	@Test
+	public void testNoopWithMapWindowing() throws WindowingException
+	{
+		wshell.execute("" +
+				"select county, tract, arealand, rank() as r " +
+				"from noopwithmap(census_tiny " +
+				"			partition by county " +
+				"			order by county, arealand desc) " +
+				"where r < 5 " +
+				"into path='/tmp/wout' " +
+				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
+				"with serdeproperties('field.delim'=',') " +
+				"format 'org.apache.hadoop.mapred.TextOutputFormat'",
+				outPrinter);
+		String r = outStream.toString();
+		r = r.replace("\r\n", "\n");
+		//System.out.println(r);
+		String e ="001	451101	5.52877327E8	1\n" +
+				"001	450701	2.66251308E8	2\n" +
+				"001	441503	7.7476439E7	3\n" +
+				"001	430102	7.6698501E7	4\n" +
+				"003	010000	1.912271907E9	1\n" +
+				"005	000102	4.5622349E8	1\n" +
+				"005	000200	3.23078053E8	2\n" +
+				"005	000301	1.95628423E8	3\n" +
+				"005	000304	1.41639221E8	4\n" +
+				"007	002400	1.106587526E9	1\n" +
+				"007	001600	5.58529159E8	2\n" +
+				"007	001500	3.50730015E8	3\n" +
+				"007	003600	3.30874034E8	4\n";
+		Assert.assertEquals(r, e);		
+	}
 
 }

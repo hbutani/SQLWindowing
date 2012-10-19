@@ -10,7 +10,7 @@ CREATE TABLE part_tiny(
     p_comment STRING
 );
 
-create table part_rc_tiny (
+create table partrc_tiny (
     p_partkey INT,
     p_name STRING,
     p_mfgr STRING,
@@ -20,7 +20,9 @@ create table part_rc_tiny (
     p_container STRING,
     p_retailprice DOUBLE,
     p_comment STRING
-);
+)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe'
+STORED AS RCFILE;
 
 create table census_tiny (
 COUNTY STRING,

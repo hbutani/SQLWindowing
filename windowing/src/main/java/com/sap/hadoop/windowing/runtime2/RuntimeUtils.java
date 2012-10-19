@@ -94,6 +94,18 @@ public class RuntimeUtils
 		return (op);
 	}
 	
+	/**
+	 * Create a new partition.
+	 * The input OI is used to evaluate rows appended to the partition.
+	 * The serde is determined based on whether the query has a map-phase 
+	 * or not. The OI on the serde is used by PTFs to evaluate output of the 
+	 * partition. 
+	 * @param qDef
+	 * @param oi
+	 * @param hiveConf
+	 * @return
+	 * @throws WindowingException
+	 */
 	public static Partition createPartition(QueryDef qDef, ObjectInspector oi,
 			HiveConf hiveConf) throws WindowingException
 	{
@@ -104,6 +116,13 @@ public class RuntimeUtils
 
 		Partition part = null;
 		SerDe serde;
+		/*
+		 * If the query has a map-phase, the serde is the lazy binary serde 
+		 * unless the table function is a NOOP_MAP_TABLE_FUNCTION (in which 
+		 * case the serde is the same as that on the input table.
+		 * If the query does not have a map-phase, the serde is the same as 
+		 * that on the input hive table definition.
+		 * */
 		if (tEval.hasMapPhase())
 		{
 			if (tabDef.getName().equals(FunctionRegistry.NOOP_MAP_TABLE_FUNCTION))
@@ -125,6 +144,14 @@ public class RuntimeUtils
 
 	}
 	
+	/**
+	 * Iterate the list of the query input definitions in reverse order 
+	 * Return the first table function definition in the chain.
+	 * This table function is the first one to be executed on the 
+	 * input hive table. 
+	 * @param qDef
+	 * @return
+	 */
 	public static TableFuncDef getFirstTableFunction(QueryDef qDef){
 		TableFuncDef tabDef = null; 
 		Iterator<QueryInputDef> it = TranslateUtils.iterateInputDefs(qDef, true);

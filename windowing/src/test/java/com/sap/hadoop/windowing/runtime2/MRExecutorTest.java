@@ -56,6 +56,54 @@ public class MRExecutorTest extends MRBaseTest
 				"Manufacturer#5	almond azure blanched chiffon midnight	23	5	5\n";
 		Assert.assertEquals(r, e);
 	}
+	
+	@Test
+	public void testRC() throws WindowingException
+	{
+		wshell.execute(
+				"select  p_mfgr,p_name, p_size,\n"
+						+ "rank() as r,\n"
+						+ "denserank() as dr\n"
+						+ "from partrc_tiny\n"
+						+ "partition by p_mfgr\n"
+						+ "order by p_name\n"
+						+ "window w1 as rows between 2 preceding and 2 following\n"
+						+ "into path='/tmp/wout2'\n"
+						+ "serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'\n"
+						+ "with serdeproperties('field.delim'=',')\n"
+						+ "format 'org.apache.hadoop.mapred.TextOutputFormat'",
+				outPrinter);
+		String r = outStream.toString();
+		r = r.replace("\r\n", "\n");
+		System.out.println(r);
+		String e = "Manufacturer#1	almond antique burnished rose metallic	2	1	1\n" +
+				"Manufacturer#1	almond antique burnished rose metallic	2	1	1\n" +
+				"Manufacturer#1	almond antique chartreuse lavender yellow	34	3	2\n" +
+				"Manufacturer#1	almond antique salmon chartreuse burlywood	6	4	3\n" +
+				"Manufacturer#1	almond aquamarine burnished black steel	28	5	4\n" +
+				"Manufacturer#1	almond aquamarine pink moccasin thistle	42	6	5\n" +
+				"Manufacturer#2	almond antique violet chocolate turquoise	14	1	1\n" +
+				"Manufacturer#2	almond antique violet turquoise frosted	40	2	2\n" +
+				"Manufacturer#2	almond aquamarine midnight light salmon	2	3	3\n" +
+				"Manufacturer#2	almond aquamarine rose maroon antique	25	4	4\n" +
+				"Manufacturer#2	almond aquamarine sandy cyan gainsboro	18	5	5\n" +
+				"Manufacturer#3	almond antique chartreuse khaki white	17	1	1\n" +
+				"Manufacturer#3	almond antique forest lavender goldenrod	14	2	2\n" +
+				"Manufacturer#3	almond antique metallic orange dim	19	3	3\n" +
+				"Manufacturer#3	almond antique misty red olive	1	4	4\n" +
+				"Manufacturer#3	almond antique olive coral navajo	45	5	5\n" +
+				"Manufacturer#4	almond antique gainsboro frosted violet	10	1	1\n" +
+				"Manufacturer#4	almond antique violet mint lemon	39	2	2\n" +
+				"Manufacturer#4	almond aquamarine floral ivory bisque	27	3	3\n" +
+				"Manufacturer#4	almond aquamarine yellow dodger mint	7	4	4\n" +
+				"Manufacturer#4	almond azure aquamarine papaya violet	12	5	5\n" +
+				"Manufacturer#5	almond antique blue firebrick mint	31	1	1\n" +
+				"Manufacturer#5	almond antique medium spring khaki	6	2	2\n" +
+				"Manufacturer#5	almond antique sky peru orange	2	3	3\n" +
+				"Manufacturer#5	almond aquamarine dodger light gainsboro	46	4	4\n" +
+				"Manufacturer#5	almond azure blanched chiffon midnight	23	5	5\n";
+		Assert.assertEquals(r, e);
+	}
 
 	@Test
 	public void test2() throws WindowingException {

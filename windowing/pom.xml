@@ -15,7 +15,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
               <archive>
                     <manifest>
                       <addClasspath>true</addClasspath>
-                      <mainClass>com.sap.hadoop.windowing.WindowingHiveCliDriver</mainClass>
+                      <mainClass>com.sap.hadoop.windowing.cli2.WindowingHiveCliDriver</mainClass>
                     </manifest>
               </archive>
           	<excludes>

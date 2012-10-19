@@ -100,7 +100,7 @@ public class WindowingHiveCliDriver extends CliDriver
 		{
 			String query = Utils.unescapeQueryString(cmd);
 			query = query.trim();
-			if (query.startsWith("from"))
+			if (query.startsWith("from") || query.startsWith("select"))
 			{
 				/*
 				 * try to parse it

@@ -1,6 +1,8 @@
 package com.sap.hadoop.windowing.runtime.mr
 
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -8,6 +10,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.sap.hadoop.windowing.MRBase2Test;
+import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.runtime2.mr.MRExecutor
 
@@ -31,50 +34,8 @@ class TestPTFOperator extends MRBase2Test {
 		mrExec.execute(qdef, wshell);
 	}
 
-/*	@Test
-	void testMap()
-	{
-		System.out.println("Beginning testMap");
-		QueryDef qdef =  wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +
-						"from noopwithmap(part_rc " +  
-						"partition by p_mfgr "  + 
-						"order by p_mfgr, p_name) " + 
-				"window w1 as rows between 2 preceding and 2 following " +
-				"into path='/tmp/testmap' " +
-				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
-				"with serdeproperties('field.delim'=',') " +
-				"format 'org.apache.hadoop.mapred.TextOutputFormat'");
-		execute(qdef);
-	}
-*/	
+
 	@Test
-	void test1() {
-		System.out.println("Beginning test1");
-		QueryDef qdef =  wshell.translate("select  p_mfgr, p_name, p_size, rank() as r, denserank() as dr " +
-				"cumedist() as cud, " + 
-				"percentrank() as pr, " +
-				"ntile(3) as nt, " +
-				"count(p_size) as c, " +
-				"count(p_size, 'all') as ca, " +
-				"count(p_size, 'distinct') as cd, " +
-				"first_value(p_size) as fv, " +
-				"last_value(p_size) as lv, " +
-				"first_value(p_size, 'true') over w1 as fv2 " +
-				"from part " +
-				"partition by p_mfgr " +
-				"order by p_mfgr " +
-				"window w1 as rows between 2 preceding and 2 following " +
-				"into path='/tmp/test1' " +
-				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
-				"with serdeproperties('field.delim'=',') " +
-				"format 'org.apache.hadoop.mapred.TextOutputFormat'");
-		execute(qdef);
-	}
-
-
-/*	
-
- 	@Test
 	void test1() {
 		System.out.println("Beginning test1");
 		QueryDef qdef =  wshell.translate("select  p_mfgr,p_name, p_size, rank() as r, denserank() as dr " +
@@ -246,7 +207,63 @@ class TestPTFOperator extends MRBase2Test {
 	 format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		execute(qDef)
 	}
-*/
-	
+
+	@Test
+	public void testNoopWithMapWindowing() throws WindowingException
+	{
+		System.out.println("Beginning testNoopWithMapWindowing");
+		QueryDef qdef =  wshell.translate("" +
+				"select county, tract, arealand, rank() as r " +
+				"from noopwithmap(census_tiny " +
+				"			partition by county " +
+				"			order by county, arealand desc) " +
+				"where r < 5 " +
+				"into path='/tmp/testNoopWithMapWindowing' " +
+				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
+				"with serdeproperties('field.delim'=',') " +
+				"format 'org.apache.hadoop.mapred.TextOutputFormat'");
+		execute(qdef);
+	}
+
+
+
+	@Test
+	public void testCensus1() throws WindowingException
+	{
+		System.out.println("Beginning testCensus1");
+		QueryDef qdef =  wshell.translate("" +
+				"select county, tract, arealand, rank() as r " +
+				"from census_tiny " +
+				"partition by county " +
+				"order by county, arealand desc " +
+				"where r < 5 " +
+				"into path='/tmp/testCensus1' " +
+				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
+				"with serdeproperties('field.delim'=',') " +
+				"format 'org.apache.hadoop.mapred.TextOutputFormat'");
+		execute(qdef);
+	}
+
+
+	@Test
+	public void testNoopWithWindowing() throws WindowingException
+	{
+		System.out.println("Beginning testNoopWithWindowing");
+		QueryDef qdef =  wshell.translate("" +
+				"select county, tract, arealand, rank() as r " +
+				"from noop(census_tiny " +
+				"			partition by county " +
+				"			order by county, arealand desc) " +
+				"where r < 5 " +
+				"into path='/tmp/testNoopWithWindowing' " +
+				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
+				"with serdeproperties('field.delim'=',') " +
+				"format 'org.apache.hadoop.mapred.TextOutputFormat'");
+		execute(qdef);
+	}
+
+
+
+
 
 }

@@ -133,8 +133,9 @@ public class MRUtils
 	 * 
 	 * @param qdef
 	 * @return
+	 * @throws WindowingException 
 	 */
-	public static boolean addPTFMapOperator(QueryDef qdef)
+	public static boolean addPTFMapOperator(QueryDef qdef) throws WindowingException
 	{
 		boolean hasMap = false;
 		TableFuncDef tabDef = RuntimeUtils.getFirstTableFunction(qdef);

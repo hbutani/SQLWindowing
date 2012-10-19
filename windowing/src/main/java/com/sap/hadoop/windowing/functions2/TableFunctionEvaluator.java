@@ -103,8 +103,9 @@ public abstract class TableFunctionEvaluator
 		return partitionMemSize;
 	}
 	
-	public boolean hasMapPhase()
+	public boolean hasMapPhase() throws WindowingException
 	{
+		resolver.setHasMapPhase();
 		return resolver.hasMapPhase();
 	}
 	

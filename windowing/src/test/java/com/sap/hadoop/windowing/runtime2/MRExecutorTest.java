@@ -397,7 +397,7 @@ public class MRExecutorTest extends MRBaseTest
 				"			partition by county " +
 				"			order by county, arealand desc) " +
 				"where r < 5 " +
-				"into path='/tmp/wout' " +
+				"into path='/tmp/NoopWithWindowing' " +
 				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
 				"with serdeproperties('field.delim'=',') " +
 				"format 'org.apache.hadoop.mapred.TextOutputFormat'",
@@ -430,7 +430,7 @@ public class MRExecutorTest extends MRBaseTest
 				"			partition by county " +
 				"			order by county, arealand desc) " +
 				"where r < 5 " +
-				"into path='/tmp/wout' " +
+				"into path='/tmp/NoopWithMapWindowing' " +
 				"serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' " +
 				"with serdeproperties('field.delim'=',') " +
 				"format 'org.apache.hadoop.mapred.TextOutputFormat'",

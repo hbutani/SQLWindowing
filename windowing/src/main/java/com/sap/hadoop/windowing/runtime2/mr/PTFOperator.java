@@ -66,7 +66,6 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 		{
 			isMapOperator = true;
 		}
-		System.out.println("isMapOperator - " + isMapOperator);
 
 		// use the string from PTFDesc to get deserialized QueryDef
 		qDef = (QueryDef) SerializationUtils

@@ -2,7 +2,6 @@ package com.sap.hadoop.windowing.runtime2;
 
 import java.io.PrintStream;
 
-import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.io.Writable;
 
 import com.sap.hadoop.windowing.WindowingException;

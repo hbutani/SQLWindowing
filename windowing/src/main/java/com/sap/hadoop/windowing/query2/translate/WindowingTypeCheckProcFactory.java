@@ -108,7 +108,7 @@ public class WindowingTypeCheckProcFactory
 			desc = new ExprNodeColumnDesc(colInfo.getType(),
 					colInfo.getInternalName(), colInfo.getTabAlias(),
 					colInfo.getIsVirtualCol());
-			ASTNode source = input.getExpressionSource(expr);
+			//ASTNode source = input.getExpressionSource(expr);
 // hb: UnparseTranslaor is not public.			
 //			if (source != null)
 //			{

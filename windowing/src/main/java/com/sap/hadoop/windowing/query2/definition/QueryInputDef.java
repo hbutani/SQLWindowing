@@ -1,7 +1,5 @@
 package com.sap.hadoop.windowing.query2.definition;
 
-import java.io.Serializable;
-
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
@@ -9,7 +7,7 @@ import com.sap.hadoop.windowing.query2.SerializationUtils;
 import com.sap.hadoop.windowing.query2.specification.HiveTableSpec;
 import com.sap.hadoop.windowing.query2.specification.QueryInputSpec;
 
-public abstract class QueryInputDef implements Serializable
+public abstract class QueryInputDef
 {
 	QueryInputSpec inputSpec;
 	WindowDef window;

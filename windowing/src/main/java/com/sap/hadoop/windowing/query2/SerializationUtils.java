@@ -23,7 +23,6 @@ import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 
-import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.specification.WindowFrameSpec.Direction;
 

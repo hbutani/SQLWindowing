@@ -1,0 +1,63 @@
+/*
+ * Basic Query
+ */
+select  p_mfgr,p_name, p_size,
+rank() as r,
+denserank() as dr
+from part_tiny
+partition by p_mfgr
+order by p_name
+window w1 as rows between 2 preceding and 2 following
+into path='/tmp/wout2';
+
+/*
+ * Where Lead
+ */
+select  p_mfgr,p_name, p_size
+from part_tiny 
+partition by p_mfgr 
+order by p_name 
+where lead(p_size, 1) <= p_size 
+into path='/tmp/testWhereLead' 
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' 
+with serdeproperties('field.delim'=',') 
+format 'org.apache.hadoop.mapred.TextOutputFormat';
+
+/*
+ * Census Query
+ */
+select county, tract, arealand, rank() as r
+from census_tiny
+partition by county 
+order by county, arealand desc
+where r < 5 
+into path='/tmp/wout' 
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' 
+with serdeproperties('field.delim'=',') 
+format 'org.apache.hadoop.mapred.TextOutputFormat';
+
+/*
+ * With Noop Function Query
+ */
+select county, tract, arealand, rank() as r 
+from noop(census_tiny 
+partition by county 
+order by county, arealand desc) 
+where r < 5 
+into path='/tmp/NoopWithWindowing' 
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' 
+with serdeproperties('field.delim'=',') 
+format 'org.apache.hadoop.mapred.TextOutputFormat';
+
+/*
+ * With NoopWithMap Function Query
+ */
+select county, tract, arealand, rank() as r 
+from noopwithmap(census_tiny 
+partition by county 
+order by county, arealand desc) 
+where r < 5 
+into path='/tmp/NoopWithWindowing' 
+serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' 
+with serdeproperties('field.delim'=',') 
+format 'org.apache.hadoop.mapred.TextOutputFormat';

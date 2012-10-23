@@ -118,7 +118,7 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000);
 		conf.set("io.sort.mb", "200");
 		conf.set("mapred.compress.map.output", "true");
-		conf.set("mapred.child.java.opts", "-Xms1024m -Xmx2048m");
+		conf.set("mapred.child.java.opts", "-Xms128m -Xmx512m");
 	}
 	
 	public static void HOME(Configuration conf)

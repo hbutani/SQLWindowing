@@ -27,7 +27,7 @@ import com.sap.hadoop.windowing.runtime2.WindowingShell;
 public abstract class BaseTest extends ClusterMapReduceDelegate
 {
 	protected  static WindowingShell wshell;
-	protected static String baseDatadir = "src/test/groovy/data";
+	protected static String baseDatadir = "src/test/java/data";
 	protected static ByteArrayOutputStream outStream;
 	protected static QueryOutputPrinter outPrinter;
 	

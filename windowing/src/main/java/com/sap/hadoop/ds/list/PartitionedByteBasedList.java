@@ -11,7 +11,6 @@ import org.apache.hadoop.hive.serde2.Serializer;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.io.Writable;
 
-import com.google.common.io.Files;
 import com.sap.hadoop.Utils;
 import com.sap.hadoop.ds.BaseException;
 import com.sap.hadoop.ds.LockUtils;
@@ -27,7 +26,7 @@ public class PartitionedByteBasedList extends ByteBasedList
 	{
 		this.batchSize = batchSize;
 		currentSize = 0;
-		dir = Files.createTempDir();
+		dir = Utils.createTempDir();
 		Runtime.getRuntime().addShutdownHook(new ShutdownHook(dir));
 		
 		partitions = new ArrayList<ByteBasedList>();

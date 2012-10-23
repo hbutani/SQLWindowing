@@ -8,7 +8,6 @@ import java.util.Iterator;
 import org.apache.hadoop.io.RawComparator;
 import org.apache.hadoop.io.Writable;
 
-import com.google.common.io.Files;
 import com.sap.hadoop.Utils;
 import com.sap.hadoop.ds.BaseException;
 import com.sap.hadoop.ds.LockUtils;
@@ -37,7 +36,7 @@ public class PartitionedByteBasedSortedMap extends ByteBasedSortedMap
 		splitList = new SplitList();
 		fixStartPositions = false;
 		partitions.add(new ByteBasedSortedMap(capacity, comparator));
-		dir = Files.createTempDir();
+		dir = Utils.createTempDir();
 		Runtime.getRuntime().addShutdownHook(new ShutdownHook(dir));
 	}
 	

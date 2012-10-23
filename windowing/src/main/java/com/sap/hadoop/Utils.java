@@ -14,7 +14,6 @@ import org.apache.hadoop.hive.serde.Constants;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe;
 
-import com.google.common.base.Preconditions;
 import com.sap.hadoop.ds.BaseException;
 
 public class Utils
@@ -173,8 +172,14 @@ public class Utils
 	public static void deleteDirectoryContents(File directory)
 			throws IOException
 	{
-		Preconditions.checkArgument(directory.isDirectory(),
+		/*Preconditions.checkArgument(directory.isDirectory(),
 				"Not a directory: %s", directory);
+		*/
+		if ( !directory.isDirectory())
+		{
+			throw new IOException(sprintf("Not a directory: %s", directory));
+		}
+		
 		// Symbolic links will have different canonical and absolute paths
 		if (!directory.getCanonicalPath().equals(directory.getAbsolutePath()))
 		{
@@ -189,6 +194,27 @@ public class Utils
 		{
 			deleteRecursively(file);
 		}
+	}
+	
+	// copied completely from guava to remove dependency on guava
+	/** Maximum loop count when creating temp directories. */
+	private static final int TEMP_DIR_ATTEMPTS = 10000;
+	public static File createTempDir()
+	{
+		File baseDir = new File(System.getProperty("java.io.tmpdir"));
+		String baseName = System.currentTimeMillis() + "-";
+
+		for (int counter = 0; counter < TEMP_DIR_ATTEMPTS; counter++)
+		{
+			File tempDir = new File(baseDir, baseName + counter);
+			if (tempDir.mkdir())
+			{
+				return tempDir;
+			}
+		}
+		throw new IllegalStateException("Failed to create directory within "
+				+ TEMP_DIR_ATTEMPTS + " attempts (tried " + baseName + "0 to "
+				+ baseName + (TEMP_DIR_ATTEMPTS - 1) + ')');
 	}
 
 }

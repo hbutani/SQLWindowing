@@ -25,7 +25,7 @@ public abstract class TableFunctionResolver {
 		String partitionClass = cfg.get(Constants.WINDOW_PARTITION_CLASS,
 				Constants.DEFAULT_WINDOW_PARTITION_CLASS);
 		int partitionMemSize = cfg.getInt(Constants.WINDOW_PARTITION_MEM_SIZE,
-				ByteBasedList.LARGE_SIZE);
+				ByteBasedList.MEDIUM_SIZE);
 
 		TableFunctionEvaluator tfEval = createEvaluator(qDef, tDef);
 		tfEval.setResolver(this);

@@ -55,7 +55,7 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 	{
 		outStream = new ByteArrayOutputStream();
 		startVirtualCluster();
-		HOME(getConf());
+		LOCAL(getConf());
 		conf.setBoolean(Constants.WINDOWING_TEST_MODE, true);
 		
 		createTestData();
@@ -111,36 +111,41 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 				conf);
 	}
 	
-	public static void WORK(Configuration conf)
+	public static void LOCAL(Configuration conf)
 	{
 		conf.set("hive.metastore.uris", "thrift://localhost:9083");
-		conf.set("hive.metastore.local", "false");
-		conf.set("windowing.jar.file", "/home/saplabs/Projects/SQLWindowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
-		
 		conf.set(Constants.HIVE_THRIFTSERVER, "localhost");
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000);
-		conf.set("HIVE_HOME", "/home/saplabs/Projects/hive/build/dist");
+		conf.set("io.sort.mb", "200");
+		conf.set("mapred.compress.map.output", "true");
+		conf.set("mapred.child.java.opts", "-Xms1024m -Xmx2048m");
 	}
 	
 	public static void HOME(Configuration conf)
 	{
 		conf.set("hive.metastore.uris", "thrift://localhost:9083");
-		conf.set("hive.metastore.local", "false");
+		//conf.set("hive.metastore.local", "false");
 		
-		conf.set("windowing.jar.file", "/media/MyPassport/windowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
+		/*
+		 * Not needed now that we are
+		 */
+		//conf.set("windowing.jar.file", "/media/MyPassport/windowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar");
 		
 		conf.set("io.sort.mb", "200");
 		conf.set("mapred.compress.map.output", "true");
 		
 		conf.set(Constants.HIVE_THRIFTSERVER, "localhost");
 		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000);
-		String hiveHome = "/media/MyPassport/hadoop/hive2/hive/build/dist";
-		conf.set("HIVE_HOME", hiveHome);
-		conf.set(HiveConf.ConfVars.HIVEADDEDJARS.toString(), 
+		//String hiveHome = "/media/MyPassport/hadoop/hive2/hive/build/dist";
+		//conf.set("HIVE_HOME", hiveHome);
+		/*
+		 * This is not needed: Mini Cluster seems to take care of adding all jars on classpath to Jobs.
+		 */
+		/*conf.set(HiveConf.ConfVars.HIVEADDEDJARS.toString(), 
 			"file:///media/MyPassport/windowing/windowing/target/com.sap.hadoop.windowing-0.0.2-SNAPSHOT.jar," +
 			"file:///media/MyPassport/hadoop/hive2/hive/build/dist/lib/antlr-runtime-3.0.1.jar," +
 			"file:///media/MyPassport/hadoop/hive2/hive/build/dist/lib/groovy-all-1.8.0.jar," +
-			"file:///media/MyPassport/hadoop/hive2/hive/build/dist/lib/hive-metastore-0.10.0-SNAPSHOT.jar");
+			"file:///media/MyPassport/hadoop/hive2/hive/build/dist/lib/hive-metastore-0.10.0-SNAPSHOT.jar");*/
 		conf.set("mapred.child.java.opts", "-Xms1024m -Xmx2048m");
 	}
 }

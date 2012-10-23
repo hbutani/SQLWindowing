@@ -107,7 +107,6 @@ public class MRExecutorTest extends MRBaseTest
 
 	@Test
 	public void test2() throws WindowingException {
-		System.out.println("Beginning test2");
 		wshell.execute("select p_mfgr,p_name,p_size "
 				+ "from part_tiny " + "partition by p_mfgr "
 				+ "order by p_size " + "into path='/tmp/test2' "
@@ -151,7 +150,6 @@ public class MRExecutorTest extends MRBaseTest
 	@Test
 	public void testSum() throws WindowingException
 	{
-		System.out.println("Beginning testSum");
 		wshell.execute(
 				"select  p_mfgr,p_name, p_size, \n"
 						+ "sum(p_size) as s \n"
@@ -175,7 +173,6 @@ public class MRExecutorTest extends MRBaseTest
 	@Test
 	public void testSumWindow() throws WindowingException
 	{
-		System.out.println("Beginning testSumWindow");
 		wshell.execute(
 				"select  p_mfgr,p_name, p_size, \n"
 						+ "sum(p_size) over w1 as s, \n"
@@ -200,7 +197,6 @@ public class MRExecutorTest extends MRBaseTest
 	@Test
 	public void testFirstLastValue() throws WindowingException
 	{
-		System.out.println("Beginning testFirstLastValue");
 		wshell.execute(
 				"select  p_mfgr,p_name, p_size, \n"
 						+ "sum(p_size) over rows between current row and current row as s2, \n"
@@ -226,7 +222,6 @@ public class MRExecutorTest extends MRBaseTest
 	@Test
 	public void testWhere() throws WindowingException
 	{
-		System.out.println("Beginning testWhere");
 		wshell.execute(
 				"		 select  p_mfgr,p_name, p_size, \n"
 						+ "rank() as r, \n"
@@ -254,7 +249,6 @@ public class MRExecutorTest extends MRBaseTest
 	@Test
 	public void testLead() throws WindowingException
 	{
-		System.out.println("Beginning testLead");
 		wshell.execute(
 				"	 select  p_mfgr,p_name, p_size,	 p_size - lead(p_size,1) as deltaSz \n"
 						+ "from part_tiny \n"
@@ -277,7 +271,6 @@ public class MRExecutorTest extends MRBaseTest
 	@Test
 	public void testLag() throws WindowingException
 	{
-		System.out.println("Beginning testLag");
 		wshell.execute(
 				"	 select  p_mfgr,p_name, p_size,	 p_size - lag(p_size,1) as deltaSz \n"
 						+ "from part_tiny \n"
@@ -301,7 +294,6 @@ public class MRExecutorTest extends MRBaseTest
 	@Test
 	public void testSumDelta() throws WindowingException
 	{
-		System.out.println("Beginning testSumDelta");
 		wshell.execute(
 				"	 select  p_mfgr,p_name, p_size,	 sum(p_size - lag(p_size,1)) as deltaSum \n"
 						+ "from part_tiny \n"
@@ -322,12 +314,15 @@ public class MRExecutorTest extends MRBaseTest
 
 	@Test
 	public void testWhereLead() throws WindowingException {
-		System.out.println("Beginning testWhereLead");
+		/*
+		 * order by something other than p_mfgr because ordering on the partitioning column only doesn't guarantee
+		 * rows in a partition will always come in the same order.
+		 */
 		wshell.execute(
 				"	 select  p_mfgr,p_name, p_size \n"
 						+ "from part_tiny \n"
 						+ "partition by p_mfgr \n"
-						+ "order by p_mfgr \n"
+						+ "order by p_name \n"
 						+ "where lead(p_size, 1) <= p_size \n"
 						+ "into path='/tmp/testWhereLead' \n"
 						+ "serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' \n"
@@ -336,21 +331,23 @@ public class MRExecutorTest extends MRBaseTest
 				outPrinter);
 		String r = outStream.toString();
 		r = r.replace("\r\n", "\n");
-		// System.out.println(r);
-		String e = "Manufacturer#1	almond antique chartreuse lavender yellow	34\n"
-				+ "Manufacturer#1	almond aquamarine pink moccasin thistle	42\n"
-				+ "Manufacturer#2	almond antique violet turquoise frosted	40\n"
-				+ "Manufacturer#2	almond aquamarine rose maroon antique	25\n"
-				+ "Manufacturer#3	almond antique metallic orange dim	19\n"
-				+ "Manufacturer#3	almond antique chartreuse khaki white	17\n"
-				+ "Manufacturer#3	almond antique forest lavender goldenrod	14\n"
-				+ "Manufacturer#3	almond antique olive coral navajo	45\n"
-				+ "Manufacturer#4	almond antique violet mint lemon	39\n"
-				+ "Manufacturer#4	almond aquamarine floral ivory bisque	27\n"
-				+ "Manufacturer#5	almond antique blue firebrick mint	31\n"
-				+ "Manufacturer#5	almond antique medium spring khaki	6\n"
-				+ "Manufacturer#5	almond aquamarine dodger light gainsboro	46\n"
-				+ "Manufacturer#5	almond azure blanched chiffon midnight	23\n";
+		//System.out.println(r);
+		String e = "Manufacturer#1	almond antique burnished rose metallic	2\n" +
+				"Manufacturer#1	almond antique chartreuse lavender yellow	34\n" +
+				"Manufacturer#1	almond aquamarine pink moccasin thistle	42\n" +
+				"Manufacturer#2	almond antique violet turquoise frosted	40\n" +
+				"Manufacturer#2	almond aquamarine rose maroon antique	25\n" +
+				"Manufacturer#2	almond aquamarine sandy cyan gainsboro	18\n" +
+				"Manufacturer#3	almond antique chartreuse khaki white	17\n" +
+				"Manufacturer#3	almond antique metallic orange dim	19\n" +
+				"Manufacturer#3	almond antique olive coral navajo	45\n" +
+				"Manufacturer#4	almond antique violet mint lemon	39\n" +
+				"Manufacturer#4	almond aquamarine floral ivory bisque	27\n" +
+				"Manufacturer#4	almond azure aquamarine papaya violet	12\n" +
+				"Manufacturer#5	almond antique blue firebrick mint	31\n" +
+				"Manufacturer#5	almond antique medium spring khaki	6\n" +
+				"Manufacturer#5	almond aquamarine dodger light gainsboro	46\n" +
+				"Manufacturer#5	almond azure blanched chiffon midnight	23\n";
 		Assert.assertEquals(r, e);	
 	}
 	

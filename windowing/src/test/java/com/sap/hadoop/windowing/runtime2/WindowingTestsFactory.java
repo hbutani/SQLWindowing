@@ -123,6 +123,170 @@ public class WindowingTestsFactory
 					+ "Manufacturer#5	almond azure blanched chiffon midnight	23\n"
 					+ "Manufacturer#5	almond antique blue firebrick mint	31\n"
 					+ "Manufacturer#5	almond aquamarine dodger light gainsboro	46\n");
+	
+	public static WindowingTest SUM = new WindowingTest(
+			"testSum",
+			"Test Sum ",
+			"select  p_mfgr,p_name, p_size, \n"
+					+ "sum(p_size) as s \n"
+					+ "from part_tiny		"
+					+ " partition by p_mfgr \n"
+					+ "order by p_mfgr \n"
+					+ "window w1 as rows between 2 preceding and 2 following \n"
+					+ "into path='/tmp/testSum' \n"
+					+ "serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'		"
+					+ "with serdeproperties('field.delim'=',') \n"
+					+ "format 'org.apache.hadoop.mapred.TextOutputFormat'",
+					"Manufacturer#1	almond antique burnished rose metallic	2	114\n" +
+							"Manufacturer#1	almond antique chartreuse lavender yellow	34	114\n" +
+							"Manufacturer#1	almond antique burnished rose metallic	2	114\n" +
+							"Manufacturer#1	almond antique salmon chartreuse burlywood	6	114\n" +
+							"Manufacturer#1	almond aquamarine burnished black steel	28	114\n" +
+							"Manufacturer#1	almond aquamarine pink moccasin thistle	42	114\n" +
+							"Manufacturer#2	almond antique violet chocolate turquoise	14	99\n" +
+							"Manufacturer#2	almond antique violet turquoise frosted	40	99\n" +
+							"Manufacturer#2	almond aquamarine midnight light salmon	2	99\n" +
+							"Manufacturer#2	almond aquamarine rose maroon antique	25	99\n" +
+							"Manufacturer#2	almond aquamarine sandy cyan gainsboro	18	99\n" +
+							"Manufacturer#3	almond antique metallic orange dim	19	96\n" +
+							"Manufacturer#3	almond antique chartreuse khaki white	17	96\n" +
+							"Manufacturer#3	almond antique forest lavender goldenrod	14	96\n" +
+							"Manufacturer#3	almond antique misty red olive	1	96\n" +
+							"Manufacturer#3	almond antique olive coral navajo	45	96\n" +
+							"Manufacturer#4	almond antique gainsboro frosted violet	10	95\n" +
+							"Manufacturer#4	almond antique violet mint lemon	39	95\n" +
+							"Manufacturer#4	almond aquamarine floral ivory bisque	27	95\n" +
+							"Manufacturer#4	almond aquamarine yellow dodger mint	7	95\n" +
+							"Manufacturer#4	almond azure aquamarine papaya violet	12	95\n" +
+							"Manufacturer#5	almond antique blue firebrick mint	31	108\n" +
+							"Manufacturer#5	almond antique medium spring khaki	6	108\n" +
+							"Manufacturer#5	almond antique sky peru orange	2	108\n" +
+							"Manufacturer#5	almond aquamarine dodger light gainsboro	46	108\n" +
+							"Manufacturer#5	almond azure blanched chiffon midnight	23	108\n");
+	public static WindowingTest SUMWINDOW = new WindowingTest(
+			"testSumWindow",
+			"Test Sum with Window",
+			"select  p_mfgr,p_name, p_size, \n"
+					+ "sum(p_size) over w1 as s, \n"
+					+ "sum(p_size) over rows between current row and current row as s2 \n"
+					+ "from part_tiny \n"
+					+ "partition by p_mfgr \n"
+					+ "order by p_mfgr \n"
+					+ "window w1 as rows between 2 preceding and 2 following \n"
+					+ "into path='/tmp/testSumWindow' \n"
+					+ "serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' \n"
+					+ "with serdeproperties('field.delim'=',') \n"
+					+ "format 'org.apache.hadoop.mapred.TextOutputFormat'",
+					"Manufacturer#1	almond antique burnished rose metallic	2	38	2\n" +
+							"Manufacturer#1	almond antique chartreuse lavender yellow	34	44	34\n" +
+							"Manufacturer#1	almond antique burnished rose metallic	2	72	2\n" +
+							"Manufacturer#1	almond antique salmon chartreuse burlywood	6	112	6\n" +
+							"Manufacturer#1	almond aquamarine burnished black steel	28	78	28\n" +
+							"Manufacturer#1	almond aquamarine pink moccasin thistle	42	76	42\n" +
+							"Manufacturer#2	almond antique violet chocolate turquoise	14	56	14\n" +
+							"Manufacturer#2	almond antique violet turquoise frosted	40	81	40\n" +
+							"Manufacturer#2	almond aquamarine midnight light salmon	2	99	2\n" +
+							"Manufacturer#2	almond aquamarine rose maroon antique	25	85	25\n" +
+							"Manufacturer#2	almond aquamarine sandy cyan gainsboro	18	45	18\n" +
+							"Manufacturer#3	almond antique metallic orange dim	19	50	19\n" +
+							"Manufacturer#3	almond antique chartreuse khaki white	17	51	17\n" +
+							"Manufacturer#3	almond antique forest lavender goldenrod	14	96	14\n" +
+							"Manufacturer#3	almond antique misty red olive	1	77	1\n" +
+							"Manufacturer#3	almond antique olive coral navajo	45	60	45\n" +
+							"Manufacturer#4	almond antique gainsboro frosted violet	10	76	10\n" +
+							"Manufacturer#4	almond antique violet mint lemon	39	83	39\n" +
+							"Manufacturer#4	almond aquamarine floral ivory bisque	27	95	27\n" +
+							"Manufacturer#4	almond aquamarine yellow dodger mint	7	85	7\n" +
+							"Manufacturer#4	almond azure aquamarine papaya violet	12	46	12\n" +
+							"Manufacturer#5	almond antique blue firebrick mint	31	39	31\n" +
+							"Manufacturer#5	almond antique medium spring khaki	6	85	6\n" +
+							"Manufacturer#5	almond antique sky peru orange	2	108	2\n" +
+							"Manufacturer#5	almond aquamarine dodger light gainsboro	46	77	46\n" +
+							"Manufacturer#5	almond azure blanched chiffon midnight	23	71	23\n");
+	public static WindowingTest FIRSTLAST = new WindowingTest(
+			"testFirstLast",
+			"Test First Last Value",
+			"select  p_mfgr,p_name, p_size, \n"
+					+ "sum(p_size) over rows between current row and current row as s2, \n"
+					+ "first_value(p_size) over w1 as f, \n"
+					+ "last_value(p_size, false) over w1 as l \n"
+					+ "from part_tiny \n"
+					+ "partition by p_mfgr \n"
+					+ "order by p_mfgr \n"
+					+ "window w1 as rows between 2 preceding and 2 following \n"
+					+ "into path='/tmp/testFirstLastValue' \n"
+					+ "serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' \n"
+					+ "with serdeproperties('field.delim'=',') \n"
+					+ "format 'org.apache.hadoop.mapred.TextOutputFormat'",
+					"Manufacturer#1	almond antique burnished rose metallic	2	2	2	2\n" +
+							"Manufacturer#1	almond antique chartreuse lavender yellow	34	34	2	6\n" +
+							"Manufacturer#1	almond antique burnished rose metallic	2	2	2	28\n" +
+							"Manufacturer#1	almond antique salmon chartreuse burlywood	6	6	34	42\n" +
+							"Manufacturer#1	almond aquamarine burnished black steel	28	28	2	42\n" +
+							"Manufacturer#1	almond aquamarine pink moccasin thistle	42	42	6	42\n" +
+							"Manufacturer#2	almond antique violet chocolate turquoise	14	14	14	2\n" +
+							"Manufacturer#2	almond antique violet turquoise frosted	40	40	14	25\n" +
+							"Manufacturer#2	almond aquamarine midnight light salmon	2	2	14	18\n" +
+							"Manufacturer#2	almond aquamarine rose maroon antique	25	25	40	18\n" +
+							"Manufacturer#2	almond aquamarine sandy cyan gainsboro	18	18	2	18\n" +
+							"Manufacturer#3	almond antique metallic orange dim	19	19	19	14\n" +
+							"Manufacturer#3	almond antique chartreuse khaki white	17	17	19	1\n" +
+							"Manufacturer#3	almond antique forest lavender goldenrod	14	14	19	45\n" +
+							"Manufacturer#3	almond antique misty red olive	1	1	17	45\n" +
+							"Manufacturer#3	almond antique olive coral navajo	45	45	14	45\n" +
+							"Manufacturer#4	almond antique gainsboro frosted violet	10	10	10	27\n" +
+							"Manufacturer#4	almond antique violet mint lemon	39	39	10	7\n" +
+							"Manufacturer#4	almond aquamarine floral ivory bisque	27	27	10	12\n" +
+							"Manufacturer#4	almond aquamarine yellow dodger mint	7	7	39	12\n" +
+							"Manufacturer#4	almond azure aquamarine papaya violet	12	12	27	12\n" +
+							"Manufacturer#5	almond antique blue firebrick mint	31	31	31	2\n" +
+							"Manufacturer#5	almond antique medium spring khaki	6	6	31	46\n" +
+							"Manufacturer#5	almond antique sky peru orange	2	2	31	23\n" +
+							"Manufacturer#5	almond aquamarine dodger light gainsboro	46	46	6	23\n" +
+							"Manufacturer#5	almond azure blanched chiffon midnight	23	23	2	23\n");
+	public static WindowingTest WHERE = new WindowingTest(
+			"testWhere",
+			"Test Where Clause",
+			"		 select  p_mfgr,p_name, p_size, \n"
+					+ "rank() as r, \n"
+					+ "sum(p_size) over rows between current row and current row as s2, \n"
+					+ "first_value(p_size) over w1 as f, \n"
+					+ "last_value(p_size, false) over w1 as l \n"
+					+ "from part_tiny \n"
+					+ "partition by p_mfgr \n"
+					+ "order by p_mfgr \n"
+					+ "where r < 7 or p_mfgr = 'Manufacturer#3' \n"
+					+ "window w1 as rows between 2 preceding and 2 following \n"
+					+ "into path='/tmp/testWhere' \n"
+					+ "serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' \n"
+					+ "with serdeproperties('field.delim'=',') \n"
+					+ "format 'org.apache.hadoop.mapred.TextOutputFormat'",
+					"Manufacturer#1	almond antique burnished rose metallic	2	1	2	2	2\n" +
+							"Manufacturer#1	almond antique chartreuse lavender yellow	34	1	34	2	6\n" +
+							"Manufacturer#1	almond antique burnished rose metallic	2	1	2	2	28\n" +
+							"Manufacturer#1	almond antique salmon chartreuse burlywood	6	1	6	34	42\n" +
+							"Manufacturer#1	almond aquamarine burnished black steel	28	1	28	2	42\n" +
+							"Manufacturer#1	almond aquamarine pink moccasin thistle	42	1	42	6	42\n" +
+							"Manufacturer#2	almond antique violet chocolate turquoise	14	1	14	14	2\n" +
+							"Manufacturer#2	almond antique violet turquoise frosted	40	1	40	14	25\n" +
+							"Manufacturer#2	almond aquamarine midnight light salmon	2	1	2	14	18\n" +
+							"Manufacturer#2	almond aquamarine rose maroon antique	25	1	25	40	18\n" +
+							"Manufacturer#2	almond aquamarine sandy cyan gainsboro	18	1	18	2	18\n" +
+							"Manufacturer#3	almond antique metallic orange dim	19	1	19	19	14\n" +
+							"Manufacturer#3	almond antique chartreuse khaki white	17	1	17	19	1\n" +
+							"Manufacturer#3	almond antique forest lavender goldenrod	14	1	14	19	45\n" +
+							"Manufacturer#3	almond antique misty red olive	1	1	1	17	45\n" +
+							"Manufacturer#3	almond antique olive coral navajo	45	1	45	14	45\n" +
+							"Manufacturer#4	almond antique gainsboro frosted violet	10	1	10	10	27\n" +
+							"Manufacturer#4	almond antique violet mint lemon	39	1	39	10	7\n" +
+							"Manufacturer#4	almond aquamarine floral ivory bisque	27	1	27	10	12\n" +
+							"Manufacturer#4	almond aquamarine yellow dodger mint	7	1	7	39	12\n" +
+							"Manufacturer#4	almond azure aquamarine papaya violet	12	1	12	27	12\n" +
+							"Manufacturer#5	almond antique blue firebrick mint	31	1	31	31	2\n" +
+							"Manufacturer#5	almond antique medium spring khaki	6	1	6	31	46\n" +
+							"Manufacturer#5	almond antique sky peru orange	2	1	2	31	23\n" +
+							"Manufacturer#5	almond aquamarine dodger light gainsboro	46	1	46	6	23\n" +
+							"Manufacturer#5	almond azure blanched chiffon midnight	23	1	23	2	23\n");
 	public static WindowingTest WHERELEAD = new WindowingTest(
 			"testWhereLead",
 			"Test with Lead in Where clause",
@@ -200,7 +364,7 @@ public class WindowingTestsFactory
 					+ "007	001500	3.50730015E8	3\n"
 					+ "007	003600	3.30874034E8	4\n");
 	public static WindowingTest NOOPWITHMAPWINDOWING = new WindowingTest(
-			"testNoopWithWindowing",
+			"testNoopWithMapWindowing",
 			"List NoopWithMap PTF",
 			"select county, tract, arealand, rank() as r "
 					+ "from noopwithmap(census_tiny "
@@ -225,13 +389,17 @@ public class WindowingTestsFactory
 					+ "007	003600	3.30874034E8	4\n");
 
 	public static Object[][] TESTS = new Object[][]
-	{ new Object[]
-	{ BASIC }, new Object[]
-	{ RC }, new Object[]
-	{ NOFUNCS }, new Object[]
-	{ WHERELEAD }, new Object[]
-	{ CENSUSTOP4 }, new Object[]
-	{ NOOPWITHWINDOWING }, new Object[]
-	{ NOOPWITHMAPWINDOWING } };
+	{  	new Object[] { BASIC }, 
+		new Object[] { RC }, 
+		new Object[] { NOFUNCS }, 
+		new Object[] { SUM }, 
+		new Object[] { SUMWINDOW }, 
+		new Object[] { FIRSTLAST },
+		new Object[] { WHERE },
+		new Object[] { WHERELEAD }, 
+		new Object[] { CENSUSTOP4 }, 
+		new Object[] { NOOPWITHWINDOWING }, 
+		new Object[] { NOOPWITHMAPWINDOWING } 
+	};
 
 }

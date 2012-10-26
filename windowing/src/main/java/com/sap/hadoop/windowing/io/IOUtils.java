@@ -8,6 +8,7 @@ import static com.sap.hadoop.windowing.Constants.INPUT_VALUE_CLASS;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -95,6 +96,49 @@ public class IOUtils
 		catch(WindowingException w)
 		{
 			throw w;
+		}
+		catch(Exception e)
+		{
+			throw new WindowingException(e);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static WindowingInput createFileWindowingInput(String path, String inputFormatClassName, 
+			String serDeClassName, Properties serDeProperties, Configuration conf) throws WindowingException
+	{
+		try
+		{
+			HiveConf hConf = new HiveConf(conf, IOUtils.class);
+			JobConf job = new JobConf(hConf);
+			Path p = new Path(path);
+			p = makeQualified(p, conf);
+
+			Class<? extends InputFormat<? extends Writable, ? extends Writable>> inputFormatClass =
+					(Class<? extends InputFormat<? extends Writable, ? extends Writable>>) Class.forName(inputFormatClassName);
+			hConf.setClass("mapred.input.format.class", inputFormatClass, InputFormat.class);
+			hConf.set(INPUT_INPUTFORMAT_CLASS, inputFormatClass.getName());
+			InputFormat<? extends Writable, ? extends Writable> iFmt = inputFormatClass.newInstance();
+			if (iFmt instanceof TextInputFormat)
+			{
+				((TextInputFormat)iFmt).configure(job);
+			}
+			FileInputFormat.addInputPath(job, p);
+			InputSplit[] iSplits = iFmt.getSplits(job, 1);
+			org.apache.hadoop.mapred.RecordReader<Writable, Writable> rdr =
+					(org.apache.hadoop.mapred.RecordReader<Writable, Writable>) iFmt.getRecordReader(iSplits[0], job, Reporter.NULL);
+			
+			hConf.set(INPUT_PATH, path);
+			hConf.set(INPUT_KEY_CLASS, rdr.createKey().getClass().getName());
+			hConf.set(INPUT_VALUE_CLASS, rdr.createValue().getClass().getName());
+
+			hConf.set(INPUT_SERDE_CLASS, serDeClassName);
+			
+			TableWindowingInput tIn = new TableWindowingInput();
+			
+			tIn.initialize(null, hConf, serDeProperties);
+			
+			return tIn;
 		}
 		catch(Exception e)
 		{

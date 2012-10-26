@@ -694,17 +694,29 @@ public class TranslateUtils
 	public static void validateNoLeadLagInValueBoundarySpec(ASTNode node)
 			throws WindowingException
 	{
+		validateNoLeadLagInValueBoundarySpec(node, "Lead/Lag not allowed in ValueBoundary Spec");
+	}
+	
+	public static void validateNoLeadLagInValueBoundarySpec(ASTNode node, String errMsg)
+			throws WindowingException
+	{
 		TreeWizard tw = new TreeWizard(adaptor, Windowing2Parser.tokenNames);
-		ValidateNoLeadLagInValueBoundarySpec visitor = new ValidateNoLeadLagInValueBoundarySpec();
+		ValidateNoLeadLag visitor = new ValidateNoLeadLag(errMsg);
 		tw.visit(node, Windowing2Parser.FUNCTION, visitor);
 		visitor.checkValid();
 	}
 
-	public static class ValidateNoLeadLagInValueBoundarySpec implements
+	public static class ValidateNoLeadLag implements
 			ContextVisitor
 	{
+		String errMsg;
 		boolean throwError = false;
 		ASTNode errorNode;
+		
+		public ValidateNoLeadLag(String errMsg)
+		{
+			this.errMsg = errMsg;
+		}
 
 		@SuppressWarnings("rawtypes")
 		@Override
@@ -725,9 +737,7 @@ public class TranslateUtils
 		{
 			if (throwError)
 			{
-				throw new WindowingException(
-						"Lead/Lag not allowed in ValueBoundary Spec"
-								+ errorNode.toStringTree());
+				throw new WindowingException(errMsg + errorNode.toStringTree());
 			}
 		}
 	}

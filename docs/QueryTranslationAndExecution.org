@@ -1,0 +1,345 @@
+#+TITLE: Query Translation and Execution
+
+#+FILETAGS: windowing cli query translation execution
+
+* Overall process
+#+begin_src dot :file queryOverallFlow.png :cmdline -Kdot -Tpng
+digraph G {
+  size ="6 6";
+  nodesep=.2;
+  //rankdir=BT;
+  ranksep=.25;
+  node [shape=record];
+  compound=true;
+
+  input[label="CLI / API call"]
+  parser[label="SQW Parser"]
+  qBldr[label="Query Builder"]
+  translator[label="SQW Translator"]
+
+  executor[label="MR Executor"]
+  planBuilder[label="Plan Builder"]
+  mrtask[label="Map Reduce Work"]
+  
+
+
+  input -> parser [label="1. parse(query)"]
+  parser -> qBldr [label="2. AST"]
+  qBldr -> translator [label="3. Query Spec."]
+  translator -> executor [label="4. Query Defn."]
+  executor -> planBuilder [label="5. build plan"]
+  planBuilder -> executor [label="6. Map Reduce Work"]
+  executor -> mrtask [label="7. execute Work"]
+}
+#+end_src
+
+* The Grammar
+[[file:grammar/query.jpg]]
+
+[[file:grammar/queryForm1.jpg]]
+
+[[file:grammar/queryForm2.jpg]]
+
+[[file:grammar/select.jpg]]
+
+[[file:grammar/selectColumn.jpg]]
+
+[[file:grammar/tableSpec.jpg]]
+
+[[file:grammar/tblfunc.jpg]]
+
+[[file:grammar/hdfsFile.jpg]]
+
+[[file:grammar/where.jpg]]
+
+[[file:grammar/outputClause.jpg]]
+
+[[file:grammar/outputSerDe.jpg]]
+
+[[file:grammar/outputSerDePropeties.jpg]]
+
+[[file:grammar/outputFormatOrWriter.jpg]]
+
+[[file:grammar/loadClause.jpg]]
+
+[[file:grammar/window_function.jpg]]
+
+[[file:grammar/window_clause.jpg]]
+
+[[file:grammar/window_defn.jpg]]
+
+[[file:grammar/window_specification.jpg]]
+
+[[file:grammar/orderby.jpg]]
+
+[[file:grammar/ordercolumn.jpg]]
+
+[[file:grammar/partitionby.jpg]]
+
+[[file:grammar/window_frame.jpg]]
+
+[[file:grammar/window_range_expression.jpg]]
+
+[[file:grammar/rowsboundary.jpg]]
+
+[[file:grammar/window_value_expression.jpg]]
+
+[[file:grammar/valuesboundary.jpg]]
+
+[[file:grammar/columnReference.jpg]]
+
+[[file:grammar/tableOrColumn.jpg]]
+
+[[file:grammar/function.jpg]]
+
+[[file:grammar/functionName.jpg]]
+
+[[file:grammar/castExpr.jpg]]
+
+[[file:grammar/caseExpr.jpg]]
+
+[[file:grammar/whenExpr.jpg]]
+
+[[file:grammar/constant.jpg]]
+
+[[file:grammar/stringLiteralSequence.jpg]]
+
+[[file:grammar/charSetStringLiteral.jpg]]
+
+[[file:grammar/expressions.jpg]]
+
+[[file:grammar/expression.jpg]]
+
+[[file:grammar/orExpr.jpg]]
+
+[[file:grammar/andExpr.jpg]]
+
+[[file:grammar/notExpr.jpg]]
+
+[[file:grammar/negatableOperator.jpg]]
+
+[[file:grammar/compareOperator.jpg]]
+
+[[file:grammar/compareExpr.jpg]]
+
+[[file:grammar/bitOrExpr.jpg]]
+
+[[file:grammar/bitAndExpr.jpg]]
+
+[[file:grammar/plusExpr.jpg]]
+
+[[file:grammar/starExpr.jpg]]
+
+[[file:grammar/xorExpr.jpg]]
+
+[[file:grammar/nullCondition.jpg]]
+
+[[file:grammar/nullExpr.jpg]]
+
+[[file:grammar/unaryExpr.jpg]]
+
+[[file:grammar/fieldExpr.jpg]]
+
+[[file:grammar/atomExpr.jpg]]
+
+[[file:grammar/booleanValue.jpg]]
+
+[[file:grammar/primitiveType.jpg]]
+
+[[file:grammar/namevalue.jpg]]
+
+[[file:grammar/HIVEQUERY.jpg]]
+
+[[file:grammar/StringLiteral.jpg]]
+
+[[file:grammar/Identifier.jpg]]
+* Query Specification
+#+begin_src plantuml :file querySpec.png
+
+  class QuerySpec {
+  }
+  QuerySpec --> QueryInputSpec : input
+  QuerySpec --> SelectSpec : selectList
+
+  QuerySpec --> ASTNode : whereExpr
+  QuerySpec *--> WindowSpec : windowSpecs
+  QuerySpec --> QueryOutputSpec : output
+
+  QueryInputSpec --> PartitionSpec : partition
+  QueryInputSpec --> OrderSpec : order
+
+  QueryInputSpec <|-- HiveTableSpec
+  QueryInputSpec <|-- HiveQuerySpec
+  QueryInputSpec <|-- TableFuncSpec
+
+  class HiveTableSpec {
+    - String dbName
+    - String tableName
+  }
+
+  class HiveQuerySpec {
+    - String hiveQuery
+  }
+
+  class TableFuncSpec {
+    - String name 
+  }
+
+  TableFuncSpec *--> ASTNode : args
+  TableFuncSpec --> QueryInputSpec : input
+
+  class SelectSpec {
+    - String[] aliases
+  }
+  SelectSpec *--> ASTNode : expressions
+  SelectSpec *--> WindowFunctionSpec : windowFuncs
+
+  WindowFunctionSpec --> WindowSpec : window
+  WindowFunctionSpec *--> ASTNode : args
+
+  class WindowSpec {
+    - String sourceId
+  }
+  WindowSpec --> PartitionSpec : partition
+  WindowSpec --> OrderSpec : order
+  WindowSpec --> WindowFrameSpec
+
+  WindowFrameSpec --> BoundarySpec : start
+  WindowFrameSpec --> BoundarySpec : end
+
+  BoundarySpec <|-- CurrentRowSpec
+  BoundarySpec <|-- RangeBoundarySpec
+  BoundarySpec <|-- ValueBoundarySpec
+
+  class RangeBoundarySpec {
+   - Direction direction
+   - int amt
+  }
+
+  class ValueBoundarySpec {
+    - Direction direction
+    - int amt
+  }
+  ValueBoundarySpec --> ASTNode : expression
+
+  PartitionSpec *--> ColumnSpec : columns
+  OrderSpec *--> OrderColumnSpec : columns
+
+  ColumnSpec <|-- OrderColumnSpec
+
+  class ColumnSpec {
+    - String tableName
+    - String columnName
+  }
+
+  class OrderColumnSpec {
+    - Order order
+  }
+
+  class QueryOutputSpec {
+    - String path
+    - String serDeClass
+    - Properties serDeProps
+    - String recordWriterClass
+    - String outputFormatClass
+    - String hiveTable
+    - String partitionClause
+    - boolean overwriteHiveTable
+  }
+  
+#+end_src
+* Query Definition
+#+begin_src plantuml :file queryDef.png
+  
+  QueryDef *--> WindowDef : windows
+  QueryDef --> QueryOutputDef : output
+  QueryDef --> SelectDef : select
+  QueryDef --> QueryInputDef : input
+  QueryDef --> WhereDef : where
+  
+  WindowDef --> PartitionDef : partition
+  WindowDef --> OrderDef : order
+  WindowDef --> WindowFrameDef : windowFrame
+  
+  PartitionDef *--> ColumnDef : columns
+  OrderDef *--> OrderColumnDef : orderColumns
+  ColumnDef <|-- OrderColumnDef
+  
+  class ColumnDef {
+   - ASTNode expr
+   - ExprNodeDesc exprNodeDesc
+   - ExprEvaluator exprEvaluator
+   - ObjectInspector OI
+  }
+
+  class WhereDef {
+   - ASTNode expr
+   - ExprNodeDesc exprNodeDesc
+   - ExprEvaluator exprEvaluator
+   - ObjectInspector OI
+  }
+
+  WindowFrameDef --> BoundaryDef : start
+  WindowFrameDef --> BoundaryDef : end
+
+  BoundaryDef <|-- CurrentRowDef
+  BoundaryDef <|-- RangeBoundaryDef
+  BoundaryDef <|-- ValueBoundaryDef
+  
+  class ValueBoundaryDef {
+   - ASTNode expr
+   - ExprNodeDesc exprNodeDesc
+   - ExprEvaluator exprEvaluator
+   - ObjectInspector OI
+  }
+
+  class QueryInputDef {
+   - ObjectInspector inputOI
+   - SerDe serde
+   - String alias
+  }
+  QueryInputDef --> WindowDef : window
+  QueryInputDef <|-- HiveTableDef
+  QueryInputDef <|-- TableFunctionDef
+  HiveTableDef <|-- HiveQueryDef
+
+  class HiveTableDef {
+   - String serDeClassName
+   - Properties serDeProperties
+   - String location
+   - String inputFormatClsNm
+  }
+
+  class TableFunctionDef {
+   - ObjectInspector mapOI
+  }
+
+  TableFunctionDef *--> ArgDef : args
+  TableFunctionDef --> TableFunctionEvaluator : evaluator
+  TableFunctionDef --> QueryInputDef : input
+
+  class ArgDef {
+   - ASTNode expr
+   - ExprNodeDesc exprNodeDesc
+   - ExprEvaluator exprEvaluator
+   - ObjectInspector OI
+  }
+
+  class SelectDef {
+   - ObjectInspector selectOI
+  }
+  SelectDef *--> WindowFunctionDef : windowFns
+  SelectDef *--> ColumnDef : columns
+
+  WindowFunctionDef *--> ArgDef : args
+  WindowFunctionDef --> WindowDef : window
+  WindowFunctionDef --> GenericUDAFEvalautor : evaluator
+
+  
+
+#+end_src
+* Query Translation
+** Function Chain Translation
+*** Window table Function translation
+*** Output translation
+* Query Execution

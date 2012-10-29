@@ -343,3 +343,81 @@ digraph G {
 *** Window table Function translation
 *** Output translation
 * Query Execution
+** Partition and PTF interface
+#+begin_src dot :file ptfChain.png :cmdline -Kdot -Tpng
+digraph G {
+  nodesep=.2;
+  rankdir=LR;
+  ranksep=.25;
+  node [shape=record];
+  compound=true;
+
+  subgraph cluster3 {
+   style=bold;
+   label="Processing with Map-side"; fontsize=18;
+
+   inputPM[label="Input Partition"];
+   ptfMM[label="{{Function|outOI|[mapOutOI]}}"];
+   ptfMR[label="{{Function|outOI|[mapOutOI]}}"];
+   outputPM[label="Output Partition"];
+   mapoutputPM[label="Map-side Output Partition"];
+
+    inputPM -> ptfMM [label="Object, inOI"];
+    ptfMM -> mapoutputPM [label="Object, mapoutOI"];
+    mapoutputPM -> ptfMR [label="Object, mapoutOI (after shuffle)"];
+    ptfMR -> outputPM [label="Object, outOI"];
+  };
+
+ subgraph cluster2 {
+   style=bold;
+   label="Processing with No Map-side"; fontsize=18;
+
+   inputPNM[label="Input Partition"];
+   ptfNM[label="{{Function|outOI|[mapOutOI]}}"];
+   outputPNM[label="Output Partition"];
+
+    inputPNM -> ptfNM [label="Object, inOI"];
+    ptfNM -> outputPNM [label="Object, outOI"];
+  };
+
+  subgraph cluster1 {
+   style=bold;
+   label="Partition Table Function"; fontsize=18;
+
+   inputP[label="Input Partition"];
+   ptf[label="{{Function|outOI|[mapOutOI]}}"];
+   outputP[label="Output Partition"];
+
+   inputP -> ptf;
+   ptf -> outputP;
+  };
+
+  subgraph cluster0 {
+   style=bold;
+   label="Partition Interface"; fontsize=18;
+   
+   input[label="Input"];
+   partition[label="{{Partition|inputOI|outputSerDe}}"];
+   output[label="Output"];
+   disk[label="File"];
+ 
+   input -> partition [label="Object, inputOI"];
+   partition -> output [label="Object, outOI"  ];
+   partition -> disk [label="can spill\nto disk"];
+  
+    {rank=same; partition; disk};
+  };
+
+}
+#+end_src
+
+#+results:
+[[file:ptfChain.png]]
+
+** Logical view of PTF chain
+ #+ATTR_HTML: align="center" width="80%"
+[[file:ptfLogicalView.png]]
+
+** Window Function processing
+ #+ATTR_HTML: align="center" width="80%"
+[[file:windowTableFuncProcessing.png]]

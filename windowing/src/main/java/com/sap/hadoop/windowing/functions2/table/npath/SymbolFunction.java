@@ -34,9 +34,22 @@ public abstract class SymbolFunction
 		result = new SymbolFunctionResult();
 	}
 	
-	public abstract SymbolFunctionResult match(Object row, PartitionIterator<Object> pItr) throws WindowingException;
+	public static SymbolFunctionResult match(SymbolFunction syFn, Object row, PartitionIterator<Object> pItr) throws WindowingException
+	{
+		int resetToIdx = pItr.getIndex() - 1;
+		try
+		{
+			return syFn.match(row, pItr);
+		}
+		finally
+		{
+			pItr.resetToIndex(resetToIdx);
+		}
+	}
 	
-	public abstract boolean isOptional();
+	protected abstract SymbolFunctionResult match(Object row, PartitionIterator<Object> pItr) throws WindowingException;
+	
+	protected abstract boolean isOptional();
 	
 	public static class Symbol extends SymbolFunction
 	{
@@ -51,12 +64,12 @@ public abstract class SymbolFunction
 					PrimitiveObjectInspectorFactory.javaBooleanObjectInspector);
 		}
 		
-		public SymbolFunctionResult match(Object row, PartitionIterator<Object> pItr) throws WindowingException
+		protected SymbolFunctionResult match(Object row, PartitionIterator<Object> pItr) throws WindowingException
 		{
 			Object val = null;
 			try
 			{
-				symbolExprEval.evaluate(row);
+				val = symbolExprEval.evaluate(row);
 			}
 			catch(HiveException he)
 			{
@@ -69,7 +82,7 @@ public abstract class SymbolFunction
 			return result;
 		}
 		
-		public boolean isOptional()
+		protected boolean isOptional()
 		{
 			return false;
 		}
@@ -84,7 +97,7 @@ public abstract class SymbolFunction
 			this.symbolFn = symbolFn;
 		}
 		
-		public SymbolFunctionResult match(Object row, PartitionIterator<Object> pItr) throws WindowingException
+		protected SymbolFunctionResult match(Object row, PartitionIterator<Object> pItr) throws WindowingException
 		{
 			result.matches = true;
 			SymbolFunctionResult rowResult = symbolFn.match(row, pItr);
@@ -95,11 +108,11 @@ public abstract class SymbolFunction
 				rowResult = symbolFn.match(row, pItr);
 			}
 			
-			result.nextRow = pItr.getIndex();
+			result.nextRow = pItr.getIndex() - 1;
 			return result;
 		}
 		
-		public boolean isOptional()
+		protected boolean isOptional()
 		{
 			return true;
 		}
@@ -114,14 +127,14 @@ public abstract class SymbolFunction
 			this.symbolFn = symbolFn;
 		}
 		
-		public SymbolFunctionResult match(Object row, PartitionIterator<Object> pItr) throws WindowingException
+		protected SymbolFunctionResult match(Object row, PartitionIterator<Object> pItr) throws WindowingException
 		{
 			SymbolFunctionResult rowResult = symbolFn.match(row, pItr);
 			
 			if ( !rowResult.matches )
 			{
 				result.matches = false;
-				result.nextRow = pItr.getIndex();
+				result.nextRow = pItr.getIndex() - 1;
 				return result;
 			}
 			
@@ -132,11 +145,11 @@ public abstract class SymbolFunction
 				rowResult = symbolFn.match(row, pItr);
 			}
 			
-			result.nextRow = pItr.getIndex();
+			result.nextRow = pItr.getIndex() - 1;
 			return result;
 		}
 		
-		public boolean isOptional()
+		protected boolean isOptional()
 		{
 			return false;
 		}
@@ -162,7 +175,7 @@ public abstract class SymbolFunction
 		 *   - but if we come to a non optional Symbol Fn, return false.
 		 * - if we match all Fns in the chain return true.
 		 */
-		public SymbolFunctionResult match(Object row, PartitionIterator<Object> pItr) throws WindowingException
+		protected SymbolFunctionResult match(Object row, PartitionIterator<Object> pItr) throws WindowingException
 		{
 			SymbolFunctionResult componentResult = null;
 			for(SymbolFunction sFn : components)
@@ -176,7 +189,7 @@ public abstract class SymbolFunction
 						result.nextRow = componentResult.nextRow;
 						return result;
 					}
-					row = pItr.hasNext() ? pItr.next() : null;
+					row = pItr.resetToIndex(componentResult.nextRow);
 				}
 				else
 				{
@@ -194,7 +207,7 @@ public abstract class SymbolFunction
 			return result;
 		}
 		
-		public boolean isOptional()
+		protected boolean isOptional()
 		{
 			return false;
 		}

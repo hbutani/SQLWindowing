@@ -3,10 +3,6 @@ package com.sap.hadoop.windowing.functions2.table.npath;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluator;
 import org.apache.hadoop.hive.ql.exec.ExprNodeEvaluatorFactory;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
@@ -20,9 +16,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import com.sap.hadoop.HiveUtils;
 import com.sap.hadoop.windowing.WindowingException;
-import com.sap.hadoop.windowing.parser.QSpecBuilder2;
-import com.sap.hadoop.windowing.parser.Windowing2Lexer;
-import com.sap.hadoop.windowing.parser.Windowing2Parser;
+import com.sap.hadoop.windowing.parser.ParseUtils;
 import com.sap.hadoop.windowing.query2.specification.SelectSpec;
 import com.sap.hadoop.windowing.query2.translate.TranslateUtils;
 
@@ -128,64 +122,7 @@ public class ResultExpressionParser
 	
 	private void parse() throws WindowingException
 	{
-		Windowing2Lexer lexer;
-		CommonTokenStream tokens;
-		Windowing2Parser parser = null;
-		CommonTree t;
-		CommonTreeNodeStream nodes;
-		QSpecBuilder2 qSpecBldr = null;
-		String err;
-		
-		try
-		{
-			lexer = new Windowing2Lexer(new ANTLRStringStream(resultExprString));
-			tokens = new CommonTokenStream(lexer);
-			parser = new Windowing2Parser(tokens);
-			parser.setTreeAdaptor(TranslateUtils.adaptor);
-			t = (CommonTree)  parser.select().getTree();
-			
-			err = parser.getWindowingParseErrors();
-			if ( err != null )
-			{
-				throw new WindowingException(err);
-			}
-		}
-		catch(Throwable te)
-		{
-			err = parser.getWindowingParseErrors();
-			if ( err != null )
-			{
-				throw new WindowingException(err);
-			}
-			throw new WindowingException("Parse Error:" + te.toString(), te);
-		}
-		
-		TranslateUtils.unescapeStringLiterals((ASTNode) t);
-		
-		try
-		{
-			
-			nodes = new CommonTreeNodeStream(t);
-			nodes.setTokenStream(tokens);
-			qSpecBldr = new QSpecBuilder2(nodes);
-			selectSpec = qSpecBldr.select();
-	
-			err = qSpecBldr.getWindowingParseErrors();
-			if ( err != null )
-			{
-				throw new WindowingException(err);
-			}
-			
-		}
-		catch(Throwable te)
-		{
-			err = qSpecBldr.getWindowingParseErrors();
-			if ( err != null )
-			{
-				throw new WindowingException(err);
-			}
-			throw new WindowingException("Parse Error:" + te.toString(), te);
-		}
+		selectSpec = ParseUtils.parseSelect(resultExprString);
 	}
 	
 	private void validateSelectExpr() throws WindowingException

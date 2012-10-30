@@ -57,7 +57,7 @@ public class OutputTranslation
 		QueryOutputSpec spec = qDef.getSpec().getOutput();
 		
 		// ensure outputPath is specified. It is optional in grammar because it is not required in Hive mode.
-		if ( spec.getPath() == null )
+		if ( spec == null || spec.getPath() == null )
 		{
 			throw new WindowingException("Query doesn't contain an output Path for results");
 		}

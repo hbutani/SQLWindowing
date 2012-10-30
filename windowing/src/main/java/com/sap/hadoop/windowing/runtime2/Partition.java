@@ -225,6 +225,10 @@ public class Partition
 		@Override
 		public Object resetToIndex(int idx)
 		{
+			if ( idx < start || idx >= end )
+			{
+				return null;
+			}
 			Object o = getAt(idx);
 			this.idx = idx + 1;
 			return o;

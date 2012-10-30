@@ -76,31 +76,4 @@ public class MRExecutorTest extends MRBaseTest
 		Assert.assertEquals(r, e);	
 	}
 	
-	@Test
-	public void testNPath() throws WindowingException
-	{
-		wshell.execute(
-				" select origin_city_name, fl_num, year, month, day_of_month, sz, tpath " +
-						" from npath( " +
-						"         flights_tiny " +
-						"         partition by fl_num " +
-						"  		  order by year, month, day_of_month, " +
-						"   	  'LATE.LATE+', " +
-						"  		  'LATE', arr_delay > 15, " +
-						"		  'origin_city_name, fl_num, year, month, day_of_month, size(tpath) as sz, tpath as tpath' " +
-						"		) " +
-						" into path='/tmp/testNPath' \n" +
-						" serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' \n" +
-						" with serdeproperties('field.delim'=',') \n" +
-						" format 'org.apache.hadoop.mapred.TextOutputFormat'",
-				outPrinter);
-		String r = outStream.toString();
-		r = r.replace("\r\n", "\n");
-		System.out.println(r);
-		String e = "";
-		//Assert.assertEquals(r, e);	
-
-	}
-
-	
 }

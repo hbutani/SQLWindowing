@@ -61,3 +61,33 @@ into path='/tmp/NoopWithWindowing'
 serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe' 
 with serdeproperties('field.delim'=',') 
 format 'org.apache.hadoop.mapred.TextOutputFormat';
+
+/*
+ * NPath1
+ */
+ select origin_city_name, fl_num, year, month, day_of_month, sz, tpath
+from npath( 
+flights_tiny 
+partition by fl_num 
+order by year, month, day_of_month, 
+'LATE.LATE+', 
+'LATE', arr_delay > 15
+'origin_city_name, fl_num, year, month, day_of_month, size(tpath) as sz, tpath as tpath'
+) 
+into path='/tmp/testNPath';
+
+/*
+ * NPath2
+ */
+ select origin_city_name, fl_num, year, month, day_of_month, sz, tpath
+from npath( 
+flights_tiny 
+partition by fl_num 
+order by year, month, day_of_month, 
+'ONTIME.LATE+', 
+'LATE', arr_delay > 15, 
+'EARLY', arr_delay < 0,
+'ONTIME', arr_delay >=0 and arr_delay <= 15,
+'origin_city_name, fl_num, year, month, day_of_month, size(tpath) as sz, tpath as tpath'
+) 
+into path='/tmp/testNPath';

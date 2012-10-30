@@ -25,6 +25,7 @@ import com.sap.hadoop.windowing.functions2.window.GenericUDAFRowNumber;
 import com.sap.hadoop.windowing.functions2.table.Noop.NoopResolver;
 import com.sap.hadoop.windowing.functions2.table.NoopWithMap.NoopWithMapResolver;
 import com.sap.hadoop.windowing.functions2.table.WindowingTableFunction.WindowingTableFunctionResolver;
+import com.sap.hadoop.windowing.functions2.table.npath.NPath.NPathResolver;
 
 @SuppressWarnings({ "deprecation", "static-access" })
 public class FunctionRegistry
@@ -130,6 +131,7 @@ public class FunctionRegistry
 		registerTableFunction(NOOP_TABLE_FUNCTION, NoopResolver.class);
 		registerTableFunction(NOOP_MAP_TABLE_FUNCTION, NoopWithMapResolver.class);
 		registerTableFunction(WINDOWING_TABLE_FUNCTION,  WindowingTableFunctionResolver.class);
+		registerTableFunction("npath",  NPathResolver.class);
 	}
 	
 	public static boolean isTableFunction(String name)

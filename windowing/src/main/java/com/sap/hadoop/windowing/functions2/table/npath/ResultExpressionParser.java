@@ -9,6 +9,7 @@ import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.parse.RowResolver;
 import org.apache.hadoop.hive.ql.parse.TypeCheckCtx;
+import org.apache.hadoop.hive.ql.plan.ExprNodeColumnDesc;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
@@ -91,7 +92,7 @@ public class ResultExpressionParser
 				throw new WindowingException(he);
 			}
 			
-			selectColName = selectColName == null ? "npath_col_" + i : selectColName;
+			selectColName = getColumnName(selectColName, selectColumnExprNode, i);
 			
 			selectListExprEvaluators.add(selectColumnExprEval);
 			selectListExprOIs.add(selectColumnOI);
@@ -136,5 +137,19 @@ public class ResultExpressionParser
 		{
 			TranslateUtils.validateNoLeadLagInValueBoundarySpec(node, "Lead/Lag not allowed in NPath Result Expression");
 		}
+	}
+	
+	private String getColumnName(String alias, ExprNodeDesc exprNode, int colIdx)
+	{
+		if ( alias != null )
+		{
+			return alias;
+		}
+		else if ( exprNode instanceof ExprNodeColumnDesc )
+		{
+			ExprNodeColumnDesc colDesc = (ExprNodeColumnDesc) exprNode;
+			return colDesc.getColumn();
+		}
+		return "npath_col_" + colIdx;
 	}
 }

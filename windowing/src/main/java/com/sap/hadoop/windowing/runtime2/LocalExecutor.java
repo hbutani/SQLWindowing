@@ -37,11 +37,17 @@ public class LocalExecutor extends Executor
 		int partMemSize = tEval.getPartitionMemSize();
 		
 		WindowingInput wIn = IOUtils.createTableWindowingInput(hvTblSpec.getDbName(), hvTblSpec.getTableName(), tInfo.getHiveCfg());
-		Partition p = IOUtils.createPartition(partClassName, partMemSize, wIn);
+		//Partition p = IOUtils.createPartition(partClassName, partMemSize, wIn);
 		
-		Partition oP = executeChain(qDef, p);
-		//IOUtils.dumpPartition(oP, System.out);
-		executeSelectList(qDef, oP, new SysOutRS(out));
+		PartitionsIterator partsItr = new PartitionsIterator(wIn, qDef);
+		
+		while(partsItr.hasNext())
+		{
+			Partition p = partsItr.next();
+			Partition oP = executeChain(qDef, p);
+			//IOUtils.dumpPartition(oP, System.out);
+			executeSelectList(qDef, oP, new SysOutRS(out));
+		}
 	}
 	
 	public static class SysOutRS implements ForwardSink

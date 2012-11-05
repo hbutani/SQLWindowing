@@ -2,6 +2,11 @@ package com.sap.hadoop.windowing.runtime2;
 
 import java.util.Iterator;
 
+/*
+ * provide an Iterator on the rows in a Partiton.
+ * Iterator exposes the index of the next location.
+ * Client can invoke lead/lag relative to the next location.
+ */
 public interface PartitionIterator<T> extends Iterator<T>
 {
 	int getIndex();

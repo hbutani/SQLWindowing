@@ -84,26 +84,26 @@ Manufacturer#1,almond antique chartreuse lavender yellow,34,1,1
 Manufacturer#1,almond antique salmon chartreuse burlywood,6,1,1
 Manufacturer#1,almond aquamarine burnished black steel,28,1,1
 Manufacturer#1,almond aquamarine pink moccasin thistle,42,1,1
-Manufacturer#2,almond antique violet chocolate turquoise,14,7,2
-Manufacturer#2,almond antique violet turquoise frosted,40,7,2
-Manufacturer#2,almond aquamarine midnight light salmon,2,7,2
-Manufacturer#2,almond aquamarine rose maroon antique,25,7,2
-Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,7,2
-Manufacturer#3,almond antique chartreuse khaki white,17,12,3
-Manufacturer#3,almond antique forest lavender goldenrod,14,12,3
-Manufacturer#3,almond antique metallic orange dim,19,12,3
-Manufacturer#3,almond antique misty red olive,1,12,3
-Manufacturer#3,almond antique olive coral navajo,45,12,3
-Manufacturer#4,almond antique gainsboro frosted violet,10,17,4
-Manufacturer#4,almond antique violet mint lemon,39,17,4
-Manufacturer#4,almond aquamarine floral ivory bisque,27,17,4
-Manufacturer#4,almond aquamarine yellow dodger mint,7,17,4
-Manufacturer#4,almond azure aquamarine papaya violet,12,17,4
-Manufacturer#5,almond antique blue firebrick mint,31,22,5
-Manufacturer#5,almond antique medium spring khaki,6,22,5
-Manufacturer#5,almond antique sky peru orange,2,22,5
-Manufacturer#5,almond aquamarine dodger light gainsboro,46,22,5
-Manufacturer#5,almond azure blanched chiffon midnight,23,22,5
+Manufacturer#2,almond antique violet chocolate turquoise,14,1,1
+Manufacturer#2,almond antique violet turquoise frosted,40,1,1
+Manufacturer#2,almond aquamarine midnight light salmon,2,1,1
+Manufacturer#2,almond aquamarine rose maroon antique,25,1,1
+Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,1,1
+Manufacturer#3,almond antique chartreuse khaki white,17,1,1
+Manufacturer#3,almond antique forest lavender goldenrod,14,1,1
+Manufacturer#3,almond antique metallic orange dim,19,1,1
+Manufacturer#3,almond antique misty red olive,1,1,1
+Manufacturer#3,almond antique olive coral navajo,45,1,1
+Manufacturer#4,almond antique gainsboro frosted violet,10,1,1
+Manufacturer#4,almond antique violet mint lemon,39,1,1
+Manufacturer#4,almond aquamarine floral ivory bisque,27,1,1
+Manufacturer#4,almond aquamarine yellow dodger mint,7,1,1
+Manufacturer#4,almond azure aquamarine papaya violet,12,1,1
+Manufacturer#5,almond antique blue firebrick mint,31,1,1
+Manufacturer#5,almond antique medium spring khaki,6,1,1
+Manufacturer#5,almond antique sky peru orange,2,1,1
+Manufacturer#5,almond aquamarine dodger light gainsboro,46,1,1
+Manufacturer#5,almond azure blanched chiffon midnight,23,1,1
 """
 		assert r == e
 	}
@@ -225,32 +225,32 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		String r = outStream.toString()
 		r = r.replace("\r\n", "\n")
 //		println r
-		String e = """Manufacturer#1,almond antique burnished rose metallic,2,512
-Manufacturer#1,almond antique burnished rose metallic,2,512
-Manufacturer#1,almond antique chartreuse lavender yellow,34,512
-Manufacturer#1,almond antique salmon chartreuse burlywood,6,512
-Manufacturer#1,almond aquamarine burnished black steel,28,512
-Manufacturer#1,almond aquamarine pink moccasin thistle,42,512
-Manufacturer#2,almond antique violet chocolate turquoise,14,512
-Manufacturer#2,almond antique violet turquoise frosted,40,512
-Manufacturer#2,almond aquamarine midnight light salmon,2,512
-Manufacturer#2,almond aquamarine rose maroon antique,25,512
-Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,512
-Manufacturer#3,almond antique chartreuse khaki white,17,512
-Manufacturer#3,almond antique forest lavender goldenrod,14,512
-Manufacturer#3,almond antique metallic orange dim,19,512
-Manufacturer#3,almond antique misty red olive,1,512
-Manufacturer#3,almond antique olive coral navajo,45,512
-Manufacturer#4,almond antique gainsboro frosted violet,10,512
-Manufacturer#4,almond antique violet mint lemon,39,512
-Manufacturer#4,almond aquamarine floral ivory bisque,27,512
-Manufacturer#4,almond aquamarine yellow dodger mint,7,512
-Manufacturer#4,almond azure aquamarine papaya violet,12,512
-Manufacturer#5,almond antique blue firebrick mint,31,512
-Manufacturer#5,almond antique medium spring khaki,6,512
-Manufacturer#5,almond antique sky peru orange,2,512
-Manufacturer#5,almond aquamarine dodger light gainsboro,46,512
-Manufacturer#5,almond azure blanched chiffon midnight,23,512
+		String e = """Manufacturer#1,almond antique burnished rose metallic,2,114
+Manufacturer#1,almond antique burnished rose metallic,2,114
+Manufacturer#1,almond antique chartreuse lavender yellow,34,114
+Manufacturer#1,almond antique salmon chartreuse burlywood,6,114
+Manufacturer#1,almond aquamarine burnished black steel,28,114
+Manufacturer#1,almond aquamarine pink moccasin thistle,42,114
+Manufacturer#2,almond antique violet chocolate turquoise,14,99
+Manufacturer#2,almond antique violet turquoise frosted,40,99
+Manufacturer#2,almond aquamarine midnight light salmon,2,99
+Manufacturer#2,almond aquamarine rose maroon antique,25,99
+Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,99
+Manufacturer#3,almond antique chartreuse khaki white,17,96
+Manufacturer#3,almond antique forest lavender goldenrod,14,96
+Manufacturer#3,almond antique metallic orange dim,19,96
+Manufacturer#3,almond antique misty red olive,1,96
+Manufacturer#3,almond antique olive coral navajo,45,96
+Manufacturer#4,almond antique gainsboro frosted violet,10,95
+Manufacturer#4,almond antique violet mint lemon,39,95
+Manufacturer#4,almond aquamarine floral ivory bisque,27,95
+Manufacturer#4,almond aquamarine yellow dodger mint,7,95
+Manufacturer#4,almond azure aquamarine papaya violet,12,95
+Manufacturer#5,almond antique blue firebrick mint,31,108
+Manufacturer#5,almond antique medium spring khaki,6,108
+Manufacturer#5,almond antique sky peru orange,2,108
+Manufacturer#5,almond aquamarine dodger light gainsboro,46,108
+Manufacturer#5,almond azure blanched chiffon midnight,23,108
 """
 		assert r == e
 	}
@@ -279,25 +279,25 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 Manufacturer#1,almond antique burnished rose metallic,2,44,2
 Manufacturer#1,almond antique chartreuse lavender yellow,34,72,34
 Manufacturer#1,almond antique salmon chartreuse burlywood,6,112,6
-Manufacturer#1,almond aquamarine burnished black steel,28,124,28
-Manufacturer#1,almond aquamarine pink moccasin thistle,42,130,42
-Manufacturer#2,almond antique violet chocolate turquoise,14,126,14
-Manufacturer#2,almond antique violet turquoise frosted,40,123,40
+Manufacturer#1,almond aquamarine burnished black steel,28,110,28
+Manufacturer#1,almond aquamarine pink moccasin thistle,42,76,42
+Manufacturer#2,almond antique violet chocolate turquoise,14,56,14
+Manufacturer#2,almond antique violet turquoise frosted,40,81,40
 Manufacturer#2,almond aquamarine midnight light salmon,2,99,2
-Manufacturer#2,almond aquamarine rose maroon antique,25,102,25
-Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,76,18
-Manufacturer#3,almond antique chartreuse khaki white,17,93,17
-Manufacturer#3,almond antique forest lavender goldenrod,14,69,14
+Manufacturer#2,almond aquamarine rose maroon antique,25,85,25
+Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,45,18
+Manufacturer#3,almond antique chartreuse khaki white,17,50,17
+Manufacturer#3,almond antique forest lavender goldenrod,14,51,14
 Manufacturer#3,almond antique metallic orange dim,19,96,19
-Manufacturer#3,almond antique misty red olive,1,89,1
-Manufacturer#3,almond antique olive coral navajo,45,114,45
-Manufacturer#4,almond antique gainsboro frosted violet,10,122,10
-Manufacturer#4,almond antique violet mint lemon,39,128,39
+Manufacturer#3,almond antique misty red olive,1,79,1
+Manufacturer#3,almond antique olive coral navajo,45,65,45
+Manufacturer#4,almond antique gainsboro frosted violet,10,76,10
+Manufacturer#4,almond antique violet mint lemon,39,83,39
 Manufacturer#4,almond aquamarine floral ivory bisque,27,95,27
-Manufacturer#4,almond aquamarine yellow dodger mint,7,116,7
-Manufacturer#4,almond azure aquamarine papaya violet,12,83,12
-Manufacturer#5,almond antique blue firebrick mint,31,58,31
-Manufacturer#5,almond antique medium spring khaki,6,97,6
+Manufacturer#4,almond aquamarine yellow dodger mint,7,85,7
+Manufacturer#4,almond azure aquamarine papaya violet,12,46,12
+Manufacturer#5,almond antique blue firebrick mint,31,39,31
+Manufacturer#5,almond antique medium spring khaki,6,85,6
 Manufacturer#5,almond antique sky peru orange,2,108,2
 Manufacturer#5,almond aquamarine dodger light gainsboro,46,77,46
 Manufacturer#5,almond azure blanched chiffon midnight,23,71,23
@@ -330,25 +330,25 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 Manufacturer#1,almond antique burnished rose metallic,2,2,2,6
 Manufacturer#1,almond antique chartreuse lavender yellow,34,34,2,28
 Manufacturer#1,almond antique salmon chartreuse burlywood,6,6,2,42
-Manufacturer#1,almond aquamarine burnished black steel,28,28,34,14
-Manufacturer#1,almond aquamarine pink moccasin thistle,42,42,6,40
-Manufacturer#2,almond antique violet chocolate turquoise,14,14,28,2
-Manufacturer#2,almond antique violet turquoise frosted,40,40,42,25
+Manufacturer#1,almond aquamarine burnished black steel,28,28,34,42
+Manufacturer#1,almond aquamarine pink moccasin thistle,42,42,6,42
+Manufacturer#2,almond antique violet chocolate turquoise,14,14,14,2
+Manufacturer#2,almond antique violet turquoise frosted,40,40,14,25
 Manufacturer#2,almond aquamarine midnight light salmon,2,2,14,18
-Manufacturer#2,almond aquamarine rose maroon antique,25,25,40,17
-Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,18,2,14
-Manufacturer#3,almond antique chartreuse khaki white,17,17,25,19
-Manufacturer#3,almond antique forest lavender goldenrod,14,14,18,1
+Manufacturer#2,almond aquamarine rose maroon antique,25,25,40,18
+Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,18,2,18
+Manufacturer#3,almond antique chartreuse khaki white,17,17,17,19
+Manufacturer#3,almond antique forest lavender goldenrod,14,14,17,1
 Manufacturer#3,almond antique metallic orange dim,19,19,17,45
-Manufacturer#3,almond antique misty red olive,1,1,14,10
-Manufacturer#3,almond antique olive coral navajo,45,45,19,39
-Manufacturer#4,almond antique gainsboro frosted violet,10,10,1,27
-Manufacturer#4,almond antique violet mint lemon,39,39,45,7
+Manufacturer#3,almond antique misty red olive,1,1,14,45
+Manufacturer#3,almond antique olive coral navajo,45,45,19,45
+Manufacturer#4,almond antique gainsboro frosted violet,10,10,10,27
+Manufacturer#4,almond antique violet mint lemon,39,39,10,7
 Manufacturer#4,almond aquamarine floral ivory bisque,27,27,10,12
-Manufacturer#4,almond aquamarine yellow dodger mint,7,7,39,31
-Manufacturer#4,almond azure aquamarine papaya violet,12,12,27,6
-Manufacturer#5,almond antique blue firebrick mint,31,31,7,2
-Manufacturer#5,almond antique medium spring khaki,6,6,12,46
+Manufacturer#4,almond aquamarine yellow dodger mint,7,7,39,12
+Manufacturer#4,almond azure aquamarine papaya violet,12,12,27,12
+Manufacturer#5,almond antique blue firebrick mint,31,31,31,2
+Manufacturer#5,almond antique medium spring khaki,6,6,31,46
 Manufacturer#5,almond antique sky peru orange,2,2,31,23
 Manufacturer#5,almond aquamarine dodger light gainsboro,46,46,6,23
 Manufacturer#5,almond azure blanched chiffon midnight,23,23,2,23
@@ -368,7 +368,7 @@ select  p_mfgr,p_name, p_size,
 from part_demo
 partition by p_mfgr
 order by p_mfgr
-where r < 7 or p_mfgr = 'Manufacturer#3'
+where l < 20 or p_mfgr = 'Manufacturer#3'
 window w1 as rows between 2 preceding and 2 following
 into path='/tmp/wout2'
 serde 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
@@ -379,17 +379,21 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		String r = outStream.toString()
 		r = r.replace("\r\n", "\n")
 //		println r
-		String e = """Manufacturer#1,almond antique burnished rose metallic,2,1,2,2,34
-Manufacturer#1,almond antique burnished rose metallic,2,1,2,2,6
-Manufacturer#1,almond antique chartreuse lavender yellow,34,1,34,2,28
-Manufacturer#1,almond antique salmon chartreuse burlywood,6,1,6,2,42
-Manufacturer#1,almond aquamarine burnished black steel,28,1,28,34,14
-Manufacturer#1,almond aquamarine pink moccasin thistle,42,1,42,6,40
-Manufacturer#3,almond antique chartreuse khaki white,17,12,17,25,19
-Manufacturer#3,almond antique forest lavender goldenrod,14,12,14,18,1
-Manufacturer#3,almond antique metallic orange dim,19,12,19,17,45
-Manufacturer#3,almond antique misty red olive,1,12,1,14,10
-Manufacturer#3,almond antique olive coral navajo,45,12,45,19,39
+		String e = """Manufacturer#1,almond antique burnished rose metallic,2,1,2,2,6
+Manufacturer#2,almond antique violet chocolate turquoise,14,1,14,14,2
+Manufacturer#2,almond aquamarine midnight light salmon,2,1,2,14,18
+Manufacturer#2,almond aquamarine rose maroon antique,25,1,25,40,18
+Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,1,18,2,18
+Manufacturer#3,almond antique chartreuse khaki white,17,1,17,17,19
+Manufacturer#3,almond antique forest lavender goldenrod,14,1,14,17,1
+Manufacturer#3,almond antique metallic orange dim,19,1,19,17,45
+Manufacturer#3,almond antique misty red olive,1,1,1,14,45
+Manufacturer#3,almond antique olive coral navajo,45,1,45,19,45
+Manufacturer#4,almond antique violet mint lemon,39,1,39,10,7
+Manufacturer#4,almond aquamarine floral ivory bisque,27,1,27,10,12
+Manufacturer#4,almond aquamarine yellow dodger mint,7,1,7,39,12
+Manufacturer#4,almond azure aquamarine papaya violet,12,1,12,27,12
+Manufacturer#5,almond antique blue firebrick mint,31,1,31,31,2
 """
 		assert r == e
 	}
@@ -418,22 +422,22 @@ Manufacturer#1,almond antique burnished rose metallic,2,-32
 Manufacturer#1,almond antique chartreuse lavender yellow,34,28
 Manufacturer#1,almond antique salmon chartreuse burlywood,6,-22
 Manufacturer#1,almond aquamarine burnished black steel,28,-14
-Manufacturer#1,almond aquamarine pink moccasin thistle,42,28
+Manufacturer#1,almond aquamarine pink moccasin thistle,42,0
 Manufacturer#2,almond antique violet chocolate turquoise,14,-26
 Manufacturer#2,almond antique violet turquoise frosted,40,38
 Manufacturer#2,almond aquamarine midnight light salmon,2,-23
 Manufacturer#2,almond aquamarine rose maroon antique,25,7
-Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,1
+Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,0
 Manufacturer#3,almond antique chartreuse khaki white,17,3
 Manufacturer#3,almond antique forest lavender goldenrod,14,-5
 Manufacturer#3,almond antique metallic orange dim,19,18
 Manufacturer#3,almond antique misty red olive,1,-44
-Manufacturer#3,almond antique olive coral navajo,45,35
+Manufacturer#3,almond antique olive coral navajo,45,0
 Manufacturer#4,almond antique gainsboro frosted violet,10,-29
 Manufacturer#4,almond antique violet mint lemon,39,12
 Manufacturer#4,almond aquamarine floral ivory bisque,27,20
 Manufacturer#4,almond aquamarine yellow dodger mint,7,-5
-Manufacturer#4,almond azure aquamarine papaya violet,12,-19
+Manufacturer#4,almond azure aquamarine papaya violet,12,0
 Manufacturer#5,almond antique blue firebrick mint,31,25
 Manufacturer#5,almond antique medium spring khaki,6,4
 Manufacturer#5,almond antique sky peru orange,2,-44
@@ -468,22 +472,22 @@ Manufacturer#1,almond antique chartreuse lavender yellow,34,32
 Manufacturer#1,almond antique salmon chartreuse burlywood,6,-28
 Manufacturer#1,almond aquamarine burnished black steel,28,22
 Manufacturer#1,almond aquamarine pink moccasin thistle,42,14
-Manufacturer#2,almond antique violet chocolate turquoise,14,-28
+Manufacturer#2,almond antique violet chocolate turquoise,14,0
 Manufacturer#2,almond antique violet turquoise frosted,40,26
 Manufacturer#2,almond aquamarine midnight light salmon,2,-38
 Manufacturer#2,almond aquamarine rose maroon antique,25,23
 Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,-7
-Manufacturer#3,almond antique chartreuse khaki white,17,-1
+Manufacturer#3,almond antique chartreuse khaki white,17,0
 Manufacturer#3,almond antique forest lavender goldenrod,14,-3
 Manufacturer#3,almond antique metallic orange dim,19,5
 Manufacturer#3,almond antique misty red olive,1,-18
 Manufacturer#3,almond antique olive coral navajo,45,44
-Manufacturer#4,almond antique gainsboro frosted violet,10,-35
+Manufacturer#4,almond antique gainsboro frosted violet,10,0
 Manufacturer#4,almond antique violet mint lemon,39,29
 Manufacturer#4,almond aquamarine floral ivory bisque,27,-12
 Manufacturer#4,almond aquamarine yellow dodger mint,7,-20
 Manufacturer#4,almond azure aquamarine papaya violet,12,5
-Manufacturer#5,almond antique blue firebrick mint,31,19
+Manufacturer#5,almond antique blue firebrick mint,31,0
 Manufacturer#5,almond antique medium spring khaki,6,-25
 Manufacturer#5,almond antique sky peru orange,2,-4
 Manufacturer#5,almond aquamarine dodger light gainsboro,46,44
@@ -514,32 +518,32 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		String r = outStream.toString()
 		r = r.replace("\r\n", "\n")
 //		println r
-		String e = """Manufacturer#1,almond antique burnished rose metallic,2,21
-Manufacturer#1,almond antique burnished rose metallic,2,21
-Manufacturer#1,almond antique chartreuse lavender yellow,34,21
-Manufacturer#1,almond antique salmon chartreuse burlywood,6,21
-Manufacturer#1,almond aquamarine burnished black steel,28,21
-Manufacturer#1,almond aquamarine pink moccasin thistle,42,21
-Manufacturer#2,almond antique violet chocolate turquoise,14,21
-Manufacturer#2,almond antique violet turquoise frosted,40,21
-Manufacturer#2,almond aquamarine midnight light salmon,2,21
-Manufacturer#2,almond aquamarine rose maroon antique,25,21
-Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,21
-Manufacturer#3,almond antique chartreuse khaki white,17,21
-Manufacturer#3,almond antique forest lavender goldenrod,14,21
-Manufacturer#3,almond antique metallic orange dim,19,21
-Manufacturer#3,almond antique misty red olive,1,21
-Manufacturer#3,almond antique olive coral navajo,45,21
-Manufacturer#4,almond antique gainsboro frosted violet,10,21
-Manufacturer#4,almond antique violet mint lemon,39,21
-Manufacturer#4,almond aquamarine floral ivory bisque,27,21
-Manufacturer#4,almond aquamarine yellow dodger mint,7,21
-Manufacturer#4,almond azure aquamarine papaya violet,12,21
-Manufacturer#5,almond antique blue firebrick mint,31,21
-Manufacturer#5,almond antique medium spring khaki,6,21
-Manufacturer#5,almond antique sky peru orange,2,21
-Manufacturer#5,almond aquamarine dodger light gainsboro,46,21
-Manufacturer#5,almond azure blanched chiffon midnight,23,21
+		String e = """Manufacturer#1,almond antique burnished rose metallic,2,40
+Manufacturer#1,almond antique burnished rose metallic,2,40
+Manufacturer#1,almond antique chartreuse lavender yellow,34,40
+Manufacturer#1,almond antique salmon chartreuse burlywood,6,40
+Manufacturer#1,almond aquamarine burnished black steel,28,40
+Manufacturer#1,almond aquamarine pink moccasin thistle,42,40
+Manufacturer#2,almond antique violet chocolate turquoise,14,4
+Manufacturer#2,almond antique violet turquoise frosted,40,4
+Manufacturer#2,almond aquamarine midnight light salmon,2,4
+Manufacturer#2,almond aquamarine rose maroon antique,25,4
+Manufacturer#2,almond aquamarine sandy cyan gainsboro,18,4
+Manufacturer#3,almond antique chartreuse khaki white,17,28
+Manufacturer#3,almond antique forest lavender goldenrod,14,28
+Manufacturer#3,almond antique metallic orange dim,19,28
+Manufacturer#3,almond antique misty red olive,1,28
+Manufacturer#3,almond antique olive coral navajo,45,28
+Manufacturer#4,almond antique gainsboro frosted violet,10,2
+Manufacturer#4,almond antique violet mint lemon,39,2
+Manufacturer#4,almond aquamarine floral ivory bisque,27,2
+Manufacturer#4,almond aquamarine yellow dodger mint,7,2
+Manufacturer#4,almond azure aquamarine papaya violet,12,2
+Manufacturer#5,almond antique blue firebrick mint,31,-8
+Manufacturer#5,almond antique medium spring khaki,6,-8
+Manufacturer#5,almond antique sky peru orange,2,-8
+Manufacturer#5,almond aquamarine dodger light gainsboro,46,-8
+Manufacturer#5,almond azure blanched chiffon midnight,23,-8
 """
 		assert r == e
 	}
@@ -561,7 +565,7 @@ format 'org.apache.hadoop.mapred.TextOutputFormat'""")
 		execute(qDef)
 		String r = outStream.toString()
 		r = r.replace("\r\n", "\n")
-//		println r
+		println r
 		String e = """Manufacturer#1,almond antique burnished rose metallic,2
 Manufacturer#1,almond antique chartreuse lavender yellow,34
 Manufacturer#1,almond aquamarine pink moccasin thistle,42
@@ -573,6 +577,7 @@ Manufacturer#3,almond antique metallic orange dim,19
 Manufacturer#3,almond antique olive coral navajo,45
 Manufacturer#4,almond antique violet mint lemon,39
 Manufacturer#4,almond aquamarine floral ivory bisque,27
+Manufacturer#4,almond azure aquamarine papaya violet,12
 Manufacturer#5,almond antique blue firebrick mint,31
 Manufacturer#5,almond antique medium spring khaki,6
 Manufacturer#5,almond aquamarine dodger light gainsboro,46

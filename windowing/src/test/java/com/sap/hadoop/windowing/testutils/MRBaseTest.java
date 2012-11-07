@@ -16,7 +16,7 @@ import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.translate.Translator;
 import com.sap.hadoop.windowing.runtime2.QueryOutputPrinter;
-import com.sap.hadoop.windowing.runtime2.ThriftBasedHiveQueryExecutor;
+//import com.sap.hadoop.windowing.runtime2.ThriftBasedHiveQueryExecutor;
 import com.sap.hadoop.windowing.runtime2.WindowingShell;
 import com.sap.hadoop.windowing.runtime2.mr.MRExecutor;
 
@@ -29,7 +29,7 @@ public abstract class MRBaseTest extends BaseTest
 		
 		HiveConf hCfg = new HiveConf(conf, conf.getClass());
 		wshell = new WindowingShell(hCfg, new Translator(), new MRExecutor());
-		wshell.setHiveQryExec(new ThriftBasedHiveQueryExecutor(conf));
+		//wshell.setHiveQryExec(new ThriftBasedHiveQueryExecutor(conf));
 		outPrinter = new QueryOutputPrinter(new TestLogHelper(false));
 	}
 	

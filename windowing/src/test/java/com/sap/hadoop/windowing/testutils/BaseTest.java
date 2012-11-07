@@ -21,7 +21,7 @@ import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.query2.translate.Translator;
 import com.sap.hadoop.windowing.runtime2.LocalExecutor;
 import com.sap.hadoop.windowing.runtime2.QueryOutputPrinter;
-import com.sap.hadoop.windowing.runtime2.ThriftBasedHiveQueryExecutor;
+//import com.sap.hadoop.windowing.runtime2.ThriftBasedHiveQueryExecutor;
 import com.sap.hadoop.windowing.runtime2.WindowingShell;
 
 public abstract class BaseTest extends ClusterMapReduceDelegate
@@ -69,7 +69,7 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 		
 		HiveConf hCfg = new HiveConf(conf, conf.getClass());
 		wshell = new WindowingShell(hCfg, new Translator(), new LocalExecutor(new PrintStream(outStream)));
-		wshell.setHiveQryExec(new ThriftBasedHiveQueryExecutor(conf));
+		//wshell.setHiveQryExec(new ThriftBasedHiveQueryExecutor(conf));
 		outPrinter = null;
 	}
 	
@@ -113,9 +113,15 @@ public abstract class BaseTest extends ClusterMapReduceDelegate
 	
 	public static void LOCAL(Configuration conf)
 	{
-		conf.set("hive.metastore.uris", "thrift://localhost:9083");
-		conf.set(Constants.HIVE_THRIFTSERVER, "localhost");
-		conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000);
+		conf.set("javax.jdo.option.ConnectionURL", 
+				"jdbc:mysql://localhost/hivems?createDatabaseIfNotExist=true");
+		conf.set("javax.jdo.option.ConnectionDriverName", "com.mysql.jdbc.Driver");
+		conf.set("javax.jdo.option.ConnectionUserName", "hiveuser");
+		conf.set("javax.jdo.option.ConnectionPassword", "hive");
+		conf.set("hive.metastore.local", "true");
+		
+		//conf.set(Constants.HIVE_THRIFTSERVER, "localhost");
+		//conf.setInt(Constants.HIVE_THRIFTSERVER_PORT, 10000);
 		conf.set("io.sort.mb", "200");
 		conf.set("mapred.compress.map.output", "true");
 		conf.set("mapred.child.java.opts", "-Xms128m -Xmx512m");

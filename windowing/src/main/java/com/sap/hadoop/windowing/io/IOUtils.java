@@ -8,6 +8,7 @@ import static com.sap.hadoop.windowing.Constants.INPUT_VALUE_CLASS;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URI;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -34,6 +35,7 @@ import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.mapred.TextInputFormat;
 
 import com.sap.hadoop.HiveUtils;
+import com.sap.hadoop.windowing.Constants;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.runtime2.Partition;
 
@@ -199,6 +201,19 @@ public class IOUtils
 	{
 		FileSystem fs = FileSystem.get(conf);
 		p = new Path(p.toUri().getPath()).makeQualified(fs);
+		return convertToTest(p, conf);
+	}
+	
+	public static Path convertToTest(Path p, Configuration conf)
+	{
+		if (conf.getBoolean(Constants.WINDOWING_TEST_LOCAL_MODE, false))
+		{
+			String testDataDir = conf.get(Constants.WINDOWING_TEST_DATA_DIR);
+			URI uri = p.toUri();
+			String location = uri.getPath();
+			location = location.replace("/user/hive/warehouse", testDataDir);
+			return new Path(location);
+		}
 		return p;
 	}
 	

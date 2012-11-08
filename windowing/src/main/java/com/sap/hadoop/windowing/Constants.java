@@ -47,6 +47,8 @@ public class Constants
 	public static final String WINDOWING_JOB_QUERY_FILE = "windowing.job.query.file";
 	
 	public static final String WINDOWING_TEST_MODE = "windowing.test.mode";
+	public static final String WINDOWING_TEST_LOCAL_MODE = "windowing.test.local.mode";
+	public static final String WINDOWING_TEST_DATA_DIR = "windowing.test.data.dir";
 	
 	public static final String WINDOWING_OUTPUT_QUERY_RESULT = "windowing.output.query.result";
 	

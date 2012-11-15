@@ -1,0 +1,178 @@
+#+TITLE: GroupByOperator in Hive
+#+LANGUAGE:  en
+#+AUTHOR: Prajakta Kalmegh
+#+EMAIL: prajakta.kalmegh@sap.com
+
+
+
+* Modes:
+1. COMPLETE: iterate, terminate
+2. PARTIAL1: iterate, terminatePartial
+3. PARTIAL2: merge, terminatePartial
+4. PARTIALS: isDist ? PARTIAL1: PARTIAL2
+5. FINAL: merge, terminate
+6. HASH: PARTIAL1 (with Hash aggregation)
+7. MERGEPARTIAL: isDist ? COMPLETE : FINAL
+
+* Query Types:
+Queries involving GroupBy clause in Hive are treated in two ways:
+
+** Queries containing a multi-group by: 
+   An example of such a query is the following:
+   
+   FROM (SELECT a.status, b.age\\_bkt, b.gender FROM status\_updates a JOIN profiles bON (a.uhash = b.uhash anda.ds='2009-03-20' )) subq1
+   INSERT OVERWRITE TABLE gender\_summary PARTITION(ds='2009-03-20') SELECT subq1.gender, COUNT(1) GROUP BY subq1.gender
+   INSERT OVERWRITE TABLE age\_bkt\_summary PARTITION(ds='2009-03-20')
+      SELECT subq1.age\_bkt, COUNT(1) GROUP BY subq1.age\_bkt
+   
+   To create a group by operator plan for these queries, Hive
+   SemanticAnalyzer generates a 2MR group by plan for each destination
+   table in the query. The steps are:
+   
+** Queries without a multi-group by:
+   + If we can put multiple group bys in a single reducer, determine suitable groups of
+     expressions, otherwise treat all the expressions as a single group.
+   + Next, we iterate over each group of subqueries with the same group
+    by/distinct keys.
+   + For each subquery:
+     If we have no other subquery with the same group by/distinct keys, 
+    - Construct a standard group by plan
+      * For each destination table in the subquery, 
+        - Generate a filter plan
+	- To generate a group by operator, check that aggregation
+          functions are present 
+	- Throw exception if data is skewed and multiple distincts are
+          present in query
+	  Insert a SelectOperator to be used by the ColumnPruner later
+          to reduce the data to be shuffled
+	- Create GroupByOperator plans based on the following
+          conditions:
+*** Case I: Map-side Aggregation and No Skew in Data
+Method Name: genGroupByPlanMapAggr1MR(...)
+**** Map\_Aggr, No\_Skew, DIST
+***** Mapper:
+- Hash-based GBY to perform partial aggregations
+ + Mode: HASH (iterate/terminatePartial)
+ + aggregations performed using distinct + grouping keys
+- ReduceSinkOperator
+ + Partitioning Key = grouping key
+ + Sorting key = grouping + distinct key
+***** Reducer:
+MergePartial (list-based) GBY to perform final aggregations
++ Mode: COMPLETE (iterate/terminate)
+
+**** Map\_Aggr, No\_Skew, No\_DIST 
+***** Mapper:
+- Hash-based GBY to perform partial aggregations
+ + Mode: HASH (iterate/terminatePartial)
+ + aggregations performed using grouping key
+- ReduceSinkOperator
+  + Partitioning Key = grouping key
+  + Sorting key = grouping key
+***** Reducer:
+MergePartial (list-based) GBY to perform final aggregations
++ Mode: COMPLETE (iterate/terminate)
+
+
+
+*** Case II:Map-side Aggregation and Skew in Data
+Method Name: genGroupByPlanMapAggr2MR(...)
+**** Map\_Aggr, Skew, DIST
+***** Mapper1:
+- Hash-based GBY to perform partial aggregations
+ + Mode: HASH (iterate/terminatePartial)
+ + aggregations performed using grouping key
+- ReduceSinkOperator
+ + Partitioning Key = grouping + distinct key
+ + Sorting key = grouping + distinct key
+***** Reducer1:
+ + PARTIALS (list-based) GBY to perform further partial aggregations
+ + Mode: PARTIALS (PARTIAL1: iterate/terminatePartial)
+***** Mapper2:
+  ReduceSinkOperator performs some partial aggregations
+ + Partitioning Key = grouping key
+ + Sorting key = grouping + distinct key
+***** Reducer2:
+ + Final (list-based) GBY to perform final aggregations
+ + Mode: FINAL (merge/terminate)
+
+**** Map\_Aggr, Skew, No\_DIST 
+***** Mapper1:
+- Hash-based GBY to perform partial aggregations
+  + Mode: HASH (iterate/terminatePartial)
+  + aggregations performed using grouping key
+- ReduceSinkOperator
+  + Partitioning Key = random()
+  + Sorting key = grouping + distinct key
+***** Reducer1:
+  + PARTIALS (list-based) GBY to perform further partial aggregations
+  + Mode: PARTIALS (PARTIAL2: merge/terminatePartial)
+***** Mapper2:
+  + ReduceSinkOperator performs some partial aggregations
+  + Partitioning Key = grouping key
+  + Sorting key = grouping key
+***** Reducer2:
+  + Final (list-based) GBY to perform final aggregations
+  + Mode: FINAL (merge/terminate)
+
+**** SPECIAL SUB-CASE:
+If there are no grouping and distinct keys, Reducer1 and Mapper 2 are
+removed from the above plan and ReduceSinkOperator in Mapper1 does not
+spray. Example query: select count(1) from T where T.ds = ....
+
+*** Case III: No Map-side Aggregation and No Skew in Data
+Method Name: genGroupByPlan1MR(...)
+**** No\_Map\_Aggr, No\_Skew, DIST
+***** Mapper:
+  ReduceSinkOperator performs some partial aggregations
+  + Partitioning Key = grouping key 
+  + Sorting key = grouping + distinct key
+***** Reducer:
+  + Complete (list-based) GBY to perform all aggregations
+  + Mode: COMPLETE (iterate/terminate)
+
+**** No\_Map\_Aggr, No\_Skew, No\_DIST 
+***** Mapper:
+  ReduceSinkOperator performs some partial aggregations
+  + Partitioning Key = grouping key 
+  + Sorting key = grouping key
+***** Reducer:
+  + Complete (list-based) GBY to perform all aggregations
+  + Mode: COMPLETE (iterate/terminate)
+
+*** Case IV: No Map-side Aggregation and Skew in Data
+Method Name: genGroupByPlan2MR(...)
+**** No\_Map\_Aggr, Skew, DIST
+***** Mapper1:
+  ReduceSinkOperator
+  + Partitioning Key = grouping + distinct key
+  + Sorting key = grouping + distinct key
+***** Reducer1:
+  + PARTIALS (list-based) GBY to perform further partial aggregations
+  + Mode: PARTIALS (PARTIAL1: iterate/terminatePartial)
+***** Mapper2:
+  ReduceSinkOperator performs some partial aggregations
+  + Partitioning Key = grouping key
+  + Sorting key = grouping + distinct key
+***** Reducer2:
+  + Final (list-based) GBY to perform final aggregations
+  + Mode: FINAL (merge/terminate)
+
+**** No\_Map\_Aggr, Skew, No\_DIST 
+***** Mapper1:
+  ReduceSinkOperator
+  + Partitioning Key = random()
+  + Sorting key = grouping key
+***** Reducer1:
+  + PARTIALS (list-based) GBY to perform further partial aggregations
+  + Mode: PARTIALS (PARTIAL2: merge/terminatePartial)
+***** Mapper2:
+  ReduceSinkOperator performs some partial aggregations
+  + Partitioning Key = grouping key
+  + Sorting key = grouping key
+***** Reducer2:
+  + Final (list-based) GBY to perform final aggregations
+  + Mode: FINAL (merge/terminate)
+
+
+ 

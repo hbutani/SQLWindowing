@@ -625,3 +625,18 @@ Expression not in GROUP BY key 'p_partkey'
 
 
 
+* Implementation details
+** Changes to genPlan
+- If a PTF Chain is a fromSource:
+  - the 1st source of the Chain should be added to the QueryBlock as
+    a source table or as a SubQuery.
+  - Invoke genPTFChain on the AST of the PTFChain. The input is the
+    Operator for the Table or the SubQuery.
+  - Generate a ReduceSink -> Extract -> PTFOp for each subchain.
+  - If the Query has WindowingClauses and no Group By and only a
+    PTFChain as the input add the WindowingTableFunc to the chain.
+- If there are Windowing clauses:
+  - provided they not already handled by appending to the from Clause
+    PTF Chain.
+  - Setup a PTFChain with only the WindowingTableFunction PTF.
+    - Its input is the Operator after handling the Having clause.

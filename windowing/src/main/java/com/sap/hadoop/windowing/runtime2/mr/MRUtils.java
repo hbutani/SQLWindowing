@@ -140,7 +140,7 @@ public class MRUtils
 		boolean hasMap = false;
 		TableFuncDef tabDef = RuntimeUtils.getFirstTableFunction(qdef);
 		TableFunctionEvaluator tEval = tabDef.getFunction();
-		if (tEval.hasMapPhase())
+		if (tEval.isTransformsRawInput())
 		{
 			hasMap = true;
 		}
@@ -173,7 +173,7 @@ public class MRUtils
 		 * query does not have a map phase, the inputInfo is retrieved from the
 		 * QueryInputDef (either HiveTableDef or HiveQueryDef) of the query.
 		 */
-		if (tEval.hasMapPhase())
+		if (tEval.isTransformsRawInput())
 		{
 			inputInfo = qdef.getTranslationInfo().getMapInputInfo(tabDef);
 		}

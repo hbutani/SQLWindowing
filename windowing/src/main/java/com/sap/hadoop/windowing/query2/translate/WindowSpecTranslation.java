@@ -71,7 +71,7 @@ public class WindowSpecTranslation
 		String desc = getInputDescription(qDef, tFnDef);
 		TableFunctionEvaluator tFn = tFnDef.getFunction();
 		InputInfo iInfo = null;
-		if ( tFn.hasMapPhase() )
+		if ( tFn.isTransformsRawInput() )
 		{
 			iInfo = tInfo.getMapInputInfo(tFnDef);
 		}

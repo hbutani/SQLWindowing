@@ -432,7 +432,8 @@ public class WindowingTestsFactory
 		new Object[] { WHERELEAD }, 
 		new Object[] { CENSUSTOP4 }, 
 		new Object[] { NOOPWITHWINDOWING }, 
-		new Object[] { NOOPWITHMAPWINDOWING } 
+		new Object[] { NOOPWITHMAPWINDOWING },
+		new Object[] { NPATH } 
 	};
 
 }

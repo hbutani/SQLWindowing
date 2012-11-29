@@ -220,7 +220,7 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable
 		try
 		{
 			TableFuncDef tDef = RuntimeUtils.getFirstTableFunction(qDef);
-			Partition outPart = tDef.getFunction().mapExecute(inputPart);
+			Partition outPart = tDef.getFunction().transformRawInput(inputPart);
 			PartitionIterator<Object> pItr = outPart.iterator();
 			while (pItr.hasNext())
 			{

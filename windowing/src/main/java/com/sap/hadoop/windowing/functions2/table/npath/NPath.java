@@ -19,7 +19,6 @@ import com.sap.hadoop.windowing.query2.definition.QueryDef;
 import com.sap.hadoop.windowing.query2.definition.TableFuncDef;
 import com.sap.hadoop.windowing.runtime2.Partition;
 import com.sap.hadoop.windowing.runtime2.PartitionIterator;
-import com.sap.hadoop.windowing.runtime2.RuntimeUtils;
 
 import static com.sap.hadoop.Utils.sprintf;
 
@@ -51,10 +50,8 @@ public class NPath extends TableFunctionEvaluator
 	
 	
 	@Override
-	public void execute(Partition iPart, Partition outP) throws WindowingException
+	public void execute(PartitionIterator<Object> pItr, Partition outP) throws WindowingException
 	{
-		PartitionIterator<Object> pItr = iPart.iterator();
-		RuntimeUtils.connectLeadLagFunctionsToPartition(getQueryDef(), pItr);
 		while (pItr.hasNext())
 		{
 			Object iRow = pItr.next();
@@ -81,116 +78,7 @@ public class NPath extends TableFunctionEvaluator
 		}
 	}
 	
-	/**
-	 * <ul>
-	 * <li> check structure of Arguments:
-	 * <ol>
-	 * <li> First arg should be a String
-	 * <li> then there should be an even number of Arguments: String, expression; expression should be Convertible to Boolean.
-	 * <li> finally there should be a String.
-	 * </ol>
-	 * <li> convert pattern into a NNode chain.
-	 * <li> convert symbol args into a Symbol Map.
-	 * <li> parse selectList into SelectList struct. The inputOI used to translate these expressions should be based on the 
-	 * columns in the Input, the 'path.attr'
-	 * </ul>
-	 */
-	@Override
-	public void setupOI() throws WindowingException
-	{
-		ArrayList<ArgDef> args = tDef.getArgs();
-		int argsNum = args == null ? 0 : args.size();
-		
-		if ( argsNum < 4 )
-		{
-			throwErrorWithSignature("at least 4 arguments required");
-		}
-		
-		/*
-		 * validate and setup patternStr
-		 */
-		ArgDef symboPatternArg = args.get(0);
-		ObjectInspector symbolPatternArgOI = symboPatternArg.getOI();
-		
-		if ( !ObjectInspectorUtils.isConstantObjectInspector(symbolPatternArgOI) ||
-			  (symbolPatternArgOI.getCategory() != ObjectInspector.Category.PRIMITIVE) ||
-			  ((PrimitiveObjectInspector)symbolPatternArgOI).getPrimitiveCategory() != PrimitiveObjectInspector.PrimitiveCategory.STRING )
-		{
-			throwErrorWithSignature("Currently the symbol Pattern must be a Constant String.");
-		}
-		
-		patternStr = ((ConstantObjectInspector)symbolPatternArgOI).getWritableConstantValue().toString();
-		
-		/*
-		 * validate and setup SymbolInfo
-		 */
-		int symbolArgsSz = argsNum - 2;
-		if ( symbolArgsSz % 2 != 0)
-		{
-			throwErrorWithSignature("Symbol Name, Expression need to be specified in pairs: there are odd number of symbol args");
-		}
-		
-		symInfo = new SymbolsInfo(symbolArgsSz/2);
-		for(int i=1; i <= symbolArgsSz; i += 2)
-		{
-			ArgDef symbolNameArg = args.get(i);
-			ObjectInspector symbolNameArgOI = symbolNameArg.getOI();
-			
-			if ( !ObjectInspectorUtils.isConstantObjectInspector(symbolNameArgOI) ||
-				  (symbolNameArgOI.getCategory() != ObjectInspector.Category.PRIMITIVE) ||
-				  ((PrimitiveObjectInspector)symbolNameArgOI).getPrimitiveCategory() != PrimitiveObjectInspector.PrimitiveCategory.STRING )
-			{
-				throwErrorWithSignature(sprintf("Currently a Symbol Name(%s) must be a Constant String", symbolNameArg.getExpression().toStringTree()));
-			}
-			String symbolName = ((ConstantObjectInspector)symbolNameArgOI).getWritableConstantValue().toString();
-			
-			ArgDef symolExprArg = args.get(i+1);
-			ObjectInspector symolExprArgOI = symolExprArg.getOI();
-			if ( (symolExprArgOI.getCategory() != ObjectInspector.Category.PRIMITIVE) ||
-					  ((PrimitiveObjectInspector)symolExprArgOI).getPrimitiveCategory() != PrimitiveObjectInspector.PrimitiveCategory.BOOLEAN )
-			{
-				throwErrorWithSignature(sprintf("Currently a Symbol Expression(%s) must be a boolean expression", symolExprArg.getExpression().toStringTree()));
-			}
-			symInfo.add(symbolName, symolExprArg);
-		}
-		
-		/*
-		 * validate and setup resultExprStr
-		 */
-		ArgDef resultExprArg = args.get(argsNum - 1);
-		ObjectInspector resultExprArgOI = resultExprArg.getOI();
-		
-		if ( !ObjectInspectorUtils.isConstantObjectInspector(resultExprArgOI) ||
-				  (resultExprArgOI.getCategory() != ObjectInspector.Category.PRIMITIVE) ||
-				  ((PrimitiveObjectInspector)resultExprArgOI).getPrimitiveCategory() != PrimitiveObjectInspector.PrimitiveCategory.STRING )
-		{
-			throwErrorWithSignature("Currently the result Expr parameter must be a Constant String.");
-		}
-			
-		resultExprStr = ((ConstantObjectInspector)resultExprArgOI).getWritableConstantValue().toString();
-		
-		/*
-		 * setup SymbolFunction chain.
-		 */
-		SymbolParser syP = new SymbolParser(patternStr, symInfo.symbolExprsNames, symInfo.symbolExprsEvaluators, symInfo.symbolExprsOIs);
-		syP.parse();
-		syFn = syP.getSymbolFunction();
-		
-		/*
-		 * setup OI for input to resultExpr select list
-		 */
-		StructObjectInspector selectListInputOI = (StructObjectInspector) NPathUtils.createSelectListInputOI(tDef.getInput().getOI());
-		
-		/*
-		 * parse ResultExpr Str and setup OI.
-		 */
-		ResultExpressionParser resultExprParser = new ResultExpressionParser(resultExprStr, selectListInputOI);
-		resultExprParser.translate();
-		resultExprEvals = resultExprParser.getSelectListExprEvaluators();
-		OI = resultExprParser.getSelectListOutputOI();
-	}
-	
-	private void throwErrorWithSignature(String message) throws WindowingException
+	static void throwErrorWithSignature(String message) throws WindowingException
 	{
 		throw new WindowingException(sprintf(
 				"NPath signature is: SymbolPattern, one or more SymbolName, expression pairs, the result expression as a select list. Error %s",
@@ -205,6 +93,127 @@ public class NPath extends TableFunctionEvaluator
 		{
 			
 			return new NPath();
+		}
+
+		/**
+		 * <ul>
+		 * <li> check structure of Arguments:
+		 * <ol>
+		 * <li> First arg should be a String
+		 * <li> then there should be an even number of Arguments: String, expression; expression should be Convertible to Boolean.
+		 * <li> finally there should be a String.
+		 * </ol>
+		 * <li> convert pattern into a NNode chain.
+		 * <li> convert symbol args into a Symbol Map.
+		 * <li> parse selectList into SelectList struct. The inputOI used to translate these expressions should be based on the 
+		 * columns in the Input, the 'path.attr'
+		 * </ul>
+		 */
+		@Override
+		public void setupOutputOI() throws WindowingException
+		{
+			NPath evaluator = (NPath) getEvaluator();
+			TableFuncDef tDef = evaluator.getTableDef();
+			
+			ArrayList<ArgDef> args = tDef.getArgs();
+			int argsNum = args == null ? 0 : args.size();
+			
+			if ( argsNum < 4 )
+			{
+				throwErrorWithSignature("at least 4 arguments required");
+			}
+			
+			/*
+			 * validate and setup patternStr
+			 */
+			ArgDef symboPatternArg = args.get(0);
+			ObjectInspector symbolPatternArgOI = symboPatternArg.getOI();
+			
+			if ( !ObjectInspectorUtils.isConstantObjectInspector(symbolPatternArgOI) ||
+				  (symbolPatternArgOI.getCategory() != ObjectInspector.Category.PRIMITIVE) ||
+				  ((PrimitiveObjectInspector)symbolPatternArgOI).getPrimitiveCategory() != PrimitiveObjectInspector.PrimitiveCategory.STRING )
+			{
+				throwErrorWithSignature("Currently the symbol Pattern must be a Constant String.");
+			}
+			
+			evaluator.patternStr = ((ConstantObjectInspector)symbolPatternArgOI).getWritableConstantValue().toString();
+			
+			/*
+			 * validate and setup SymbolInfo
+			 */
+			int symbolArgsSz = argsNum - 2;
+			if ( symbolArgsSz % 2 != 0)
+			{
+				throwErrorWithSignature("Symbol Name, Expression need to be specified in pairs: there are odd number of symbol args");
+			}
+			
+			evaluator.symInfo = new SymbolsInfo(symbolArgsSz/2);
+			for(int i=1; i <= symbolArgsSz; i += 2)
+			{
+				ArgDef symbolNameArg = args.get(i);
+				ObjectInspector symbolNameArgOI = symbolNameArg.getOI();
+				
+				if ( !ObjectInspectorUtils.isConstantObjectInspector(symbolNameArgOI) ||
+					  (symbolNameArgOI.getCategory() != ObjectInspector.Category.PRIMITIVE) ||
+					  ((PrimitiveObjectInspector)symbolNameArgOI).getPrimitiveCategory() != PrimitiveObjectInspector.PrimitiveCategory.STRING )
+				{
+					throwErrorWithSignature(sprintf("Currently a Symbol Name(%s) must be a Constant String", symbolNameArg.getExpression().toStringTree()));
+				}
+				String symbolName = ((ConstantObjectInspector)symbolNameArgOI).getWritableConstantValue().toString();
+				
+				ArgDef symolExprArg = args.get(i+1);
+				ObjectInspector symolExprArgOI = symolExprArg.getOI();
+				if ( (symolExprArgOI.getCategory() != ObjectInspector.Category.PRIMITIVE) ||
+						  ((PrimitiveObjectInspector)symolExprArgOI).getPrimitiveCategory() != PrimitiveObjectInspector.PrimitiveCategory.BOOLEAN )
+				{
+					throwErrorWithSignature(sprintf("Currently a Symbol Expression(%s) must be a boolean expression", symolExprArg.getExpression().toStringTree()));
+				}
+				evaluator.symInfo.add(symbolName, symolExprArg);
+			}
+			
+			/*
+			 * validate and setup resultExprStr
+			 */
+			ArgDef resultExprArg = args.get(argsNum - 1);
+			ObjectInspector resultExprArgOI = resultExprArg.getOI();
+			
+			if ( !ObjectInspectorUtils.isConstantObjectInspector(resultExprArgOI) ||
+					  (resultExprArgOI.getCategory() != ObjectInspector.Category.PRIMITIVE) ||
+					  ((PrimitiveObjectInspector)resultExprArgOI).getPrimitiveCategory() != PrimitiveObjectInspector.PrimitiveCategory.STRING )
+			{
+				throwErrorWithSignature("Currently the result Expr parameter must be a Constant String.");
+			}
+				
+			evaluator.resultExprStr = ((ConstantObjectInspector)resultExprArgOI).getWritableConstantValue().toString();
+			
+			/*
+			 * setup SymbolFunction chain.
+			 */
+			SymbolParser syP = new SymbolParser(evaluator.patternStr, 
+					evaluator.symInfo.symbolExprsNames, 
+					evaluator.symInfo.symbolExprsEvaluators, evaluator.symInfo.symbolExprsOIs);
+			syP.parse();
+			evaluator.syFn = syP.getSymbolFunction();
+			
+			/*
+			 * setup OI for input to resultExpr select list
+			 */
+			StructObjectInspector selectListInputOI = (StructObjectInspector) NPathUtils.createSelectListInputOI(tDef.getInput().getOI());
+			
+			/*
+			 * parse ResultExpr Str and setup OI.
+			 */
+			ResultExpressionParser resultExprParser = new ResultExpressionParser(evaluator.resultExprStr, selectListInputOI);
+			resultExprParser.translate();
+			evaluator.resultExprEvals = resultExprParser.getSelectListExprEvaluators();
+			StructObjectInspector OI = resultExprParser.getSelectListOutputOI();
+			setOutputOI(OI);
+		}
+		
+		@Override
+		public boolean transformsRawInput()
+		{
+			return false;
 		}
 		
 	}

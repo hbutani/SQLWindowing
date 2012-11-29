@@ -20,4 +20,8 @@ public interface PartitionIterator<T> extends Iterator<T>
 	 * to the value for the current Index.
 	 */
 	Object resetToIndex(int idx);
+	
+	Partition getPartition();
+	
+	void reset();
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.sap.hadoop.windowing.WindowingException;
-import com.sap.hadoop.windowing.functions2.FunctionRegistry;
 import com.sap.hadoop.windowing.query2.definition.ArgDef;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.HiveQueryDef;
@@ -22,7 +21,6 @@ import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.BoundaryDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.CurrentRowDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.RangeBoundaryDef;
 import com.sap.hadoop.windowing.query2.definition.WindowFrameDef.ValueBoundaryDef;
-import com.sap.hadoop.windowing.query2.definition.WindowFunctionDef;
 
 /**
  * encapsulate the Order in which a QueryDef should be processed.
@@ -110,15 +108,17 @@ public class QueryDefWalker
 	 */
 	protected void walk(QueryDef qDef, TableFuncDef tblFunc) throws WindowingException
 	{
-		// 1. allow visitor to establish input
-		visitor.preVisit(tblFunc);
-		
-		// 2. visit the Args.
+		// 1. visit the Args; these are resolved based on the shape of the Input to the function.
 		walk(tblFunc.getArgs());
 		
-		//3. walk the window objects
+		// 2. allow visitor to establish input
+		visitor.preVisit(tblFunc);
+		
+		//3. walk the window objects; this resolved based on the rawInputTransformation, if it has happened.
 		walk(tblFunc.getWindow());
 		
+		/* This is not needed because the WindowTableFunction sets up the WindowFunctions in its setupOI call.
+
 		//4. for WindowTable Func walk the Window Functions on the Select List
 		String fName = tblFunc.getName();
 		if ( fName.equals(FunctionRegistry.WINDOWING_TABLE_FUNCTION))
@@ -132,6 +132,7 @@ public class QueryDefWalker
 				visitor.visit(wFn);
 			}
 		}
+		*/
 		
 		//5. revisit tblFunc
 		visitor.visit(tblFunc);

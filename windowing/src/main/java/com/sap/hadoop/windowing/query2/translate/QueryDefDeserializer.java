@@ -15,6 +15,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import com.sap.hadoop.windowing.WindowingException;
 import com.sap.hadoop.windowing.functions2.FunctionRegistry;
 import com.sap.hadoop.windowing.functions2.TableFunctionEvaluator;
+import com.sap.hadoop.windowing.functions2.TableFunctionResolver;
 import com.sap.hadoop.windowing.query2.definition.ArgDef;
 import com.sap.hadoop.windowing.query2.definition.ColumnDef;
 import com.sap.hadoop.windowing.query2.definition.HiveQueryDef;
@@ -43,6 +44,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	InputInfo inputInfo;
 	QueryTranslationInfo tInfo;
 	ObjectInspector inputOI;
+	TableFunctionResolver currentTFnResolver;
 
 	// TODO get rid of this dependency
 	static
@@ -111,6 +113,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 		}
 
 		tInfo.addInput(hiveTable);
+		inputInfo = tInfo.getInputInfo(hiveTable);
 	}
 
 	/*
@@ -133,9 +136,11 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	public void preVisit(TableFuncDef tblFuncDef) throws WindowingException
 	{
 		TableFunctionEvaluator tEval = tblFuncDef.getFunction();
-		if (tEval.hasMapPhase())
+		currentTFnResolver = FunctionRegistry.getTableFunctionResolver(tEval.getTableDef().getName());
+		currentTFnResolver.initialize(qDef, tblFuncDef, tEval);
+		if (tEval.isTransformsRawInput())
 		{
-			tEval.setupMapOI();
+			currentTFnResolver.setupRawInputOI();
 			inputInfo = qDef.getTranslationInfo().getMapInputInfo(tblFuncDef);
 		}
 		else
@@ -156,7 +161,7 @@ public class QueryDefDeserializer extends QueryDefVisitor
 	public void visit(TableFuncDef tblFuncDef) throws WindowingException
 	{
 		TableFunctionEvaluator tEval = tblFuncDef.getFunction();
-		tEval.setupOI();
+		currentTFnResolver.setupOutputOI();
 		TranslateUtils.setupSerdeAndOI(tblFuncDef, qInDef, tInfo, tEval);
 		tInfo.addInput(tblFuncDef);
 		inputInfo = qDef.getTranslationInfo().getInputInfo(tblFuncDef);

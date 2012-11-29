@@ -250,13 +250,12 @@ public class InputTranslation
 			}
 		}
 		
-		TableFunctionEvaluator tEval = tFn.initialize(qDef, tDef);
+		tFn.initialize(qDef, tDef);
+		TableFunctionEvaluator tEval = tFn.getEvaluator();		
 		tDef.setFunction(tEval);
-		
-		tEval.setupMapOI();
+		tFn.setupRawInputOI();
 		tDef.setWindow(WindowSpecTranslation.translateWindow(qDef, tDef));
-		tEval.setupOI();
-		
+		tFn.setupOutputOI();
 		TranslateUtils.setupSerdeAndOI(tDef, inputDef, tInfo, tEval);
 
 		return tDef;

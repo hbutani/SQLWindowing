@@ -41,48 +41,14 @@ import com.sap.hadoop.windowing.runtime2.ValueBoundaryScanner;
 
 public class WindowingTableFunction extends TableFunctionEvaluator
 {
-	@Override
-	public void setupOI() throws WindowingException
-	{
-		ArrayList<WindowFunctionDef> wFnDefs = new ArrayList<WindowFunctionDef>();
-		QueryDef qDef = getQueryDef();
-		SelectDef select = qDef.getSelectList();
-		ArrayList<WindowFunctionSpec> wFnSpecs = qDef.getSpec().getSelectList().getWindowFuncs();
-		ArrayList<String> aliases = new ArrayList<String>();
-		ArrayList<ObjectInspector> fieldOIs = new ArrayList<ObjectInspector>();
-		
-		WindowFunctionTranslation.addInputColumnsToList(qDef, getTableDef(), aliases, fieldOIs);
-		
-		for(WindowFunctionSpec wFnS : wFnSpecs)
-		{
-				WindowFunctionDef wFnDef = WindowFunctionTranslation.translate(qDef, getTableDef(), wFnS);
-				WindowFunctionInfo wFnInfo = FunctionRegistry.getWindowFunctionInfo(wFnS.getName());
-				wFnDefs.add(wFnDef);
-				aliases.add(wFnS.getAlias());
-				if ( wFnInfo.isPivotResult())
-				{
-					ListObjectInspector lOI = (ListObjectInspector) wFnDef.getOI();
-					fieldOIs.add(lOI.getListElementObjectInspector());
-				}
-				else
-				{
-					fieldOIs.add(wFnDef.getOI());
-				}
-		}
-		select.setWindowFuncs(wFnDefs);
-		
-		OI = ObjectInspectorFactory.getStandardStructObjectInspector(aliases, fieldOIs);
-	}
-
+	ArrayList<WindowFunctionDef> wFnDefs;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void execute(Partition iPart, Partition outP) throws WindowingException
+	public void execute(PartitionIterator<Object> pItr, Partition outP) throws WindowingException
 	{
-		QueryDef qDef = getQueryDef();
-		ArrayList<WindowFunctionDef> wFns = qDef.getSelectList().getWindowFuncs();
 		ArrayList<List<?>> oColumns = new ArrayList<List<?>>();
-		
+		Partition iPart = pItr.getPartition();
 		StructObjectInspector inputOI;
 		try {
 			inputOI = (StructObjectInspector) iPart.getSerDe().getObjectInspector();
@@ -92,17 +58,15 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 		
 		try
 		{
-			for(WindowFunctionDef wFn : wFns)
+			for(WindowFunctionDef wFn : wFnDefs)
 			{
 				boolean processWindow = wFn.getWindow() != null;
-				
+				pItr.reset();
 				if ( !processWindow )
 				{
 					GenericUDAFEvaluator fEval = wFn.getEvaluator();
 					Object[] args = new Object[wFn.getArgs().size()];
 					AggregationBuffer aggBuffer = fEval.getNewAggregationBuffer();
-					PartitionIterator<Object> pItr = iPart.iterator();
-					RuntimeUtils.connectLeadLagFunctionsToPartition(getQueryDef(), pItr);
 					while(pItr.hasNext())
 					{
 						Object row = pItr.next();
@@ -159,6 +123,48 @@ public class WindowingTableFunction extends TableFunctionEvaluator
 		{
 			
 			return new WindowingTableFunction();
+		}
+
+		@Override
+		public void setupOutputOI() throws WindowingException
+		{
+			ArrayList<WindowFunctionDef> wFnDefs = new ArrayList<WindowFunctionDef>();
+			QueryDef qDef = getQueryDef();
+			SelectDef select = qDef.getSelectList();
+			ArrayList<WindowFunctionSpec> wFnSpecs = qDef.getSpec().getSelectList().getWindowFuncs();
+			ArrayList<String> aliases = new ArrayList<String>();
+			ArrayList<ObjectInspector> fieldOIs = new ArrayList<ObjectInspector>();
+			
+			WindowFunctionTranslation.addInputColumnsToList(qDef, getEvaluator().getTableDef(), aliases, fieldOIs);
+			
+			for(WindowFunctionSpec wFnS : wFnSpecs)
+			{
+					WindowFunctionDef wFnDef = WindowFunctionTranslation.translate(qDef, getEvaluator().getTableDef(), wFnS);
+					WindowFunctionInfo wFnInfo = FunctionRegistry.getWindowFunctionInfo(wFnS.getName());
+					wFnDefs.add(wFnDef);
+					aliases.add(wFnS.getAlias());
+					if ( wFnInfo.isPivotResult())
+					{
+						ListObjectInspector lOI = (ListObjectInspector) wFnDef.getOI();
+						fieldOIs.add(lOI.getListElementObjectInspector());
+					}
+					else
+					{
+						fieldOIs.add(wFnDef.getOI());
+					}
+			}
+			select.setWindowFuncs(wFnDefs);
+			WindowingTableFunction wTFn = (WindowingTableFunction) getEvaluator();
+			wTFn.wFnDefs = wFnDefs;
+			
+			StructObjectInspector OI = ObjectInspectorFactory.getStandardStructObjectInspector(aliases, fieldOIs);
+			setOutputOI(OI);
+		}
+
+		@Override
+		public boolean transformsRawInput()
+		{
+			return false;
 		}
 		
 	}

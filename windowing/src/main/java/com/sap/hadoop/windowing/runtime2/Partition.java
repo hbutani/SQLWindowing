@@ -146,9 +146,9 @@ public class Partition
 	class PItr implements PartitionIterator<Object>
 	{
 		int idx;
-		int start;
-		int end;
-		int createTimeSz;
+		final int start;
+		final int end;
+		final int createTimeSz;
 		
 		PItr(int start, int end)
 		{
@@ -232,6 +232,18 @@ public class Partition
 			Object o = getAt(idx);
 			this.idx = idx + 1;
 			return o;
+		}
+
+		@Override
+		public Partition getPartition()
+		{
+			return Partition.this;
+		}
+		
+		@Override
+		public void reset()
+		{
+			idx = start;
 		}
 	};
 	

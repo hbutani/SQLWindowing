@@ -119,7 +119,7 @@ public class QueryTranslationInfo
 	public InputInfo getMapInputInfo(TableFuncDef tDef) throws WindowingException
 	{
 		TableFunctionEvaluator tFn = tDef.getFunction();
-		if ( !tFn.hasMapPhase() )
+		if ( !tFn.isTransformsRawInput() )
 		{
 			return null;
 		}
@@ -127,7 +127,7 @@ public class QueryTranslationInfo
 		InputInfo ii = mapReshapeInfoMap.get(tDef.getAlias());
 		if ( ii == null )
 		{
-			ii = new InputInfo(this, tDef, tFn.getMapOutputOI());
+			ii = new InputInfo(this, tDef, tFn.getRawInputOI());
 			mapReshapeInfoMap.put(tDef.getAlias(), ii);
 		}
 		return ii;

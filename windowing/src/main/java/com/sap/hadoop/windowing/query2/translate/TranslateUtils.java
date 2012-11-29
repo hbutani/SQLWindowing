@@ -477,7 +477,7 @@ public class TranslateUtils
 			throw new WindowingException(se);
 		}
 
-		if (tEval.hasMapPhase())
+		if (tEval.isTransformsRawInput())
 		{
 			if (tDef.getName().equals(FunctionRegistry.NOOP_MAP_TABLE_FUNCTION))
 			{
@@ -486,7 +486,7 @@ public class TranslateUtils
 			else
 			{
 				serde = TranslateUtils.createLazyBinarySerDe(
-						tInfo.getHiveCfg(), tEval.getMapOutputOI());
+						tInfo.getHiveCfg(), tEval.getRawInputOI());
 			}
 			try
 			{
